@@ -1,4 +1,4 @@
-# Répartition Équitable des Dépenses
+# Mon Foyer
 
 ## Description
 
@@ -21,11 +21,11 @@ Ce projet propose un **outil gratuit** pour gérer les dépenses communes et per
 
 1. Clonez le dépôt :
   ```bash
-  git clone https://github.com/votre-repo/repartition-equitable.git
+  git clone https://github.com/JeremyPouyet/Mon-Foyer.git
   ```
 2. Accédez au dossier du projet :
   ```bash
-  cd repartition-equitable
+  cd Mon-Foyer
   ```
 3. Installez les dépendances :
   ```bash

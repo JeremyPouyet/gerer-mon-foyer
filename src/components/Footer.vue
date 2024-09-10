@@ -34,7 +34,7 @@
             Ressources
           </h5>
           <p>
-            Code source disponible sur <a href="https://github.com/" target="_blank" rel="noopener noreferrer">Github</a>
+            Code source disponible sur <a href="https://github.com/JeremyPouyet/Mon-Foyer" target="_blank" rel="noopener noreferrer">Github</a>
           </p>
           <p>
             Développeur fait avec amour par sa mère et son père ❤️
