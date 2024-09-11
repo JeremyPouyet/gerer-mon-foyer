@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import Note from './Note.vue';
   import { ref } from 'vue'
-  import historyManager from '@/historyManager';
+  import historyManager, { type Sample } from '@/historyManager';
 
   const emit = defineEmits(['switchSample'])
   const activeDate = ref<string | null | undefined>(sessionStorage.getItem('currentHistoryDate'))
+  const history = ref<Sample[]>(historyManager.history)
 
   function switchSample(date: string) : void {
     const newSample = historyManager.sampleGet(date)
@@ -49,8 +50,8 @@
     </div>
   </div>
   <ul class="item-list">
-    <li v-for="sample in historyManager.history" :key="sample.date" class="item">
-      <div class="item-info">
+    <li v-for="sample in history" :key="sample.date" class="item">
+      <div class="item-info justify-content-between">
         <span
           title="Cliquer pour sélectionner"
           style="cursor: pointer"
@@ -68,8 +69,8 @@
             <img src="@/assets/icons/message.png" class="icon-container-small">
           </span>
         </span>
-        <div class="align-right">
-          <Note :item="sample" />
+        <div>
+          <Note :item="sample" @update="note => historyManager.sampleUpdate(sample.date, { note })" />
           <img
             src="@/assets/icons/cross.png"
             alt="Supprimer"

@@ -4,6 +4,10 @@
   import type { Sample } from '@/historyManager'
   import User from '@/user'
 
+  const emit = defineEmits<
+    (e: 'update', note: string | undefined) => void
+  >()
+
   const props = defineProps<{ item: User | Transaction | Sample }>()
   const currentNote = ref<string | undefined>(props.item.note)
   const showNotePopup = ref<boolean>(false)
@@ -26,12 +30,13 @@
 
   function noteUpdate() : void {
     showNotePopup.value = false
-    props.item.note = currentNote.value
+    emit('update', currentNote.value)
   }
 
   function noteDelete() : void {
     showNotePopup.value = false
-    props.item.note = ''
+    currentNote.value = ''
+    emit('update', '')
   }
 
   function noteCancel() : void {
@@ -64,7 +69,7 @@
         </div>
       </div>
     </div>
-    <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup">
+    <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup" style="vertical-align: middle;">
   </div>
 </template>
 
@@ -87,7 +92,7 @@
   content: '';
   position: absolute;
   bottom: -10px;
-  right: 5px;
+  right: 0;
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
@@ -103,7 +108,7 @@
   content: '';
   position: absolute;
   top: -10px;
-  right: 5px;
+  right: 0;
   width: 0;
   height: 0;
   border-left: 10px solid transparent;

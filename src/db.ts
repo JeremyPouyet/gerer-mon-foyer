@@ -1,7 +1,7 @@
 import { reactive, ref, watch } from 'vue'
 
 import { emptyTransactions } from './helpers'
-import historyManager from './historyManager'
+import historyManager, { type Sample } from './historyManager'
 import User from './user'
 
 class DB {
@@ -37,7 +37,8 @@ class DB {
     watch(this.unsavedChanges, value => { localStorage.setItem('unsavedChanges', value.toString()) })
     watch(this.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
-    watch(historyManager.history, updated => this.persistChanges('history', updated), { deep: true }) // deep so it also watches history samples
+
+    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail));
   }
 
   export() : string {
@@ -51,7 +52,7 @@ class DB {
 
     Object.assign(this.account.expenses, emptyTransactions())
     Object.assign(this.account.incomes, emptyTransactions())
-    historyManager.history.splice(0)
+    historyManager.empty()
     this.unsavedChanges.value = 0
   }
 

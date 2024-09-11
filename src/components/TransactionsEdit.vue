@@ -217,8 +217,8 @@
               </td>
 
               <!-- Actions -->
-              <td class="char-width-10 text-end">
-                <Note :item="transaction" />
+              <td class="char-width-10 text-end" style="vertical-align: middle;">
+                <Note :item="transaction" @update="note => transaction.note = note" />
                 <img
                   src="@/assets/icons/cross.png"
                   alt="Supprimer"

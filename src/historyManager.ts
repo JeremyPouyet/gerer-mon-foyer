@@ -1,5 +1,3 @@
-import { reactive } from 'vue'
-
 import DBSnapshot from '@/dbSnapshot'
 
 export interface Sample {
@@ -8,8 +6,8 @@ export interface Sample {
   note?: string
 }
 
-class HistoryManager {
-  readonly history = reactive<Sample[]>([])
+class HistoryManager extends EventTarget {
+  #_history: Sample[] = []
 
   /**
    * Sets the active date in the session storage.
@@ -41,27 +39,41 @@ class HistoryManager {
   }
 
   /**
-   * Loads the history from localStorage and updates the reactive history array.
+   * Removes all Sample from the history
+   */
+  empty() : void {
+    this.#_history = []
+    this.dispatchUpdate()
+  }
+
+  /**
+   * Gets the entire history of samples.
+   *
+   * @returns {Sample[]} - The array of samples in the history.
+   */
+  get history() : Sample[] {
+    return this.#_history
+  }
+
+  /**
+   * Loads the history from localStorage and updates the history array.
    *
    * It clears the current history, parses the stored data from localStorage,
    * and pushes the new samples into the history array.
    */
-  load() {
-    this.history.splice(0)
-    const samples = JSON.parse(localStorage.getItem('history') ?? '[]') as Sample[]
-
-    this.history.push(...samples)
+  load() : void {
+    this.#_history = JSON.parse(localStorage.getItem('history') ?? '[]') as Sample[]
   }
 
   /**
    * Gets a specific sample from the history based on a date.
    *
    * @param {string | null} [date] - The date string of the history sample to retrieve.
-   *                                 If null or undefined, returns the most recent sample (first in the array).
+   *                                 When absent, the most recent sample (first in the array) is returned.
    * @returns {Sample | undefined} - The matching sample from the history or undefined if not found.
    */
   sampleGet(date?: string | null) : Sample | undefined {
-    return date ? this.findSample(date, sample => sample) : this.history[0]
+    return date ? this.findSample(date, sample => sample) : this.#_history[0]
   }
 
   /**
@@ -70,10 +82,11 @@ class HistoryManager {
    * @param {DBSnapshot} snapshot - Snapshot to insert at the beginning of the history (most recent).
    *                                Also sets the active date to the date of the new sample.
    */
-  sampleCreate(snapshot: DBSnapshot) {
+  sampleCreate(snapshot: DBSnapshot) : void {
     const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
-    this.history.unshift(sample)
+    this.#_history.unshift(sample)
     this.activeDate = sample.date
+    this.dispatchUpdate()
   }
 
   /**
@@ -86,17 +99,18 @@ class HistoryManager {
    */
   sampleDelete(date: string) : void {
     this.findSample(date, (sample, index) => {
-      this.history.splice(index, 1)
+      this.#_history.splice(index, 1)
+      this.dispatchUpdate()
 
       if (date !== this.activeDate) return
 
-      if (this.history.length === 0) {
+      if (this.#_history.length === 0) {
         this.activeDate = ''
         return
       }
 
       // substract 1 if the deleted sample was the last one
-      this.activeDate = (this.history[index] || this.history[index - 1]).date
+      this.activeDate = (this.#_history[index] || this.#_history[index - 1]).date
     })
   }
 
@@ -106,8 +120,18 @@ class HistoryManager {
    * @param {string} date - The date of the sample to update.
    * @param {string} data - The new data to be assigned to the sample.
    */
-  sampleUpdate(date: string, data: string) {
-    this.findSample(date, sample => sample.data = data)
+  sampleUpdate(date: string, updates: Partial<Sample>) {
+    this.findSample(date, sample => {
+      Object.assign(sample, updates)
+      this.dispatchUpdate()
+    })
+  }
+
+  /**
+   * Dispatches an update event to notify subscribers of changes to the history.
+   */
+  private dispatchUpdate() : void {
+    this.dispatchEvent(new CustomEvent('update', { detail: this.#_history }))
   }
 
   /**
@@ -119,9 +143,9 @@ class HistoryManager {
   * @returns {T | undefined} - Returns the value of the callback or undefined if the sample is not found.
   */
   private findSample<T>(date: string, cb: (sample: Sample, index: number) => T) : T | undefined {
-     const index = this.history.findIndex(sample => sample.date === date)
+     const index = this.#_history.findIndex(sample => sample.date === date)
 
-     if (index !== -1) return cb(this.history[index], index)
+     if (index !== -1) return cb(this.#_history[index], index)
   }
 }
 

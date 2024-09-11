@@ -21,7 +21,7 @@
         >
           <img src="@/assets/icons/message.png" class="icon-container-small" alt="l'habitant est annoté">
         </span>
-        <Note v-if="props.withNote" :item="props.user" />
+        <Note v-if="props.withNote" :item="props.user" @update="note => user.note = note" />
       </h3>
     </div>
     <div class="d-flex">
