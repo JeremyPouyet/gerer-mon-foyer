@@ -5,6 +5,11 @@
   import { Toast } from 'bootstrap'
   import { onUpdated } from 'vue'
 
+  const urls = {
+    [NotificationType.Error]: new URL('@/assets/icons/error.png', import.meta.url),
+    [NotificationType.Success]: new URL('@/assets/icons/success.png', import.meta.url)
+  }
+
   onUpdated(() => {
     document.querySelectorAll('.toast').forEach(toastEl => {
       const toast = new Toast(toastEl, { delay: 6000 })
@@ -18,7 +23,7 @@
 
       toast.show()
     })
-})
+  })
 </script>
 
 <template>
@@ -33,7 +38,7 @@
       :data-id="id"
     >
       <div class="toast-header">
-        <img :src="`src/assets/icons/${notif.type}.png`" class="rounded me-2 icon-container" :alt="notif.type">
+        <img :src="urls[notif.type].href" class="rounded me-2 icon-container" :alt="notif.type">
         <strong v-if="notif.type === NotificationType.Error" class="me-auto">Erreur</strong>
         <strong v-else class="me-auto">Succès</strong>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" />
