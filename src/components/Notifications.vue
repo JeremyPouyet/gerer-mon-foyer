@@ -21,7 +21,8 @@
           notificationManager.delete(toastDiv.dataset.id as ID)
       }, { once: true })
 
-      toast.show()
+      if (toast.isShown() === false)
+        toast.show()
     })
   })
 </script>

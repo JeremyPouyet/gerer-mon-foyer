@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>
-    <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup" style="vertical-align: middle;">
+    <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup">
   </div>
 </template>
 

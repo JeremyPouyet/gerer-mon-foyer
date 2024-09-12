@@ -118,7 +118,7 @@ class HistoryManager extends EventTarget {
    * Updates the data of a sample based on a given date.
    *
    * @param {string} date - The date of the sample to update.
-   * @param {string} data - The new data to be assigned to the sample.
+   * @param {string} updates - The new data to be assigned to the sample.
    */
   sampleUpdate(date: string, updates: Partial<Sample>) {
     this.findSample(date, sample => {

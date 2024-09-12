@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Note from './Note.vue';
-  import { ref } from 'vue'
+  import { onMounted, onUnmounted, ref } from 'vue'
   import historyManager, { type Sample } from '@/historyManager';
 
   const emit = defineEmits(['switchSample'])
@@ -40,6 +40,17 @@
   function sexyDate(strDate: string) {
     return formatter.format(new Date(strDate))
   }
+
+  onMounted(() => {
+    const updateHistory = (event: Event) => {
+      const customEvent = event as CustomEvent
+      history.value = [...customEvent.detail]
+    }
+
+    historyManager.addEventListener('update', updateHistory);
+    onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
+});
+
 </script>
 
 <template>
