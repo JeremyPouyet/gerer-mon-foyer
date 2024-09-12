@@ -14,7 +14,6 @@
   const popupPosition = ref<'above' | 'below'>('above')
   const notePopupRef = ref<HTMLElement | null>(null) // Reference to the note-popup element
 
-  // Function to toggle the visibility of the note popup and adjust its position
   async function toggleNotePopup(event: MouseEvent): Promise<void> {
     showNotePopup.value = !showNotePopup.value
 
@@ -24,8 +23,14 @@
 
     const popupElement = notePopupRef.value
 
-    if (popupElement && showNotePopup.value)
-      popupPosition.value = event.clientY - popupElement.offsetHeight < 0 ? 'below' : 'above'
+    if (!popupElement || !showNotePopup.value) return
+
+    const windowWidth = window.innerWidth
+    const popupRect = popupElement.getBoundingClientRect()
+
+    popupPosition.value = event.clientY - popupElement.offsetHeight < 0 ? 'below' : 'above'
+    popupPosition.value += ' '
+    popupPosition.value += popupRect.left < 0 || popupRect.right > windowWidth ? 'left' : 'right'
   }
 
   function noteUpdate() : void {
@@ -116,6 +121,20 @@
   border-bottom: 10px solid white;
 }
 
+.note-popup.left {
+  right: auto;
+  left: 0;
+}
+.note-popup.left::before {
+  right: auto;
+  left: 0;
+}
+.note-popup.right {
+  right: 0;
+}
+.note-popup.right::before {
+  right: 0;
+}
 .note-popup textarea {
   box-sizing: border-box;
   resize: both;

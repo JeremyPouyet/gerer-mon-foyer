@@ -26,7 +26,7 @@
     <section>
       <TableTitle :title="labels[transactionType]['plural']" :transaction-type="transactionType" :user="user" />
 
-      <div class="table-responsive shadowed-border">
+      <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover table-responsive">
           <thead>
             <tr>
