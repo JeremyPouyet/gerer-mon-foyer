@@ -26,8 +26,6 @@
     ['/simulator',            'Simulateur',               new URL('@/assets/icons/distribution.png', import.meta.url)]
   ]
 
-  console.log(menuItems)
-
   function historicise() {
     historyManager.sampleCreate({ account: db.account, users: db.users })
     notificationManager.create('Répartition historisé !', NotificationType.Success)
