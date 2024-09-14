@@ -12,8 +12,8 @@ class HistoryManager extends EventTarget {
   /**
    * Sets the active date in the session storage.
    *
-   * @param {string} date - The date string to set as the current active history date.
-   *                        If the value is empty, an empty string is stored.
+   * @param {string} date The date string to set as the current active history date.
+   *                      If the value is empty, an empty string is stored.
    */
   set activeDate(date: string) {
     sessionStorage.setItem('currentHistoryDate', date || '')
@@ -22,7 +22,7 @@ class HistoryManager extends EventTarget {
   /**
    * Gets the active date from the session storage.
    *
-   * @returns {string | null} - The currently active date from session storage or null if not set.
+   * @returns {string | null} The currently active date from session storage or null if not set.
    */
   get activeDate() : string | null {
     return sessionStorage.getItem('currentHistoryDate')
@@ -31,8 +31,8 @@ class HistoryManager extends EventTarget {
   /**
    * Retrieves the active sample based on the active date.
    *
-   * @returns {Sample | undefined} - The active sample associated with the current date.
-   *                                 Returns undefined if no sample is found.
+   * @returns {Sample | undefined} The active sample associated with the current date.
+   *                               Returns undefined if no sample is found.
    */
   get activeSample() : Sample | undefined {
     return this.sampleGet(this.activeDate)
@@ -49,7 +49,7 @@ class HistoryManager extends EventTarget {
   /**
    * Gets the entire history of samples.
    *
-   * @returns {Sample[]} - The array of samples in the history.
+   * @returns {Sample[]} The array of samples representing the history.
    */
   get history() : Sample[] {
     return this.#_history
@@ -68,9 +68,9 @@ class HistoryManager extends EventTarget {
   /**
    * Gets a specific sample from the history based on a date.
    *
-   * @param {string | null} [date] - The date string of the history sample to retrieve.
-   *                                 When absent, the most recent sample (first in the array) is returned.
-   * @returns {Sample | undefined} - The matching sample from the history or undefined if not found.
+   * @param {string | null} [date] The date string of the history sample to retrieve.
+   *                               When absent, the most recent sample (first in the array) is returned.
+   * @returns {Sample | undefined} The matching sample from the history or undefined if not found.
    */
   sampleGet(date?: string | null) : Sample | undefined {
     return date ? this.findSample(date, sample => sample) : this.#_history[0]
@@ -79,8 +79,8 @@ class HistoryManager extends EventTarget {
   /**
    * Creates a new sample and adds it to the history.
    *
-   * @param {DBSnapshot} snapshot - Snapshot to insert at the beginning of the history (most recent).
-   *                                Also sets the active date to the date of the new sample.
+   * @param {DBSnapshot} snapshot Snapshot to insert at the beginning of the history (most recent).
+   *                              Also sets the active date to the date of the new sample.
    */
   sampleCreate(snapshot: DBSnapshot) : void {
     const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
@@ -92,10 +92,10 @@ class HistoryManager extends EventTarget {
   /**
    * Deletes a sample from the history based on a given date.
    *
-   * @param {string} date - The date of the sample to delete.
-   *                        After deletion, if the active sample is the one being deleted,
-   *                        the active date is updated to the next available sample in the history.
-   *                        If no samples remain, the active date is cleared.
+   * @param {string} date The date of the sample to delete.
+   *                      After deletion, if the active sample is the one being deleted,
+   *                      the active date is updated to the next available sample in the history.
+   *                      If no samples remain, the active date is cleared.
    */
   sampleDelete(date: string) : void {
     this.findSample(date, (sample, index) => {
@@ -117,8 +117,8 @@ class HistoryManager extends EventTarget {
   /**
    * Updates the data of a sample based on a given date.
    *
-   * @param {string} date - The date of the sample to update.
-   * @param {string} updates - The new data to be assigned to the sample.
+   * @param {string} date The date of the sample to update.
+   * @param {string} updates The new data to be assigned to the sample.
    */
   sampleUpdate(date: string, updates: Partial<Sample>) {
     this.findSample(date, sample => {
@@ -137,10 +137,10 @@ class HistoryManager extends EventTarget {
   /**
    * Finds the index of a sample in the history and performs an action based on it.
   *
-  * @param {string} date - The date of the sample to find.
-  * @param {(sample: Sample, index: number) => T} cb - A callback to execute when the sample is found.
-  *                                                    It receives the sample and its index in the history.
-  * @returns {T | undefined} - Returns the value of the callback or undefined if the sample is not found.
+  * @param {string} date The date of the sample to find.
+  * @param {(sample: Sample, index: number) => T} cb A callback to execute when the sample is found.
+  *                                                  It receives the sample and its index in the history.
+  * @returns {T | undefined} Returns the value of the callback or undefined if the sample is not found.
   */
   private findSample<T>(date: string, cb: (sample: Sample, index: number) => T) : T | undefined {
      const index = this.#_history.findIndex(sample => sample.date === date)

@@ -13,9 +13,7 @@
   let accountWatcherCleanup: (() => void) | null = null
 
   function switchSample() {
-    const newSample = historyManager.activeSample
-
-    sample.value = newSample
+    sample.value = historyManager.activeSample
 
     stopWatchers()
 
