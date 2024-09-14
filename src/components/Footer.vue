@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer mt-auto py-4" style="background-color: var(--color-celadon);">
+  <footer v-once class="footer mt-auto py-4" style="background-color: var(--color-celadon);">
     <div class="container">
       <div class="row">
         <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">

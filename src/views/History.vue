@@ -1,24 +1,23 @@
 <script setup lang="ts">
   import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
   import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
-  import HistoryEditDates from '@/components/HistoryEditDates.vue';
+  import HistoryEditDates from '@/components/HistoryEditDates.vue'
   import UserNameTitle from '@/components/UserNameTitle.vue'
 
-  import { computed, ref, watch } from 'vue'
+  import { computed, onUnmounted, ref, watch } from 'vue'
   import DBSnapshot from '@/dbSnapshot'
   import { TransactionType } from '@/types'
-  import historyManager, { type Sample } from '@/historyManager';
+  import historyManager, { type Sample } from '@/historyManager'
 
-  let userWatcherCleanup: (() => void) | null = null;
-  let accountWatcherCleanup: (() => void) | null = null;
+  let userWatcherCleanup: (() => void) | null = null
+  let accountWatcherCleanup: (() => void) | null = null
 
   function switchSample() {
     const newSample = historyManager.activeSample
 
     sample.value = newSample
 
-    userWatcherCleanup?.()
-    accountWatcherCleanup?.()
+    stopWatchers()
 
     if (!sample.value)
       return
@@ -43,6 +42,13 @@
       historyManager.sampleUpdate(sample.value.date, { data: JSON.stringify(data) })
     }
   }
+
+  function stopWatchers() : void {
+    userWatcherCleanup?.()
+    accountWatcherCleanup?.()
+  }
+
+  onUnmounted(() => stopWatchers())
 
   switchSample()
 </script>
