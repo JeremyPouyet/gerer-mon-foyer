@@ -277,16 +277,16 @@
 
         <select v-model="newTransaction.frequency" class="form-select mt-2 mt-sm-0" title="Fréquence" @keypress.enter="transactionAdd">
           <option :value="Frequency.monthly">
-            Mensuelle
+            Mois
           </option>
           <option :value="Frequency.quarterly">
-            Trimestrielle
+            Trimestre
           </option>
           <option :value="Frequency.quarterly">
-            Semestrielle
+            Semestre
           </option>
           <option :value="Frequency.yearly">
-            Annuelle
+            Annnée
           </option>
         </select>
         <button class="btn btn-primary default-button mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
