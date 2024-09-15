@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
-  import TransactionsEdit from '@/components/TransactionsEdit.vue'
-  import UsersEdit from '@/components/UsersEdit.vue'
-  import UserNameTitle from '@/components/UserNameTitle.vue'
+import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
+import TransactionsEdit from '@/components/TransactionsEdit.vue'
+import UsersEdit from '@/components/UsersEdit.vue'
+import UserNameTitle from '@/components/UserNameTitle.vue'
 
-  import { computed } from 'vue'
-  import db from '@/db'
-  import { TransactionType } from '@/types'
+import { computed } from 'vue'
+import db from '@/db'
+import { TransactionType } from '@/types'
 
-  const commonBill = computed<number>(() => Math.max(db.account.expenses.sum - db.account.incomes.sum, 0))
-  const incomeSum = computed(() => db.users.reduce((sum, user) => sum + user.account.incomes.sum, db.account.incomes.sum))
-  const remainSum = computed<number>(() => db.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+const commonBill = computed<number>(() => Math.max(db.account.expenses.sum - db.account.incomes.sum, 0))
+const incomeSum = computed(() => db.users.reduce((sum, user) => sum + user.account.incomes.sum, db.account.incomes.sum))
+const remainSum = computed<number>(() => db.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
 </script>
 
 <template>

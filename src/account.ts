@@ -1,6 +1,6 @@
 import { emptyTransactions, newId, valueAs } from './helpers'
-import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from "./types"
-import { TransactionType } from "./types"
+import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
+import { TransactionType } from './types'
 
 /**
  * Interface representing account related settings.
@@ -69,11 +69,11 @@ export default class Account {
    * @param {TransactionFunctional} transaction The transaction details to add.
    */
   transactionAdd(transactionType: TransactionType, transaction: TransactionFunctional) : void {
-    const { name, frequency, value } = transaction;
+    const { name, frequency, value } = transaction
     const trimmedName = name.trim()
 
     if (!trimmedName || !value)
-      return;
+      return
 
     const newTransaction = { frequency, id: newId(), name: trimmedName, value }
     this[transactionType].values[newTransaction.id] = newTransaction

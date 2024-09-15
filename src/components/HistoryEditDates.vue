@@ -1,55 +1,55 @@
 <script setup lang="ts">
-  import Note from './Note.vue';
-  import { onMounted, onUnmounted, ref } from 'vue'
-  import historyManager, { type Sample } from '@/historyManager';
+import Note from './Note.vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import historyManager, { type Sample } from '@/historyManager'
 
-  const emit = defineEmits(['switchSample'])
-  const activeDate = ref<string | null | undefined>(sessionStorage.getItem('currentHistoryDate'))
-  const history = ref<Sample[]>(historyManager.history)
+const emit = defineEmits(['switchSample'])
+const activeDate = ref<string | null | undefined>(sessionStorage.getItem('currentHistoryDate'))
+const history = ref<Sample[]>(historyManager.history)
 
-  function switchSample(date: string) : void {
-    const newSample = historyManager.sampleGet(date)
+function switchSample(date: string) : void {
+  const newSample = historyManager.sampleGet(date)
 
-    activeDate.value = date
-    historyManager.activeDate = date
-    if (newSample) emit('switchSample')
+  activeDate.value = date
+  historyManager.activeDate = date
+  if (newSample) emit('switchSample')
+}
+
+function removeSample(date: string) : void {
+  const userIsremovingActiveSample = date == historyManager.activeDate
+
+  historyManager.sampleDelete(date)
+
+  if (!userIsremovingActiveSample)
+    return
+
+  activeDate.value = historyManager.activeDate
+  emit('switchSample')
+}
+
+/* eslint-disable sort-keys */
+const formatter = new Intl.DateTimeFormat('fr-FR', {
+  minute: 'numeric',
+  hour: 'numeric',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+/* eslint-enable sort-keys */
+
+function sexyDate(strDate: string) {
+  return formatter.format(new Date(strDate))
+}
+
+onMounted(() => {
+  const updateHistory = (event: Event) => {
+    const customEvent = event as CustomEvent
+    history.value = [...customEvent.detail]
   }
 
-  function removeSample(date: string) : void {
-    const userIsremovingActiveSample = date == historyManager.activeDate
-
-    historyManager.sampleDelete(date)
-
-    if (!userIsremovingActiveSample)
-      return
-
-    activeDate.value = historyManager.activeDate
-    emit('switchSample')
-  }
-
-  /* eslint-disable sort-keys */
-  const formatter = new Intl.DateTimeFormat('fr-FR', {
-    minute: 'numeric',
-    hour: 'numeric',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-  /* eslint-enable sort-keys */
-
-  function sexyDate(strDate: string) {
-    return formatter.format(new Date(strDate))
-  }
-
-  onMounted(() => {
-    const updateHistory = (event: Event) => {
-      const customEvent = event as CustomEvent
-      history.value = [...customEvent.detail]
-    }
-
-    historyManager.addEventListener('update', updateHistory);
-    onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
-});
+  historyManager.addEventListener('update', updateHistory)
+  onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
+})
 
 </script>
 

@@ -1,7 +1,7 @@
-import { all, create, } from "mathjs"
+import { all, create, } from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Frequency, type ID, type Transaction, type TransactionRecord } from "./types"
+import { Frequency, type ID, type Transaction, type TransactionRecord } from './types'
 
 // https://mathjs.org/docs/expressions/security.html
 const math = create(all)

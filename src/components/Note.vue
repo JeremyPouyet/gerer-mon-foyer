@@ -1,53 +1,53 @@
 <script setup lang="ts">
-  import { nextTick, ref } from 'vue'
-  import type { Transaction } from '@/types';
-  import type { Sample } from '@/historyManager'
-  import type Account from '@/account';
+import { nextTick, ref } from 'vue'
+import type { Transaction } from '@/types'
+import type { Sample } from '@/historyManager'
+import type Account from '@/account'
 
-  const emit = defineEmits<
-    (e: 'update', note: string | undefined) => void
-  >()
+const emit = defineEmits<
+  (e: 'update', note: string | undefined) => void
+>()
 
-  const props = defineProps<{ item: Account | Transaction | Sample }>()
-  const currentNote = ref<string | undefined>(props.item.note)
-  const showNotePopup = ref<boolean>(false)
-  const popupPosition = ref<'above' | 'below'>('above')
-  const notePopupRef = ref<HTMLElement | null>(null) // Reference to the note-popup element
+const props = defineProps<{ item: Account | Transaction | Sample }>()
+const currentNote = ref<string | undefined>(props.item.note)
+const showNotePopup = ref<boolean>(false)
+const popupPosition = ref<'above' | 'below'>('above')
+const notePopupRef = ref<HTMLElement | null>(null) // Reference to the note-popup element
 
-  async function toggleNotePopup(event: MouseEvent): Promise<void> {
-    showNotePopup.value = !showNotePopup.value
+async function toggleNotePopup(event: MouseEvent): Promise<void> {
+  showNotePopup.value = !showNotePopup.value
 
-    // await for the page to be refreshed.
-    // otherwise, as the note-popup element is not on the page, the ref to notePopupRef won't be setup.
-    await nextTick()
+  // await for the page to be refreshed.
+  // otherwise, as the note-popup element is not on the page, the ref to notePopupRef won't be setup.
+  await nextTick()
 
-    const popupElement = notePopupRef.value
+  const popupElement = notePopupRef.value
 
-    if (!popupElement || !showNotePopup.value) return
+  if (!popupElement || !showNotePopup.value) return
 
-    const windowWidth = window.innerWidth
-    const popupRect = popupElement.getBoundingClientRect()
+  const windowWidth = window.innerWidth
+  const popupRect = popupElement.getBoundingClientRect()
 
-    popupPosition.value = event.clientY - popupElement.offsetHeight < 0 ? 'below' : 'above'
-    popupPosition.value += ' '
-    popupPosition.value += popupRect.left < 0 || popupRect.right > windowWidth ? 'left' : 'right'
-  }
+  popupPosition.value = event.clientY - popupElement.offsetHeight < 0 ? 'below' : 'above'
+  popupPosition.value += ' '
+  popupPosition.value += popupRect.left < 0 || popupRect.right > windowWidth ? 'left' : 'right'
+}
 
-  function noteUpdate() : void {
-    showNotePopup.value = false
-    emit('update', currentNote.value)
-  }
+function noteUpdate() : void {
+  showNotePopup.value = false
+  emit('update', currentNote.value)
+}
 
-  function noteDelete() : void {
-    showNotePopup.value = false
-    currentNote.value = ''
-    emit('update', '')
-  }
+function noteDelete() : void {
+  showNotePopup.value = false
+  currentNote.value = ''
+  emit('update', '')
+}
 
-  function noteCancel() : void {
-    currentNote.value = props.item.note
-    showNotePopup.value = false
-  }
+function noteCancel() : void {
+  currentNote.value = props.item.note
+  showNotePopup.value = false
+}
 </script>
 
 <template>

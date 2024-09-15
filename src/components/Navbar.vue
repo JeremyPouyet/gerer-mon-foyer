@@ -1,35 +1,35 @@
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue'
-  import { RouterLink, useRoute } from 'vue-router'
-  import db from '@/db'
-  import notificationManager, { NotificationType } from '@/notificationManager'
-  import historyManager from '@/historyManager';
+import { computed, ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import db from '@/db'
+import notificationManager, { NotificationType } from '@/notificationManager'
+import historyManager from '@/historyManager'
 
-  const route = useRoute()
-  const currentPath = ref(route.path)
-  watch(route, newRoute => currentPath.value = newRoute.path)
+const route = useRoute()
+const currentPath = ref(route.path)
+watch(route, newRoute => currentPath.value = newRoute.path)
 
-  const unsavedChangesText = computed(() : string => {
-    const count = db.unsavedChanges.value
+const unsavedChangesText = computed(() : string => {
+  const count = db.unsavedChanges.value
 
-    return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`;
-  })
+  return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
+})
 
-  const addMarginWhenBadge = computed(() : string => {
-    return db.unsavedChanges.value > 0 ? 'me-3' : '';
-  })
+const addMarginWhenBadge = computed(() : string => {
+  return db.unsavedChanges.value > 0 ? 'me-3' : ''
+})
 
-  const menuItems: [string, string, URL][] = [
-    ['/',                     'Accueil',                  new URL('@/assets/icons/home.png', import.meta.url)],
-    ['/expense-distribution', 'Répartition des dépenses', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
-    ['/history',              'Historique',               new URL('@/assets/icons/history.png', import.meta.url)],
-    ['/simulator',            'Simulateur',               new URL('@/assets/icons/distribution.png', import.meta.url)]
-  ]
+const menuItems: [string, string, URL][] = [
+  ['/',                     'Accueil',                  new URL('@/assets/icons/home.png', import.meta.url)],
+  ['/expense-distribution', 'Répartition des dépenses', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
+  ['/history',              'Historique',               new URL('@/assets/icons/history.png', import.meta.url)],
+  ['/simulator',            'Simulateur',               new URL('@/assets/icons/distribution.png', import.meta.url)]
+]
 
-  function historicise() {
-    historyManager.sampleCreate({ account: db.account, users: db.users })
-    notificationManager.create('Répartition historisé !', NotificationType.Success)
-  }
+function historicise() {
+  historyManager.sampleCreate({ account: db.account, users: db.users })
+  notificationManager.create('Répartition historisé !', NotificationType.Success)
+}
 
 </script>
 

@@ -1,30 +1,30 @@
 <script setup lang="ts">
-  import { type ID } from '@/types';
-  import notificationManager, { NotificationType } from '@/notificationManager'
+import { type ID } from '@/types'
+import notificationManager, { NotificationType } from '@/notificationManager'
 
-  import { Toast } from 'bootstrap'
-  import { onUpdated } from 'vue'
+import { Toast } from 'bootstrap'
+import { onUpdated } from 'vue'
 
-  const urls = {
-    [NotificationType.Error]: new URL('@/assets/icons/error.png', import.meta.url),
-    [NotificationType.Success]: new URL('@/assets/icons/success.png', import.meta.url)
-  }
+const urls = {
+  [NotificationType.Error]: new URL('@/assets/icons/error.png', import.meta.url),
+  [NotificationType.Success]: new URL('@/assets/icons/success.png', import.meta.url)
+}
 
-  onUpdated(() => {
-    document.querySelectorAll('.toast').forEach(toastEl => {
-      const toast = new Toast(toastEl, { delay: 6000 })
+onUpdated(() => {
+  document.querySelectorAll('.toast').forEach(toastEl => {
+    const toast = new Toast(toastEl, { delay: 6000 })
 
-      toastEl.addEventListener("hide.bs.toast", event => {
-        const toastDiv = event.target as HTMLDivElement
+    toastEl.addEventListener('hide.bs.toast', event => {
+      const toastDiv = event.target as HTMLDivElement
 
-        if (toastDiv)
-          notificationManager.delete(toastDiv.dataset.id as ID)
-      }, { once: true })
+      if (toastDiv)
+        notificationManager.delete(toastDiv.dataset.id as ID)
+    }, { once: true })
 
-      if (toast.isShown() === false)
-        toast.show()
-    })
+    if (toast.isShown() === false)
+      toast.show()
   })
+})
 </script>
 
 <template>

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-  import TableTitle from './TableTitle.vue'
+import TableTitle from './TableTitle.vue'
 
-  import { computed } from 'vue'
-  import { Frequency, TransactionType } from '@/types';
-  import { round, valueAs  } from '@/helpers';
-  import type Account from '@/account';
+import { computed } from 'vue'
+import { Frequency, TransactionType } from '@/types'
+import { round, valueAs  } from '@/helpers'
+import type Account from '@/account'
 
-  const props = defineProps<{account: Account, income?: number, transactionType: TransactionType}>()
+const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
 
-  const labels = {
-    [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
-    [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
-  }
+const labels = {
+  [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
+  [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
+}
 
-  const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
-  const yTotal = computed(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
+const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
+const yTotal = computed(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
 </script>
 
 <template>

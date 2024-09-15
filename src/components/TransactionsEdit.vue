@@ -1,118 +1,118 @@
 <script setup lang="ts">
-  import Note from '@/components/Note.vue'
-  import TableTitle from './TableTitle.vue'
+import Note from '@/components/Note.vue'
+import TableTitle from './TableTitle.vue'
 
-  import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
+import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 
-  import { round, valueAs } from '@/helpers'
-  import notificationManager, { NotificationType } from '@/notificationManager'
-  import { Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
-  import type Account from '@/account'
+import { round, valueAs } from '@/helpers'
+import notificationManager, { NotificationType } from '@/notificationManager'
+import { Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
+import type Account from '@/account'
 
-  const labels = {
-    [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
-    [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
+const labels = {
+  [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
+  [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
+}
+
+const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
+
+const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
+const editedName = ref<string>('')
+const editedNameId = ref<ID>()
+const editedValueId = ref<ID>()
+const editedFrequency = ref<Frequency | null>(null)
+const editedValue = ref<string>('')
+const yTotal = computed<number>(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
+const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
+let input : HTMLInputElement
+const newTransactionInputName = ref<HTMLInputElement>()
+
+function testTransactionValue(transaction: Pick<Transaction, 'value' | 'frequency'>) : boolean {
+  try {
+    valueAs(transaction)
+    return true
+  } catch {
+    notificationManager.create(`"${transaction.value}" n'est pas un montant valide`, NotificationType.Error)
+    return false
   }
+}
 
-  const props = defineProps<{account: Account, income?: number, transactionType: TransactionType}>()
+function transactionAdd() : void {
+  const draft = newTransaction.value
+  if (!draft.name || !draft.value || !testTransactionValue(draft))
+    return
 
-  const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
-  const editedName = ref<string>('')
-  const editedNameId = ref<ID>()
-  const editedValueId = ref<ID>()
-  const editedFrequency = ref<Frequency | null>(null)
-  const editedValue = ref<string>('')
-  const yTotal = computed<number>(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
-  const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
-  let input : HTMLInputElement
-  const newTransactionInputName = ref<HTMLInputElement>()
+  // move all code logic to this function and return true/false ? or better show error with message if possible ?
+  props.account.transactionAdd(props.transactionType, newTransaction.value)
+  newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
 
-  function testTransactionValue(transaction: Pick<Transaction, "value" | "frequency">) : boolean {
-    try {
-      valueAs(transaction);
-      return true
-    } catch {
-      notificationManager.create(`"${transaction.value}" n'est pas un montant valide`, NotificationType.Error)
-      return false
-    }
-  }
+  // once the transaction is added, expect the user to add a new one
+  nextTick(() => newTransactionInputName.value?.focus())
+}
 
-  function transactionAdd() : void {
-    const draft = newTransaction.value
-    if (!draft.name || !draft.value || !testTransactionValue(draft))
-      return;
+function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
+  if (el)
+    input = el as HTMLInputElement
+}
 
-    // move all code logic to this function and return true/false ? or better show error with message if possible ?
-    props.account.transactionAdd(props.transactionType, newTransaction.value)
-    newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
+function startEditTransactionName(transaction: Transaction) : void {
+  editedNameId.value = transaction.id
+  editedName.value = transaction.name
+  cancelEditTransactionValue()
+  document.addEventListener('mousedown', handleClickOutside)
+  nextTick(() => input?.focus())
+}
 
-    // once the transaction is added, expect the user to add a new one
-    nextTick(() => newTransactionInputName.value?.focus())
-  }
+function cancelEditTransactionName() : void {
+  editedNameId.value = undefined
+  editedName.value = ''
+  document.removeEventListener('mousedown', handleClickOutside)
+}
 
-  function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
-    if (el)
-      input = el as HTMLInputElement
-  }
+function executeEditTransactionName(transaction: Transaction) : void {
+  if (!editedName.value)
+    return
+  transaction.name = editedName.value
+  // ToDo - create and call a function in user to edit transaction maybe ?
+  cancelEditTransactionName()
+}
 
-  function startEditTransactionName(transaction: Transaction) : void {
-    editedNameId.value = transaction.id;
-    editedName.value = transaction.name
+function startEditTransactionValue(transaction: Transaction, newFrequency: Frequency) : void {
+  editedFrequency.value = newFrequency
+  editedValueId.value = transaction.id
+  editedValue.value = newFrequency === transaction.frequency
+    ? transaction.value
+    : round(valueAs(transaction, newFrequency)).toString()
+  cancelEditTransactionName()
+  document.addEventListener('mousedown', handleClickOutside)
+  nextTick(() => input?.focus())
+}
+
+function cancelEditTransactionValue() : void {
+  editedFrequency.value = Frequency.monthly
+  editedValueId.value = undefined
+  editedValue.value = ''
+  document.removeEventListener('mousedown', handleClickOutside)
+}
+
+function executeEditTransactionValue(transaction: Transaction, frequency: Frequency) : void {
+  if (!editedValue.value)
+    return
+
+  const draft = { frequency, value: editedValue.value }
+  if (testTransactionValue(draft)) {
+    props.account.transactionUpdate(props.transactionType, transaction.id, draft)
     cancelEditTransactionValue()
-    document.addEventListener('mousedown', handleClickOutside)
-    nextTick(() => input?.focus())
   }
+}
 
-  function cancelEditTransactionName() : void {
-    editedNameId.value = undefined
-    editedName.value = ''
-    document.removeEventListener('mousedown', handleClickOutside)
-  }
-
-  function executeEditTransactionName(transaction: Transaction) : void {
-    if (!editedName.value)
-      return
-    transaction.name = editedName.value
-      // ToDo - create and call a function in user to edit transaction maybe ?
+function handleClickOutside(event: MouseEvent) : void {
+  // todo - When a click outside an input is made, modified values should be updated, not discarded
+  if (input && !input.contains(event.target as Node)) {
     cancelEditTransactionName()
+    cancelEditTransactionValue()
   }
-
-  function startEditTransactionValue(transaction: Transaction, newFrequency: Frequency) : void {
-    editedFrequency.value = newFrequency
-    editedValueId.value = transaction.id
-    editedValue.value = newFrequency === transaction.frequency
-      ? transaction.value
-      : round(valueAs(transaction, newFrequency)).toString()
-    cancelEditTransactionName()
-    document.addEventListener('mousedown', handleClickOutside)
-    nextTick(() => input?.focus())
-  }
-
-  function cancelEditTransactionValue() : void {
-    editedFrequency.value = Frequency.monthly
-    editedValueId.value = undefined
-    editedValue.value = ''
-    document.removeEventListener('mousedown', handleClickOutside)
-  }
-
-  function executeEditTransactionValue(transaction: Transaction, frequency: Frequency) : void {
-    if (!editedValue.value)
-      return
-
-    const draft = { frequency, value: editedValue.value }
-    if (testTransactionValue(draft)) {
-      props.account.transactionUpdate(props.transactionType, transaction.id, draft)
-      cancelEditTransactionValue()
-    }
-  }
-
-  function handleClickOutside(event: MouseEvent) : void {
-    // todo - When a click outside an input is made, modified values should be updated, not discarded
-    if (input && !input.contains(event.target as Node)) {
-      cancelEditTransactionName()
-      cancelEditTransactionValue()
-    }
-  }
+}
 </script>
 
 <template>

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-  import UserNameEdit from '@/components/UserNameEdit.vue'
+import UserNameEdit from '@/components/UserNameEdit.vue'
 
-  import { ref } from 'vue'
-  import db from '@/db'
-  import User from '@/user'
+import { ref } from 'vue'
+import db from '@/db'
+import User from '@/user'
 
-  const username = ref<string>('')
+const username = ref<string>('')
 
-  function userCreate() : void {
-    db.userCreate(username.value)
-    username.value = ''
-  }
+function userCreate() : void {
+  db.userCreate(username.value)
+  username.value = ''
+}
 
-  function userDelete(user: User) : void {
-    const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
+function userDelete(user: User) : void {
+  const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
 
-    if (confirmation) db.userDelete(user)
-  }
+  if (confirmation) db.userDelete(user)
+}
 </script>
 
 <template>

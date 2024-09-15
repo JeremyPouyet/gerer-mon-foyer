@@ -1,80 +1,80 @@
 <script setup lang="ts">
-  import notificationManager, { NotificationType } from '@/notificationManager'
-  import db from '@/db'
-  import historyManager from '@/historyManager';
+import notificationManager, { NotificationType } from '@/notificationManager'
+import db from '@/db'
+import historyManager from '@/historyManager'
 
-  function generateDateString() : string {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months start at 0
-    const day = String(now.getDate()).padStart(2, '0');
+function generateDateString() : string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0') // Months start at 0
+  const day = String(now.getDate()).padStart(2, '0')
 
-    return `${year}-${month}-${day}-sauvegarde.json`;
+  return `${year}-${month}-${day}-sauvegarde.json`
+}
+
+function saveFile() : void {
+  const blob = new Blob([db.export()], { type: 'text/plain' })
+  const link = document.createElement('a')
+
+  link.href = URL.createObjectURL(blob)
+  link.download = generateDateString()
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
+function uploadFile() : void {
+  const input = document.createElement('input')
+
+  input.type = 'file'
+  input.accept = '.json'
+
+  input.onchange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    const file = (target.files || [])[0]
+
+    if (!file)
+      return
+
+    const reader = new FileReader()
+
+    reader.addEventListener('load', onFileUploaded, { once: true })
+    reader.readAsText(file)
   }
 
-  function saveFile() : void {
-    const blob = new Blob([db.export()], { type: 'text/plain' })
-    const link = document.createElement('a');
+  input.click()
+}
 
-    link.href = URL.createObjectURL(blob)
-    link.download = generateDateString()
-    link.click()
-    URL.revokeObjectURL(link.href)
+function onFileUploaded(event: ProgressEvent<FileReader>) : void {
+  db.empty()
+
+  try {
+    const reader = event.target
+
+    if (!reader)
+      throw new Error('Unexpected error')
+
+    const data = JSON.parse(reader.result as string) as Record<string, string>
+
+    for (const [key, value] of Object.entries(data))
+      localStorage.setItem(key, value)
+
+    db.setup()
+    historyManager.activeDate = historyManager.history[0]?.date || ''
+    notificationManager.create('Données importées avec succès', NotificationType.Success)
+  } catch (error) {
+    console.error(error)
+    notificationManager.create('Erreur lors de l\'importation des données', NotificationType.Error)
   }
+}
 
-  function uploadFile() : void {
-    const input = document.createElement('input')
+function confirmDataDeletion() : void {
+  const confirmation = confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')
 
-    input.type = 'file'
-    input.accept = '.json'
-
-    input.onchange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      const file = (target.files || [])[0]
-
-      if (!file)
-        return
-
-      const reader = new FileReader();
-
-      reader.addEventListener('load', onFileUploaded, { once: true })
-      reader.readAsText(file)
-    }
-
-    input.click()
-  }
-
-  function onFileUploaded(event: ProgressEvent<FileReader>) : void {
+  if (confirmation) {
     db.empty()
-
-    try {
-      const reader = event.target
-
-      if (!reader)
-        throw new Error('Unexpected error')
-
-      const data = JSON.parse(reader.result as string) as Record<string, string>
-
-      for (const [key, value] of Object.entries(data))
-        localStorage.setItem(key, value)
-
-      db.setup()
-      historyManager.activeDate = historyManager.history[0]?.date || ''
-      notificationManager.create('Données importées avec succès', NotificationType.Success)
-    } catch (error) {
-      console.error(error)
-      notificationManager.create('Erreur lors de l\'importation des données', NotificationType.Error)
-    }
+    notificationManager.create('Données supprimées avec succès', NotificationType.Success)
   }
-
-  function confirmDataDeletion() : void {
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.");
-
-    if (confirmation) {
-      db.empty()
-      notificationManager.create('Données supprimées avec succès', NotificationType.Success)
-    }
-  }
+}
 </script>
 
 <template>

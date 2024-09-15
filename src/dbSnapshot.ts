@@ -1,6 +1,6 @@
-import { reactive } from "vue"
-import User from "./user"
-import Account from "./account"
+import { reactive } from 'vue'
+import User from './user'
+import Account from './account'
 
 export default class DBSnapshot {
   account: Account

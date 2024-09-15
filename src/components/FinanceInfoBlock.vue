@@ -1,24 +1,24 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
-  import { round } from '@/helpers'
-  import User from '@/user'
+import { computed } from 'vue'
+import { round } from '@/helpers'
+import User from '@/user'
 
-  const props = defineProps<{
-    commonBill: number,
-    remainSum: number,
-    user: User
-  }>()
+const props = defineProps<{
+  commonBill: number,
+  remainSum: number,
+  user: User
+}>()
 
-  const monthlyRemainingBalance = computed(() => {
-    return props.user.monthlyRemainingBalance
-  })
+const monthlyRemainingBalance = computed(() => {
+  return props.user.monthlyRemainingBalance
+})
 
-  const ratio = computed(() => {
-    return props.user.ratio
-  })
-  const in10years = computed<number>(() => {
-    return round((monthlyRemainingBalance.value - ratio.value * props.commonBill) * 12 * 10)
-  })
+const ratio = computed(() => {
+  return props.user.ratio
+})
+const in10years = computed<number>(() => {
+  return round((monthlyRemainingBalance.value - ratio.value * props.commonBill) * 12 * 10)
+})
 </script>
 
 <template>

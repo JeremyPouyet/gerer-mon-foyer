@@ -24,7 +24,7 @@ export default class User {
     name = name.trim()
 
     if (name)
-      this.name = name;
+      this.name = name
   }
 
   monthlyRemainingBalanceUpdate() {

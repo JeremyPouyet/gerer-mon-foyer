@@ -39,7 +39,7 @@ class DB {
     watch(this.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
 
-    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail));
+    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
   }
 
   export() : string {
@@ -69,7 +69,7 @@ class DB {
       ++this.unsavedChanges.value
     }
     catch(err) {
-      console.error(`Failed to persist ${key}:`, err);
+      console.error(`Failed to persist ${key}:`, err)
       return false
     }
     return true
@@ -99,7 +99,7 @@ class DB {
     this.computeRatios()
   }
 
- private computeRatios() : void {
+  private computeRatios() : void {
     const remains : Map<string, number> = this.users.reduce((map, user) => {
       const remain = Math.max(user.monthlyRemainingBalance, 0)
       return map.set(user.id, remain)

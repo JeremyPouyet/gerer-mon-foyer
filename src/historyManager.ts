@@ -143,9 +143,9 @@ class HistoryManager extends EventTarget {
   * @returns {T | undefined} Returns the value of the callback or undefined if the sample is not found.
   */
   private findSample<T>(date: string, cb: (sample: Sample, index: number) => T) : T | undefined {
-     const index = this.#_history.findIndex(sample => sample.date === date)
+    const index = this.#_history.findIndex(sample => sample.date === date)
 
-     if (index !== -1) return cb(this.#_history[index], index)
+    if (index !== -1) return cb(this.#_history[index], index)
   }
 }
 

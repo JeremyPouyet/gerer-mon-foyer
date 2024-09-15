@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { TransactionType } from '@/types'
-  import type Account from '@/account';
+import { TransactionType } from '@/types'
+import type Account from '@/account'
 
-  const props = defineProps<{ title: string, transactionType: TransactionType, account: Account}>()
+const props = defineProps<{ title: string, transactionType: TransactionType, account: Account }>()
 </script>
 
 <template>

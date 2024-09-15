@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
-  import db from '@/db'
-  import { limitedEvaluate, round } from '@/helpers'
+import { ref, watch } from 'vue'
+import db from '@/db'
+import { limitedEvaluate, round } from '@/helpers'
 
-  const expenseValue = ref<string>(sessionStorage.getItem('simulatorValue') || '')
+const expenseValue = ref<string>(sessionStorage.getItem('simulatorValue') || '')
 
-  watch(expenseValue, () => {
-    sessionStorage.setItem('simulatorValue', expenseValue.value)
-  })
+watch(expenseValue, () => {
+  sessionStorage.setItem('simulatorValue', expenseValue.value)
+})
 </script>
 
 <template>

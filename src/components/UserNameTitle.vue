@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import type Account from '@/account';
-  import Note from '@/components/Note.vue'
-  import { TransactionType } from '@/types';
+import type Account from '@/account'
+import Note from '@/components/Note.vue'
+import { TransactionType } from '@/types'
 
-  const props = defineProps<{ account: Account, name: string, withNote: boolean }>()
+const props = defineProps<{ account: Account, name: string, withNote: boolean }>()
 </script>
 
 <template>

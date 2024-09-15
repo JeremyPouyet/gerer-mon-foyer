@@ -1,54 +1,54 @@
 <script setup lang="ts">
-  import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
-  import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
-  import HistoryEditDates from '@/components/HistoryEditDates.vue'
-  import UserNameTitle from '@/components/UserNameTitle.vue'
+import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
+import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
+import HistoryEditDates from '@/components/HistoryEditDates.vue'
+import UserNameTitle from '@/components/UserNameTitle.vue'
 
-  import { computed, onUnmounted, ref, watch } from 'vue'
-  import DBSnapshot from '@/dbSnapshot'
-  import { TransactionType } from '@/types'
-  import historyManager, { type Sample } from '@/historyManager'
+import { computed, onUnmounted, ref, watch } from 'vue'
+import DBSnapshot from '@/dbSnapshot'
+import { TransactionType } from '@/types'
+import historyManager, { type Sample } from '@/historyManager'
 
-  let userWatcherCleanup: (() => void) | null = null
-  let accountWatcherCleanup: (() => void) | null = null
+let userWatcherCleanup: (() => void) | null = null
+let accountWatcherCleanup: (() => void) | null = null
 
-  function switchSample() {
-    sample.value = historyManager.activeSample
+function switchSample() {
+  sample.value = historyManager.activeSample
 
-    stopWatchers()
+  stopWatchers()
 
-    if (!sample.value)
-      return
+  if (!sample.value)
+    return
 
-    snapshot.value = new DBSnapshot(JSON.parse(sample.value.data))
+  snapshot.value = new DBSnapshot(JSON.parse(sample.value.data))
 
-    userWatcherCleanup = watch(snapshot.value.users, () => updateSampleData({ users: snapshot.value.users }), { deep: true })
-    accountWatcherCleanup = watch(snapshot.value.account, () => updateSampleData({ account: snapshot.value.account }), {deep: true})
+  userWatcherCleanup = watch(snapshot.value.users, () => updateSampleData({ users: snapshot.value.users }), { deep: true })
+  accountWatcherCleanup = watch(snapshot.value.account, () => updateSampleData({ account: snapshot.value.account }), {deep: true})
+}
+
+const sample = ref<Sample | null | undefined>()
+const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
+
+const commonBill = computed<number>(() => Math.max(snapshot.value.account.expenses.sum - snapshot.value.account.incomes.sum, 0))
+const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.account.incomes.sum, snapshot.value.account.incomes.sum))
+const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+
+function updateSampleData(updatedData: Partial<DBSnapshot>) {
+  if (sample.value) {
+    const data = JSON.parse(sample.value.data) as DBSnapshot
+    Object.assign(data, updatedData)
+    historyManager.sampleUpdate(sample.value.date, { data: JSON.stringify(data) })
   }
+}
 
-  const sample = ref<Sample | null | undefined>()
-  const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
+function stopWatchers() : void {
+  userWatcherCleanup?.()
+  accountWatcherCleanup?.()
+}
 
-  const commonBill = computed<number>(() => Math.max(snapshot.value.account.expenses.sum - snapshot.value.account.incomes.sum, 0))
-  const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.account.incomes.sum, snapshot.value.account.incomes.sum))
-  const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+onUnmounted(() => stopWatchers())
 
-  function updateSampleData(updatedData: Partial<DBSnapshot>) {
-    if (sample.value) {
-      const data = JSON.parse(sample.value.data) as DBSnapshot
-      Object.assign(data, updatedData)
-      historyManager.sampleUpdate(sample.value.date, { data: JSON.stringify(data) })
-    }
-  }
-
-  function stopWatchers() : void {
-    userWatcherCleanup?.()
-    accountWatcherCleanup?.()
-  }
-
-  onUnmounted(() => stopWatchers())
-
-  switchSample()
+switchSample()
 </script>
 
 <template>
