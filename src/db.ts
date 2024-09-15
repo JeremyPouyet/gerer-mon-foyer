@@ -3,9 +3,10 @@ import { reactive, ref, watch } from 'vue'
 import { emptyTransactions } from './helpers'
 import historyManager, { type Sample } from './historyManager'
 import User from './user'
+import Account from './account'
 
 class DB {
-  readonly account = reactive<User>(this.newUser({name: 'Compte commun'}))
+  readonly account = reactive<Account>(new Account({}, this.computeRatios.bind(this)))
   readonly users = reactive<User[]>([])
   readonly unsavedChanges = ref<number>(0)
 
@@ -100,7 +101,7 @@ class DB {
 
  private computeRatios() : void {
     const remains : Map<string, number> = this.users.reduce((map, user) => {
-      const remain = Math.max(user.incomes.sum - user.expenses.sum, 0)
+      const remain = Math.max(user.monthlyRemainingBalance, 0)
       return map.set(user.id, remain)
     }, new Map<string, number>())
 

@@ -30,7 +30,7 @@
   const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
 
   const commonBill = computed<number>(() => Math.max(snapshot.value.account.expenses.sum - snapshot.value.account.incomes.sum, 0))
-  const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.incomes.sum, snapshot.value.account.incomes.sum))
+  const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.account.incomes.sum, snapshot.value.account.incomes.sum))
   const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
 
   function updateSampleData(updatedData: Partial<DBSnapshot>) {
@@ -64,16 +64,16 @@
       </div>
       <div class="col">
         <div class="row">
-          <UserNameTitle :user="snapshot.account" :with-note="false" />
-          <HistoryTransactionsShow :income="incomeSum" :transaction-type="TransactionType.Expense" :user="snapshot.account" />
-          <HistoryTransactionsShow :transaction-type="TransactionType.Income" :user="snapshot.account" />
+          <UserNameTitle :account="snapshot.account" :name="'Compte commun'" :with-note="false" />
+          <HistoryTransactionsShow :account="snapshot.account" :income="incomeSum" :transaction-type="TransactionType.Expense" />
+          <HistoryTransactionsShow :account="snapshot.account" :transaction-type="TransactionType.Income" />
         </div>
         <div v-for="user in snapshot.users" :key="user.id" class="row">
-          <UserNameTitle :user="user" :with-note="false" />
-          <HistoryTransactionsShow :income="user.incomes.sum" :transaction-type="TransactionType.Expense" :user="user" />
+          <UserNameTitle :account="user.account" :name="user.name" :with-note="false" />
+          <HistoryTransactionsShow :account="user.account" :income="user.account.incomes.sum" :transaction-type="TransactionType.Expense" />
           <div class="col mb-4">
-            <HistoryTransactionsShow :transaction-type="TransactionType.Income" :user="user" />
-            <FinanceInfoBlock :user="user" :common-bill="commonBill" :remain-sum="remainSum" />
+            <HistoryTransactionsShow :account="user.account" :transaction-type="TransactionType.Income" />
+            <FinanceInfoBlock :common-bill="commonBill" :remain-sum="remainSum" :user="user" />
           </div>
         </div>
       </div>

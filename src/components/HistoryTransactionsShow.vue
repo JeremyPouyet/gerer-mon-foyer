@@ -2,29 +2,25 @@
   import TableTitle from './TableTitle.vue'
 
   import { computed } from 'vue'
-  import User from '@/user'
   import { Frequency, TransactionType } from '@/types';
   import { round, valueAs  } from '@/helpers';
+  import type Account from '@/account';
+
+  const props = defineProps<{account: Account, income?: number, transactionType: TransactionType}>()
 
   const labels = {
     [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
     [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
   }
 
-  const props = defineProps<{
-    income?: number,
-    transactionType: TransactionType
-    user: User,
-  }>()
-
-  const transactionList = computed(() => props.user.transactionSorted(props.transactionType))
+  const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
   const yTotal = computed(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
 </script>
 
 <template>
-  <div v-show="user.settings.show[transactionType]" class="col mb-4">
+  <div v-show="account.settings.show[transactionType]" class="col mb-4">
     <section>
-      <TableTitle :title="labels[transactionType]['plural']" :transaction-type="transactionType" :user="user" />
+      <TableTitle :title="labels[transactionType]['plural']" :transaction-type="transactionType" :account="account" />
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover table-responsive">

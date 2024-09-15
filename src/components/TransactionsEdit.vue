@@ -4,23 +4,19 @@
 
   import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 
-  import User from '@/user'
   import { round, valueAs } from '@/helpers'
   import notificationManager, { NotificationType } from '@/notificationManager'
   import { Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
+  import type Account from '@/account'
 
   const labels = {
     [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
     [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
   }
 
-  const props = defineProps<{
-    income?: number,
-    transactionType: TransactionType
-    user: User,
-  }>()
+  const props = defineProps<{account: Account, income?: number, transactionType: TransactionType}>()
 
-  const transactionList = computed(() => props.user.transactionSorted(props.transactionType))
+  const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
   const editedName = ref<string>('')
   const editedNameId = ref<ID>()
   const editedValueId = ref<ID>()
@@ -47,7 +43,7 @@
       return;
 
     // move all code logic to this function and return true/false ? or better show error with message if possible ?
-    props.user.transactionAdd(props.transactionType, newTransaction.value)
+    props.account.transactionAdd(props.transactionType, newTransaction.value)
     newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
 
     // once the transaction is added, expect the user to add a new one
@@ -105,7 +101,7 @@
 
     const draft = { frequency, value: editedValue.value }
     if (testTransactionValue(draft)) {
-      props.user.transactionUpdate(props.transactionType, transaction.id, draft)
+      props.account.transactionUpdate(props.transactionType, transaction.id, draft)
       cancelEditTransactionValue()
     }
   }
@@ -120,9 +116,9 @@
 </script>
 
 <template>
-  <div v-show="user.settings.show[transactionType]" class="col mb-4">
+  <div v-show="account.settings.show[transactionType]" class="col mb-4">
     <section>
-      <TableTitle :title="labels[transactionType]['plural']" :transaction-type="transactionType" :user="user" />
+      <TableTitle :account="account" :title="labels[transactionType]['plural']" :transaction-type="transactionType" />
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
@@ -225,7 +221,7 @@
                   title="Supprimer"
                   class="icon-container-small icon-hoverable"
                   style="margin-left:0.4rem;"
-                  @click="() => props.user.transactionDelete(props.transactionType, transaction)"
+                  @click="() => props.account.transactionDelete(props.transactionType, transaction)"
                 >
               </td>
             </tr>

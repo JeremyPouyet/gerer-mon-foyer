@@ -23,7 +23,7 @@
 
 <template>
   <div class="text-block finance-info mt-2">
-    <template v-if="user.incomes.sum > 0">
+    <template v-if="user.account.incomes.sum > 0">
       <p>Après avoir couvert tes dépenses obligatoires, il te reste <span class="red fw-semibold">{{ round(monthlyRemainingBalance) }}€</span> par mois.</p>
       <p>Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="red fw-semibold">{{ round(remainSum) }}€</span>.</p>
       <p>Tes revenus représentent <span class="red fw-semibold">{{ round(ratio * 100) }}%</span> des revenus du foyer.</p>

@@ -2,13 +2,13 @@
   import { nextTick, ref } from 'vue'
   import type { Transaction } from '@/types';
   import type { Sample } from '@/historyManager'
-  import User from '@/user'
+  import type Account from '@/account';
 
   const emit = defineEmits<
     (e: 'update', note: string | undefined) => void
   >()
 
-  const props = defineProps<{ item: User | Transaction | Sample }>()
+  const props = defineProps<{ item: Account | Transaction | Sample }>()
   const currentNote = ref<string | undefined>(props.item.note)
   const showNotePopup = ref<boolean>(false)
   const popupPosition = ref<'above' | 'below'>('above')

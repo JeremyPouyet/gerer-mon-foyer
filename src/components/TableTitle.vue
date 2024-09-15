@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import User from '@/user'
   import { TransactionType } from '@/types'
+  import type Account from '@/account';
 
-  const props = defineProps<{ title: string, transactionType: TransactionType, user: User}>()
+  const props = defineProps<{ title: string, transactionType: TransactionType, account: Account}>()
 </script>
 
 <template>
@@ -15,7 +15,7 @@
       class="icon-container icon-hoverable position-absolute end-0"
       alt="Cacher"
       title="Cacher"
-      @click="() => props.user.settings.show[props.transactionType] = false"
+      @click="() => props.account.settings.show[props.transactionType] = false"
     >
   </div>
 </template>
