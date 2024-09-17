@@ -78,7 +78,6 @@ function noteCancel() : void {
 
 <style scoped>
 .note-popup {
-  /* position: initial; */
   position: relative;
   z-index: 10;
   background-color: white;

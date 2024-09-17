@@ -8,9 +8,9 @@ import Notifications from '@/components/Notifications.vue'
 
 <template>
   <Navbar />
+  <Notifications />
   <main id="main" role="main">
     <RouterView />
-    <Notifications />
   </main>
   <Footer />
 </template>

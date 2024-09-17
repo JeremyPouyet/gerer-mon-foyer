@@ -30,7 +30,6 @@ function historicise() {
   historyManager.sampleCreate({ account: db.account, users: db.users })
   notificationManager.create('Répartition historisé !', NotificationType.Success)
 }
-
 </script>
 
 <template>

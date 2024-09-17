@@ -28,7 +28,7 @@ onUpdated(() => {
 </script>
 
 <template>
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast-container position-fixed end-0 p-3" style="top:60px;">
     <div
       v-for="[id, notif] in notificationManager.notifications.value"
       :key="id"
