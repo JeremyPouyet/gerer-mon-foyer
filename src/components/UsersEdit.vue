@@ -27,7 +27,7 @@ function userDelete(user: User) : void {
     </div>
     <ul class="item-list">
       <li v-for="user in db.users" :key="user.id" class="item">
-        <div class="item-info">
+        <div class="d-flex justify-content-between container-fluid align-items-center">
           <UserNameEdit :user="user" />
           <img
             src="@/assets/icons/cross.png"

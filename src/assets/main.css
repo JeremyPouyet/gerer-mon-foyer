@@ -127,17 +127,8 @@ tfoot tr td:first-child {
 }
 
 .item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+  padding: .5rem 0 .5rem 0;
   border-bottom: 1px solid var(--color-celadon);
-}
-
-.item-info {
-  display: flex;
-  align-items: center;
-  flex-grow: 1; /* Allow the user-info to take up remaining space */
 }
 
 .align-right {

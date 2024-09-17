@@ -59,41 +59,41 @@ onMounted(() => {
       <h3>Dates</h3>
       <hr>
     </div>
-  </div>
-  <ul class="item-list">
-    <li v-for="sample in history" :key="sample.date" class="item">
-      <div class="item-info justify-content-between">
-        <span
-          title="Cliquer pour sélectionner"
-          style="cursor: pointer"
-          :class="{ active: activeDate === sample.date }"
-          @click="() => switchSample(sample.date)"
-        >
-          {{ sexyDate(sample.date) }}
+    <ul class="item-list">
+      <li v-for="sample in history" :key="sample.date" class="item">
+        <div class="d-flex justify-content-between container-fluid align-items-center">
           <span
-            v-if="sample.note"
-            data-toggle="tooltip"
-            :title="sample.note"
-            class="translate-middle badge unpaded"
-            style="position:relative;top:-0.2rem;right:-0.6rem;"
+            title="Cliquer pour sélectionner"
+            style="cursor: pointer"
+            :class="{ active: activeDate === sample.date }"
+            @click="() => switchSample(sample.date)"
           >
-            <img src="@/assets/icons/message.png" class="icon-container-small">
+            {{ sexyDate(sample.date) }}
+            <span
+              v-if="sample.note"
+              data-toggle="tooltip"
+              :title="sample.note"
+              class="translate-middle badge unpaded"
+              style="position:relative;top:-0.2rem;right:-0.6rem;"
+            >
+              <img src="@/assets/icons/message.png" class="icon-container-small">
+            </span>
           </span>
-        </span>
-        <div>
-          <Note :item="sample" @update="note => historyManager.sampleUpdate(sample.date, { note })" />
-          <img
-            src="@/assets/icons/cross.png"
-            alt="Supprimer"
-            :title="`Supprimer ${sexyDate(sample.date)} de l'historique`"
-            class="icon-container-small icon-hoverable"
-            style="margin-left:0.4rem;"
-            @click="() => removeSample(sample.date)"
-          >
+          <div>
+            <Note :item="sample" @update="note => historyManager.sampleUpdate(sample.date, { note })" />
+            <img
+              src="@/assets/icons/cross.png"
+              alt="Supprimer"
+              :title="`Supprimer ${sexyDate(sample.date)} de l'historique`"
+              class="icon-container-small icon-hoverable"
+              style="margin-left:0.4rem;"
+              @click="() => removeSample(sample.date)"
+            >
+          </div>
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>

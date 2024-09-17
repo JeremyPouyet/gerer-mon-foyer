@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
 import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
-import HistoryEditDates from '@/components/HistoryEditDates.vue'
+import HistoryEdit from '@/components/HistoryEdit.vue'
 import UserNameTitle from '@/components/UserNameTitle.vue'
 
 import { computed, onUnmounted, ref, watch } from 'vue'
@@ -60,7 +60,7 @@ switchSample()
     </div>
     <div v-else class="row">
       <div class="col-auto mb-4">
-        <HistoryEditDates @switch-sample="() => switchSample()" />
+        <HistoryEdit @switch-sample="() => switchSample()" />
       </div>
       <div class="col">
         <div class="row">

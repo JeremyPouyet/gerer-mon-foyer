@@ -51,40 +51,39 @@ function noteCancel() : void {
 </script>
 
 <template>
-  <div style="display:inline;position:relative;">
-    <div v-if="showNotePopup" ref="notePopupRef" class="note-popup" :class="popupPosition">
-      <div class="form-floating">
-        <textarea
-          v-model="currentNote"
-          rows="4"
-          cols="30"
-          placeholder="Entrez une note"
-          @keydown.esc="noteCancel"
-        />
-        <div class="input-group">
-          <button type="button" class="btn btn-primary btn-sm default-button" @click="noteUpdate">
-            Valider
-          </button>
-          <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-red);" @click="noteDelete">
-            Supprimer
-          </button>
-          <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-dark-purple);" @click="noteCancel">
-            Annuler
-          </button>
-        </div>
+  <div v-if="showNotePopup" ref="notePopupRef" class="note-popup" :class="popupPosition">
+    <div class="form-floating">
+      <textarea
+        v-model="currentNote"
+        rows="4"
+        cols="30"
+        placeholder="Entrez une note"
+        @keydown.esc="noteCancel"
+      />
+      <div class="input-group">
+        <button type="button" class="btn btn-primary btn-sm default-button" @click="noteUpdate">
+          Valider
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-red);" @click="noteDelete">
+          Supprimer
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-dark-purple);" @click="noteCancel">
+          Annuler
+        </button>
       </div>
     </div>
-    <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup">
   </div>
+  <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup">
 </template>
 
 <style scoped>
 .note-popup {
-  position: absolute;
+  /* position: initial; */
+  position: relative;
+  z-index: 10;
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px;
-  z-index: 100;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
 }
@@ -93,46 +92,17 @@ function noteCancel() : void {
   bottom: calc(100% + 15px);
   right: 0;
 }
-.note-popup.above::before {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid white;
-}
 
 .note-popup.below {
   top: calc(100% + 15px);
   right: 0;
-}
-.note-popup.below::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid white;
 }
 
 .note-popup.left {
   right: auto;
   left: 0;
 }
-.note-popup.left::before {
-  right: auto;
-  left: 0;
-}
 .note-popup.right {
-  right: 0;
-}
-.note-popup.right::before {
   right: 0;
 }
 .note-popup textarea {
