@@ -238,6 +238,9 @@ function handleClickOutside(event: MouseEvent) : void {
                 {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.quarterly), 0)) }}
               </td>
               <td class="text-end">
+                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.biannual), 0)) }}
+              </td>
+              <td class="text-end">
                 {{ yTotal }}
               </td>
               <td v-if="props.income" class="text-end">
