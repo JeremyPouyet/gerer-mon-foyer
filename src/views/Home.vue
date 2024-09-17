@@ -54,7 +54,15 @@
         <li>Les dépenses communes du foyer (loyer, factures, etc.).</li>
       </ul>
       <p class="text-start">
-        L'outil soustrait automatiquement les dépenses contraintes des revenus individuels pour une répartition juste. Il vous attribue ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles. Utilisez ensuite le <RouterLink to="/simulator">simulateur de dépenses ponctuelles</RouterLink> pour diviser équitablement le prix d’un achat unique, et <RouterLink to="/history">l’historique</RouterLink> pour suivre l’évolution de vos budgets et dépenses dans le temps.
+        L'outil soustrait automatiquement les dépenses contraintes des revenus individuels pour une répartition juste. Il vous attribue ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles. Utilisez ensuite le
+        <RouterLink to="/simulator">
+          simulateur de dépenses ponctuelles
+        </RouterLink>
+        pour diviser équitablement le prix d’un achat unique, et
+        <RouterLink to="/history">
+          l’historique
+        </RouterLink>
+        pour suivre l’évolution de vos budgets et dépenses dans le temps.
       </p>
     </section>
   </section>
