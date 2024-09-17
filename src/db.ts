@@ -54,6 +54,7 @@ class DB {
     Object.assign(this.account.expenses, emptyTransactions())
     Object.assign(this.account.incomes, emptyTransactions())
     historyManager.empty()
+    sessionStorage.clear()
     this.unsavedChanges.value = 0
   }
 

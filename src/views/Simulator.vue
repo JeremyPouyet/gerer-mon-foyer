@@ -2,12 +2,31 @@
 import { ref, watch } from 'vue'
 import db from '@/db'
 import { limitedEvaluate, round } from '@/helpers'
+import type User from '@/user'
 
 const expenseValue = ref<string>(sessionStorage.getItem('simulatorValue') || '')
+let computedValue = 0
 
-watch(expenseValue, () => {
-  sessionStorage.setItem('simulatorValue', expenseValue.value)
-})
+watch(expenseValue, () => sessionStorage.setItem('simulatorValue', expenseValue.value))
+
+/**
+ * Computes a user's contribution to an expense based on their ratio.
+ *
+ * Evaluates the `expenseValue` (which may be a formula), multiplies it by the user's ratio,
+ * and returns the rounded result. If evaluation fails, it returns the last valid computed value.
+ *
+ * @param {User} user The user object containing the ratio.
+ * @returns {number} The computed contribution for the user.
+ */
+function computeValue(user: User) : number {
+  try {
+    const value = round((limitedEvaluate(expenseValue.value) || 0) * user.ratio)
+    if (!Number.isNaN(value))
+      computedValue = value
+  }
+  catch { /* empty */ }
+  return computedValue
+}
 </script>
 
 <template>
@@ -52,7 +71,7 @@ watch(expenseValue, () => {
               <div class="fw-bold">
                 {{ user.name }}
               </div>
-              {{ round((limitedEvaluate(expenseValue) || 0) * user.ratio) }}€
+              {{ computeValue(user) }}€
             </div>
             <span class="badge bg-primary rounded-pill">
               Ratio de {{ round(user.ratio * 100) }}%
