@@ -34,7 +34,6 @@ body {
 }
 
 .text-block {
-  /* background-color: #f9f9f9; */
   background-color: #fffbc1;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -45,7 +44,6 @@ body {
 #app {
   min-height: 100vh;
   position: relative;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
