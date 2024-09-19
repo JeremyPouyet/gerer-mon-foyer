@@ -6,7 +6,7 @@ const props = defineProps<{ title: string, transactionType: TransactionType, acc
 </script>
 
 <template>
-  <div class="table-title-container d-flex align-items-center justify-content-center position-relative">
+  <div class="table-title-container rounded-shadow d-flex align-items-center justify-content-center position-relative">
     <h1 class="table-title align-bottom">
       {{ props.title }}
     </h1>
@@ -23,11 +23,8 @@ const props = defineProps<{ title: string, transactionType: TransactionType, acc
 <style scope>
   .table-title-container {
     display: flex;
-    justify-content: center;
     padding: 10px 0;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   .table-title {

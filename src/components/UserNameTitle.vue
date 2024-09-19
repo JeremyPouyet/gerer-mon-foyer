@@ -26,7 +26,8 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
     <div class="d-flex">
       <div
         v-if="!account.settings.show[TransactionType.Expense]"
-        class="text-container icon-hoverable me-3 d-flex align-items-center"
+        class="text-container rounded-shadow icon-hoverable d-flex align-items-center"
+        :class="!account.settings.show[TransactionType.Income] ? 'me-3' : ''"
         @click="account.settings.show[TransactionType.Expense] = true"
       >
         Dépenses
@@ -34,7 +35,7 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
       </div>
       <div
         v-if="!account.settings.show[TransactionType.Income]"
-        class="text-container me-3 icon-hoverable d-flex align-items-center"
+        class="text-container rounded-shadow icon-hoverable d-flex align-items-center"
         @click="account.settings.show[TransactionType.Income] = true"
       >
         Revenus
@@ -47,10 +48,6 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
 
 <style scope>
   .text-container {
-    justify-content: center;
-    padding: 10px 0;
-    margin-bottom: 2px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: .5rem;
   }
 </style>
