@@ -2,20 +2,20 @@
 import UserNameEdit from '@/components/UserNameEdit.vue'
 
 import { ref } from 'vue'
-import db from '@/db'
 import User from '@/user'
+import userManager from '@/userManager'
 
 const username = ref<string>('')
 
 function userCreate() : void {
-  db.userCreate(username.value)
+  userManager.create(username.value)
   username.value = ''
 }
 
 function userDelete(user: User) : void {
   const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
 
-  if (confirmation) db.userDelete(user)
+  if (confirmation) userManager.delete(user)
 }
 </script>
 
@@ -26,7 +26,7 @@ function userDelete(user: User) : void {
       <hr>
     </div>
     <ul class="item-list">
-      <li v-for="user in db.users" :key="user.id" class="item">
+      <li v-for="user in userManager.users" :key="user.id" class="item">
         <div class="d-flex justify-content-between container-fluid align-items-center">
           <UserNameEdit :user="user" />
           <img

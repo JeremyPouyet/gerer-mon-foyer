@@ -7,10 +7,11 @@ import UserNameTitle from '@/components/UserNameTitle.vue'
 import { computed } from 'vue'
 import db from '@/db'
 import { TransactionType } from '@/types'
+import userManager from '@/userManager'
 
 const commonBill = computed<number>(() => Math.max(db.account.expenses.sum - db.account.incomes.sum, 0))
-const incomeSum = computed(() => db.users.reduce((sum, user) => sum + user.account.incomes.sum, db.account.incomes.sum))
-const remainSum = computed<number>(() => db.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+const incomeSum = computed(() => userManager.users.reduce((sum, user) => sum + user.account.incomes.sum, db.account.incomes.sum))
+const remainSum = computed<number>(() => userManager.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
 </script>
 
 <template>
@@ -25,7 +26,7 @@ const remainSum = computed<number>(() => db.users.reduce((sum, user) => sum + us
           <TransactionsEdit :account="db.account" :transaction-type="TransactionType.Expense" :income="incomeSum" />
           <TransactionsEdit :account="db.account" :transaction-type="TransactionType.Income" />
         </div>
-        <div v-for="user in db.users" :key="user.id" class="row">
+        <div v-for="user in userManager.users" :key="user.id" class="row">
           <UserNameTitle :account="user.account" :name="user.name" :with-note="true" />
           <TransactionsEdit :account="user.account" :transaction-type="TransactionType.Expense" :income="user.account.incomes.sum" />
           <div class="col mb-4">

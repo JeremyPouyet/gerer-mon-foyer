@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import db from '@/db'
 import { limitedEvaluate, round } from '@/helpers'
 import type User from '@/user'
+import userManager from '@/userManager'
 
 const expenseValue = ref<string>(sessionStorage.getItem('simulatorValue') || '')
 let computedValue = 0
@@ -31,7 +31,7 @@ function computeValue(user: User) : number {
 
 <template>
   <div class="container mt-2">
-    <div v-if="!db.users.length">
+    <div v-if="!userManager.users.length">
       <p class="text-center">
         Ajoutez des utilisateurs pour voir la distribution d'une dépense ponctuelle
       </p>
@@ -63,7 +63,7 @@ function computeValue(user: User) : number {
       <div class="col-md-6 mt-4 mt-md-0">
         <ul class="list-group">
           <li
-            v-for="user in db.users"
+            v-for="user in userManager.users"
             :key="user.id"
             class="list-group-item d-flex justify-content-between align-items-center"
           >

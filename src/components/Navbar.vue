@@ -4,6 +4,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import historyManager from '@/historyManager'
+import userManager from '@/userManager'
 
 const route = useRoute()
 const currentPath = ref(route.path)
@@ -27,7 +28,7 @@ const menuItems: [string, string, URL][] = [
 ]
 
 function historicise() {
-  historyManager.sampleCreate({ account: db.account, users: db.users })
+  historyManager.sampleCreate({ account: db.account, users: userManager.users })
   notificationManager.create('Répartition historisé !', NotificationType.Success)
 }
 </script>

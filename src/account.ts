@@ -33,7 +33,6 @@ function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSetting
   }
 }
 
-
 export default class Account {
   readonly expenses: TransactionRecord
   readonly incomes: TransactionRecord
