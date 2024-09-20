@@ -53,7 +53,7 @@ export default ts.config(
       'vue/multi-word-component-names': 'off',
       'vue/no-mutating-props': ['error', { shallowOnly: true }],
       // eslint-disable-next-line no-restricted-syntax
-      'vue/no-restricted-syntax': ['error', { message: apostropheMsg, selector: 'VElement[name=/^(p|span)$/] > VText[value=/.*\'.*/]' }],
+      'vue/no-restricted-syntax': ['error', { message: apostropheMsg, selector: 'VElement[name=/^(p|span|h1|h2|h3|h4)$/] > VText[value=/.*\'.*/]' }],
     }
   },
 )
