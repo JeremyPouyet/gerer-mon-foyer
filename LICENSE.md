@@ -14,7 +14,7 @@ Licensor: Jeremy Pouyet
 
 ___
 
-"Mon Foyer" is a software that helps its users with their home management.
+"Mon Foyer" is software that helps users with household management.
 
 Copyright (C) 2024 Jeremy Pouyet
 
