@@ -4,6 +4,10 @@ import User from './user'
 class UserManager {
   readonly users = reactive<User[]>([])
 
+  /**
+   * Computes the shared expense ratio of each user ((what they earn - what they spend) / user number)
+   * If the total remaining balance is zero, each user is given an equal ratio.
+   */
   computeRatios() : void {
     const remains : Map<string, number> = this.users.reduce((map, user) => {
       const monthlyRemainingBalance = user.account.incomes.sum - user.account.expenses.sum
@@ -19,6 +23,11 @@ class UserManager {
     })
   }
 
+  /**
+   * Adds a user to the users array if its name is not empty and re-computes ratios for all users.
+   *
+   * @param {string} name The name of the user to create.
+   */
   create(name: string) : void {
     const trimmedName = name.trim()
 
@@ -28,6 +37,11 @@ class UserManager {
     this.computeRatios()
   }
 
+  /**
+   * Deletes a user from the users array and re-computes ratios for the remaining users.
+   *
+   * @param {User} user The user to delete.
+   */
   delete(user: User) {
     const userIndex = this.users.findIndex(({ id }) => user.id === id)
 
@@ -37,10 +51,16 @@ class UserManager {
     this.computeRatios()
   }
 
+  /**
+   * Empties the users array, removing all users.
+   */
   empty() : void {
     this.users.splice(0)
   }
 
+  /**
+   * Loads users from local storage ('users' key) and repopulates the users array.
+   */
   load() : void {
     this.empty()
     const users = localStorage.getItem('users')
