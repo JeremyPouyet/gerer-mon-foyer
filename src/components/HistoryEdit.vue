@@ -18,7 +18,7 @@ function switchSample(date: string) : void {
 function removeSample(date: string) : void {
   const userIsremovingActiveSample = date == historyManager.activeDate
 
-  historyManager.sampleDelete(date)
+  historyManager.delete(date)
 
   if (!userIsremovingActiveSample)
     return
@@ -32,7 +32,7 @@ const formatter = new Intl.DateTimeFormat('fr-FR', {
   minute: 'numeric',
   hour: 'numeric',
   day: 'numeric',
-  month: 'long',
+  month: 'short',
   year: 'numeric',
 })
 /* eslint-enable sort-keys */
@@ -80,7 +80,7 @@ onMounted(() => {
             </span>
           </span>
           <div>
-            <Note :item="sample" @update="note => historyManager.sampleUpdate(sample.date, { note })" />
+            <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
             <img
               src="@/assets/icons/cross.png"
               alt="Supprimer"

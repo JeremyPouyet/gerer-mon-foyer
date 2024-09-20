@@ -39,6 +39,44 @@ class HistoryManager extends EventTarget {
   }
 
   /**
+   * Creates a new sample and adds it to the history.
+   *
+   * @param {DBSnapshot} snapshot Snapshot to insert at the beginning of the history (most recent).
+   *                              Also sets the active date to the date of the new sample.
+   */
+  create(snapshot: DBSnapshot) : void {
+    const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
+    this.#_history.unshift(sample)
+    this.activeDate = sample.date
+    this.dispatchUpdate()
+  }
+
+  /**
+   * Deletes a sample from the history based on a given date.
+   *
+   * @param {string} date The date of the sample to delete.
+   *                      After deletion, if the active sample is the one being deleted,
+   *                      the active date is updated to the next available sample in the history.
+   *                      If no samples remain, the active date is cleared.
+   */
+  delete(date: string) : void {
+    this.findSample(date, (sample, index) => {
+      this.#_history.splice(index, 1)
+      this.dispatchUpdate()
+
+      if (date !== this.activeDate) return
+
+      if (this.#_history.length === 0) {
+        this.activeDate = ''
+        return
+      }
+
+      // substract 1 if the deleted sample was the last one
+      this.activeDate = (this.#_history[index] || this.#_history[index - 1]).date
+    })
+  }
+
+  /**
    * Removes all Sample from the history
    */
   empty() : void {
@@ -77,50 +115,12 @@ class HistoryManager extends EventTarget {
   }
 
   /**
-   * Creates a new sample and adds it to the history.
-   *
-   * @param {DBSnapshot} snapshot Snapshot to insert at the beginning of the history (most recent).
-   *                              Also sets the active date to the date of the new sample.
-   */
-  sampleCreate(snapshot: DBSnapshot) : void {
-    const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
-    this.#_history.unshift(sample)
-    this.activeDate = sample.date
-    this.dispatchUpdate()
-  }
-
-  /**
-   * Deletes a sample from the history based on a given date.
-   *
-   * @param {string} date The date of the sample to delete.
-   *                      After deletion, if the active sample is the one being deleted,
-   *                      the active date is updated to the next available sample in the history.
-   *                      If no samples remain, the active date is cleared.
-   */
-  sampleDelete(date: string) : void {
-    this.findSample(date, (sample, index) => {
-      this.#_history.splice(index, 1)
-      this.dispatchUpdate()
-
-      if (date !== this.activeDate) return
-
-      if (this.#_history.length === 0) {
-        this.activeDate = ''
-        return
-      }
-
-      // substract 1 if the deleted sample was the last one
-      this.activeDate = (this.#_history[index] || this.#_history[index - 1]).date
-    })
-  }
-
-  /**
    * Updates the data of a sample based on a given date.
    *
    * @param {string} date The date of the sample to update.
    * @param {string} updates The new data to be assigned to the sample.
    */
-  sampleUpdate(date: string, updates: Partial<Sample>) {
+  update(date: string, updates: Partial<Sample>) {
     this.findSample(date, sample => {
       Object.assign(sample, updates)
       this.dispatchUpdate()

@@ -10,7 +10,6 @@ const props = defineProps<{
   user: User
 }>()
 
-
 const ratio = computed(() => props.user.ratio)
 // The user's remaining balance at the end of the month after paying all personal expenses
 const monthlyRemainingBalance = computed(() => props.user.account.incomes.sum - props.user.account.expenses.sum)

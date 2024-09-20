@@ -28,7 +28,7 @@ const menuItems: [string, string, URL][] = [
 ]
 
 function historicise() {
-  historyManager.sampleCreate({ account: db.account, users: userManager.users })
+  historyManager.create({ account: db.account, users: userManager.users })
   notificationManager.create('Répartition historisé !', NotificationType.Success)
 }
 </script>

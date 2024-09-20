@@ -14,6 +14,21 @@ class DB {
     this.watch()
   }
 
+  empty() : void {
+    userManager.empty()
+
+    Object.assign(this.account.expenses, emptyTransactions())
+    Object.assign(this.account.incomes, emptyTransactions())
+    historyManager.empty()
+    sessionStorage.clear()
+    this.unsavedChanges.value = 0
+  }
+
+  export() : string {
+    this.unsavedChanges.value = 0
+    return JSON.stringify(localStorage, ['account', 'users', 'history'], 2)
+  }
+
   setup() : void {
     const unsavedChanges = localStorage.getItem('unsavedChanges')
     if (unsavedChanges)
@@ -26,29 +41,6 @@ class DB {
       Object.assign(this.account, JSON.parse(account))
 
     historyManager.load()
-  }
-
-  private watch() : void {
-    watch(this.unsavedChanges, value => { localStorage.setItem('unsavedChanges', value.toString()) })
-    watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
-    watch(this.account, updated => this.persistChanges('account', updated))
-
-    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
-  }
-
-  export() : string {
-    this.unsavedChanges.value = 0
-    return JSON.stringify(localStorage, ['account', 'users', 'history'], 2)
-  }
-
-  empty() : void {
-    userManager.empty()
-
-    Object.assign(this.account.expenses, emptyTransactions())
-    Object.assign(this.account.incomes, emptyTransactions())
-    historyManager.empty()
-    sessionStorage.clear()
-    this.unsavedChanges.value = 0
   }
 
   private persistChanges(key: 'account' | 'users' | 'history', value: object) : boolean {
@@ -67,6 +59,14 @@ class DB {
       return false
     }
     return true
+  }
+
+  private watch() : void {
+    watch(this.unsavedChanges, value => { localStorage.setItem('unsavedChanges', value.toString()) })
+    watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
+    watch(this.account, updated => this.persistChanges('account', updated))
+
+    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
   }
 }
 

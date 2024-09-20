@@ -37,7 +37,7 @@ function updateSampleData(updatedData: Partial<DBSnapshot>) {
   if (sample.value) {
     const data = JSON.parse(sample.value.data) as DBSnapshot
     Object.assign(data, updatedData)
-    historyManager.sampleUpdate(sample.value.date, { data: JSON.stringify(data) })
+    historyManager.update(sample.value.date, { data: JSON.stringify(data) })
   }
 }
 
