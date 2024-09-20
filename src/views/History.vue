@@ -55,7 +55,7 @@ switchSample()
   <div class="container-fluid mt-2">
     <div v-if="!sample">
       <p class="text-center">
-        Pas de données dans l'historique
+        Pas de données dans l’historique
       </p>
     </div>
     <div v-else class="row">

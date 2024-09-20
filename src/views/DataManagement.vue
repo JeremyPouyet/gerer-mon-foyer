@@ -63,7 +63,7 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
     notificationManager.create('Données importées avec succès', NotificationType.Success)
   } catch (error) {
     console.error(error)
-    notificationManager.create('Erreur lors de l\'importation des données', NotificationType.Error)
+    notificationManager.create('Erreur lors de l’importation des données', NotificationType.Error)
   }
 }
 

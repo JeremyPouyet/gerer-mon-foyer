@@ -33,7 +33,7 @@ function computeValue(user: User) : number {
   <div class="container mt-2">
     <div v-if="!userManager.users.length">
       <p class="text-center">
-        Ajoutez des utilisateurs pour voir la distribution d'une dépense ponctuelle
+        Ajoutez des utilisateurs pour voir la distribution d’une dépense ponctuelle
       </p>
     </div>
     <div v-else class="row">

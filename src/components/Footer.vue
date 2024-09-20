@@ -25,7 +25,7 @@
             À propos de Mon Foyer
           </h5>
           <p>
-            Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription. Abusez-en tant qu'il existe !
+            Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription. Abusez-en tant qu’il existe !
           </p>
           <p>
             Contact : <a href="mailto:contact@gerer-mon-foyer.fr">contact@gerer-mon-foyer.fr</a>

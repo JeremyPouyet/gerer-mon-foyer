@@ -14,7 +14,7 @@
         L’importance d'une répartition équitable
       </h2>
       <p class="text-start">
-        Les revenus des membres d'un foyer sont souvent inégaux, en raison de facteurs tels que des différences salariales entre professions,
+        Les revenus des membres d’un foyer sont souvent inégaux, en raison de facteurs tels que des différences salariales entre professions,
         une interruption de carrière, ou des inégalités structurelles comme l’écart de salaires entre les hommes et les femmes.
         Cependant, malgré ces écarts de revenus, la répartition des dépenses commune est généralement faite à 50/50, ce qui désavantage une seconde fois la personne qui gagne le moins,
         en lui imposant une charge financière disproportionnée.
@@ -26,7 +26,7 @@
         Exemple simple de répartition
       </h2>
       <p class="text-start">
-        Prenons un couple dans lequel un des membres gagne 2400€ par mois et l'autre 1600€. Le premier représente 60% des revenus du foyer et l'autre 40%.
+        Prenons un couple dans lequel un des membres gagne 2400€ par mois et l’autre 1600€. Le premier représente 60% des revenus du foyer et l’autre 40%.
         Cependant, la personne qui touche 1600€ rembourse en plus un prêt étudiant de 200€ par mois! Voici comment seront réparties 500€ de dépenses communes :
       </p>
       <ul class="text-start">
@@ -54,7 +54,7 @@
         <li>Les dépenses communes du foyer (loyer, factures, etc.).</li>
       </ul>
       <p class="text-start">
-        L'outil soustrait automatiquement les dépenses contraintes des revenus individuels pour une répartition juste. Il vous attribue ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles. Utilisez ensuite le
+        L’outil soustrait automatiquement les dépenses contraintes des revenus individuels pour une répartition juste. Il vous attribue ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles. Utilisez ensuite le
         <RouterLink to="/simulator">
           simulateur de dépenses ponctuelles
         </RouterLink>
