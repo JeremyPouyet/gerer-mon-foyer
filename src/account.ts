@@ -1,6 +1,7 @@
 import { emptyTransactions, newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
 import { TransactionType } from './types'
+import userManager from './userManager'
 
 /**
  * Interface representing account related settings.
@@ -38,15 +39,16 @@ export default class Account {
   readonly incomes: TransactionRecord
   note?: string
   readonly onTransactionChange?: () => void
+  readonly triggerRatio: boolean
   readonly settings: AccountSettings
 
-  constructor(props: Partial<Account> = {}, onTransactionChange?: () => void) {
+  constructor(props: Partial<Account> = {}, triggerRatio = false) {
     this.note = props.note
     this.settings = buildSettings(props.settings)
     this.incomes = props.incomes ?? emptyTransactions()
     this.expenses = props.expenses ?? emptyTransactions()
 
-    this.onTransactionChange = onTransactionChange
+    this.triggerRatio = triggerRatio
 
     this.updateSum(TransactionType.Income)
     this.updateSum(TransactionType.Expense)
@@ -77,7 +79,7 @@ export default class Account {
     const newTransaction = { frequency, id: newId(), name: trimmedName, value }
     this[transactionType].values[newTransaction.id] = newTransaction
     this.updateSum(transactionType)
-    this.onTransactionChange?.()
+    if (this.triggerRatio) userManager.computeRatios()
   }
 
   /**
@@ -90,7 +92,7 @@ export default class Account {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
-    this.onTransactionChange?.()
+    if (this.triggerRatio) userManager.computeRatios()
   }
 
   /**
@@ -110,7 +112,7 @@ export default class Account {
 
     if (['frequency', 'value'].some(key => key in updates)) {
       this.updateSum(transactionType)
-      this.onTransactionChange?.()
+      if (this.triggerRatio) userManager.computeRatios()
     }
   }
 

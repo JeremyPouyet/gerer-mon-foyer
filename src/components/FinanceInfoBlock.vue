@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { round } from '@/helpers'
+import db from '@/db'
 import User from '@/user'
 
 const props = defineProps<{
@@ -9,23 +10,24 @@ const props = defineProps<{
   user: User
 }>()
 
-const monthlyRemainingBalance = computed(() => {
-  return props.user.monthlyRemainingBalance
-})
 
-const ratio = computed(() => {
-  return props.user.ratio
-})
-const in10years = computed<number>(() => {
-  return round((monthlyRemainingBalance.value - ratio.value * props.commonBill) * 12 * 10)
-})
+const ratio = computed(() => props.user.ratio)
+// The user's remaining balance at the end of the month after paying all personal expenses
+const monthlyRemainingBalance = computed(() => props.user.account.incomes.sum - props.user.account.expenses.sum)
+// The amount the household needs to cover its shared expenses each month
+const mensualCommonExpenses = computed<number>(() => round(Math.max(db.account.expenses.sum - db.account.incomes.sum, 0)))
+// The total remaining amount after all personal expenses are covered, including shared incomes
+const mensualRemainSum = computed<number>(() => round(props.remainSum + db.account.incomes.sum))
+// The total amount the user can potentially save over 10 years, assuming they save the amount remaining after paying both personal and shared expenses
+const in10years = computed<number>(() => round((monthlyRemainingBalance.value - ratio.value * props.commonBill) * 12 * 10))
 </script>
 
 <template>
   <div class="text-block finance-info mt-2">
     <template v-if="user.account.incomes.sum > 0">
       <p>Après avoir couvert tes dépenses obligatoires, il te reste <span class="red fw-semibold">{{ round(monthlyRemainingBalance) }}€</span> par mois.</p>
-      <p>Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="red fw-semibold">{{ round(remainSum) }}€</span>.</p>
+      <p>Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="red fw-semibold">{{ mensualRemainSum }}€</span>.</p>
+      <p>Pour couvrir vos dépenses communes, il vous faut <span class="red fw-semibold">{{ mensualCommonExpenses }}€</span> par mois.</p>
       <p>Tes revenus représentent <span class="red fw-semibold">{{ round(ratio * 100) }}%</span> des revenus du foyer.</p>
       <p>C'est à ce niveau que tu devras contribuer aux dépenses commune, soit <span class="red fw-semibold">{{ round(ratio * commonBill) }}€</span> par mois.</p>
       <p>À la fin du mois, il te restera alors <span class="red fw-semibold">{{ round(monthlyRemainingBalance - ratio * commonBill) }}€</span>.</p>

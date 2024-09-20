@@ -31,7 +31,7 @@ const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
 
 const commonBill = computed<number>(() => Math.max(snapshot.value.account.expenses.sum - snapshot.value.account.incomes.sum, 0))
 const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.account.incomes.sum, snapshot.value.account.incomes.sum))
-const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
 
 function updateSampleData(updatedData: Partial<DBSnapshot>) {
   if (sample.value) {

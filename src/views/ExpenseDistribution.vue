@@ -11,7 +11,7 @@ import userManager from '@/userManager'
 
 const commonBill = computed<number>(() => Math.max(db.account.expenses.sum - db.account.incomes.sum, 0))
 const incomeSum = computed(() => userManager.users.reduce((sum, user) => sum + user.account.incomes.sum, db.account.incomes.sum))
-const remainSum = computed<number>(() => userManager.users.reduce((sum, user) => sum + user.monthlyRemainingBalance, 0))
+const remainSum = computed<number>(() => userManager.users.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
 </script>
 
 <template>
