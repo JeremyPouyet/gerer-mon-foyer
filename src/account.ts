@@ -55,21 +55,12 @@ export default class Account {
   }
 
   /**
-   * Updates the sum of transactions for a specified transaction type.
-   *
-   * @param {TransactionType} transactionType The type of transactions to update (either Income or Expense).
-   */
-  updateSum(transactionType: TransactionType) {
-    this[transactionType].sum = Object.values(this[transactionType].values).reduce((sum, transaction) => sum + valueAs(transaction), 0)
-  }
-
-  /**
    * Adds a new transaction to the specified transaction type.
    *
    * @param {TransactionType} transactionType The type of transaction to add (either Income or Expense).
    * @param {TransactionFunctional} transaction The transaction details to add.
    */
-  transactionAdd(transactionType: TransactionType, transaction: TransactionFunctional) : void {
+  create(transactionType: TransactionType, transaction: TransactionFunctional) : void {
     const { name, frequency, value } = transaction
     const trimmedName = name.trim()
 
@@ -88,32 +79,11 @@ export default class Account {
    * @param {TransactionType} transactionType The type of transaction to delete (either Income or Expense).
    * @param {Transaction} transaction The transaction to delete.
    */
-  transactionDelete(transactionType: TransactionType, transaction: Transaction) : void {
+  delete(transactionType: TransactionType, transaction: Transaction) : void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
     if (this.triggerRatio) userManager.computeRatios()
-  }
-
-  /**
-   * Updates an existing transaction with new details.
-   *
-   * @param {TransactionType} transactionType The type of transaction to update (either Income or Expense).
-   * @param {ID} id The ID of the transaction to update.
-   * @param {Partial<Transaction>} updates The updates to apply to the transaction.
-   */
-  transactionUpdate(transactionType: TransactionType, id: ID, updates: Partial<Transaction>) {
-    const transaction = this[transactionType].values[id]
-
-    if (!transaction)
-      return
-
-    Object.assign(transaction, updates)
-
-    if (['frequency', 'value'].some(key => key in updates)) {
-      this.updateSum(transactionType)
-      if (this.triggerRatio) userManager.computeRatios()
-    }
   }
 
   /**
@@ -130,5 +100,35 @@ export default class Account {
       values: Object.values(transactionRecord.values)
         .sort((a: Transaction, b: Transaction) => valueAs(b) - valueAs(a))
     }
+  }
+
+  /**
+   * Updates an existing transaction with new details.
+   *
+   * @param {TransactionType} transactionType The type of transaction to update (either Income or Expense).
+   * @param {ID} id The ID of the transaction to update.
+   * @param {Partial<Transaction>} updates The updates to apply to the transaction.
+   */
+  update(transactionType: TransactionType, id: ID, updates: Partial<Transaction>) {
+    const transaction = this[transactionType].values[id]
+
+    if (!transaction)
+      return
+
+    Object.assign(transaction, updates)
+
+    if (['frequency', 'value'].some(key => key in updates)) {
+      this.updateSum(transactionType)
+      if (this.triggerRatio) userManager.computeRatios()
+    }
+  }
+
+  /**
+   * Updates the sum of transactions for a specified transaction type.
+   *
+   * @param {TransactionType} transactionType The type of transactions to update (either Income or Expense).
+   */
+  updateSum(transactionType: TransactionType) {
+    this[transactionType].sum = Object.values(this[transactionType].values).reduce((sum, transaction) => sum + valueAs(transaction), 0)
   }
 }

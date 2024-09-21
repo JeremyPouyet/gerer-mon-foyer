@@ -20,7 +20,7 @@ const transactionList = computed(() => props.account.transactionSorted(props.tra
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
 const editedValueId = ref<ID>()
-const editedFrequency = ref<Frequency | null>(null)
+const editedFrequency = ref<Frequency>()
 const editedValue = ref<string>('')
 const yTotal = computed<number>(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
 const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
@@ -42,8 +42,7 @@ function transactionAdd() : void {
   if (!draft.name || !draft.value || !testTransactionValue(draft))
     return
 
-  // move all code logic to this function and return true/false ? or better show error with message if possible ?
-  props.account.transactionAdd(props.transactionType, newTransaction.value)
+  props.account.create(props.transactionType, newTransaction.value)
   newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
 
   // once the transaction is added, expect the user to add a new one
@@ -56,9 +55,9 @@ function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
 }
 
 function startEditTransactionName(transaction: Transaction) : void {
+  cancelEditTransactionValue()
   editedNameId.value = transaction.id
   editedName.value = transaction.name
-  cancelEditTransactionValue()
   document.addEventListener('mousedown', handleClickOutside)
   nextTick(() => input?.focus())
 }
@@ -69,48 +68,44 @@ function cancelEditTransactionName() : void {
   document.removeEventListener('mousedown', handleClickOutside)
 }
 
-function executeEditTransactionName(transaction: Transaction) : void {
-  if (!editedName.value)
-    return
-  transaction.name = editedName.value
-  // ToDo - create and call a function in user to edit transaction maybe ?
+function executeEditTransactionName() : void {
+  if (editedName.value && editedNameId.value)
+    props.account.update(props.transactionType, editedNameId.value, { name: editedName.value })
   cancelEditTransactionName()
 }
 
 function startEditTransactionValue(transaction: Transaction, newFrequency: Frequency) : void {
+  cancelEditTransactionName()
   editedFrequency.value = newFrequency
   editedValueId.value = transaction.id
   editedValue.value = newFrequency === transaction.frequency
     ? transaction.value
     : round(valueAs(transaction, newFrequency)).toString()
-  cancelEditTransactionName()
   document.addEventListener('mousedown', handleClickOutside)
   nextTick(() => input?.focus())
 }
 
 function cancelEditTransactionValue() : void {
-  editedFrequency.value = Frequency.monthly
+  editedFrequency.value = undefined
   editedValueId.value = undefined
   editedValue.value = ''
   document.removeEventListener('mousedown', handleClickOutside)
 }
 
-function executeEditTransactionValue(transaction: Transaction, frequency: Frequency) : void {
-  if (!editedValue.value)
-    return
-
-  const draft = { frequency, value: editedValue.value }
-  if (testTransactionValue(draft)) {
-    props.account.transactionUpdate(props.transactionType, transaction.id, draft)
-    cancelEditTransactionValue()
+function executeEditTransactionValue() : void {
+  if (editedValue.value && editedValueId.value && editedFrequency.value !== undefined) {
+    const draft = { frequency: editedFrequency.value, value: editedValue.value }
+    if (testTransactionValue(draft)) {
+      props.account.update(props.transactionType, editedValueId.value, draft)
+      cancelEditTransactionValue()
+    }
   }
 }
 
 function handleClickOutside(event: MouseEvent) : void {
-  // todo - When a click outside an input is made, modified values should be updated, not discarded
   if (input && !input.contains(event.target as Node)) {
-    cancelEditTransactionName()
-    cancelEditTransactionValue()
+    executeEditTransactionName()
+    executeEditTransactionValue()
   }
 }
 </script>
@@ -157,8 +152,8 @@ function handleClickOutside(event: MouseEvent) : void {
                     v-model="editedName"
                     type="text"
                     @keydown.esc="cancelEditTransactionName"
-                    @keypress.enter="() => executeEditTransactionName(transaction)"
-                    @keydown.tab="() => executeEditTransactionName(transaction)"
+                    @keydown.enter="executeEditTransactionName"
+                    @keydown.tab="executeEditTransactionName"
                   >
                 </template>
                 <template v-else>
@@ -191,8 +186,8 @@ function handleClickOutside(event: MouseEvent) : void {
                     type="text"
                     class="w-100"
                     @keydown.esc="cancelEditTransactionValue"
-                    @keypress.enter="() => executeEditTransactionValue(transaction, frequency)"
-                    @keydown.tab="() => executeEditTransactionValue(transaction, frequency)"
+                    @keydown.enter="executeEditTransactionValue"
+                    @keydown.tab="executeEditTransactionValue"
                   >
                 </template>
                 <template v-else>
@@ -221,7 +216,7 @@ function handleClickOutside(event: MouseEvent) : void {
                   title="Supprimer"
                   class="icon-container-small icon-hoverable"
                   style="margin-left:0.4rem;"
-                  @click="() => props.account.transactionDelete(props.transactionType, transaction)"
+                  @click="() => props.account.delete(props.transactionType, transaction)"
                 >
               </td>
             </tr>
