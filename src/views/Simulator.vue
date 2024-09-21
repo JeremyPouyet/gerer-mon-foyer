@@ -45,7 +45,7 @@ function computeValue(user: User) : number {
           </RouterLink>
           pour savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle.
         </p>
-        <label for="expenseInput" class="form-label">Valeure ou formule</label>
+        <label for="expenseInput" class="form-label">Valeur ou formule</label>
 
         <div class="input-group mb-3">
           <input

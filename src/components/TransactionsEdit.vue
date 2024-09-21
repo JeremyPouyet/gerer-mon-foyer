@@ -261,7 +261,7 @@ function handleClickOutside(event: MouseEvent) : void {
         <input
           v-model="newTransaction.value"
           type="text"
-          placeholder="Valeure"
+          placeholder="Valeur ou formule"
           class="form-control"
           title="Exemples:
 · 500
