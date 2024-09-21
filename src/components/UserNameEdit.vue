@@ -45,7 +45,7 @@ function handleClickOutside(event: MouseEvent) : void {
       ref="input"
       v-model="newName"
       type="text"
-      @keypress.enter="executeEditName"
+      @keydown.enter="executeEditName"
       @keydown.tab="executeEditName"
       @keydown.esc="cancelEdit"
     >

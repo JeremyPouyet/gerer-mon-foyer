@@ -256,7 +256,7 @@ function handleClickOutside(event: MouseEvent) : void {
           class="form-control"
           aria-label="Nom de la transaction"
           :title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
-          @keypress.enter="transactionAdd"
+          @keydown.enter="transactionAdd"
         >
         <input
           v-model="newTransaction.value"
@@ -268,12 +268,12 @@ function handleClickOutside(event: MouseEvent) : void {
 · 10 * 50
 · 1000 / 2"
           aria-label="Valeur de la transaction"
-          @keypress.enter="transactionAdd"
+          @keydown.enter="transactionAdd"
         >
         <span class="input-group-text">€</span>
         <div class="w-100 d-sm-none" />
 
-        <select v-model="newTransaction.frequency" class="form-select mt-2 mt-sm-0" title="Fréquence" @keypress.enter="transactionAdd">
+        <select v-model="newTransaction.frequency" class="form-select mt-2 mt-sm-0" title="Fréquence" @keydown.enter="transactionAdd">
           <option :value="Frequency.monthly">
             Mois
           </option>

@@ -45,7 +45,7 @@ function userDelete(user: User) : void {
         type="text"
         placeholder="Prénom"
         class="form-control"
-        @keypress.enter="userCreate"
+        @keydown.enter="userCreate"
       >
       <button
         type="button"
