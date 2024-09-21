@@ -150,6 +150,7 @@ function handleClickOutside(event: MouseEvent) : void {
                   <input
                     :ref="el => setActiveInput(el)"
                     v-model="editedName"
+                    class="char-width-20"
                     type="text"
                     @keydown.esc="cancelEditTransactionName"
                     @keydown.enter="executeEditTransactionName"
