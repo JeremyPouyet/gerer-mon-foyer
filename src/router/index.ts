@@ -5,7 +5,7 @@ export default createRouter({
   routes: [
     ['Home',                '/'] ,
     ['ExpenseDistribution', '/expense-distribution'],
-    ['DataManagement',      '/data-management'],
+    ['Settings',            '/settings'],
     ['History',             '/history'],
     ['Simulator',           '/simulator'],
     ['NotFound',            '/:pathMatch(.*)*']

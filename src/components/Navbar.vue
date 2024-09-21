@@ -56,7 +56,7 @@ function historicise() {
             </RouterLink>
           </li>
           <li :class="['nav-item', addMarginWhenBadge]">
-            <RouterLink class="nav-link" to="/data-management" active-class="active">
+            <RouterLink class="nav-link" to="/settings" active-class="active">
               <img src="@/assets/icons/diskette.png" class="icon-container" alt="">
               <span>
                 Gestion des données

@@ -13,7 +13,7 @@ function generateDateString() : string {
 }
 
 function saveFile() : void {
-  const blob = new Blob([db.export()], { type: 'text/plain' })
+  const blob = new Blob([db.export()], { type: 'application/json' })
   const link = document.createElement('a')
 
   link.href = URL.createObjectURL(blob)
