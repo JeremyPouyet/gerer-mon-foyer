@@ -142,11 +142,11 @@ export default class Account {
 
     const draft: Partial<Transaction> = {}
 
-    if (updates.name && !setName(updates.name, draft)) return false
+    if (updates.name !== undefined && !setName(updates.name, draft)) return false
 
-    const needsUpdateSum = updates.value || updates.frequency !== undefined
+    const needsUpdateSum = updates.value !== undefined || updates.frequency !== undefined
     if (needsUpdateSum)  {
-      if (updates.value) draft.value = updates.value
+      if (updates.value !== undefined) draft.value = updates.value
       if (updates.frequency !== undefined) draft.frequency = updates.frequency
       if (!testValue({ ...transaction, ...draft })) return false
     }

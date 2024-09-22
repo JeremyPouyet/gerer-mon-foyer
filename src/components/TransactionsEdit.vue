@@ -79,11 +79,10 @@ function cancelEditTransactionValue() : void {
 }
 
 function executeEditTransactionValue() : void {
-  if (editedValue.value && editedValueId.value && editedFrequency.value !== undefined) {
-    const draft = { frequency: editedFrequency.value, value: editedValue.value }
-    if (props.account.update(props.transactionType, editedValueId.value, draft))
-      cancelEditTransactionValue()
-  }
+  const draft = { frequency: editedFrequency.value, value: editedValue.value }
+
+  if (editedValueId.value && props.account.update(props.transactionType, editedValueId.value, draft))
+    cancelEditTransactionValue()
 }
 
 function handleClickOutside(event: MouseEvent) : void {
