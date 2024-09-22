@@ -1,5 +1,5 @@
 <template>
-  <section class="container mt-4">
+  <section v-once class="container mt-4">
     <header class="text-center mb-5">
       <h1>Répartissez vos dépenses communes de manière équitable</h1>
       <p class="lead">
@@ -72,8 +72,8 @@ h1 {
 p:not(.lead) {
   line-height: 1.75;
   font-size: 1.1rem;
-  margin-bottom: 1.5rem; /* Espacement entre les paragraphes pour aérer */
-  text-align: justify; /* Texte justifié pour une apparence soignée */
+  margin-bottom: 1.5rem;
+  text-align: justify;
 }
 
 ul.step-list {
