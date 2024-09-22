@@ -2,7 +2,7 @@
 import TableTitle from './TableTitle.vue'
 
 import { computed } from 'vue'
-import { Frequency, TransactionType } from '@/types'
+import { frequencies, TransactionType } from '@/types'
 import { round, valueAs  } from '@/helpers'
 import type Account from '@/account'
 
@@ -14,16 +14,19 @@ const labels = {
 }
 
 const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
-const yTotal = computed(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
+
+const totals = computed<number[]>(() =>
+  frequencies.map(frequency => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0)) )
+)
 </script>
 
 <template>
   <div v-show="account.settings.show[transactionType]" class="col mb-4">
     <section>
-      <TableTitle :title="labels[transactionType]['plural']" :transaction-type="transactionType" :account="account" />
+      <TableTitle :account="account" :title="labels[transactionType]['plural']" :transaction-type="transactionType" />
 
       <div class="table-responsive shadowed-border mb-3">
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">
@@ -65,7 +68,7 @@ const yTotal = computed(() => round(transactionList.value.values.reduce((sum, tr
               </td>
 
               <!-- Transaction frequency -->
-              <td v-for="frequency in [Frequency.monthly, Frequency.quarterly, Frequency.biannual, Frequency.yearly]" :key="frequency" class="char-width-10 text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="char-width-10 text-end">
                 <span :title="frequency===transaction.frequency ? transaction.value : ''">
                   {{ round(valueAs(transaction, frequency)) }}
                   <div v-show="transaction.frequency===frequency" class="underline" />
@@ -83,20 +86,11 @@ const yTotal = computed(() => round(transactionList.value.values.reduce((sum, tr
               <td class="fw-bold">
                 Total
               </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.quarterly), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.quarterly), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ yTotal }}
+              <td v-for="total in totals" :key="total" class="text-end">
+                {{ total }}
               </td>
               <td v-if="props.income" class="text-end">
-                {{ round(yTotal / (props.income * 12) * 100) }}
+                {{ round(totals.at(-1) ?? 0 / (props.income * 12) * 100) }}
               </td>
             </tr>
           </tfoot>

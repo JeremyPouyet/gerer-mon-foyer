@@ -5,6 +5,10 @@ export enum Frequency {
   yearly
 }
 
+export const frequencies = Object.freeze(
+  Object.values(Frequency).filter(value => typeof value === 'number') as number[]
+)
+
 export type ID = `${string}-${string}-${string}-${string}-${string}`
 
 /**** Transactions ****/

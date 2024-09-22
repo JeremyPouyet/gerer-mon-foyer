@@ -5,15 +5,15 @@ import TableTitle from './TableTitle.vue'
 import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 
 import { round, valueAs } from '@/helpers'
-import { Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
+import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
+
+const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
 
 const labels = {
   [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
   [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
 }
-
-const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
 
 const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
 const editedName = ref<string>('')
@@ -21,7 +21,10 @@ const editedNameId = ref<ID>()
 const editedValueId = ref<ID>()
 const editedFrequency = ref<Frequency>()
 const editedValue = ref<string>('')
-const yTotal = computed<number>(() => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.yearly), 0)))
+
+const totals = computed<number[]>(() =>
+  frequencies.map(frequency => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0)) )
+)
 const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
 let input : HTMLInputElement
 const newTransactionInputName = ref<HTMLInputElement>()
@@ -162,7 +165,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction value by frequency -->
-              <td v-for="frequency in [Frequency.monthly, Frequency.quarterly, Frequency.biannual, Frequency.yearly]" :key="frequency" class="char-width-10 text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="char-width-10 text-end">
                 <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -210,20 +213,11 @@ function handleClickOutside(event: MouseEvent) : void {
               <td class="fw-bold" style="">
                 Total
               </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.quarterly), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ round(transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, Frequency.biannual), 0)) }}
-              </td>
-              <td class="text-end">
-                {{ yTotal }}
+              <td v-for="total in totals" :key="total" class="text-end">
+                {{ total }}
               </td>
               <td v-if="props.income" class="text-end">
-                {{ round(yTotal / (props.income * 12) * 100) }}
+                {{ round(totals.at(-1) ?? 0 / (props.income * 12) * 100) }}
               </td>
               <td colspan="2" />
             </tr>
@@ -264,7 +258,7 @@ function handleClickOutside(event: MouseEvent) : void {
           <option :value="Frequency.quarterly">
             Trimestre
           </option>
-          <option :value="Frequency.quarterly">
+          <option :value="Frequency.biannual">
             Semestre
           </option>
           <option :value="Frequency.yearly">
