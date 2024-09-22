@@ -49,8 +49,7 @@ function userDelete(user: User) : void {
       >
       <button
         type="button"
-        class="btn btn-primary btn-sm default-button"
-        style="background-color: var(--color-xanthous);"
+        class="btn btn-primary btn-sm default-button xanthous"
         :disabled="!username"
         @click="userCreate"
       >

@@ -72,6 +72,10 @@ body {
   background-color: var(--color-xanthous-light) !important;
 }
 
+.xanthous {
+  background-color: var(--color-xanthous) !important;
+}
+
 .underline {
   width: 100%;
   height: 2px;

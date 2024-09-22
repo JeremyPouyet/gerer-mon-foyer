@@ -108,7 +108,7 @@ function confirmDataDeletion() : void {
     <div class="mb-4">
       <p>Ou sinon vous pouvez aussi :</p>
       <p>
-        <button class="btn btn-primary btn-sm default-button" style="background-color: var(--color-xanthous);" @click="uploadFile">
+        <button class="btn btn-primary btn-sm default-button" @click="uploadFile">
           Importer une sauvegarde
         </button>
       </p>

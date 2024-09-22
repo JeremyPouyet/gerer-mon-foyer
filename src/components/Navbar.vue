@@ -34,7 +34,7 @@ function historicise() {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg mb-4" style="background-color: var(--color-celadon)">
+  <nav class="navbar navbar-expand-lg mb-4">
     <div class="container-fluid">
       <button
         class="navbar-toggler"
@@ -65,8 +65,7 @@ function historicise() {
                   data-toggle="tooltip"
                   :title="unsavedChangesText"
                   data-placement="bottom"
-                  class="position-absolute start-100 translate-middle badge rounded-pill"
-                  style="background-color: var(--color-xanthous)"
+                  class="position-absolute start-100 translate-middle badge rounded-pill xanthous"
                 >
                   {{ db.unsavedChanges }}
                 </div>
@@ -83,6 +82,10 @@ function historicise() {
 </template>
 
 <style scoped>
+nav {
+  background-color: var(--color-celadon)
+}
+
 .navbar-nav .nav-link {
   position: relative;
   color: #333;
