@@ -1,6 +1,7 @@
 import { emptyTransactions, newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
 import { TransactionType } from './types'
+import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
 
 /**
@@ -21,7 +22,6 @@ interface AccountSettings {
   }
 }
 
-
 /**
  * Constructs the default account settings based on provided partial settings.
  *
@@ -31,6 +31,28 @@ interface AccountSettings {
 function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSettings {
   return {
     show: Object.assign({[TransactionType.Expense]: true, [TransactionType.Income]: true}, settings.show)
+  }
+}
+
+function setName(name: string, transaction: Partial<Transaction>) : boolean {
+  const trimmedName = name.trim()
+
+  if (!trimmedName) {
+    notificationManager.create(`"${name}" n’est pas un nom valide`, NotificationType.Error)
+    return false
+  }
+  transaction.name = trimmedName
+  return true
+}
+
+function testValue(transaction: Pick<Transaction, 'value' | 'frequency'>) : boolean {
+  try {
+    const value = valueAs(transaction)
+    if (Number.isNaN(value)) throw Error()
+    return true
+  } catch {
+    notificationManager.create(`"${transaction.value}" n’est pas un montant valide`, NotificationType.Error)
+    return false
   }
 }
 
@@ -59,18 +81,21 @@ export default class Account {
    *
    * @param {TransactionType} transactionType The type of transaction to add (either Income or Expense).
    * @param {TransactionFunctional} transaction The transaction details to add.
+   * @returns {boolean} Whether the transaction has been created.
    */
-  create(transactionType: TransactionType, transaction: TransactionFunctional) : void {
+  create(transactionType: TransactionType, transaction: TransactionFunctional) : boolean {
     const { name, frequency, value } = transaction
-    const trimmedName = name.trim()
+    const draft: Partial<Transaction> = {}
 
-    if (!trimmedName || !value)
-      return
+    if (!setName(name, draft) || !testValue(transaction))
+      return false
 
-    const newTransaction = { frequency, id: newId(), name: trimmedName, value }
-    this[transactionType].values[newTransaction.id] = newTransaction
+    const id = newId()
+
+    this[transactionType].values[id] = Object.assign(draft, { frequency, id, value }) as Transaction
     this.updateSum(transactionType)
     if (this.triggerRatio) userManager.computeRatios()
+    return true
   }
 
   /**
@@ -108,19 +133,31 @@ export default class Account {
    * @param {TransactionType} transactionType The type of transaction to update (either Income or Expense).
    * @param {ID} id The ID of the transaction to update.
    * @param {Partial<Transaction>} updates The updates to apply to the transaction.
+   * @returns {boolean} Whether the transaction has been updated.
    */
-  update(transactionType: TransactionType, id: ID, updates: Partial<Transaction>) {
+  update(transactionType: TransactionType, id: ID, updates: Partial<Pick<Transaction, 'frequency' | 'name' | 'value'>>) : boolean {
     const transaction = this[transactionType].values[id]
 
-    if (!transaction)
-      return
+    if (!transaction) return false
 
-    Object.assign(transaction, updates)
+    const draft: Partial<Transaction> = {}
 
-    if (['frequency', 'value'].some(key => key in updates)) {
+    if (updates.name && !setName(updates.name, draft)) return false
+
+    const needsUpdateSum = updates.value || updates.frequency !== undefined
+    if (needsUpdateSum)  {
+      if (updates.value) draft.value = updates.value
+      if (updates.frequency !== undefined) draft.frequency = updates.frequency
+      if (!testValue({ ...transaction, ...draft })) return false
+    }
+
+    Object.assign(transaction, draft)
+
+    if (needsUpdateSum) {
       this.updateSum(transactionType)
       if (this.triggerRatio) userManager.computeRatios()
     }
+    return true
   }
 
   /**

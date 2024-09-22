@@ -5,7 +5,6 @@ import TableTitle from './TableTitle.vue'
 import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 
 import { round, valueAs } from '@/helpers'
-import notificationManager, { NotificationType } from '@/notificationManager'
 import { Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
 
@@ -27,22 +26,10 @@ const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly
 let input : HTMLInputElement
 const newTransactionInputName = ref<HTMLInputElement>()
 
-function testTransactionValue(transaction: Pick<Transaction, 'value' | 'frequency'>) : boolean {
-  try {
-    valueAs(transaction)
-    return true
-  } catch {
-    notificationManager.create(`"${transaction.value}" n'est pas un montant valide`, NotificationType.Error)
-    return false
-  }
-}
-
 function transactionAdd() : void {
-  const draft = newTransaction.value
-  if (!draft.name || !draft.value || !testTransactionValue(draft))
+  if (!props.account.create(props.transactionType, newTransaction.value))
     return
 
-  props.account.create(props.transactionType, newTransaction.value)
   newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
 
   // once the transaction is added, expect the user to add a new one
@@ -69,9 +56,8 @@ function cancelEditTransactionName() : void {
 }
 
 function executeEditTransactionName() : void {
-  if (editedName.value && editedNameId.value)
-    props.account.update(props.transactionType, editedNameId.value, { name: editedName.value })
-  cancelEditTransactionName()
+  if (editedNameId.value && props.account.update(props.transactionType, editedNameId.value, { name: editedName.value }))
+    cancelEditTransactionName()
 }
 
 function startEditTransactionValue(transaction: Transaction, newFrequency: Frequency) : void {
@@ -95,10 +81,8 @@ function cancelEditTransactionValue() : void {
 function executeEditTransactionValue() : void {
   if (editedValue.value && editedValueId.value && editedFrequency.value !== undefined) {
     const draft = { frequency: editedFrequency.value, value: editedValue.value }
-    if (testTransactionValue(draft)) {
-      props.account.update(props.transactionType, editedValueId.value, draft)
+    if (props.account.update(props.transactionType, editedValueId.value, draft))
       cancelEditTransactionValue()
-    }
   }
 }
 
