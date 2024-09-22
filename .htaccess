@@ -1,10 +1,19 @@
-# .htaccess file for Vue.js SPA
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Redirect www.gerer-mon-foyer.fr to gerer-mon-foyer.fr
+  RewriteCond %{HTTP_HOST} ^www\.gerer-mon-foyer\.fr$ [NC]
+  RewriteRule ^(.*)$ https://gerer-mon-foyer.fr/$1 [L,R=301]
+
+  # Vue.js SPA handling
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Enable HSTS (Strict-Transport-Security)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>
