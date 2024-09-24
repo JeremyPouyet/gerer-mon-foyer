@@ -24,37 +24,37 @@ function userDelete(user: User) : void {
     <div class="row">
       <h3>Habitants</h3>
       <hr>
-    </div>
-    <ul class="item-list">
-      <li v-for="user in userManager.users" :key="user.id" class="item">
-        <div class="d-flex justify-content-between container-fluid align-items-center">
-          <UserNameEdit :user="user" />
-          <img
-            src="@/assets/icons/cross.png"
-            alt="Supprimer"
-            :title="`Supprimer ${user.name}`"
-            class="icon-container-small icon-hoverable align-right"
-            @click="() => userDelete(user)"
-          >
-        </div>
-      </li>
-    </ul>
-    <div class="input-group">
-      <input
-        v-model="username"
-        type="text"
-        placeholder="Prénom"
-        class="form-control"
-        @keydown.enter="userCreate"
-      >
-      <button
-        type="button"
-        class="btn btn-primary btn-sm default-button xanthous"
-        :disabled="!username"
-        @click="userCreate"
-      >
-        Ajouter
-      </button>
+      <ul class="item-list">
+        <li v-for="user in userManager.users" :key="user.id" class="item py-2">
+          <div class="d-flex justify-content-between container-fluid align-items-center">
+            <UserNameEdit :user="user" />
+            <img
+              src="@/assets/icons/cross.png"
+              alt="Supprimer"
+              :title="`Supprimer ${user.name}`"
+              class="icon-container-small icon-hoverable"
+              @click="() => userDelete(user)"
+            >
+          </div>
+        </li>
+      </ul>
+      <div class="input-group">
+        <input
+          v-model="username"
+          type="text"
+          placeholder="Prénom"
+          class="form-control"
+          @keydown.enter="userCreate"
+        >
+        <button
+          type="button"
+          class="btn btn-primary btn-sm default-button xanthous"
+          :disabled="!username"
+          @click="userCreate"
+        >
+          Ajouter
+        </button>
+      </div>
     </div>
   </div>
 </template>

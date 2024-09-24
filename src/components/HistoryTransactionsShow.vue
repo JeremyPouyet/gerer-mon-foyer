@@ -68,7 +68,7 @@ const totals = computed<number[]>(() =>
               </td>
 
               <!-- Transaction frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="char-width-10 text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
                 <span :title="frequency===transaction.frequency ? transaction.value : ''">
                   {{ round(valueAs(transaction, frequency)) }}
                   <div v-show="transaction.frequency===frequency" class="underline" />

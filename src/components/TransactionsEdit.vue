@@ -165,7 +165,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction value by frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="char-width-10 text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
                 <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -195,14 +195,13 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Actions -->
-              <td class="char-width-10 text-end" style="vertical-align: middle;">
+              <td class="text-end align-middle">
                 <Note :item="transaction" @update="note => transaction.note = note" />
                 <img
                   src="@/assets/icons/cross.png"
                   alt="Supprimer"
                   title="Supprimer"
-                  class="icon-container-small icon-hoverable"
-                  style="margin-left:0.4rem;"
+                  class="icon-container-small icon-hoverable ms-2"
                   @click="() => props.account.delete(props.transactionType, transaction)"
                 >
               </td>
@@ -210,7 +209,7 @@ function handleClickOutside(event: MouseEvent) : void {
           </tbody>
           <tfoot>
             <tr>
-              <td class="fw-bold" style="">
+              <td class="fw-bold">
                 Total
               </td>
               <td v-for="total in totals" :key="total" class="text-end">
