@@ -5,13 +5,9 @@ import { computed } from 'vue'
 import { frequencies, TransactionType } from '@/types'
 import { round, valueAs  } from '@/helpers'
 import type Account from '@/account'
+import Texts from '@/texts'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
-
-const labels = {
-  [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
-  [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
-}
 
 const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
 
@@ -23,14 +19,14 @@ const totals = computed<number[]>(() =>
 <template>
   <div v-show="account.settings.show[transactionType]" class="col mb-4">
     <section>
-      <TableTitle :account="account" :title="labels[transactionType]['plural']" :transaction-type="transactionType" />
+      <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">
-                {{ labels[props.transactionType]['singular'] }}
+                {{ Texts.transactionTypes[props.transactionType]['singular'] }}
               </th>
               <th scope="col" class="text-end">
                 Mois
@@ -70,7 +66,6 @@ const totals = computed<number[]>(() =>
 
               <!-- Transaction frequency -->
               <td v-for="frequency in frequencies" :key="frequency" class="text-end">
-                {{  }}
                 <span
                   v-tooltip
                   :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"

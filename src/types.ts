@@ -1,12 +1,14 @@
 export enum Frequency {
-  monthly,
-  quarterly,
-  biannual,
-  yearly
+  monthly = 'monthly',
+  quarterly = 'quarterly',
+  biannual = 'biannual',
+  yearly = 'yearly'
 }
 
+console.log(Object.values(Frequency))
+
 export const frequencies = Object.freeze(
-  Object.values(Frequency).filter(value => typeof value === 'number') as number[]
+  Object.values(Frequency)
 )
 
 export type ID = `${string}-${string}-${string}-${string}-${string}`

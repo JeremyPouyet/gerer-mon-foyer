@@ -7,13 +7,9 @@ import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
 import { round, valueAs } from '@/helpers'
 import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
+import Texts from '@/texts'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
-
-const labels = {
-  [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
-  [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
-}
 
 const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
 const editedName = ref<string>('')
@@ -99,26 +95,17 @@ function handleClickOutside(event: MouseEvent) : void {
 <template>
   <div v-show="account.settings.show[transactionType]" class="col mb-4">
     <section>
-      <TableTitle :account="account" :title="labels[transactionType]['plural']" :transaction-type="transactionType" />
+      <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">
-                {{ labels[props.transactionType]['singular'] }}
+                {{ Texts.transactionTypes[props.transactionType]['singular'] }}
               </th>
-              <th scope="col" class="text-end">
-                Mois
-              </th>
-              <th scope="col" class="text-end">
-                Trimestre
-              </th>
-              <th scope="col" class="text-end">
-                Semestre
-              </th>
-              <th scope="col" class="text-end">
-                Année
+              <th v-for="frequency in frequencies" :key="frequency" scope="col" class="text-end">
+                {{ Texts.frequencies[frequency] }}
               </th>
               <th v-if="props.income" scope="col" class="text-end">
                 % des revenus
@@ -232,7 +219,7 @@ function handleClickOutside(event: MouseEvent) : void {
           v-model="newTransaction.name"
           v-tooltip
           type="text"
-          :placeholder="labels[props.transactionType]['singular']"
+          :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
           class="form-control"
           aria-label="Nom de la transaction"
           data-bs-placement="bottom"
