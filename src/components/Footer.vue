@@ -8,7 +8,7 @@
           </h5>
           <p>
             Icons créés par
-            <a title="Icons" href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>
+            <a href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>
             sur
             <a href="https://www.flaticon.com" target="_blank" rel="noopener noreferrer">Flaticon</a>
           </p>

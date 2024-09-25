@@ -146,7 +146,6 @@ function handleClickOutside(event: MouseEvent) : void {
                 <template v-else>
                   <span
                     class="editable-text text-break"
-                    :title="transaction.note"
                     @click="() => startEditTransactionName(transaction)"
                   >
                     {{ transaction.name }}
@@ -155,7 +154,7 @@ function handleClickOutside(event: MouseEvent) : void {
                     v-if="transaction.note"
                     v-tooltip
                     data-toggle="tooltip"
-                    :title="transaction.note"
+                    :data-bs-title="transaction.note"
                     class="translate-middle badge"
                     style="position:relative;top:-0.2rem;right:-0.6rem"
                   >
@@ -179,8 +178,9 @@ function handleClickOutside(event: MouseEvent) : void {
                 </template>
                 <template v-else>
                   <span
+                    v-tooltip
                     class="editable-text"
-                    :title="frequency===transaction.frequency ? transaction.value : ''"
+                    :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
                     @click="() => startEditTransactionValue(transaction, frequency)"
                   >
                     {{ round(valueAs(transaction, frequency)) }}
@@ -198,9 +198,10 @@ function handleClickOutside(event: MouseEvent) : void {
               <td class="text-end align-middle">
                 <Note :item="transaction" @update="note => transaction.note = note" />
                 <img
+                  v-tooltip
                   src="@/assets/icons/cross.png"
                   alt="Supprimer"
-                  title="Supprimer"
+                  data-bs-title="Supprimer"
                   class="icon-container-small icon-hoverable ms-2"
                   @click="() => props.account.delete(props.transactionType, transaction)"
                 >
@@ -224,33 +225,42 @@ function handleClickOutside(event: MouseEvent) : void {
         </table>
       </div>
 
+      <!-- Create transaction -->
       <div class="input-group flex-sm-row">
         <input
           ref="newTransactionInputName"
           v-model="newTransaction.name"
+          v-tooltip
           type="text"
           :placeholder="labels[props.transactionType]['singular']"
           class="form-control"
           aria-label="Nom de la transaction"
-          :title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
+          data-bs-placement="bottom"
+          :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
           @keydown.enter="transactionAdd"
         >
         <input
           v-model="newTransaction.value"
+          v-tooltip
+          data-bs-placement="bottom"
           type="text"
           placeholder="Valeur ou formule"
           class="form-control"
-          title="Exemples:
-· 500
-· 10 * 50
-· 1000 / 2"
+          data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
         <span class="input-group-text">€</span>
         <div class="w-100 d-sm-none" />
 
-        <select v-model="newTransaction.frequency" class="form-select mt-2 mt-sm-0" title="Fréquence" @keydown.enter="transactionAdd">
+        <select
+          v-model="newTransaction.frequency"
+          v-tooltip
+          class="form-select mt-2 mt-sm-0"
+          data-bs-placement="bottom"
+          data-bs-title="Fréquence"
+          @keydown.enter="transactionAdd"
+        >
           <option :value="Frequency.monthly">
             Mois
           </option>

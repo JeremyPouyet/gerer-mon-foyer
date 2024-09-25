@@ -51,10 +51,12 @@ function computeValue(user: User) : number {
           <input
             id="expenseInput"
             v-model="expenseValue"
+            v-tooltip
+            data-bs-placement="bottom"
             class="form-control"
             type="text"
             placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
-            title="Exemples: 500 ou 10 * 50 ou 1000 / 2"
+            data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           >
           <span class="input-group-text">€</span>
         </div>

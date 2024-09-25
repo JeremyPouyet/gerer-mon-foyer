@@ -62,9 +62,9 @@ function historicise() {
                 Gestion des données
                 <div
                   v-show="db.unsavedChanges.value > 0"
-                  data-toggle="tooltip"
-                  :title="unsavedChangesText"
-                  data-placement="bottom"
+                  v-tooltip
+                  :data-bs-title="unsavedChangesText"
+                  data-bs-placement="bottom"
                   class="position-absolute start-100 translate-middle badge rounded-pill xanthous"
                 >
                   {{ db.unsavedChanges }}

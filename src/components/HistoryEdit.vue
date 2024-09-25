@@ -62,7 +62,9 @@ onMounted(() => {
         <li v-for="sample in history" :key="sample.date" class="item py-2">
           <div class="d-flex justify-content-between container-fluid align-items-center">
             <span
-              title="Cliquer pour sélectionner"
+              v-tooltip
+              data-bs-placement="right"
+              data-bs-title="Cliquer pour sélectionner"
               style="cursor: pointer"
               :class="{ active: activeDate === sample.date }"
               @click="() => switchSample(sample.date)"
@@ -72,7 +74,7 @@ onMounted(() => {
                 v-if="sample.note"
                 v-tooltip
                 data-toggle="tooltip"
-                :title="sample.note"
+                :data-bs-title="sample.note"
                 class="translate-middle badge unpaded"
                 style="position:relative;top:-0.2rem;right:-0.6rem;"
               >
@@ -82,9 +84,10 @@ onMounted(() => {
             <div>
               <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
               <img
+                v-tooltip
                 src="@/assets/icons/cross.png"
                 alt="Supprimer"
-                :title="`Supprimer ${sexyDate(sample.date)} de l'historique`"
+                data-bs-title="Supprimer de l’historique"
                 class="icon-container-small icon-hoverable ms-2"
                 @click="() => removeSample(sample.date)"
               >

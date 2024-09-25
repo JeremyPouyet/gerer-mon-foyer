@@ -53,14 +53,14 @@ const totals = computed<number[]>(() =>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
               <td>
-                <span class="text-break" :title="transaction.note">
+                <span>
                   {{ transaction.name }}
                 </span>
                 <span
                   v-if="transaction.note"
                   v-tooltip
                   data-toggle="tooltip"
-                  :title="transaction.note"
+                  :data-bs-title="transaction.note"
                   class="translate-middle badge"
                   style="position:relative;top:-0.2rem;right:-0.6rem"
                 >
@@ -70,7 +70,11 @@ const totals = computed<number[]>(() =>
 
               <!-- Transaction frequency -->
               <td v-for="frequency in frequencies" :key="frequency" class="text-end">
-                <span :title="frequency===transaction.frequency ? transaction.value : ''">
+                {{  }}
+                <span
+                  v-tooltip
+                  :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
+                >
                   {{ round(valueAs(transaction, frequency)) }}
                   <div v-show="transaction.frequency===frequency" class="underline" />
                 </span>

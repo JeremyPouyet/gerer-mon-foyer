@@ -8,9 +8,9 @@ Ce projet propose un **outil gratuit** pour gérer les dépenses communes et per
 
 ### Fonctionnalités
 
-- **Répartition des dépenses** : Au travers de l'établissement d'un budget par habitant du foyer, la répartition des dépenses commune se fait en respectant les revenus et charges personnelles de chacun pour une répartition équitable.
+- **Répartition des dépenses** : Au travers de l’établissement d'un budget par habitant du foyer, la répartition des dépenses commune se fait en respectant les revenus et charges personnelles de chacun pour une répartition équitable.
 - **Simulation de dépenses ponctuelles** : Un outil pour diviser de manière équitable le coût d'achats uniques.
-- **Suivi de l'historique** : Un historique pour suivre l'évolution de ses budgets et des dépenses au fil du temps.
+- **Suivi de l’historique** : Un historique pour suivre l’évolution de ses budgets et des dépenses au fil du temps.
 
 ## Installation et développement
 

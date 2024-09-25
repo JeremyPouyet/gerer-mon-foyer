@@ -73,7 +73,14 @@ function noteCancel() : void {
       </div>
     </div>
   </div>
-  <img src="@/assets/icons/take-note.png" alt="Annoter" title="Ajouter une note" class="icon-container-small icon-hoverable" @click="toggleNotePopup">
+  <img
+    v-tooltip
+    src="@/assets/icons/take-note.png"
+    alt="Annoter"
+    data-bs-title="Annoter"
+    class="icon-container-small icon-hoverable"
+    @click="toggleNotePopup"
+  >
 </template>
 
 <style scoped>

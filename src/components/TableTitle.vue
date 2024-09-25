@@ -11,10 +11,12 @@ const props = defineProps<{ title: string, transactionType: TransactionType, acc
       {{ props.title }}
     </h1>
     <img
+      v-tooltip
       src="@/assets/icons/hide.png"
       class="icon-container icon-hoverable position-absolute end-0"
       alt="Cacher"
-      title="Cacher"
+      data-bs-placement="left"
+      data-bs-title="Cacher"
       @click="() => props.account.settings.show[props.transactionType] = false"
     >
   </div>

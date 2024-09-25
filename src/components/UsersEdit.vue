@@ -29,9 +29,10 @@ function userDelete(user: User) : void {
           <div class="d-flex justify-content-between container-fluid align-items-center">
             <UserNameEdit :user="user" />
             <img
+              v-tooltip
               src="@/assets/icons/cross.png"
-              alt="Supprimer"
-              :title="`Supprimer ${user.name}`"
+              :alt="`Supprimer ${user.name} des habitants`"
+              data-bs-title="Supprimer des habitants"
               class="icon-container-small icon-hoverable"
               @click="() => userDelete(user)"
             >

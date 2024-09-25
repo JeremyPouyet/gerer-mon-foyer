@@ -34,8 +34,10 @@ function handleClickOutside(event: MouseEvent) : void {
 <template>
   <span
     v-if="isEditing === false"
+    v-tooltip
     class="editable-text"
-    title="Cliquer pour éditer"
+    data-bs-placement="right"
+    data-bs-title="Cliquer pour éditer"
     @click="startEditName"
   >
     {{ user.name }}

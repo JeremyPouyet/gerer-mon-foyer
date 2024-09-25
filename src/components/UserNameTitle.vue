@@ -9,17 +9,17 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
 <template>
   <div class="d-flex justify-content-between">
     <div>
-      <h3 :title="props.account.note">
+      <h3>
         {{ name }}
         <span
           v-if="props.account.note"
           v-tooltip
           data-toggle="tooltip"
-          :title="props.account.note"
+          :data-bs-title="props.account.note"
           class="translate-middle badge unpaded"
           style="position:relative;top:-0.2rem;right:-0.6rem;"
         >
-          <img src="@/assets/icons/message.png" class="icon-container-small" alt="l'habitant est annoté">
+          <img src="@/assets/icons/message.png" class="icon-container-small" alt="l’habitant est annoté">
         </span>
         <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
       </h3>
@@ -27,20 +27,24 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
     <div class="d-flex">
       <div
         v-if="!account.settings.show[TransactionType.Expense]"
+        v-tooltip
+        data-bs-title="Aggrandir"
         class="text-container rounded-shadow icon-hoverable d-flex align-items-center"
         :class="!account.settings.show[TransactionType.Income] ? 'me-3' : ''"
         @click="account.settings.show[TransactionType.Expense] = true"
       >
         Dépenses
-        <img src="@/assets/icons/show.png" class="icon-container-small" alt="Aggrandir" title="Aggrandir">
+        <img src="@/assets/icons/show.png" class="icon-container-small" alt="Aggrandir">
       </div>
       <div
         v-if="!account.settings.show[TransactionType.Income]"
+        v-tooltip
+        data-bs-title="Aggrandir"
         class="text-container rounded-shadow icon-hoverable d-flex align-items-center"
         @click="account.settings.show[TransactionType.Income] = true"
       >
         Revenus
-        <img src="@/assets/icons/show.png" class="icon-container-small" alt="Aggrandir" title="Aggrandir">
+        <img src="@/assets/icons/show.png" class="icon-container-small" alt="Aggrandir">
       </div>
     </div>
   </div>
