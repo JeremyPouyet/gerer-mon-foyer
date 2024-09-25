@@ -53,11 +53,12 @@ const totals = computed<number[]>(() =>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
               <td>
-                <span class="text-break" style="position:relative;" :title="transaction.note">
+                <span class="text-break" :title="transaction.note">
                   {{ transaction.name }}
                 </span>
                 <span
                   v-if="transaction.note"
+                  v-tooltip
                   data-toggle="tooltip"
                   :title="transaction.note"
                   class="translate-middle badge"

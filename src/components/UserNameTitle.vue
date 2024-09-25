@@ -13,6 +13,7 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
         {{ name }}
         <span
           v-if="props.account.note"
+          v-tooltip
           data-toggle="tooltip"
           :title="props.account.note"
           class="translate-middle badge unpaded"

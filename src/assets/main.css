@@ -107,11 +107,6 @@ table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-tbody tr:hover {
-  transform: scale(1.01);
-  transition: transform 0.2s ease-in-out;
-}
-
 thead tr th {
   color: white !important;
   background-color: var(--color-dark-purple) !important

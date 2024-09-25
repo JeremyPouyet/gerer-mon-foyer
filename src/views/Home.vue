@@ -33,9 +33,6 @@
         <li>La personne qui gagne 1600€ ne paiera que 37% (185€).</li>
         <li>Avec une répartition 50/50, la personne qui gagne 1600€ aurait payé 250€, soit une économie de 7 800€ sur 10 ans grâce à cette méthode !</li>
       </ul>
-      <p class="text-start">
-        Ce type de répartition permet à chacun·e de contribuer de manière équitable, tout en prenant en compte les charges personnelles.
-      </p>
     </section>
 
     <section class="mb-5 text-center text-block">

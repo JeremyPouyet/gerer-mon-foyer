@@ -146,7 +146,6 @@ function handleClickOutside(event: MouseEvent) : void {
                 <template v-else>
                   <span
                     class="editable-text text-break"
-                    style="position:relative;"
                     :title="transaction.note"
                     @click="() => startEditTransactionName(transaction)"
                   >
@@ -154,6 +153,7 @@ function handleClickOutside(event: MouseEvent) : void {
                   </span>
                   <span
                     v-if="transaction.note"
+                    v-tooltip
                     data-toggle="tooltip"
                     :title="transaction.note"
                     class="translate-middle badge"

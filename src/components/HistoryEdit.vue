@@ -70,6 +70,7 @@ onMounted(() => {
               {{ sexyDate(sample.date) }}
               <span
                 v-if="sample.note"
+                v-tooltip
                 data-toggle="tooltip"
                 :title="sample.note"
                 class="translate-middle badge unpaded"
