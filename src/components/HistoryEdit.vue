@@ -52,7 +52,6 @@ onMounted(() => {
   historyManager.addEventListener('update', updateHistory)
   onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
 })
-
 </script>
 
 <template>

@@ -62,7 +62,7 @@ function computeValue(user: User) : number {
         </div>
       </div>
 
-      <div class="col-md-6 mt-4 mt-md-0">
+      <div class="col-md-6 mt-4 mt-md-0 mb-4">
         <ul class="list-group">
           <li
             v-for="user in userManager.users"
