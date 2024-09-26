@@ -1,7 +1,10 @@
 import { all, create, } from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Frequency, type ID, type Transaction, type TransactionRecord } from './types'
+import { frequencies, Frequency, TransactionType } from './types'
+import type { ID, Transaction, TransactionList, TransactionRecord } from './types'
+import { computed, type ComputedRef, type Ref } from 'vue'
+import type Account from './account'
 
 // https://mathjs.org/docs/expressions/security.html
 const math = create(all)
@@ -54,4 +57,19 @@ export function newId() : ID {
 
 export function emptyTransactions() : TransactionRecord {
   return { sum: 0, values: {} }
+}
+
+export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) : {
+  totals: ComputedRef<number[]>
+  transactionList: ComputedRef<TransactionList>
+} {
+  const transactionList = computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
+
+  const totals = computed<number[]>(() =>
+    frequencies.map(frequency =>
+      round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0))
+    )
+  )
+
+  return { totals, transactionList }
 }

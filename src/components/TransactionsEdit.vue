@@ -1,32 +1,31 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
+import NoteIcon from './NoteIcon.vue'
 import TableTitle from './TableTitle.vue'
 
-import { type ComponentPublicInstance, computed, nextTick, ref } from 'vue'
+import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
-import { round, valueAs } from '@/helpers'
+import { round, useTransactions, valueAs } from '@/helpers'
 import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
 import Texts from '@/texts'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
+const { account, transactionType } = toRefs(props)
+const { totals, transactionList } = useTransactions(account, transactionType)
 
-const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
 const editedValueId = ref<ID>()
 const editedFrequency = ref<Frequency>()
 const editedValue = ref<string>('')
 
-const totals = computed<number[]>(() =>
-  frequencies.map(frequency => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0)) )
-)
 const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
 let input : HTMLInputElement
 const newTransactionInputName = ref<HTMLInputElement>()
 
 function transactionAdd() : void {
-  if (!props.account.create(props.transactionType, newTransaction.value))
+  if (!account.value.create(props.transactionType, newTransaction.value))
     return
 
   newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
@@ -55,7 +54,7 @@ function cancelEditTransactionName() : void {
 }
 
 function executeEditTransactionName() : void {
-  if (editedNameId.value && props.account.update(props.transactionType, editedNameId.value, { name: editedName.value }))
+  if (editedNameId.value && account.value.update(props.transactionType, editedNameId.value, { name: editedName.value }))
     cancelEditTransactionName()
 }
 
@@ -80,7 +79,7 @@ function cancelEditTransactionValue() : void {
 function executeEditTransactionValue() : void {
   const draft = { frequency: editedFrequency.value, value: editedValue.value }
 
-  if (editedValueId.value && props.account.update(props.transactionType, editedValueId.value, draft))
+  if (editedValueId.value && account.value.update(props.transactionType, editedValueId.value, draft))
     cancelEditTransactionValue()
 }
 
@@ -137,16 +136,7 @@ function handleClickOutside(event: MouseEvent) : void {
                   >
                     {{ transaction.name }}
                   </span>
-                  <span
-                    v-if="transaction.note"
-                    v-tooltip
-                    data-toggle="tooltip"
-                    :data-bs-title="transaction.note"
-                    class="translate-middle badge"
-                    style="position:relative;top:-0.2rem;right:-0.6rem"
-                  >
-                    <img src="@/assets/icons/message.png" class="icon-container-small">
-                  </span>
+                  <NoteIcon :text="transaction.note" />
                 </template>
               </td>
 
@@ -190,7 +180,7 @@ function handleClickOutside(event: MouseEvent) : void {
                   alt="Supprimer"
                   data-bs-title="Supprimer"
                   class="icon-container-small icon-hoverable ms-2"
-                  @click="() => props.account.delete(props.transactionType, transaction)"
+                  @click="() => account.delete(props.transactionType, transaction)"
                 >
               </td>
             </tr>

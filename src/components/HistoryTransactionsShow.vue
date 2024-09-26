@@ -1,19 +1,16 @@
 <script setup lang="ts">
+import NoteIcon from './NoteIcon.vue'
 import TableTitle from './TableTitle.vue'
 
-import { computed } from 'vue'
+import { toRefs } from 'vue'
 import { frequencies, TransactionType } from '@/types'
-import { round, valueAs  } from '@/helpers'
+import { round, useTransactions, valueAs  } from '@/helpers'
 import type Account from '@/account'
 import Texts from '@/texts'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
-
-const transactionList = computed(() => props.account.transactionSorted(props.transactionType))
-
-const totals = computed<number[]>(() =>
-  frequencies.map(frequency => round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0)) )
-)
+const { account, transactionType } = toRefs(props)
+const { totals, transactionList } = useTransactions(account, transactionType)
 </script>
 
 <template>
@@ -43,16 +40,7 @@ const totals = computed<number[]>(() =>
                 <span class="text-break">
                   {{ transaction.name }}
                 </span>
-                <span
-                  v-if="transaction.note"
-                  v-tooltip
-                  data-toggle="tooltip"
-                  :data-bs-title="transaction.note"
-                  class="translate-middle badge"
-                  style="position:relative;top:-0.2rem;right:-0.6rem"
-                >
-                  <img src="@/assets/icons/message.png" class="icon-container-small">
-                </span>
+                <NoteIcon :text="transaction.note" />
               </td>
 
               <!-- Transaction frequency -->

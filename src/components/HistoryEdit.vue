@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Note from './Note.vue'
+import NoteIcon from './NoteIcon.vue'
+
 import { onMounted, onUnmounted, ref } from 'vue'
 import historyManager, { type Sample } from '@/historyManager'
 
@@ -70,16 +72,7 @@ onMounted(() => {
               @click="() => switchSample(sample.date)"
             >
               {{ sexyDate(sample.date) }}
-              <span
-                v-if="sample.note"
-                v-tooltip
-                data-toggle="tooltip"
-                :data-bs-title="sample.note"
-                class="translate-middle badge unpaded"
-                style="position:relative;top:-0.2rem;right:-0.6rem;"
-              >
-                <img src="@/assets/icons/message.png" class="icon-container-small">
-              </span>
+              <NoteIcon :text="sample.note" :unpaded="true" />
             </span>
             <div>
               <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
