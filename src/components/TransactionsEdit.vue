@@ -248,17 +248,8 @@ function handleClickOutside(event: MouseEvent) : void {
           data-bs-title="Fréquence"
           @keydown.enter="transactionAdd"
         >
-          <option :value="Frequency.monthly">
-            Mois
-          </option>
-          <option :value="Frequency.quarterly">
-            Trimestre
-          </option>
-          <option :value="Frequency.biannual">
-            Semestre
-          </option>
-          <option :value="Frequency.yearly">
-            Annnée
+          <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
+            {{ name }}
           </option>
         </select>
         <button class="btn btn-primary default-button mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">

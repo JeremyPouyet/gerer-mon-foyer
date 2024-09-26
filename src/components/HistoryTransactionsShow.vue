@@ -28,17 +28,8 @@ const totals = computed<number[]>(() =>
               <th scope="col">
                 {{ Texts.transactionTypes[props.transactionType]['singular'] }}
               </th>
-              <th scope="col" class="text-end">
-                Mois
-              </th>
-              <th scope="col" class="text-end">
-                Trimestre
-              </th>
-              <th scope="col" class="text-end">
-                Semestre
-              </th>
-              <th scope="col" class="text-end">
-                Année
+              <th v-for="frequency in frequencies" :key="frequency" scope="col" class="text-end">
+                {{ Texts.frequencies[frequency] }}
               </th>
               <th v-if="props.income" scope="col" class="text-end">
                 % des revenus
@@ -49,7 +40,7 @@ const totals = computed<number[]>(() =>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
               <td>
-                <span>
+                <span class="text-break">
                   {{ transaction.name }}
                 </span>
                 <span

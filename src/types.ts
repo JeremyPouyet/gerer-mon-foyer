@@ -5,11 +5,7 @@ export enum Frequency {
   yearly = 'yearly'
 }
 
-console.log(Object.values(Frequency))
-
-export const frequencies = Object.freeze(
-  Object.values(Frequency)
-)
+export const frequencies = Object.freeze(Object.values(Frequency))
 
 export type ID = `${string}-${string}-${string}-${string}-${string}`
 
