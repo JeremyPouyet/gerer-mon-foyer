@@ -16,12 +16,7 @@ const unsavedChangesText = computed(() : string => {
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
 
-const addMarginWhenBadge = computed(() : string => {
-  return db.unsavedChanges.value > 0 ? 'me-3' : ''
-})
-
 const menuItems: [string, string, URL][] = [
-  ['/',          'Accueil',    new URL('@/assets/icons/home.png', import.meta.url)],
   ['/budget',    'Mon budget', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
   ['/history',   'Historique', new URL('@/assets/icons/history.png', import.meta.url)],
   ['/simulator', 'Simulateur', new URL('@/assets/icons/distribution.png', import.meta.url)]
@@ -36,6 +31,11 @@ function historicise() {
 <template>
   <nav class="navbar navbar-expand-lg mb-4">
     <div class="container-fluid">
+      <RouterLink class="navbar-brand" to="/" active-class="active">
+        Mon
+        <img src="@/assets/icons/home.png" class="icon-container-small" alt="">
+        Foyer
+      </RouterLink>
       <button
         class="navbar-toggler"
         type="button"
@@ -55,11 +55,11 @@ function historicise() {
               {{ label }}
             </RouterLink>
           </li>
-          <li :class="['nav-item', addMarginWhenBadge]">
+          <li class="nav-item">
             <RouterLink class="nav-link" to="/settings" active-class="active">
               <img src="@/assets/icons/diskette.png" class="icon-container" alt="">
               <span>
-                Gestion des données
+                Mes données
                 <div
                   v-show="db.unsavedChanges.value > 0"
                   v-tooltip
