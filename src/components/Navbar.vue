@@ -29,7 +29,7 @@ function historicise() {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg mb-4">
+  <nav class="navbar navbar-expand-md mb-4">
     <div class="container-fluid">
       <RouterLink class="navbar-brand" to="/" active-class="active">
         Mon
@@ -74,7 +74,7 @@ function historicise() {
           </li>
         </ul>
       </div>
-      <button v-if="currentPath === '/expense-distribution'" class="btn btn-primary default-button" @click="historicise">
+      <button v-if="currentPath === '/budget'" class="btn btn-primary default-button" @click="historicise">
         Historiser
       </button>
     </div>
