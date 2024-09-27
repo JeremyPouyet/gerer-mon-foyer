@@ -2,7 +2,7 @@
   <footer v-once class="footer mt-auto py-4">
     <div class="container">
       <div class="row">
-        <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+        <div class="col-md-3 text-center text-md-start">
           <h5 class="section-title">
             Crédits
           </h5>
@@ -20,12 +20,14 @@
           </p>
         </div>
 
-        <div class="col-md-6 text-center mb-3 mb-md-0">
+        <div class="col-md-6 text-center mb-3 mb-md-0 px-5">
           <h5 class="section-title">
             À propos de Mon Foyer
           </h5>
           <p>
-            Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription. Abusez-en tant qu’il existe !
+            Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription.
+            <br>
+            Abusez-en tant qu’il existe !
           </p>
           <p>
             Contact : <a href="mailto:contact@gerer-mon-foyer.fr">contact@gerer-mon-foyer.fr</a>
@@ -71,11 +73,5 @@
 .footer .row {
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   padding-top: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .footer {
-    text-align: center;
-  }
 }
 </style>
