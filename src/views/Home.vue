@@ -21,7 +21,7 @@
 
     <section class="mb-5 text-center text-block">
       <h2 class="mb-3">
-        Éxemple simple de répartition
+        Exemple simple de répartition
       </h2>
       <p class="text-start">
         Prenons un foyer dans lequel Camille gagne 2400€ par mois, et Sam 1600€, tout en remboursant un prêt étudiant de 200€.
