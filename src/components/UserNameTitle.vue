@@ -45,7 +45,7 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
 </template>
 
 <style scope>
-  .text-container {
-    margin-bottom: .5rem;
-  }
+.text-container {
+  margin-bottom: .5rem;
+}
 </style>

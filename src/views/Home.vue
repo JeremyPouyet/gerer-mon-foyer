@@ -6,7 +6,7 @@
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses partagées, tout en tenant compte de vos charges personnelles.
       </p>
 
-      <a href="/expense-distribution" class="btn btn-primary btn-lg mt-3">Commencer maintenant</a>
+      <a href="/budget" class="btn btn-primary btn-lg mt-3">Commencer maintenant</a>
     </header>
 
     <section class="mb-5 text-center text-block">

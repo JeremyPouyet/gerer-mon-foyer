@@ -21,10 +21,10 @@ const addMarginWhenBadge = computed(() : string => {
 })
 
 const menuItems: [string, string, URL][] = [
-  ['/',                     'Accueil',                  new URL('@/assets/icons/home.png', import.meta.url)],
-  ['/expense-distribution', 'Répartition des dépenses', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
-  ['/history',              'Historique',               new URL('@/assets/icons/history.png', import.meta.url)],
-  ['/simulator',            'Simulateur',               new URL('@/assets/icons/distribution.png', import.meta.url)]
+  ['/',          'Accueil',    new URL('@/assets/icons/home.png', import.meta.url)],
+  ['/budget',    'Mon budget', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
+  ['/history',   'Historique', new URL('@/assets/icons/history.png', import.meta.url)],
+  ['/simulator', 'Simulateur', new URL('@/assets/icons/distribution.png', import.meta.url)]
 ]
 
 function historicise() {
