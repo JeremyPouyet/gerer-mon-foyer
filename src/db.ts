@@ -1,4 +1,4 @@
-import { reactive, ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch } from 'vue'
 
 import { emptyTransactions } from './helpers'
 import historyManager, { type Sample } from './historyManager'
@@ -21,7 +21,9 @@ class DB {
     Object.assign(this.account.incomes, emptyTransactions())
     historyManager.empty()
     sessionStorage.clear()
-    this.unsavedChanges.value = 0
+
+    // wait for watchers to save empty values before updating usavedChanges
+    nextTick(() => this.unsavedChanges.value = 0)
   }
 
   export() : string {
@@ -62,7 +64,7 @@ class DB {
   }
 
   private watch() : void {
-    watch(this.unsavedChanges, value => { localStorage.setItem('unsavedChanges', value.toString()) })
+    watch(this.unsavedChanges, value => localStorage.setItem('unsavedChanges', value.toString()))
     watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
 
