@@ -3,7 +3,7 @@
     <header class="text-center mb-5">
       <h1>Répartissez vos dépenses communes de manière équitable</h1>
       <p class="lead">
-        Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses partagées, tout en tenant compte de vos charges personnelles.
+        Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 
       <a href="/budget" class="btn btn-primary btn-lg mt-3">Commencer maintenant</a>
