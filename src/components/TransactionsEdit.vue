@@ -175,7 +175,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
             </tr>
           </tbody>
-          <TableFooter :account="account" :income="income" :totals="totals" :with-tds="true" />
+          <TableFooter :income="income" :totals="totals" :with-tds="true" />
         </table>
       </div>
 

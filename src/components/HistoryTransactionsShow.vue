@@ -50,7 +50,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
             </tr>
           </tbody>
-          <TableFooter :account="account" :income="income" :totals="totals" :with-tds="false" />
+          <TableFooter :income="income" :totals="totals" :with-tds="false" />
         </table>
       </div>
     </section>

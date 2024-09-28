@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type Account from '@/account'
 import { round } from '@/helpers'
 
-defineProps<{ account: Account, income?: number, totals: number[], withTds: boolean }>()
+defineProps<{ income?: number, totals: number[], withTds: boolean }>()
 </script>
 
 <template>
