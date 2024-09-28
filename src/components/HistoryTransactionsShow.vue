@@ -2,6 +2,7 @@
 import NoteIcon from './NoteIcon.vue'
 import TableTitle from './TransactionsTable/TableTitle.vue'
 import TableFooter from './TransactionsTable/TableFooter.vue'
+import TableHeader from './TransactionsTable/TableHeader.vue'
 
 import { toRefs } from 'vue'
 import { frequencies, TransactionType } from '@/types'
@@ -21,19 +22,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">
-                {{ Texts.transactionTypes[props.transactionType]['singular'] }}
-              </th>
-              <th v-for="frequency in frequencies" :key="frequency" scope="col" class="text-end">
-                {{ Texts.frequencies[frequency] }}
-              </th>
-              <th v-if="props.income" scope="col" class="text-end">
-                % des revenus
-              </th>
-            </tr>
-          </thead>
+          <TableHeader :income="income" :transaction-type="transactionType" :with-actions="false" />
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
