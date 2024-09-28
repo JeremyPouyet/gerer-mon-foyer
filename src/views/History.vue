@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
 import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import HistoryEdit from '@/components/HistoryEdit.vue'
-import UserNameTitle from '@/components/UserNameTitle.vue'
+import BudgetShow from '@/components/BudgetShow.vue'
 
 import { computed, onUnmounted, ref, watch } from 'vue'
 import DBSnapshot from '@/dbSnapshot'
-import { TransactionType } from '@/types'
 import historyManager, { type Sample } from '@/historyManager'
+import { useFinanceCalculations } from '@/helpers'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null
@@ -29,9 +28,9 @@ function switchSample() {
 const sample = ref<Sample | null | undefined>()
 const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
 
-const commonBill = computed<number>(() => Math.max(snapshot.value.account.expenses.sum - snapshot.value.account.incomes.sum, 0))
-const incomeSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + user.account.incomes.sum, snapshot.value.account.incomes.sum))
-const remainSum = computed(() => snapshot.value.users.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
+const account = computed(() => snapshot.value.account)
+const users = computed(() => snapshot.value.users)
+const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, users)
 
 function updateSampleData(updatedData: Partial<DBSnapshot>) {
   if (sample.value) {
@@ -62,21 +61,15 @@ switchSample()
       <div class="col-auto mb-4">
         <HistoryEdit @switch-sample="() => switchSample()" />
       </div>
-      <div class="col">
-        <div class="row">
-          <UserNameTitle :account="snapshot.account" :name="'Compte commun'" :with-note="false" />
-          <HistoryTransactionsShow :account="snapshot.account" :income="incomeSum" :transaction-type="TransactionType.Expense" />
-          <HistoryTransactionsShow :account="snapshot.account" :transaction-type="TransactionType.Income" />
-        </div>
-        <div v-for="user in snapshot.users" :key="user.id" class="row">
-          <UserNameTitle :account="user.account" :name="user.name" :with-note="false" />
-          <HistoryTransactionsShow :account="user.account" :income="user.account.incomes.sum" :transaction-type="TransactionType.Expense" />
-          <div class="col mb-4">
-            <HistoryTransactionsShow :account="user.account" :transaction-type="TransactionType.Income" />
-            <FinanceInfoBlock :common-bill="commonBill" :remain-sum="remainSum" :user="user" />
-          </div>
-        </div>
-      </div>
+      <BudgetShow
+        :account="account"
+        :users="users"
+        :income-sum="incomeSum"
+        :remain-sum="remainSum"
+        :common-bill="commonBill"
+        :with-note="false"
+        :component-type="HistoryTransactionsShow"
+      />
     </div>
   </div>
 </template>

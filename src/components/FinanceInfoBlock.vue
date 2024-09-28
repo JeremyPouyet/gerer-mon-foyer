@@ -4,11 +4,7 @@ import { round } from '@/helpers'
 import db from '@/db'
 import User from '@/user'
 
-const props = defineProps<{
-  commonBill: number,
-  remainSum: number,
-  user: User
-}>()
+const props = defineProps<{ commonBill: number, remainSum: number, user: User }>()
 
 const ratio = computed(() => props.user.ratio)
 // The user's remaining balance at the end of the month after paying all personal expenses

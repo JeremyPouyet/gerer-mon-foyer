@@ -2,9 +2,10 @@ import { all, create, } from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 
 import { frequencies, Frequency, TransactionType } from './types'
-import type { ID, Transaction, TransactionList, TransactionRecord } from './types'
-import { computed, type ComputedRef, type Ref } from 'vue'
+import type { ID, Transaction, TransactionRecord } from './types'
+import { computed, type Ref } from 'vue'
 import type Account from './account'
+import type User from './user'
 
 // https://mathjs.org/docs/expressions/security.html
 const math = create(all)
@@ -59,10 +60,7 @@ export function emptyTransactions() : TransactionRecord {
   return { sum: 0, values: {} }
 }
 
-export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) : {
-  totals: ComputedRef<number[]>
-  transactionList: ComputedRef<TransactionList>
-} {
+export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
   const transactionList = computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
 
   const totals = computed<number[]>(() =>
@@ -72,4 +70,12 @@ export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Re
   )
 
   return { totals, transactionList }
+}
+
+export function useFinanceCalculations(account: Ref<Account>, users: Ref<User[]>) {
+  return {
+    commonBill: computed(() => Math.max(account.value.expenses.sum - account.value.incomes.sum, 0)),
+    incomeSum:  computed(() => users.value.reduce((sum, user) => sum + user.account.incomes.sum, account.value.incomes.sum)),
+    remainSum:  computed(() => users.value.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
+  }
 }
