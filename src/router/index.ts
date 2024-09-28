@@ -10,7 +10,6 @@ const router = createRouter({
     ['Simulator', '/simulator',       'Simulateur de dépenses ponctuelles'],
     ['NotFound',  '/:pathMatch(.*)*', 'Oulà, cette pas n’existe pas !']
   ].map(([fileName, path, title]) => {
-    console.log(fileName, path, title)
     return { component: () => import(`@/views/${fileName}.vue`), meta: { title }, path }
   })
 })

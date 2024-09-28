@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
-import TableTitle from './TableTitle.vue'
+import TableTitle from './TransactionsTable/TableTitle.vue'
+import TableFooter from './TransactionsTable/TableFooter.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
@@ -173,7 +174,10 @@ function handleClickOutside(event: MouseEvent) : void {
 
               <!-- Actions -->
               <td class="text-end align-middle">
-                <Note :item="transaction" @update="note => transaction.note = note" />
+                <Note
+                  :item="transaction"
+                  @update="note => account.update(transactionType, transaction.id, { note })"
+                />
                 <img
                   v-tooltip
                   src="@/assets/icons/cross.png"
@@ -185,20 +189,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td class="fw-bold">
-                Total
-              </td>
-              <td v-for="total in totals" :key="total" class="text-end">
-                {{ total }}
-              </td>
-              <td v-if="props.income" class="text-end">
-                {{ round(totals.at(-1) ?? 0 / (props.income * 12) * 100) }}
-              </td>
-              <td colspan="2" />
-            </tr>
-          </tfoot>
+          <TableFooter :account="account" :income="income" :totals="totals" :with-tds="true" />
         </table>
       </div>
 

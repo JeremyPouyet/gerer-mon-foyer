@@ -32,4 +32,4 @@ export interface TransactionList {
   values: Transaction[],
   sum: number
 }
-export type TransactionFunctional = Required<Omit<Transaction, 'id' | 'note'>>
+export type TransactionFunctional = Omit<Transaction, 'id' | 'note'>

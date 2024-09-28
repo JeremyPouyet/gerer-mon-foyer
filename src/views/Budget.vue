@@ -3,12 +3,13 @@ import TransactionsEdit from '@/components/TransactionsEdit.vue'
 import UsersEdit from '@/components/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
-import { toRefs } from 'vue'
+import { computed } from 'vue'
 import db from '@/db'
 import userManager from '@/userManager'
 import { useFinanceCalculations } from '@/helpers'
 
-const { account, users } = toRefs({ account: db.account, users: userManager.users })
+const account = computed(() => db.account)
+const users = computed(() => userManager.users)
 const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, users)
 </script>
 

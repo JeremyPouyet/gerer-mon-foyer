@@ -1,6 +1,6 @@
 import { emptyTransactions, newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
-import { TransactionType } from './types'
+import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
 
@@ -34,21 +34,29 @@ function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSetting
   }
 }
 
-function setName(name: string, transaction: Partial<Transaction>) : boolean {
-  const trimmedName = name.trim()
+function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
+  const trimmedName = transaction.name.trim()
 
   if (!trimmedName) {
-    notificationManager.create(`"${name}" n’est pas un nom valide`, NotificationType.Error)
+    notificationManager.create(`"${transaction.name}" n’est pas un nom valide`, NotificationType.Error)
     return false
   }
   transaction.name = trimmedName
   return true
 }
 
-function testValue(transaction: Pick<Transaction, 'value' | 'frequency'>) : boolean {
+/**
+ * Normalize a transaction value by triming it, removing multiple consequent spaces and replacing comas with dots
+ *
+ * @param {Transaction} transaction The transaction for whom the value should be normalized
+ */
+function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Transaction, 'frequency'>>) : boolean {
+  const value = transaction.value.trim().replaceAll(',', '.').replaceAll(/ +/g, ' ')
+
   try {
-    const value = valueAs(transaction)
-    if (Number.isNaN(value)) throw Error()
+    const computedValue = valueAs({ frequency: transaction.frequency || Frequency.monthly, value })
+    if (Number.isNaN(computedValue) || Math.abs(computedValue) == Infinity) throw Error()
+    transaction.value = value
     return true
   } catch {
     notificationManager.create(`"${transaction.value}" n’est pas un montant valide`, NotificationType.Error)
@@ -85,14 +93,12 @@ export default class Account {
    */
   create(transactionType: TransactionType, transaction: TransactionFunctional) : boolean {
     const { name, frequency, value } = transaction
-    const draft: Partial<Transaction> = {}
+    const draft: Transaction = { frequency, id: newId(), name, value }
 
-    if (!setName(name, draft) || !testValue(transaction))
+    if (!formatName(draft) || !formatValue(draft as TransactionFunctional))
       return false
 
-    const id = newId()
-
-    this[transactionType].values[id] = Object.assign(draft, { frequency, id, value }) as Transaction
+    this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
     if (this.triggerRatio) userManager.computeRatios()
     return true
@@ -135,25 +141,21 @@ export default class Account {
    * @param {Partial<Transaction>} updates The updates to apply to the transaction.
    * @returns {boolean} Whether the transaction has been updated.
    */
-  update(transactionType: TransactionType, id: ID, updates: Partial<Pick<Transaction, 'frequency' | 'name' | 'value'>>) : boolean {
+  update(transactionType: TransactionType, id: ID, updates: Partial<Transaction>) : boolean {
     const transaction = this[transactionType].values[id]
 
     if (!transaction) return false
 
-    const draft: Partial<Transaction> = {}
+    const draft: Partial<Transaction> = structuredClone(updates)
 
-    if (updates.name !== undefined && !setName(updates.name, draft)) return false
-
-    const needsUpdateSum = updates.value !== undefined || updates.frequency !== undefined
-    if (needsUpdateSum)  {
-      if (updates.value !== undefined) draft.value = updates.value
-      if (updates.frequency !== undefined) draft.frequency = updates.frequency
-      if (!testValue({ ...transaction, ...draft })) return false
-    }
+    if (draft.name !== undefined && !formatName(draft as Pick<Transaction, 'name'>))
+      return false
+    if (draft.value !== undefined && !formatValue(draft as Pick<Transaction, 'value'>))
+      return false
 
     Object.assign(transaction, draft)
 
-    if (needsUpdateSum) {
+    if (draft.value !== undefined || draft.frequency !== undefined) {
       this.updateSum(transactionType)
       if (this.triggerRatio) userManager.computeRatios()
     }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NoteIcon from './NoteIcon.vue'
-import TableTitle from './TableTitle.vue'
+import TableTitle from './TransactionsTable/TableTitle.vue'
+import TableFooter from './TransactionsTable/TableFooter.vue'
 
 import { toRefs } from 'vue'
 import { frequencies, TransactionType } from '@/types'
@@ -60,19 +61,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td class="fw-bold">
-                Total
-              </td>
-              <td v-for="total in totals" :key="total" class="text-end">
-                {{ total }}
-              </td>
-              <td v-if="props.income" class="text-end">
-                {{ round(totals.at(-1) ?? 0 / (props.income * 12) * 100) }}
-              </td>
-            </tr>
-          </tfoot>
+          <TableFooter :account="account" :income="income" :totals="totals" :with-tds="false" />
         </table>
       </div>
     </section>
