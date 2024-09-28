@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TransactionsEdit from '@/components/TransactionsEdit.vue'
 import UsersEdit from '@/components/UsersEdit.vue'
-import Budget from '@/components/BudgetShow.vue'
+import BudgetShow from '@/components/BudgetShow.vue'
 
 import { toRefs } from 'vue'
 import db from '@/db'
@@ -18,7 +18,7 @@ const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, use
       <div class="col-auto mb-4">
         <UsersEdit />
       </div>
-      <Budget
+      <BudgetShow
         :account="account"
         :users="users"
         :income-sum="incomeSum"
