@@ -29,7 +29,7 @@ defineProps<{
       <component :is="componentType" :account="user.account" :income="user.account.incomes.sum" :transaction-type="TransactionType.Expense" />
       <div class="col mb-4">
         <component :is="componentType" :account="user.account" :transaction-type="TransactionType.Income" />
-        <FinanceInfoBlock :user="user" :common-bill="commonBill" :remain-sum="remainSum" />
+        <FinanceInfoBlock :user="user" :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" />
       </div>
     </div>
   </div>

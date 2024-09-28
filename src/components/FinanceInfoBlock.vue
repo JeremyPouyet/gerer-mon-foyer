@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { round } from '@/helpers'
-import db from '@/db'
 import User from '@/user'
+import type Account from '@/account'
 
-const props = defineProps<{ commonBill: number, remainSum: number, user: User }>()
+const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()
 
 const ratio = computed(() => props.user.ratio)
 // The user's remaining balance at the end of the month after paying all personal expenses
 const monthlyRemainingBalance = computed(() => props.user.account.incomes.sum - props.user.account.expenses.sum)
 // The amount the household needs to cover its shared expenses each month
-const mensualCommonExpenses = computed<number>(() => round(Math.max(db.account.expenses.sum - db.account.incomes.sum, 0)))
+const mensualCommonExpenses = computed<number>(() => round(Math.max(props.commonAccount.expenses.sum - props.commonAccount.incomes.sum, 0)))
 // The total remaining amount after all personal expenses are covered, including shared incomes
-const mensualRemainSum = computed<number>(() => round(props.remainSum + db.account.incomes.sum))
+const mensualRemainSum = computed<number>(() => round(props.remainSum + props.commonAccount.incomes.sum))
 // The total amount the user can potentially save over 10 years, assuming they save the amount remaining after paying both personal and shared expenses
 const in10years = computed<number>(() => round((monthlyRemainingBalance.value - ratio.value * props.commonBill) * 12 * 10))
 </script>
