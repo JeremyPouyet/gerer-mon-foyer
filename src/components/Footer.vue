@@ -36,7 +36,6 @@
           </h5>
           <p>
             Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription.
-            <br>
             Abusez-en tant qu’il existe !
           </p>
           <p>
