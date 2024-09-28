@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import NoteIcon from './NoteIcon.vue'
-import TableTitle from './TransactionsTable/TableTitle.vue'
 import TableFooter from './TransactionsTable/TableFooter.vue'
 import TableHeader from './TransactionsTable/TableHeader.vue'
+import TableTitle from './TransactionsTable/TableTitle.vue'
 
 import { toRefs } from 'vue'
-import { frequencies, TransactionType } from '@/types'
-import { round, useTransactions, valueAs  } from '@/helpers'
+
 import type Account from '@/account'
+import { round, useTransactions, valueAs  } from '@/helpers'
 import Texts from '@/texts'
+import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
 const { account, transactionType } = toRefs(props)

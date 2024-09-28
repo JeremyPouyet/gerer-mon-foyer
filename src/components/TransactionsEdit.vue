@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
-import TableTitle from './TransactionsTable/TableTitle.vue'
 import TableFooter from './TransactionsTable/TableFooter.vue'
 import TableHeader from './TransactionsTable/TableHeader.vue'
+import TableTitle from './TransactionsTable/TableTitle.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
-import { round, useTransactions, valueAs } from '@/helpers'
-import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
+import { round, useTransactions, valueAs } from '@/helpers'
 import Texts from '@/texts'
+import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 
 const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
 const { account, transactionType } = toRefs(props)
