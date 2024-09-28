@@ -21,8 +21,18 @@
         </div>
 
         <div class="col-md-6 text-center mb-3 mb-md-0 px-5">
-          <h5 class="section-title">
-            À propos de Mon Foyer
+          <h5 class="section-title text-center">
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="d-inline-block align-middle me-2">
+                À propos de
+              </div>
+              <div class="d-inline-block border p-2">
+                <p class="mb-0 lh-1 py-0">
+                  Gérer
+                </p>
+                Mon <img src="@/assets/icons/home.png" class="icon-container-small" alt=""> Foyer
+              </div>
+            </div>
           </h5>
           <p>
             Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription.

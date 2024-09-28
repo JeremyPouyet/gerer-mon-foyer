@@ -31,10 +31,13 @@ function historicise() {
 <template>
   <nav class="navbar navbar-expand-md mb-4">
     <div class="container-fluid">
-      <RouterLink class="navbar-brand" to="/" active-class="active">
-        Mon
-        <img src="@/assets/icons/home.png" class="icon-container-small" alt="">
-        Foyer
+      <RouterLink class="navbar-brand py-0" to="/" active-class="active">
+        <p class="text-center mb-0 lh-1">
+          Gérer
+        </p>
+        <div>
+          Mon <img src="@/assets/icons/home.png" class="icon-container-small" alt=""> Foyer
+        </div>
       </RouterLink>
       <button
         class="navbar-toggler"
