@@ -56,10 +56,6 @@ export function newId() : ID {
   return uuidv4() as ID
 }
 
-export function emptyTransactions() : TransactionRecord {
-  return { sum: 0, values: {} }
-}
-
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
   const transactionList = computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
 

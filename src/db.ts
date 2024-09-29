@@ -1,6 +1,5 @@
 import { nextTick, reactive, ref, watch } from 'vue'
 
-import { emptyTransactions } from './helpers'
 import historyManager, { type Sample } from './historyManager'
 import Account from './account'
 import userManager from './userManager'
@@ -16,9 +15,7 @@ class DB {
 
   empty() : void {
     userManager.empty()
-
-    Object.assign(this.account.expenses, emptyTransactions())
-    Object.assign(this.account.incomes, emptyTransactions())
+    this.account.empty()
     historyManager.empty()
     sessionStorage.clear()
 

@@ -1,4 +1,4 @@
-import { emptyTransactions, newId, valueAs } from './helpers'
+import { newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
 import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
@@ -29,10 +29,11 @@ interface AccountSettings {
  * @returns {AccountSettings} The complete account settings.
  */
 function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSettings {
-  return {
-    show: Object.assign({[TransactionType.Expense]: true, [TransactionType.Income]: true}, settings.show)
-  }
+  return { show: { ...defaultSettings().show, ...settings.show } }
 }
+
+const defaultSettings = () => ({ show: { [TransactionType.Expense]: true, [TransactionType.Income]: true } })
+const emptyTransactions = () => ({ sum: 0, values: {} })
 
 function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
   const trimmedName = transaction.name.trim()
@@ -115,6 +116,10 @@ export default class Account {
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
     if (this.triggerRatio) userManager.computeRatios()
+  }
+
+  empty() {
+    Object.assign(this, { expenses: emptyTransactions(), incomes: emptyTransactions(), note: '', settings: defaultSettings() })
   }
 
   /**
