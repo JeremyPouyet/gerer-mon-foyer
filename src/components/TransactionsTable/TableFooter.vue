@@ -14,7 +14,7 @@ defineProps<{ income?: number, totals: number[], withTds: boolean }>()
         {{ total }}
       </td>
       <td v-if="income" class="text-end">
-        {{ round(totals.at(-1) ?? 0 / (income * 12) * 100) }}
+        {{ round((totals.at(-1) ?? 0) / (income * 12) * 100) }}
       </td>
       <!-- When the table has no action, additional tds are required -->
       <td v-if="withTds" colspan="2" />
