@@ -2,7 +2,7 @@ import { all, create, } from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 
 import { frequencies, Frequency, TransactionType } from './types'
-import type { ID, Transaction, TransactionRecord } from './types'
+import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'

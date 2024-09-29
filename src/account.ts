@@ -32,8 +32,8 @@ function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSetting
   return { show: { ...defaultSettings().show, ...settings.show } }
 }
 
-const defaultSettings = () => ({ show: { [TransactionType.Expense]: true, [TransactionType.Income]: true } })
-const emptyTransactions = () => ({ sum: 0, values: {} })
+const defaultSettings : () => AccountSettings = () => ({ show: { [TransactionType.Expense]: true, [TransactionType.Income]: true } })
+const emptyTransactions : () => TransactionRecord = () => ({ sum: 0, values: {} })
 
 function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
   const trimmedName = transaction.name.trim()
