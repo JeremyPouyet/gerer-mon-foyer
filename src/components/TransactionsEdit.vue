@@ -142,7 +142,7 @@ function handleClickOutside(event: MouseEvent) : void {
                 </template>
                 <template v-else>
                   <span
-                    v-tooltip
+                    v-tooltip="{ disposeOnClick: true }"
                     class="editable-text"
                     :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
                     @click="() => startEditTransactionValue(transaction, frequency)"
