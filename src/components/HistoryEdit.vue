@@ -76,7 +76,7 @@ onMounted(() => {
             <div>
               <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
               <img
-                v-tooltip
+                v-tooltip="{ disposeOnClick: true }"
                 src="@/assets/icons/cross.png"
                 alt="Supprimer"
                 data-bs-title="Supprimer de l’historique"
