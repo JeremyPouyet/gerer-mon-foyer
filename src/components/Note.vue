@@ -74,7 +74,7 @@ function noteCancel() : void {
     </div>
   </div>
   <img
-    v-tooltip
+    v-tooltip="{ disposeOnClick: true }"
     src="@/assets/icons/take-note.png"
     alt="Annoter"
     data-bs-title="Annoter"

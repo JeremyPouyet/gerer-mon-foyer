@@ -34,7 +34,7 @@ function handleClickOutside(event: MouseEvent) : void {
 <template>
   <span
     v-if="isEditing === false"
-    v-tooltip
+    v-tooltip="{ disposeOnClick: true }"
     class="editable-text"
     data-bs-placement="right"
     data-bs-title="Cliquer pour éditer"

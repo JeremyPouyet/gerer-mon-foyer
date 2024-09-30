@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type TransactionsEdit from './TransactionsEdit.vue'
+import HistoryTransactionsShow from './HistoryTransactionsShow.vue'
+
 import UserNameTitle from '@/components/UserNameTitle.vue'
 import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
 import { TransactionType } from '@/types'
 import Account from '@/account'
 import type User from '@/user'
-import type { defineComponent } from 'vue'
 
 defineProps<{
   account: Account,
@@ -13,7 +15,7 @@ defineProps<{
   remainSum: number,
   commonBill: number,
   withNote: boolean,
-  componentType: ReturnType<typeof defineComponent>
+  componentType: typeof TransactionsEdit | typeof HistoryTransactionsShow
 }>()
 </script>
 

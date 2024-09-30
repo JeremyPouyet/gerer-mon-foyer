@@ -11,7 +11,7 @@ const props = defineProps<{ title: string, transactionType: TransactionType, acc
       {{ props.title }}
     </h1>
     <img
-      v-tooltip
+      v-tooltip="{ disposeOnClick: true }"
       src="@/assets/icons/hide.png"
       class="icon-container icon-hoverable position-absolute end-0"
       alt="Cacher"
