@@ -12,7 +12,12 @@ import { round, useTransactions, valueAs } from '@/helpers'
 import Texts from '@/texts'
 import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
 
-const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
+const props = defineProps<{
+  account: Account,
+  income?: { label: string, value: number },
+  transactionType: TransactionType
+}>()
+
 const { account, transactionType } = toRefs(props)
 const { totals, transactionList } = useTransactions(account, transactionType)
 
@@ -100,7 +105,7 @@ function handleClickOutside(event: MouseEvent) : void {
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
-          <TableHeader :income="income" :transaction-type="transactionType" :with-actions="true" />
+          <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="true" />
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
@@ -154,8 +159,8 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="props.income" class="text-end">
-                {{ round(valueAs(transaction) / props.income * 100) }}
+              <td v-if="income" class="text-end">
+                {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
 
               <!-- Actions -->
@@ -175,7 +180,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
             </tr>
           </tbody>
-          <TableFooter :income="income" :totals="totals" :with-tds="true" />
+          <TableFooter :income="income?.value" :totals="totals" :with-tds="true" />
         </table>
       </div>
 

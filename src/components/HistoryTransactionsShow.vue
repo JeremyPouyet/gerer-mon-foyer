@@ -11,7 +11,11 @@ import { round, useTransactions, valueAs  } from '@/helpers'
 import Texts from '@/texts'
 import { frequencies, TransactionType } from '@/types'
 
-const props = defineProps<{ account: Account, income?: number, transactionType: TransactionType }>()
+const props = defineProps<{
+  account: Account,
+  income?:  { label: string, value: number },
+  transactionType: TransactionType
+}>()
 const { account, transactionType } = toRefs(props)
 const { totals, transactionList } = useTransactions(account, transactionType)
 </script>
@@ -23,7 +27,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
 
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover">
-          <TableHeader :income="income" :transaction-type="transactionType" :with-actions="false" />
+          <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="false" />
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
@@ -46,12 +50,12 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="props.income" class="text-end">
-                {{ round(valueAs(transaction) / props.income * 100) }}
+              <td v-if="income" class="text-end">
+                {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
             </tr>
           </tbody>
-          <TableFooter :income="income" :totals="totals" :with-tds="false" />
+          <TableFooter :income="income?.value" :totals="totals" :with-tds="false" />
         </table>
       </div>
     </section>
