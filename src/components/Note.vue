@@ -59,6 +59,7 @@ function noteCancel() : void {
         cols="30"
         placeholder="Entrez une note"
         @keydown.esc="noteCancel"
+        @keydown.ctrl.enter="noteUpdate"
       />
       <div class="input-group">
         <button type="button" class="btn btn-primary btn-sm default-button" @click="noteUpdate">
