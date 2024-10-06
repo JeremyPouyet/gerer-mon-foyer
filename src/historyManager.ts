@@ -150,3 +150,4 @@ class HistoryManager extends EventTarget {
 }
 
 export default new HistoryManager()
+export type { HistoryManager }

@@ -11,7 +11,7 @@ export interface Notification {
   text: string
 }
 
-export default new class NotificationManager {
+class NotificationManager {
   /**
    * Reactive collection of notifications.
    * The key is the notification's unique ID, and the value is the Notification object.
@@ -37,3 +37,6 @@ export default new class NotificationManager {
     this.notifications.value.delete(id)
   }
 }
+
+export default new NotificationManager()
+export type { NotificationManager }

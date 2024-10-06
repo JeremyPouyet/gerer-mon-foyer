@@ -133,6 +133,38 @@ tfoot tr td:first-child {
   border-bottom: 1px solid var(--color-celadon);
 }
 
+/**** Navbar ****/
+nav {
+  background-color: var(--color-celadon)
+}
+
+.navbar-nav .nav-link {
+  position: relative;
+  color: #333;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.navbar-nav .nav-link:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-xanthous);
+  transition: transform 0.3s ease-in-out;
+  transform: scaleX(0);
+}
+
+.navbar-nav .nav-link:hover:after {
+  transform: scaleX(1);
+}
+
 /**** Footer ****/
 .footer {
   padding: 2rem 0;

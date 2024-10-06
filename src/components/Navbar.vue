@@ -2,9 +2,10 @@
 import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
-import notificationManager, { NotificationType } from '@/notificationManager'
-import historyManager from '@/historyManager'
-import userManager from '@/userManager'
+import { NotificationType } from '@/notificationManager'
+import type { NotificationManager } from '@/notificationManager'
+import type { HistoryManager } from '@/historyManager'
+import type { UserManager } from '@/userManager'
 
 const route = useRoute()
 const currentPath = ref(route.path)
@@ -22,7 +23,20 @@ const menuItems: [string, string, URL][] = [
   ['/simulator', 'Simulateur', new URL('@/assets/icons/distribution.png', import.meta.url)]
 ]
 
-function historicise() {
+let notificationManager: NotificationManager
+let historyManager: HistoryManager
+let userManager: UserManager
+
+const loadManagers = async () => {
+  notificationManager = (await import('@/notificationManager')).default
+  historyManager = (await import('@/historyManager')).default
+  userManager = (await import('@/userManager')).default
+}
+
+async function historicise() {
+  if (!notificationManager || !historyManager || !userManager)
+    await loadManagers()
+
   historyManager.create({ account: db.account, users: userManager.users })
   notificationManager.create('Répartition historisé !', NotificationType.Success)
 }
@@ -83,36 +97,3 @@ function historicise() {
     </div>
   </nav>
 </template>
-
-<style scoped>
-nav {
-  background-color: var(--color-celadon)
-}
-
-.navbar-nav .nav-link {
-  position: relative;
-  color: #333;
-  text-decoration: none;
-}
-
-.nav-link.active {
-  font-weight: bold;
-  color: #000;
-}
-
-.navbar-nav .nav-link:after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: var(--color-xanthous);
-  transition: transform 0.3s ease-in-out;
-  transform: scaleX(0);
-}
-
-.navbar-nav .nav-link:hover:after {
-  transform: scaleX(1);
-}
-</style>

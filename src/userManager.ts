@@ -71,3 +71,4 @@ class UserManager {
 }
 
 export default new UserManager()
+export type { UserManager }
