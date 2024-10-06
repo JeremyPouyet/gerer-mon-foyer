@@ -6,6 +6,9 @@
   RewriteCond %{HTTP_HOST} ^www\.gerer-mon-foyer\.fr$ [NC]
   RewriteRule ^(.*)$ https://gerer-mon-foyer.fr/$1 [L,R=301]
 
+  # Exclude assets folder from rewrites (to prevent routing issues with JavaScript/CSS)
+  RewriteCond %{REQUEST_URI} !^/assets/ [NC]
+
   # Vue.js SPA handling
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
@@ -24,3 +27,8 @@
     Header set Cache-Control "max-age=31536000, public, must-revalidate"
   </IfModule>
 </FilesMatch>
+
+# Set the correct MIME type for JavaScript files
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+</IfModule>
