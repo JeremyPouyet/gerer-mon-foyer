@@ -58,29 +58,3 @@
     </div>
   </footer>
 </template>
-
-<style scoped>
-.footer {
-  padding: 2rem 0;
-  background-color: var(--color-celadon);
-}
-
-.footer p, .footer h5 {
-  margin: 0;
-  padding: 0.5rem 0;
-  font-size: 0.9rem;
-}
-
-.footer .section-title {
-  font-weight: bold;
-}
-
-.footer a {
-  text-decoration: underline;
-}
-
-.footer .row {
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  padding-top: 1.5rem;
-}
-</style>
