@@ -2,7 +2,6 @@
 import { type ID } from '@/types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 
-import { Toast } from 'bootstrap'
 import { onUpdated } from 'vue'
 
 const urls = {
@@ -10,7 +9,9 @@ const urls = {
   [NotificationType.Success]: new URL('@/assets/icons/success.png', import.meta.url)
 }
 
-onUpdated(() => {
+onUpdated(async () => {
+  const { Toast } = await import('bootstrap') // Lazy load the Toast component
+
   document.querySelectorAll('.toast').forEach(toastEl => {
     const toast = new Toast(toastEl, { delay: 6000 })
 

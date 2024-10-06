@@ -1,12 +1,13 @@
-import { Tooltip } from 'bootstrap'
 import type { DirectiveBinding } from 'vue'
 
 type TooltipElement = HTMLElement & { _tooltipClickHandler?: () => void }
 
 export const tooltip = {
 
-  mounted(el: TooltipElement, binding: DirectiveBinding) {
+  async mounted(el: TooltipElement, binding: DirectiveBinding) {
     if (!el.dataset.bsTitle) return
+
+    const { Tooltip } = await import('bootstrap')
 
     const tooltip = new Tooltip(el, { html: true, trigger: 'hover focus'})
 
