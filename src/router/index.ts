@@ -8,11 +8,13 @@ const router = createRouter({
     ['Settings',  '/settings',        'Paramètres'],
     ['History',   '/history',         'Historique de mon budget'],
     ['Simulator', '/simulator',       'Simulateur de dépenses ponctuelles'],
-    ['NotFound',  '/:pathMatch(.*)*', 'Oulà, cette pas n’existe pas !']
+    ['NotFound',  '/not-found',       'Oulà, cette page n’existe pas !']
   ].map(([fileName, path, title]) => {
     return { component: () => import(`@/views/${fileName}.vue`), meta: { title }, path }
   })
 })
+
+router.addRoute({ path: '/:pathMatch(.*)*', redirect: '/not-found' })
 
 router.beforeEach(to => { document.title = to.meta.title as string })
 
