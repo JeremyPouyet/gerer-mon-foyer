@@ -78,7 +78,7 @@ async function historicise() {
               <span>
                 Mes données
                 <div
-                  v-show="db.unsavedChanges.value > 0"
+                  v-if="db.unsavedChanges.value > 0"
                   v-tooltip
                   :data-bs-title="unsavedChangesText"
                   data-bs-placement="bottom"

@@ -32,7 +32,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
               <td>
-                <span class="text-break">
+                <span>
                   {{ transaction.name }}
                 </span>
                 <NoteIcon :text="transaction.note" />

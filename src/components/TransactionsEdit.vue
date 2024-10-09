@@ -123,7 +123,7 @@ function handleClickOutside(event: MouseEvent) : void {
                 </template>
                 <template v-else>
                   <span
-                    class="editable-text text-break"
+                    class="editable-text"
                     @click="() => startEditTransactionName(transaction)"
                   >
                     {{ transaction.name }}
