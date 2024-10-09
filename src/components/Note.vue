@@ -62,13 +62,13 @@ function noteCancel() : void {
         @keydown.ctrl.enter="noteUpdate"
       />
       <div class="input-group">
-        <button type="button" class="btn btn-primary btn-sm default-button" @click="noteUpdate">
+        <button type="button" class="btn btn-secondary btn-sm" @click="noteUpdate">
           Valider
         </button>
-        <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-red);" @click="noteDelete">
+        <button type="button" class="text-white btn btn-danger btn-sm" @click="noteDelete">
           Supprimer
         </button>
-        <button type="button" class="btn btn-danger btn-sm" style="background-color: var(--color-dark-purple);" @click="noteCancel">
+        <button type="button" class="text-white btn btn-danger btn-sm" style="background-color: var(--color-dark-purple);" @click="noteCancel">
           Annuler
         </button>
       </div>

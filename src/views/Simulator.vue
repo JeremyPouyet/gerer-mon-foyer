@@ -40,7 +40,7 @@ function computeValue(user: User) : number {
       <div class="col-md-6">
         <p>
           Ici on réutilise les ratios calculés lors de la
-          <RouterLink to="/expense-distribution">
+          <RouterLink class="text-primary-emphasis" to="/expense-distribution">
             répartition des dépenses
           </RouterLink>
           pour savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle.
@@ -75,7 +75,7 @@ function computeValue(user: User) : number {
               </div>
               {{ computeValue(user) }}€
             </div>
-            <span class="badge bg-primary rounded-pill">
+            <span class="badge bg-secondary rounded-pill">
               Ratio de {{ round(user.ratio * 100) }}%
             </span>
           </li>

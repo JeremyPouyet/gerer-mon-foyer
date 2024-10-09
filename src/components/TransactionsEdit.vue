@@ -224,7 +224,7 @@ function handleClickOutside(event: MouseEvent) : void {
             {{ name }}
           </option>
         </select>
-        <button class="btn btn-primary default-button mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
+        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
           Ajouter
         </button>
       </div>

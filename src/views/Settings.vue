@@ -89,31 +89,29 @@ function confirmDataDeletion() : void {
       </p>
     </div>
 
-    <div class="mb-4">
-      <p v-if="db.unsavedChanges.value === 0">
-        Toutes vos données ont été sauvegardées, mais vous pouvez le refaire quand même :
-      </p>
-      <p v-else-if="db.unsavedChanges.value === 1">
-        {{ db.unsavedChanges }} modification non sauvegardée :
-      </p>
-      <p v-else>
-        {{ db.unsavedChanges }} modifications non sauvegardées :
-      </p>
-    </div>
+    <p v-if="db.unsavedChanges.value === 0">
+      Toutes vos données ont été sauvegardées, mais vous pouvez le refaire quand même :
+    </p>
+    <p v-else-if="db.unsavedChanges.value === 1">
+      {{ db.unsavedChanges }} modification non sauvegardée :
+    </p>
+    <p v-else>
+      {{ db.unsavedChanges }} modifications non sauvegardées :
+    </p>
 
-    <button type="button" class="btn btn-primary btn-sm mb-3 default-button" @click="saveFile">
+    <button type="button" class="text-black btn btn-secondary btn-sm mb-3" @click="saveFile">
       Exporter mes données
     </button>
 
     <div class="mb-4">
       <p>Ou sinon vous pouvez aussi :</p>
       <p>
-        <button class="btn btn-primary btn-sm default-button" @click="uploadFile">
+        <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
           Importer une sauvegarde
         </button>
       </p>
       <p>
-        <button class="btn btn-danger btn-sm" style="background-color: var(--color-red)" @click="confirmDataDeletion">
+        <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
           Supprimer toutes mes données
         </button>
       </p>

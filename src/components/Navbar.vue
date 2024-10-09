@@ -43,7 +43,7 @@ async function historicise() {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-md mb-4">
+  <nav class="bg-primary navbar navbar-expand-md mb-4">
     <div class="container-fluid">
       <RouterLink class="navbar-brand py-0" to="/" active-class="active">
         <p class="text-center mb-0 lh-1">
@@ -82,7 +82,7 @@ async function historicise() {
                   v-tooltip
                   :data-bs-title="unsavedChangesText"
                   data-bs-placement="bottom"
-                  class="position-absolute start-100 translate-middle badge rounded-pill xanthous"
+                  class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary"
                 >
                   {{ db.unsavedChanges }}
                 </div>
@@ -91,7 +91,7 @@ async function historicise() {
           </li>
         </ul>
       </div>
-      <button v-if="currentPath === '/budget'" class="btn btn-primary default-button" @click="historicise">
+      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicise">
         Historiser
       </button>
     </div>

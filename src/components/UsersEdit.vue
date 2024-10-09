@@ -49,7 +49,7 @@ function userDelete(user: User) : void {
         >
         <button
           type="button"
-          class="btn btn-primary btn-sm default-button xanthous"
+          class="btn btn-secondary btn-sm"
           :disabled="!username"
           @click="userCreate"
         >

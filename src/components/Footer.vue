@@ -1,5 +1,5 @@
 <template>
-  <footer v-once class="footer mt-auto py-4">
+  <footer v-once class="bg-primary footer mt-auto py-4">
     <div class="container">
       <div class="row">
         <div class="col-md-3 text-center text-md-start">
@@ -8,15 +8,15 @@
           </h5>
           <p>
             Icons créés par
-            <a href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>
+            <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>
             sur
-            <a href="https://www.flaticon.com" target="_blank" rel="noopener noreferrer">Flaticon</a>
+            <a class="text-primary-emphasis" href="https://www.flaticon.com" target="_blank" rel="noopener noreferrer">Flaticon</a>
           </p>
           <p>
             Développé avec
-            <a href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue.js</a>
+            <a class="text-primary-emphasis" href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue.js</a>
             et
-            <a href="https://getbootstrap.com/docs/5.3/" target="_blank" rel="noopener noreferrer">Bootstrap 5</a>
+            <a class="text-primary-emphasis" href="https://getbootstrap.com/docs/5.3/" target="_blank" rel="noopener noreferrer">Bootstrap 5</a>
           </p>
         </div>
 
@@ -39,7 +39,7 @@
             Abusez-en tant qu’il existe !
           </p>
           <p>
-            Contact : <a href="mailto:contact@gerer-mon-foyer.fr">contact@gerer-mon-foyer.fr</a>
+            Contact : <a class="text-primary-emphasis" href="mailto:contact@gerer-mon-foyer.fr">contact@gerer-mon-foyer.fr</a>
           </p>
         </div>
 
@@ -48,7 +48,7 @@
             Ressources
           </h5>
           <p>
-            Code source disponible sur <a href="https://github.com/JeremyPouyet/Mon-Foyer" target="_blank" rel="noopener noreferrer">Github</a>
+            Code source disponible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" target="_blank" rel="noopener noreferrer">Github</a>
           </p>
           <p>
             Développeur fait avec amour par sa mère et son père ❤️
