@@ -1,12 +1,12 @@
 // Mandatory bootstrap imports
-@import "../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/functions";
 
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
 
-@import "../node_modules/bootstrap/scss/maps";
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
 
 @import '../../node_modules/bootstrap/scss/utilities';
 @import "../../node_modules/bootstrap/scss/reboot";
@@ -134,6 +134,11 @@ body {
 }
 
 /**** Table ****/
+.shadowed-border {
+  border-radius: 10px 10px 0px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 table {
   margin-bottom: 0 !important;
 
