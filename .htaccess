@@ -6,6 +6,10 @@
   RewriteCond %{HTTP_HOST} ^www\.gerer-mon-foyer\.fr$ [NC]
   RewriteRule ^(.*)$ https://gerer-mon-foyer.fr/$1 [L,R=301]
 
+  # Force HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
   # Exclude assets folder from rewrites (to prevent routing issues with JavaScript/CSS)
   RewriteCond %{REQUEST_URI} !^/assets/ [NC]
 
@@ -19,14 +23,12 @@
 <IfModule mod_headers.c>
   # Enable HSTS (Strict-Transport-Security)
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-</IfModule>
 
-# cache files
-<FilesMatch "\.(?i:png|ico)$">
-  <IfModule mod_headers.c>
+  # cache files
+  <FilesMatch "\.(?i:png|ico|js|css)$">
     Header set Cache-Control "max-age=31536000, public, must-revalidate"
-  </IfModule>
-</FilesMatch>
+  </FilesMatch>
+</IfModule>
 
 # Set the correct MIME type for JavaScript files
 <IfModule mod_mime.c>
