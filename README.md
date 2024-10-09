@@ -48,6 +48,5 @@ Ce projet propose un **outil gratuit** de gestion des dépenses communes et pers
     Frontend : Vue.js 3 avec Vue Router
     Styles : Bootstrap 5
     Gestion des mathématiques : Math.js
-    Utilitaires : uuid pour la génération d'identifiants uniques
-    Build : Vite pour un environnement de développement rapide
+    Build : Vite
     Linting : ESLint avec des règles spécifiques pour Vue.js et TypeScript
