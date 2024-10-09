@@ -65,10 +65,10 @@ function noteCancel() : void {
         <button type="button" class="btn btn-secondary btn-sm" @click="noteUpdate">
           Valider
         </button>
-        <button type="button" class="text-white btn btn-danger btn-sm" @click="noteDelete">
+        <button type="button" class="text-black btn btn-danger btn-sm" @click="noteDelete">
           Supprimer
         </button>
-        <button type="button" class="text-white btn btn-danger btn-sm" style="background-color: var(--color-dark-purple);" @click="noteCancel">
+        <button type="button" class="text-white btn btn-dark btn-sm" @click="noteCancel">
           Annuler
         </button>
       </div>

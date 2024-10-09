@@ -1,6 +1,7 @@
 // Mandatory bootstrap imports
 @import "../../node_modules/bootstrap/scss/functions";
 
+$dark: #442c47;
 $red: #F72C25;
 $primary: #A9E5BB;
 $secondary: #F7B32B;
@@ -38,7 +39,6 @@ $secondary: #F7B32B;
 :root {
   --color-vanilla: #FCF6B1;
   --color-celadon: #A9E5BB;
-  --color-dark-purple: #442c47;
 }
 
 body {
@@ -133,7 +133,7 @@ table {
     tr {
       th {
         color: white !important;
-        background-color: var(--color-dark-purple) !important;
+        background-color: $dark !important;
       }
     }
   }
@@ -150,7 +150,7 @@ table {
     tr {
       td {
         color: white !important;
-        background-color: var(--color-dark-purple) !important;
+        background-color: $dark !important;
 
         &:first-child {
           border-radius: 0 0 0 10px;

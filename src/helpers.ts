@@ -1,4 +1,4 @@
-import { all, create, } from 'mathjs'
+import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 
 import { frequencies, Frequency, TransactionType } from './types'
@@ -7,20 +7,10 @@ import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
 
-// https://mathjs.org/docs/expressions/security.html
-const math = create(all)
+const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
 
 export { limitedEvaluate }
-
-math.import({
-  'createUnit': function () { throw new Error('Function createUnit is disabled') },
-  'derivative': function () { throw new Error('Function derivative is disabled') },
-  'evaluate':   function () { throw new Error('Function evaluate is disabled') },
-  'import':     function () { throw new Error('Function import is disabled') },
-  'parse':      function () { throw new Error('Function parse is disabled') },
-  'simplify':   function () { throw new Error('Function simplify is disabled') },
-}, { override: true })
 
 export function round(value: number) : number {
   return math.round(value, 2)
