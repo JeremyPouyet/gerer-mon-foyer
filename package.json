@@ -16,7 +16,6 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "mathjs": "^12.4.2",
-    "uuid": "^10.0.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

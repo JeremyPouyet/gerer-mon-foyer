@@ -1,5 +1,4 @@
 import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
-import { v4 as uuidv4 } from 'uuid'
 
 import { frequencies, Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
@@ -42,8 +41,7 @@ export function valueAs(transaction: Pick<Transaction, 'value' | 'frequency'>, a
 
 export function newId() : ID {
   // only available with https
-  // return crypto.randomUUID()
-  return uuidv4() as ID
+  return crypto.randomUUID()
 }
 
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
