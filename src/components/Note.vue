@@ -51,7 +51,7 @@ function noteCancel() : void {
 </script>
 
 <template>
-  <div v-if="showNotePopup" ref="notePopupRef" class="note-popup rounded-shadow" :class="popupPosition">
+  <div v-if="showNotePopup" ref="notePopupRef" class="note-popup rounded-shadow bg-white" :class="popupPosition">
     <div class="form-floating">
       <textarea
         v-model="currentNote"
@@ -88,7 +88,6 @@ function noteCancel() : void {
 .note-popup {
   position: relative;
   z-index: 10;
-  background-color: white;
   border: 1px solid #ccc;
   padding: 10px;
   display: flex;

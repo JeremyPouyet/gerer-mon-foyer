@@ -20,16 +20,28 @@ const in10years = computed<number>(() => round((monthlyRemainingBalance.value - 
 <template>
   <div class="text-block finance-info mt-2">
     <template v-if="user.account.incomes.sum > 0">
-      <p>Après avoir couvert tes dépenses obligatoires, il te reste <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance) }}€</span> par mois.</p>
-      <p>Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="text-danger fw-semibold">{{ mensualRemainSum }}€</span>.</p>
-      <p>Pour couvrir vos dépenses communes, il vous faut <span class="text-danger fw-semibold">{{ mensualCommonExpenses }}€</span> par mois.</p>
-      <p>Tes revenus représentent <span class="text-danger fw-semibold">{{ round(ratio * 100) }}%</span> des revenus du foyer.</p>
-      <p>C’est à ce niveau que tu devras contribuer aux dépenses commune, soit <span class="text-danger fw-semibold">{{ round(ratio * commonBill) }}€</span> par mois.</p>
-      <p>À la fin du mois, il te restera alors <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance - ratio * commonBill) }}€</span>.</p>
-      <p v-if="in10years > 0">
+      <p class="mb-0">
+        Après avoir couvert tes dépenses obligatoires, il te reste <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance) }}€</span> par mois.
+      </p>
+      <p class="mb-0">
+        Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="text-danger fw-semibold">{{ mensualRemainSum }}€</span>.
+      </p>
+      <p class="mb-0">
+        Pour couvrir vos dépenses communes, il vous faut <span class="text-danger fw-semibold">{{ mensualCommonExpenses }}€</span> par mois.
+      </p>
+      <p class="mb-0">
+        Tes revenus représentent <span class="text-danger fw-semibold">{{ round(ratio * 100) }}%</span> des revenus du foyer.
+      </p>
+      <p class="mb-0">
+        C’est à ce niveau que tu devras contribuer aux dépenses commune, soit <span class="text-danger fw-semibold">{{ round(ratio * commonBill) }}€</span> par mois.
+      </p>
+      <p class="mb-0">
+        À la fin du mois, il te restera alors <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance - ratio * commonBill) }}€</span>.
+      </p>
+      <p v-if="in10years > 0" class="mb-0">
         En 10 ans, tu pourrais économiser jusqu’à <span class="text-danger fw-semibold">{{ in10years }}€</span>.
       </p>
-      <p v-else-if="in10years < 0">
+      <p v-else-if="in10years < 0"  class="mb-0">
         En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ -in10years }}€</span>.
       </p>
     </template>
@@ -38,13 +50,3 @@ const in10years = computed<number>(() => round((monthlyRemainingBalance.value - 
     </template>
   </div>
 </template>
-
-<style scoped>
-.finance-info {
-  max-width: 700px;
-}
-
-.finance-info p {
-  margin-bottom: 0;
-}
-</style>
