@@ -38,6 +38,7 @@ defineProps<{
         :account="user.account"
         :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
         :transaction-type="TransactionType.Expense"
+        :belongs-to-user="true"
       />
       <div class="col mb-4">
         <component :is="componentType" :account="user.account" :transaction-type="TransactionType.Income" />

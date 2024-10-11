@@ -15,7 +15,8 @@ import { frequencies, Frequency, type ID, type Transaction, type TransactionFunc
 const props = defineProps<{
   account: Account,
   income?: { label: string, value: number },
-  transactionType: TransactionType
+  transactionType: TransactionType,
+  belongsToUser?: boolean
 }>()
 
 const { account, transactionType } = toRefs(props)
@@ -96,6 +97,10 @@ function handleClickOutside(event: MouseEvent) : void {
     executeEditTransactionValue()
   }
 }
+
+function switchExpenseMandatory(transaction: Transaction) {
+  transaction.mandatory = !transaction.mandatory
+}
 </script>
 
 <template>
@@ -164,7 +169,27 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Actions -->
-              <td class="text-end align-middle">
+              <td class="text-end align-middle text-nowrap">
+                <template v-if="belongsToUser && transactionType==TransactionType.Expense">
+                  <img
+                    v-if="transaction.mandatory === false"
+                    v-tooltip="{ disposeOnClick: true }"
+                    alt="Dépense personnelle"
+                    data-bs-title="Dépense personnelle. Elle n’impacte pas le budget commun. Cliquez pour en faire une dépense contrainte."
+                    src="@/assets/icons/emojis/greedy.png"
+                    class="icon-container-small icon-hoverable me-2"
+                    @click="() => switchExpenseMandatory(transaction)"
+                  >
+                  <img
+                    v-else
+                    v-tooltip="{ disposeOnClick: true }"
+                    alt="Dépense contrainte"
+                    data-bs-title="Dépense contrainte. Elle impacte le budget commun. Cliquez pour en faire une dépense personnelle."
+                    src="@/assets/icons/emojis/fever.png"
+                    class="icon-container-small icon-hoverable me-2"
+                    @click="() => switchExpenseMandatory(transaction)"
+                  >
+                </template>
                 <Note
                   :item="transaction"
                   @update="note => account.update(transactionType, transaction.id, { note })"

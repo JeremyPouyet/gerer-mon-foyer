@@ -98,7 +98,7 @@ export default class Account {
 
     if (!formatName(draft) || !formatValue(draft as TransactionFunctional))
       return false
-
+    draft.mandatory = transactionType === TransactionType.Expense
     this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
     if (this.triggerRatio) userManager.computeRatios()

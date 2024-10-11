@@ -22,6 +22,7 @@ export interface Transaction {
   name: string,
   note?: string,
   value: string // Not a number to allow math formulas
+  mandatory?: boolean // Expense only
 }
 
 export interface TransactionRecord {
