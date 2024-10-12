@@ -14,8 +14,7 @@ import { frequencies, TransactionType } from '@/types'
 const props = defineProps<{
   account: Account,
   income?:  { label: string, value: number },
-  transactionType: TransactionType,
-  belongsToUser: boolean
+  transactionType: TransactionType
 }>()
 const { account, transactionType } = toRefs(props)
 const { totals, transactionList } = useTransactions(account, transactionType)

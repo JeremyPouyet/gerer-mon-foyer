@@ -15,7 +15,7 @@ import { frequencies, Frequency, type ID, type Transaction, type TransactionFunc
 const props = defineProps<{
   account: Account,
   income?: { label: string, value: number },
-  transactionType: TransactionType,
+  transactionType: TransactionType
 }>()
 
 const { account, transactionType } = toRefs(props)
