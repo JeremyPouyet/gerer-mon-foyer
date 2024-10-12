@@ -19,7 +19,7 @@ const props = defineProps<{
 }>()
 
 const { account, transactionType } = toRefs(props)
-const { totals, transactionList } = useTransactions(account, transactionType)
+const { lgClass, totals, transactionList } = useTransactions(account, transactionType)
 
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
@@ -99,7 +99,11 @@ function handleClickOutside(event: MouseEvent) : void {
 </script>
 
 <template>
-  <div v-show="account.settings.show[transactionType]" class="col-sm-12 col-md-12 col-lg-6 mb-4">
+  <div
+    v-show="account.settings.show[transactionType]"
+    class="col-sm-12 col-md-12 mb-4"
+    :class="lgClass"
+  >
     <section>
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 

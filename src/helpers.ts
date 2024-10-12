@@ -5,6 +5,7 @@ import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
+import { AccountType } from './account'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -53,7 +54,15 @@ export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Re
     )
   )
 
-  return { totals, transactionList }
+  const lgClass = computed(() => {
+    const show = accountRef.value.settings.show
+    // If the account is common and one of the transaction array is hidden on large screens
+    return accountRef.value.type === AccountType.Common && (!show.expenses || !show.incomes)
+      ? 'col-lg-12' // Then show the transaction array full screen
+      : 'col-lg-6'  // Otherwise a transaction array takes 50% of the screen to show both
+  })
+
+  return { lgClass, totals, transactionList }
 }
 
 export function useFinanceCalculations(account: Ref<Account>, users: Ref<User[]>) {

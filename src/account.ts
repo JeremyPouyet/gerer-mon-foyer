@@ -4,6 +4,11 @@ import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
 
+export enum AccountType {
+  Common = 'common',
+  Personal = 'personal'
+}
+
 /**
  * Interface representing account related settings.
  * @interface AccountSettings
@@ -75,17 +80,17 @@ export default class Account {
 
   note?: string
   readonly onTransactionChange?: () => void
-  readonly triggerRatio: boolean
+  readonly type: AccountType
   readonly settings: AccountSettings
 
-  constructor(props: Partial<Account> = {}, triggerRatio = false) {
+  constructor(props: Partial<Account> = {}, accountType: AccountType) {
     this.note = props.note
     this.settings = buildSettings(props.settings)
     this.expenses = props.expenses ?? emptyTransactions()
     this.incomes = props.incomes ?? emptyTransactions()
     this.personalExpenses = props.personalExpenses ?? emptyTransactions()
 
-    this.triggerRatio = triggerRatio
+    this.type = accountType
 
     this.updateSum(TransactionType.Expense)
     this.updateSum(TransactionType.Income)
@@ -108,7 +113,7 @@ export default class Account {
 
     this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
-    if (this.triggerRatio) userManager.computeRatios()
+    if (this.type === AccountType.Personal) userManager.computeRatios()
     return true
   }
 
@@ -122,7 +127,7 @@ export default class Account {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
-    if (this.triggerRatio) userManager.computeRatios()
+    if (this.type === AccountType.Personal) userManager.computeRatios()
   }
 
   empty() {
@@ -175,7 +180,7 @@ export default class Account {
 
     if (draft.value !== undefined || draft.frequency !== undefined) {
       this.updateSum(transactionType)
-      if (this.triggerRatio) userManager.computeRatios()
+      if (this.type === AccountType.Personal) userManager.computeRatios()
     }
     return true
   }

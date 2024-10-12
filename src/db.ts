@@ -1,11 +1,11 @@
 import { nextTick, reactive, ref, watch } from 'vue'
 
 import historyManager, { type Sample } from './historyManager'
-import Account from './account'
+import Account, { AccountType } from './account'
 import userManager from './userManager'
 
 class DB {
-  readonly account = reactive<Account>(new Account())
+  readonly account = reactive<Account>(new Account({}, AccountType.Common))
   readonly unsavedChanges = ref<number>(0)
 
   constructor() {
