@@ -19,7 +19,7 @@ const props = defineProps<{
 }>()
 
 const { account, transactionType } = toRefs(props)
-const { totals, transactionList } = useTransactions(account, transactionType)
+const { lgClass, totals, transactionList } = useTransactions(account, transactionType)
 
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
@@ -99,7 +99,11 @@ function handleClickOutside(event: MouseEvent) : void {
 </script>
 
 <template>
-  <div v-show="account.settings.show[transactionType]" class="col mb-4">
+  <div
+    v-show="account.settings.show[transactionType]"
+    class="col-sm-12 col-md-12 mb-4"
+    :class="lgClass"
+  >
     <section>
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
@@ -109,7 +113,7 @@ function handleClickOutside(event: MouseEvent) : void {
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
-              <td>
+              <td class="align-middle">
                 <template v-if="editedNameId === transaction.id">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -133,7 +137,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction value by frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
                 <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -159,12 +163,12 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end">
+              <td v-if="income" class="text-end align-middle">
                 {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
 
               <!-- Actions -->
-              <td class="text-end align-middle">
+              <td class="text-end align-middle text-nowrap">
                 <Note
                   :item="transaction"
                   @update="note => account.update(transactionType, transaction.id, { note })"

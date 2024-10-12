@@ -8,7 +8,8 @@ export default {
     [Frequency.yearly]: 'Année',
   },
   transactionTypes: {
-    [TransactionType.Expense]: { plural: 'Dépenses', singular: 'Dépense' },
-    [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' }
+    [TransactionType.Expense]: { plural: 'Dépenses contraintes', singular: 'Dépense contrainte' },
+    [TransactionType.Income]: { plural: 'Revenus', singular: 'Revenu' },
+    [TransactionType.PersonalExpense]: { plural: 'Dépenses personnelles', singular: 'Dépense personnelle' },
   }
 }

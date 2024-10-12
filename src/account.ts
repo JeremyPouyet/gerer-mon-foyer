@@ -4,6 +4,11 @@ import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
 
+export enum AccountType {
+  Common = 'common',
+  Personal = 'personal'
+}
+
 /**
  * Interface representing account related settings.
  * @interface AccountSettings
@@ -18,7 +23,8 @@ interface AccountSettings {
    */
   show: {
     [TransactionType.Expense]: boolean,
-    [TransactionType.Income]: boolean
+    [TransactionType.Income]: boolean,
+    [TransactionType.PersonalExpense]: boolean
   }
 }
 
@@ -32,7 +38,9 @@ function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSetting
   return { show: { ...defaultSettings().show, ...settings.show } }
 }
 
-const defaultSettings : () => AccountSettings = () => ({ show: { [TransactionType.Expense]: true, [TransactionType.Income]: true } })
+const defaultSettings : () => AccountSettings = () => ({
+  show: { [TransactionType.Expense]: true, [TransactionType.Income]: true, [TransactionType.PersonalExpense]: true }
+})
 const emptyTransactions : () => TransactionRecord = () => ({ sum: 0, values: {} })
 
 function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
@@ -68,21 +76,25 @@ function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Tran
 export default class Account {
   readonly expenses: TransactionRecord
   readonly incomes: TransactionRecord
+  readonly personalExpenses: TransactionRecord
+
   note?: string
   readonly onTransactionChange?: () => void
-  readonly triggerRatio: boolean
+  readonly type: AccountType
   readonly settings: AccountSettings
 
-  constructor(props: Partial<Account> = {}, triggerRatio = false) {
+  constructor(props: Partial<Account> = {}, accountType: AccountType) {
     this.note = props.note
     this.settings = buildSettings(props.settings)
-    this.incomes = props.incomes ?? emptyTransactions()
     this.expenses = props.expenses ?? emptyTransactions()
+    this.incomes = props.incomes ?? emptyTransactions()
+    this.personalExpenses = props.personalExpenses ?? emptyTransactions()
 
-    this.triggerRatio = triggerRatio
+    this.type = accountType
 
-    this.updateSum(TransactionType.Income)
     this.updateSum(TransactionType.Expense)
+    this.updateSum(TransactionType.Income)
+    this.updateSum(TransactionType.PersonalExpense)
   }
 
   /**
@@ -101,7 +113,7 @@ export default class Account {
 
     this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
-    if (this.triggerRatio) userManager.computeRatios()
+    if (this.type === AccountType.Personal) userManager.computeRatios()
     return true
   }
 
@@ -115,11 +127,17 @@ export default class Account {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
-    if (this.triggerRatio) userManager.computeRatios()
+    if (this.type === AccountType.Personal) userManager.computeRatios()
   }
 
   empty() {
-    Object.assign(this, { expenses: emptyTransactions(), incomes: emptyTransactions(), note: '', settings: defaultSettings() })
+    Object.assign(this, {
+      expenses: emptyTransactions(),
+      incomes: emptyTransactions(),
+      note: '',
+      personalExpenses: emptyTransactions(),
+      settings: defaultSettings()
+    })
   }
 
   /**
@@ -162,7 +180,7 @@ export default class Account {
 
     if (draft.value !== undefined || draft.frequency !== undefined) {
       this.updateSum(transactionType)
-      if (this.triggerRatio) userManager.computeRatios()
+      if (this.type === AccountType.Personal) userManager.computeRatios()
     }
     return true
   }

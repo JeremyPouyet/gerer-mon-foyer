@@ -13,15 +13,19 @@ import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{
   account: Account,
-  income?:  { label: string, value: number },
+  income?: { label: string, value: number },
   transactionType: TransactionType
 }>()
 const { account, transactionType } = toRefs(props)
-const { totals, transactionList } = useTransactions(account, transactionType)
+const { lgClass, totals, transactionList } = useTransactions(account, transactionType)
 </script>
 
 <template>
-  <div v-show="account.settings.show[transactionType]" class="col mb-4">
+  <div
+    v-show="account.settings.show[transactionType]"
+    class="col-sm-12 col-md-12 mb-4"
+    :class="lgClass"
+  >
     <section>
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
@@ -31,7 +35,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
-              <td>
+              <td class="align-middle">
                 <span>
                   {{ transaction.name }}
                 </span>
@@ -39,7 +43,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
 
               <!-- Transaction frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
                 <span
                   v-tooltip
                   :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
@@ -50,7 +54,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end">
+              <td v-if="income" class="text-end align-middle">
                 {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
             </tr>

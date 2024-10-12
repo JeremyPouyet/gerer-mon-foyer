@@ -13,7 +13,8 @@ export type ID = `${string}-${string}-${string}-${string}-${string}`
 
 export enum TransactionType {
   Expense = 'expenses',
-  Income = 'incomes'
+  Income = 'incomes',
+  PersonalExpense = 'personalExpenses'
 }
 
 export interface Transaction {

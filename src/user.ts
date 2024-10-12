@@ -1,6 +1,6 @@
 import { newId } from './helpers'
 import type { ID } from '@/types'
-import Account from './account'
+import Account, { AccountType } from './account'
 
 export default class User {
   readonly account: Account
@@ -9,7 +9,7 @@ export default class User {
   ratio: number
 
   constructor(props: Partial<User>) {
-    this.account = new Account(props.account, true)
+    this.account = new Account(props.account, AccountType.Personal)
     this.id = props.id ?? newId()
     this.name = props.name ?? ''
     this.ratio = props.ratio ?? 0
