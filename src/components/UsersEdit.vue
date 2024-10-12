@@ -24,7 +24,7 @@ function userDelete(user: User) : void {
     <div class="row">
       <h3>Habitants</h3>
       <hr>
-      <ul class="item-list">
+      <ul class="item-list p-0">
         <li v-for="user in userManager.users" :key="user.id" class="item py-2">
           <div class="d-flex justify-content-between container-fluid align-items-center">
             <UserNameEdit :user="user" />

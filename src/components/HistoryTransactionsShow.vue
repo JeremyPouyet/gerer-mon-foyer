@@ -30,7 +30,7 @@ const { lgClass, totals, transactionList } = useTransactions(account, transactio
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
       <div class="table-responsive shadowed-border mb-3">
-        <table class="table table-hover">
+        <table class="table table-hover mb-0">
           <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="false" />
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">

@@ -127,12 +127,10 @@ body {
 }
 
 table {
-  margin-bottom: 0 !important;
-
   thead {
     tr {
       th {
-        color: white !important;
+        color: $white !important;
         background-color: $dark !important;
       }
     }
@@ -149,7 +147,7 @@ table {
   tfoot {
     tr {
       td {
-        color: white !important;
+        color: $white !important;
         background-color: $dark !important;
 
         &:first-child {
@@ -163,7 +161,6 @@ table {
 /**** Left column with history dates or users ****/
 .item-list {
   list-style-type: none;
-  padding: 0;
 
   .item {
     border-bottom: 1px solid var(--color-celadon);
@@ -180,7 +177,7 @@ nav {
 
       &.active {
         font-weight: bold;
-        color: #000;
+        color: $black;
       }
 
       &:after {
@@ -204,8 +201,6 @@ nav {
 
 /**** Footer ****/
 .footer {
-  padding: 2rem 0;
-
   p, h5 {
     margin: 0;
     padding: 0.5rem 0;

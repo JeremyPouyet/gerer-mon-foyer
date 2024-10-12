@@ -59,7 +59,7 @@ onMounted(() => {
     <div class="row">
       <h3>Dates</h3>
       <hr>
-      <ul class="item-list">
+      <ul class="item-list p-0">
         <li v-for="sample in history" :key="sample.date" class="item py-2">
           <div class="d-flex justify-content-between container-fluid align-items-center">
             <span
