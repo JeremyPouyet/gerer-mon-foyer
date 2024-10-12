@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import User from './user'
-import hydrate from './Hydrators'
 
 class UserManager {
   readonly users = reactive<User[]>([])
@@ -67,10 +66,8 @@ class UserManager {
     const stringifiedUsers = localStorage.getItem('users') || '[]'
     const users = JSON.parse(stringifiedUsers) as Partial<User>[]
 
-    for (const user of users) {
-      hydrate('account', user.account)
+    for (const user of users)
       this.users.push(new User(user))
-    }
   }
 }
 

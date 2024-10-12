@@ -18,7 +18,8 @@ interface AccountSettings {
    */
   show: {
     [TransactionType.Expense]: boolean,
-    [TransactionType.Income]: boolean
+    [TransactionType.Income]: boolean,
+    [TransactionType.PersonalExpense]: boolean
   }
 }
 
@@ -32,7 +33,9 @@ function buildSettings(settings: Partial<AccountSettings> = {}) : AccountSetting
   return { show: { ...defaultSettings().show, ...settings.show } }
 }
 
-const defaultSettings : () => AccountSettings = () => ({ show: { [TransactionType.Expense]: true, [TransactionType.Income]: true } })
+const defaultSettings : () => AccountSettings = () => ({
+  show: { [TransactionType.Expense]: true, [TransactionType.Income]: true, [TransactionType.PersonalExpense]: true }
+})
 const emptyTransactions : () => TransactionRecord = () => ({ sum: 0, values: {} })
 
 function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
@@ -68,6 +71,8 @@ function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Tran
 export default class Account {
   readonly expenses: TransactionRecord
   readonly incomes: TransactionRecord
+  readonly personalExpenses: TransactionRecord
+
   note?: string
   readonly onTransactionChange?: () => void
   readonly triggerRatio: boolean
@@ -76,13 +81,15 @@ export default class Account {
   constructor(props: Partial<Account> = {}, triggerRatio = false) {
     this.note = props.note
     this.settings = buildSettings(props.settings)
-    this.incomes = props.incomes ?? emptyTransactions()
     this.expenses = props.expenses ?? emptyTransactions()
+    this.incomes = props.incomes ?? emptyTransactions()
+    this.personalExpenses = props.personalExpenses ?? emptyTransactions()
 
     this.triggerRatio = triggerRatio
 
-    this.updateSum(TransactionType.Income)
     this.updateSum(TransactionType.Expense)
+    this.updateSum(TransactionType.Income)
+    this.updateSum(TransactionType.PersonalExpense)
   }
 
   /**
@@ -119,7 +126,13 @@ export default class Account {
   }
 
   empty() {
-    Object.assign(this, { expenses: emptyTransactions(), incomes: emptyTransactions(), note: '', settings: defaultSettings() })
+    Object.assign(this, {
+      expenses: emptyTransactions(),
+      incomes: emptyTransactions(),
+      note: '',
+      personalExpenses: emptyTransactions(),
+      settings: defaultSettings()
+    })
   }
 
   /**

@@ -16,7 +16,6 @@ const props = defineProps<{
   account: Account,
   income?: { label: string, value: number },
   transactionType: TransactionType,
-  belongsToUser?: boolean
 }>()
 
 const { account, transactionType } = toRefs(props)
@@ -97,14 +96,10 @@ function handleClickOutside(event: MouseEvent) : void {
     executeEditTransactionValue()
   }
 }
-
-function switchExpenseMandatory(transaction: Transaction) {
-  transaction.mandatory = !transaction.mandatory
-}
 </script>
 
 <template>
-  <div v-show="account.settings.show[transactionType]" class="col mb-4">
+  <div v-show="account.settings.show[transactionType]" class="col mb-4 min-half">
     <section>
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 
@@ -170,26 +165,6 @@ function switchExpenseMandatory(transaction: Transaction) {
 
               <!-- Actions -->
               <td class="text-end align-middle text-nowrap">
-                <template v-if="belongsToUser && transactionType==TransactionType.Expense">
-                  <img
-                    v-if="transaction.mandatory === false"
-                    v-tooltip="{ disposeOnClick: true }"
-                    alt="Dépense personnelle"
-                    data-bs-title="Dépense personnelle. Elle n’impacte pas le budget commun. Cliquez pour en faire une dépense contrainte."
-                    src="@/assets/icons/emojis/greedy.png"
-                    class="icon-container-small icon-hoverable me-2"
-                    @click="() => switchExpenseMandatory(transaction)"
-                  >
-                  <img
-                    v-else
-                    v-tooltip="{ disposeOnClick: true }"
-                    alt="Dépense contrainte"
-                    data-bs-title="Dépense contrainte. Elle impacte le budget commun. Cliquez pour en faire une dépense personnelle."
-                    src="@/assets/icons/emojis/fever.png"
-                    class="icon-container-small icon-hoverable me-2"
-                    @click="() => switchExpenseMandatory(transaction)"
-                  >
-                </template>
                 <Note
                   :item="transaction"
                   @update="note => account.update(transactionType, transaction.id, { note })"

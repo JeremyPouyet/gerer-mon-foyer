@@ -17,16 +17,25 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
         <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
       </h3>
     </div>
-    <div class="d-flex">
+    <div class="d-flex gap-3">
+      <div
+        v-if="!account.settings.show[TransactionType.PersonalExpense]"
+        v-tooltip="{ disposeOnClick: true }"
+        data-bs-title="Aggrandir"
+        class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
+        @click="account.settings.show[TransactionType.PersonalExpense] = true"
+      >
+        Dépenses personnelles
+        <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
+      </div>
       <div
         v-if="!account.settings.show[TransactionType.Expense]"
         v-tooltip="{ disposeOnClick: true }"
         data-bs-title="Aggrandir"
         class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-        :class="!account.settings.show[TransactionType.Income] ? 'me-3' : ''"
         @click="account.settings.show[TransactionType.Expense] = true"
       >
-        Dépenses
+        Dépenses contraintes
         <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
       </div>
       <div

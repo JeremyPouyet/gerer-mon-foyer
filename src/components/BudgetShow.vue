@@ -38,12 +38,15 @@ defineProps<{
         :account="user.account"
         :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
         :transaction-type="TransactionType.Expense"
-        :belongs-to-user="true"
       />
-      <div class="col mb-4">
-        <component :is="componentType" :account="user.account" :transaction-type="TransactionType.Income" />
-        <FinanceInfoBlock :user="user" :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" />
-      </div>
+      <component
+        :is="componentType"
+        :account="user.account"
+        :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
+        :transaction-type="TransactionType.PersonalExpense"
+      />
+      <component :is="componentType" :account="user.account" :transaction-type="TransactionType.Income" />
+      <FinanceInfoBlock :user="user" :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" />
     </div>
   </div>
 </template>

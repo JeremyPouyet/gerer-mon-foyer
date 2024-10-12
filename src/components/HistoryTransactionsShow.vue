@@ -22,7 +22,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
 </script>
 
 <template>
-  <div v-show="account.settings.show[transactionType]" class="col mb-4">
+  <div v-show="account.settings.show[transactionType]" class="col mb-4 min-half">
     <section>
       <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
 

@@ -13,7 +13,8 @@ export type ID = `${string}-${string}-${string}-${string}-${string}`
 
 export enum TransactionType {
   Expense = 'expenses',
-  Income = 'incomes'
+  Income = 'incomes',
+  PersonalExpense = 'personalExpenses'
 }
 
 export interface Transaction {
@@ -22,7 +23,6 @@ export interface Transaction {
   name: string,
   note?: string,
   value: string // Not a number to allow math formulas
-  mandatory?: boolean // Expense only
 }
 
 export interface TransactionRecord {

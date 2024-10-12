@@ -3,10 +3,15 @@ import { computed } from 'vue'
 import { round } from '@/helpers'
 import User from '@/user'
 import type Account from '@/account'
+import userManager from '@/userManager'
 
 const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()
 
 const ratio = computed(() => props.user.ratio)
+const monthlyCommonIncomes = computed<number>(() => {
+  const sum = userManager.users.reduce((sum, user) => sum + user.account.incomes.sum, props.commonAccount.incomes.sum)
+  return round(sum)
+})
 // The user's remaining balance at the end of the month after paying all personal expenses
 const monthlyRemainingBalance = computed(() => props.user.account.incomes.sum - props.user.account.expenses.sum)
 // The amount the household needs to cover its shared expenses each month
@@ -18,35 +23,54 @@ const in10years = computed<number>(() => round((monthlyRemainingBalance.value - 
 </script>
 
 <template>
-  <div class="text-block finance-info mt-2">
-    <template v-if="user.account.incomes.sum > 0">
-      <p class="mb-0">
-        Après avoir couvert tes dépenses obligatoires, il te reste <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance) }}€</span> par mois.
-      </p>
-      <p class="mb-0">
-        Après avoir couvert les dépenses obligatoires de chacun, votre foyer dispose de <span class="text-danger fw-semibold">{{ mensualRemainSum }}€</span>.
-      </p>
-      <p class="mb-0">
-        Pour couvrir vos dépenses communes, il vous faut <span class="text-danger fw-semibold">{{ mensualCommonExpenses }}€</span> par mois.
-      </p>
-      <p class="mb-0">
-        Tes revenus représentent <span class="text-danger fw-semibold">{{ round(ratio * 100) }}%</span> des revenus du foyer.
-      </p>
-      <p class="mb-0">
-        C’est à ce niveau que tu devras contribuer aux dépenses commune, soit <span class="text-danger fw-semibold">{{ round(ratio * commonBill) }}€</span> par mois.
-      </p>
-      <p class="mb-0">
-        À la fin du mois, il te restera alors <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance - ratio * commonBill) }}€</span>.
-      </p>
-      <p v-if="in10years > 0" class="mb-0">
-        En 10 ans, tu pourrais économiser jusqu’à <span class="text-danger fw-semibold">{{ in10years }}€</span>.
-      </p>
-      <p v-else-if="in10years < 0"  class="mb-0">
-        En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ -in10years }}€</span>.
-      </p>
-    </template>
-    <template v-else>
-      <p>Renseigne tes revenus pour que soit calculé ta part des dépenses communes</p>
-    </template>
+  <div class="col mb-4 max-half">
+    <div class="text-block">
+      <template v-if="user.account.incomes.sum > 0">
+        <p class="mb-0">
+          Votre foyer gagne
+          <span class="text-danger fw-semibold">{{ monthlyCommonIncomes }}€</span>
+          par mois, dont
+          <span class="text-danger fw-semibold">{{ mensualRemainSum }}€</span>
+          restants après vos dépenses contraintes.
+        </p>
+        <p class="mb-0">
+          Vos dépenses communes contraintes s’élèvent à
+          <span class="text-danger fw-semibold">{{ mensualCommonExpenses }}€</span>
+          par mois.
+        </p>
+        <p class="mb-0">
+          Après avoir couvert tes dépenses contraintes, il te reste
+          <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance) }}€</span>,
+          soit
+          <span class="text-danger fw-semibold">{{ round(ratio * 100) }}%</span>
+          des revenus du foyer.
+        </p>
+        <p class="mb-0">
+          C’est à ce niveau que tu devras contribuer aux dépenses communes, soit
+          <span class="text-danger fw-semibold">{{ round(ratio * commonBill) }}€</span>
+          par mois, te laissant
+          <span class="text-danger fw-semibold">{{ round(monthlyRemainingBalance - ratio * commonBill) }}€</span>
+          à économiser.
+        </p>
+        <p class="mb-0">
+          En soustrayant tes dépenses personnelles, tu pourras épargner 1700€ par mois.
+        </p>
+        <p v-if="in10years > 0" class="mb-0">
+          En 10 ans, tu pourrais économiser <span class="text-danger fw-semibold">{{ in10years }}€</span>.
+        </p>
+        <p v-else-if="in10years < 0" class="mb-0">
+          En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ -in10years }}€</span>.
+        </p>
+      </template>
+      <template v-else>
+        <p>Renseigne tes revenus pour que soit calculé ta part des dépenses communes</p>
+      </template>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.max-half {
+  max-width: 50%;
+}
+</style>
