@@ -109,7 +109,7 @@ function handleClickOutside(event: MouseEvent) : void {
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
-              <td>
+              <td class="align-middle">
                 <template v-if="editedNameId === transaction.id">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -133,7 +133,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction value by frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
                 <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
                   <input
                     :ref="el => setActiveInput(el)"
@@ -159,7 +159,7 @@ function handleClickOutside(event: MouseEvent) : void {
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end">
+              <td v-if="income" class="text-end align-middle">
                 {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
 

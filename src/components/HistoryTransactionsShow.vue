@@ -31,7 +31,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
           <tbody>
             <tr v-for="transaction in transactionList.values" :key="transaction.id">
               <!-- Transaction name -->
-              <td>
+              <td class="align-middle">
                 <span>
                   {{ transaction.name }}
                 </span>
@@ -39,7 +39,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
 
               <!-- Transaction frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end">
+              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
                 <span
                   v-tooltip
                   :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
@@ -50,7 +50,7 @@ const { totals, transactionList } = useTransactions(account, transactionType)
               </td>
 
               <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end">
+              <td v-if="income" class="text-end align-middle">
                 {{ round(valueAs(transaction) / income.value * 100) }}
               </td>
             </tr>
