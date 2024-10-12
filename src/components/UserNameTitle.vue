@@ -3,9 +3,19 @@ import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
 
 import type Account from '@/account'
+import Texts from '@/texts'
 import { TransactionType } from '@/types'
+import { computed } from 'vue'
 
 const props = defineProps<{ account: Account, name: string, withNote: boolean }>()
+
+const transactionTypes : TransactionType[] = [
+  TransactionType.PersonalExpense,
+  TransactionType.Expense,
+  TransactionType.Income,
+]
+
+const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !props.account.settings.show[type]))
 </script>
 
 <template>
@@ -19,33 +29,14 @@ const props = defineProps<{ account: Account, name: string, withNote: boolean }>
     </div>
     <div class="d-flex gap-3">
       <div
-        v-if="!account.settings.show[TransactionType.PersonalExpense]"
+        v-for="transactionType in visibleTransactionTypes"
+        :key="transactionType"
         v-tooltip="{ disposeOnClick: true }"
-        data-bs-title="Aggrandir"
+        :data-bs-title="'Aggrandir'"
         class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-        @click="account.settings.show[TransactionType.PersonalExpense] = true"
+        @click="account.settings.show[transactionType] = true"
       >
-        Dépenses personnelles
-        <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
-      </div>
-      <div
-        v-if="!account.settings.show[TransactionType.Expense]"
-        v-tooltip="{ disposeOnClick: true }"
-        data-bs-title="Aggrandir"
-        class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-        @click="account.settings.show[TransactionType.Expense] = true"
-      >
-        Dépenses contraintes
-        <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
-      </div>
-      <div
-        v-if="!account.settings.show[TransactionType.Income]"
-        v-tooltip="{ disposeOnClick: true }"
-        data-bs-title="Aggrandir"
-        class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-        @click="account.settings.show[TransactionType.Income] = true"
-      >
-        Revenus
+        {{ Texts.transactionTypes[transactionType].plural }}
         <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
       </div>
     </div>
