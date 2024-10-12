@@ -2,17 +2,18 @@
 import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
 
-import type Account from '@/account'
+import Account, { AccountType } from '@/account'
 import Texts from '@/texts'
 import { TransactionType } from '@/types'
 import { computed } from 'vue'
 
 const props = defineProps<{ account: Account, name: string, withNote: boolean }>()
 
-const transactionTypes : TransactionType[] = [
-  TransactionType.PersonalExpense,
+const transactionTypes: TransactionType[] = [
   TransactionType.Expense,
   TransactionType.Income,
+  // Onle a personal account has personal expenses !
+  ...(props.account.type === AccountType.Personal ? [TransactionType.PersonalExpense] : [])
 ]
 
 const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !props.account.settings.show[type]))
