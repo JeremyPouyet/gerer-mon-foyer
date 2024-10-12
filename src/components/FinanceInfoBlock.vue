@@ -27,7 +27,7 @@ const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12
 </script>
 
 <template>
-  <div class="col mb-4 max-half">
+  <div class="col-sm-12 col-md-12 col-lg-6 mb-4">
     <div class="text-block">
       <template v-if="user.account.incomes.sum > 0">
         <p class="mb-0">
@@ -77,9 +77,3 @@ const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12
     </div>
   </div>
 </template>
-
-<style scoped>
-.max-half {
-  max-width: 50%;
-}
-</style>
