@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{ text?: string, unpaded?: boolean }>()
-const unpadedClass = props.unpaded ? 'unpaded' : ''
+const unpadedClass = props.unpaded ? 'unpaded px-0' : ''
 </script>
 
 <template>
@@ -21,5 +21,9 @@ const unpadedClass = props.unpaded ? 'unpaded' : ''
   position:relative;
   top:-0.2rem;
   right:-0.6rem;
+}
+
+.unpaded {
+  margin-left: -0.5rem;
 }
 </style>

@@ -3,14 +3,12 @@ import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
 import TableFooter from './TransactionsTable/TableFooter.vue'
 import TableHeader from './TransactionsTable/TableHeader.vue'
-import TableTitle from './TransactionsTable/TableTitle.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
 import type Account from '@/account'
 import { round, useTransactions, valueAs } from '@/helpers'
-import Texts from '@/texts'
-import { frequencies, Frequency, type ID, type Transaction, type TransactionFunctional, TransactionType } from '@/types'
+import { frequencies, Frequency, type ID, type Transaction, TransactionType } from '@/types'
 
 const props = defineProps<{
   account: Account,
@@ -19,7 +17,7 @@ const props = defineProps<{
 }>()
 
 const { account, transactionType } = toRefs(props)
-const { lgClass, totals, transactionList } = useTransactions(account, transactionType)
+const { totals, transactionList } = useTransactions(account, transactionType)
 
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
@@ -27,19 +25,7 @@ const editedValueId = ref<ID>()
 const editedFrequency = ref<Frequency>()
 const editedValue = ref<string>('')
 
-const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
 let input : HTMLInputElement
-const newTransactionInputName = ref<HTMLInputElement>()
-
-function transactionAdd() : void {
-  if (!account.value.create(props.transactionType, newTransaction.value))
-    return
-
-  newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
-
-  // once the transaction is added, expect the user to add a new one
-  nextTick(() => newTransactionInputName.value?.focus())
-}
 
 function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
   if (el)
@@ -99,139 +85,77 @@ function handleClickOutside(event: MouseEvent) : void {
 </script>
 
 <template>
-  <div
-    v-show="account.settings.show[transactionType]"
-    class="col-sm-12 col-md-12 mb-4"
-    :class="lgClass"
-  >
-    <section>
-      <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
-
-      <div class="table-responsive shadowed-border mb-3">
-        <table class="table table-hover mb-0">
-          <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="true" />
-          <tbody>
-            <tr v-for="transaction in transactionList.values" :key="transaction.id">
-              <!-- Transaction name -->
-              <td class="align-middle">
-                <template v-if="editedNameId === transaction.id">
-                  <input
-                    :ref="el => setActiveInput(el)"
-                    v-model="editedName"
-                    class="char-width-20"
-                    type="text"
-                    @keydown.esc="cancelEditTransactionName"
-                    @keydown.enter="executeEditTransactionName"
-                    @keydown.tab="executeEditTransactionName"
-                  >
-                </template>
-                <template v-else>
-                  <span
-                    class="editable-text"
-                    @click="() => startEditTransactionName(transaction)"
-                  >
-                    {{ transaction.name }}
-                  </span>
-                  <NoteIcon :text="transaction.note" />
-                </template>
-              </td>
-
-              <!-- Transaction value by frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
-                <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
-                  <input
-                    :ref="el => setActiveInput(el)"
-                    v-model="editedValue"
-                    type="text"
-                    class="w-100"
-                    @keydown.esc="cancelEditTransactionValue"
-                    @keydown.enter="executeEditTransactionValue"
-                    @keydown.tab="executeEditTransactionValue"
-                  >
-                </template>
-                <template v-else>
-                  <span
-                    v-tooltip="{ disposeOnClick: true }"
-                    class="editable-text"
-                    :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
-                    @click="() => startEditTransactionValue(transaction, frequency)"
-                  >
-                    {{ round(valueAs(transaction, frequency)) }}
-                    <div v-show="transaction.frequency===frequency" class="underline" />
-                  </span>
-                </template>
-              </td>
-
-              <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end align-middle">
-                {{ round(valueAs(transaction) / income.value * 100) }}
-              </td>
-
-              <!-- Actions -->
-              <td class="text-end align-middle text-nowrap">
-                <Note
-                  :item="transaction"
-                  @update="note => account.update(transactionType, transaction.id, { note })"
-                />
-                <img
-                  v-tooltip="{ disposeOnClick: true }"
-                  src="@/assets/icons/cross.png"
-                  alt="Supprimer"
-                  data-bs-title="Supprimer"
-                  class="icon-container-small icon-hoverable ms-2"
-                  @click="() => account.delete(props.transactionType, transaction)"
-                >
-              </td>
-            </tr>
-          </tbody>
-          <TableFooter :income="income?.value" :totals="totals" :with-tds="true" />
-        </table>
-      </div>
-
-      <!-- Create transaction -->
-      <div class="input-group flex-sm-row">
-        <input
-          ref="newTransactionInputName"
-          v-model="newTransaction.name"
-          v-tooltip
-          type="text"
-          :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
-          class="form-control"
-          aria-label="Nom de la transaction"
-          data-bs-placement="bottom"
-          :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
-          @keydown.enter="transactionAdd"
+  <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="true" />
+  <tbody>
+    <tr v-for="transaction in transactionList.values" :key="transaction.id">
+      <!-- Transaction name -->
+      <td class="align-middle">
+        <template v-if="editedNameId === transaction.id">
+          <input
+            :ref="el => setActiveInput(el)"
+            v-model="editedName"
+            class="char-width-20"
+            type="text"
+            @keydown.esc="cancelEditTransactionName"
+            @keydown.enter="executeEditTransactionName"
+            @keydown.tab="executeEditTransactionName"
+          >
+        </template>
+        <template v-else>
+          <span
+            class="editable-text"
+            @click="() => startEditTransactionName(transaction)"
+          >
+            {{ transaction.name }}
+          </span>
+          <NoteIcon :text="transaction.note" />
+        </template>
+      </td>
+      <!-- Transaction value by frequency -->
+      <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
+        <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
+          <input
+            :ref="el => setActiveInput(el)"
+            v-model="editedValue"
+            type="text"
+            class="w-100"
+            @keydown.esc="cancelEditTransactionValue"
+            @keydown.enter="executeEditTransactionValue"
+            @keydown.tab="executeEditTransactionValue"
+          >
+        </template>
+        <template v-else>
+          <span
+            v-tooltip="{ disposeOnClick: true }"
+            class="editable-text"
+            :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
+            @click="() => startEditTransactionValue(transaction, frequency)"
+          >
+            {{ round(valueAs(transaction, frequency)) }}
+            <div v-show="transaction.frequency===frequency" class="underline" />
+          </span>
+        </template>
+      </td>
+      <!-- Transaction income percentage -->
+      <td v-if="income" class="text-end align-middle">
+        {{ round(valueAs(transaction) / income.value * 100) }}
+      </td>
+      <!-- Actions -->
+      <td class="text-end align-middle text-nowrap">
+        <Note
+          :item="transaction"
+          @update="note => account.update(transactionType, transaction.id, { note })"
+        />
+        <img
+          v-tooltip="{ disposeOnClick: true }"
+          src="@/assets/icons/cross.png"
+          alt="Supprimer"
+          data-bs-title="Supprimer"
+          class="icon-container-small icon-hoverable ms-2"
+          @click="() => account.delete(props.transactionType, transaction)"
         >
-        <input
-          v-model="newTransaction.value"
-          v-tooltip
-          data-bs-placement="bottom"
-          type="text"
-          placeholder="Valeur ou formule"
-          class="form-control"
-          data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
-          aria-label="Valeur de la transaction"
-          @keydown.enter="transactionAdd"
-        >
-        <span class="input-group-text">€</span>
-        <div class="w-100 d-sm-none" />
-
-        <select
-          v-model="newTransaction.frequency"
-          v-tooltip
-          class="form-select mt-2 mt-sm-0"
-          data-bs-placement="bottom"
-          data-bs-title="Fréquence"
-          @keydown.enter="transactionAdd"
-        >
-          <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
-            {{ name }}
-          </option>
-        </select>
-        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
-          Ajouter
-        </button>
-      </div>
-    </section>
-  </div>
+      </td>
+    </tr>
+  </tbody>
+  <TableFooter :income="income?.value" :totals="totals" :with-tds="true" />
 </template>

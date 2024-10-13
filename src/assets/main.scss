@@ -78,7 +78,6 @@ body {
 
 #app {
   min-height: 100vh;
-  position: relative;
   display: flex;
   flex-direction: column;
 }
@@ -114,18 +113,7 @@ body {
   width: 30ch;
 }
 
-.unpaded {
-  padding-left: 0%;
-  padding-right: 0%;
-  margin-left: -0.5rem;
-}
-
 /**** Table ****/
-.shadowed-border {
-  border-radius: 10px 10px 0px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
 table {
   thead {
     tr {

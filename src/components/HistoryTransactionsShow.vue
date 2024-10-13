@@ -2,13 +2,11 @@
 import NoteIcon from './NoteIcon.vue'
 import TableFooter from './TransactionsTable/TableFooter.vue'
 import TableHeader from './TransactionsTable/TableHeader.vue'
-import TableTitle from './TransactionsTable/TableTitle.vue'
 
 import { toRefs } from 'vue'
 
 import type Account from '@/account'
 import { round, useTransactions, valueAs  } from '@/helpers'
-import Texts from '@/texts'
 import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{
@@ -17,51 +15,35 @@ const props = defineProps<{
   transactionType: TransactionType
 }>()
 const { account, transactionType } = toRefs(props)
-const { lgClass, totals, transactionList } = useTransactions(account, transactionType)
+const { totals, transactionList } = useTransactions(account, transactionType)
 </script>
 
 <template>
-  <div
-    v-show="account.settings.show[transactionType]"
-    class="col-sm-12 col-md-12 mb-4"
-    :class="lgClass"
-  >
-    <section>
-      <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
-
-      <div class="table-responsive shadowed-border mb-3">
-        <table class="table table-hover mb-0">
-          <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="false" />
-          <tbody>
-            <tr v-for="transaction in transactionList.values" :key="transaction.id">
-              <!-- Transaction name -->
-              <td class="align-middle">
-                <span>
-                  {{ transaction.name }}
-                </span>
-                <NoteIcon :text="transaction.note" />
-              </td>
-
-              <!-- Transaction frequency -->
-              <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
-                <span
-                  v-tooltip
-                  :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
-                >
-                  {{ round(valueAs(transaction, frequency)) }}
-                  <div v-show="transaction.frequency===frequency" class="underline" />
-                </span>
-              </td>
-
-              <!-- Transaction income percentage -->
-              <td v-if="income" class="text-end align-middle">
-                {{ round(valueAs(transaction) / income.value * 100) }}
-              </td>
-            </tr>
-          </tbody>
-          <TableFooter :income="income?.value" :totals="totals" :with-tds="false" />
-        </table>
-      </div>
-    </section>
-  </div>
+  <TableHeader :income-label="income?.label" :transaction-type="transactionType" :with-actions="false" />
+  <tbody>
+    <tr v-for="transaction in transactionList.values" :key="transaction.id">
+      <!-- Transaction name -->
+      <td class="align-middle">
+        <span>
+          {{ transaction.name }}
+        </span>
+        <NoteIcon :text="transaction.note" />
+      </td>
+      <!-- Transaction frequency -->
+      <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
+        <span
+          v-tooltip
+          :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
+        >
+          {{ round(valueAs(transaction, frequency)) }}
+          <div v-show="transaction.frequency===frequency" class="underline" />
+        </span>
+      </td>
+      <!-- Transaction income percentage -->
+      <td v-if="income" class="text-end align-middle">
+        {{ round(valueAs(transaction) / income.value * 100) }}
+      </td>
+    </tr>
+  </tbody>
+  <TableFooter :income="income?.value" :totals="totals" :with-tds="false" />
 </template>
