@@ -1,3 +1,7 @@
+<script>
+import '@/assets/secondary.scss'
+</script>
+
 <template>
   <div class="container mt-2">
     <header>

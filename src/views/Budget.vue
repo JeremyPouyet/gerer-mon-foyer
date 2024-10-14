@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/secondary.scss'
+
 import TransactionsEdit from '@/components/TransactionsEdit.vue'
 import UsersEdit from '@/components/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'

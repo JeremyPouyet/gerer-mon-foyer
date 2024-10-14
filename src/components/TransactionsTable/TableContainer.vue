@@ -45,8 +45,6 @@ const lgClass = computed(() => {
     :class="lgClass"
   >
     <section>
-      <TableTitle :account="account" :title="Texts.transactionTypes[transactionType]['plural']" :transaction-type="transactionType" />
-
       <div class="table-title-container rounded-shadow d-flex align-items-center justify-content-center position-relative">
         <h1 class="table-title align-bottom">
           {{ Texts.transactionTypes[transactionType]['plural'] }}

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/secondary.scss'
+
 import { ref, watch } from 'vue'
 import { limitedEvaluate, round } from '@/helpers'
 import type User from '@/user'

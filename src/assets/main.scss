@@ -18,19 +18,12 @@ $secondary: #F7B32B;
 @import "../../node_modules/bootstrap/scss/type";
 
 // Optional used components
-@import '../../node_modules/bootstrap/scss/alert';
 @import '../../node_modules/bootstrap/scss/badge';
 @import '../../node_modules/bootstrap/scss/buttons';
-@import '../../node_modules/bootstrap/scss/button-group';
-@import '../../node_modules/bootstrap/scss/close';
 @import '../../node_modules/bootstrap/scss/containers';
-@import '../../node_modules/bootstrap/scss/forms';
 @import '../../node_modules/bootstrap/scss/grid';
-@import '../../node_modules/bootstrap/scss/list-group';
 @import '../../node_modules/bootstrap/scss/nav';
 @import '../../node_modules/bootstrap/scss/navbar';
-@import '../../node_modules/bootstrap/scss/tables';
-@import '../../node_modules/bootstrap/scss/toasts';
 @import '../../node_modules/bootstrap/scss/tooltip';
 @import '../../node_modules/bootstrap/scss/transitions'; // navbar collapse
 
@@ -80,79 +73,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-.rounded-shadow {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  justify-content: center;
-}
-
-/* Basic clickable and editable text style */
-.editable-text {
-  cursor: pointer;
-
-  &:hover {
-    border-bottom: 1px solid #0056b3;
-  }
-}
-
-.underline {
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: $secondary;
-}
-
-.char-width-20 {
-  width: 20ch;
-}
-
-.char-width-30 {
-  width: 30ch;
-}
-
-/**** Table ****/
-table {
-  thead {
-    tr {
-      th {
-        color: $white !important;
-        background-color: $dark !important;
-      }
-    }
-  }
-
-  tbody {
-    tr {
-      td {
-        background-color: var(--color-vanilla) !important;
-      }
-    }
-  }
-
-  tfoot {
-    tr {
-      td {
-        color: $white !important;
-        background-color: $dark !important;
-
-        &:first-child {
-          border-radius: 0 0 0 10px;
-        }
-      }
-    }
-  }
-}
-
-/**** Left column with history dates or users ****/
-.item-list {
-  list-style-type: none;
-
-  .item {
-    border-bottom: 1px solid var(--color-celadon);
-  }
 }
 
 /**** Navbar ****/

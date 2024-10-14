@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/secondary.scss'
+
 import notificationManager, { NotificationType } from '@/notificationManager'
 import db from '@/db'
 import historyManager from '@/historyManager'

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/secondary.scss'
+
 import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import HistoryEdit from '@/components/HistoryEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
