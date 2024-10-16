@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { limitedEvaluate, round } from '@/helpers'
 import type User from '@/user'
 import userManager from '@/userManager'
 
-const expenseValue = ref<string>(sessionStorage.getItem('simulatorValue') || '')
+const expenseValue = ref<string>('')
+
+onMounted(() => {
+  if (typeof sessionStorage !== 'undefined')
+    expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
+})
+
 let computedValue = 0
 
-watch(expenseValue, () => sessionStorage.setItem('simulatorValue', expenseValue.value))
+watch(expenseValue, () => {
+  if (typeof sessionStorage !== 'undefined')
+    sessionStorage.setItem('simulatorValue', expenseValue.value)
+})
 
 /**
  * Computes a user's contribution to an expense based on their ratio.

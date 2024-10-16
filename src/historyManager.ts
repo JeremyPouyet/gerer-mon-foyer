@@ -16,7 +16,8 @@ class HistoryManager extends EventTarget {
    *                      If the value is empty, an empty string is stored.
    */
   set activeDate(date: string) {
-    sessionStorage.setItem('currentHistoryDate', date || '')
+    if (typeof sessionStorage !== 'undefined')
+      sessionStorage.setItem('currentHistoryDate', date || '')
   }
 
   /**
@@ -25,6 +26,7 @@ class HistoryManager extends EventTarget {
    * @returns {string | null} The currently active date from session storage or null if not set.
    */
   get activeDate() : string | null {
+    if (typeof sessionStorage === 'undefined') return null
     return sessionStorage.getItem('currentHistoryDate')
   }
 
