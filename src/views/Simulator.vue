@@ -7,23 +7,17 @@ import type User from '@/user'
 import userManager from '@/userManager'
 
 const expenseValue = ref<string>('')
-// let computedValue = 0
-
-// watch(expenseValue, () => sessionStorage?.setItem('simulatorValue', expenseValue.value))
-
 
 onMounted(() => {
-  if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+  if (typeof sessionStorage !== 'undefined')
     expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
-  }
 })
 
 let computedValue = 0
 
 watch(expenseValue, () => {
-  if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+  if (typeof sessionStorage !== 'undefined')
     sessionStorage.setItem('simulatorValue', expenseValue.value)
-  }
 })
 
 /**

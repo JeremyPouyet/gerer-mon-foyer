@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
+import historyIcon from '@/assets/icons/history.png'
+import distributionIcon from '@/assets/icons/distribution.png'
+
 import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
@@ -17,10 +21,10 @@ const unsavedChangesText = computed(() : string => {
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
 
-const menuItems: [string, string, URL][] = [
-  ['/budget',    'Mon budget', new URL('@/assets/icons/tax-calculate.png', import.meta.url)],
-  ['/history',   'Historique', new URL('@/assets/icons/history.png', import.meta.url)],
-  ['/simulator', 'Simulateur', new URL('@/assets/icons/distribution.png', import.meta.url)]
+const menuItems: [string, string, string][] = [
+  ['/budget',    'Mon budget', taxCalculateIcon],
+  ['/history',   'Historique', historyIcon],
+  ['/simulator', 'Simulateur', distributionIcon]
 ]
 
 let notificationManager: NotificationManager
@@ -68,7 +72,7 @@ async function historicise() {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li v-for="[uri, label, src] in menuItems" :key="label" class="nav-item">
             <RouterLink class="nav-link" :to="uri" active-class="active">
-              <img :src="src.href" class="icon-container" alt="">
+              <img :src="src" class="icon-container" alt="">
               {{ label }}
             </RouterLink>
           </li>
