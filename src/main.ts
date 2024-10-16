@@ -2,8 +2,6 @@ import './assets/main.scss'
 
 import App from './App.vue'
 import { ViteSSG } from 'vite-ssg'
-// import { createApp } from 'vue'
-// import router from './router'
 import { tooltip } from './tooltip'
 import { createMemoryHistory, createWebHistory } from 'vue-router'
 
@@ -24,12 +22,13 @@ export const createApp = ViteSSG(
       return { component: () => import(`@/views/${fileName}.vue`), meta: { title }, path }
     }),
   },
-  ({ app/*, router, routes, isClient, initialState */}) => {
-  // install plugins etc.
+  ({ app, router }) => {
     app.directive('tooltip', tooltip)
+
+    router.addRoute({ path: '/:pathMatch(.*)*', redirect: '/not-found' })
+    router.beforeEach(to => {
+      if (typeof document !== 'undefined')
+        document.title = to.meta.title as string
+    })
   },
 )
-
-// createApp(App).use(router)
-//   .directive('tooltip', tooltip)
-//   .mount('#app')
