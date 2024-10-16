@@ -6,7 +6,16 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import historyManager, { type Sample } from '@/historyManager'
 
 const emit = defineEmits(['switchSample'])
-const activeDate = ref<string | null | undefined>(sessionStorage.getItem('currentHistoryDate'))
+// const activeDate = ref<string | null | undefined>(sessionStorage.getItem('currentHistoryDate'))
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+    activeDate.value = sessionStorage.getItem('currentHistoryDate')
+  }
+})
+
+
+const activeDate = ref<string | null | undefined>(null)
 const history = ref<Sample[]>(historyManager.history)
 
 function switchSample(date: string) : void {

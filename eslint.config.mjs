@@ -33,7 +33,7 @@ export default ts.config(
     }
   },
   {
-    ignores: ['dist/**', 'vite.config.ts'],
+    ignores: ['dist/**', '.vite-ssg-temp/**', 'vite.config.ts'],
   },
   {
     plugins: {
