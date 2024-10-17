@@ -2,16 +2,22 @@
 import { type ID } from '@/types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 
-import { onUpdated } from 'vue'
+import { onMounted, onUpdated } from 'vue'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let Toast: any
 
 const urls = {
   [NotificationType.Error]: new URL('@/assets/icons/error.png', import.meta.url),
   [NotificationType.Success]: new URL('@/assets/icons/success.png', import.meta.url)
 }
 
-onUpdated(async () => {
-  const { Toast } = await import('bootstrap') // Lazy load the Toast component
+onMounted(async () => {
+  const module = await import('bootstrap/js/dist/toast')
+  Toast = module.default
+})
 
+onUpdated(() => {
   document.querySelectorAll('.toast').forEach(toastEl => {
     const toast = new Toast(toastEl, { delay: 6000 })
 

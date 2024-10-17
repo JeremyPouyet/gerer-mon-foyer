@@ -7,7 +7,7 @@ export const tooltip = {
   async mounted(el: TooltipElement, binding: DirectiveBinding) {
     if (!el.dataset.bsTitle) return
 
-    const { Tooltip } = await import('bootstrap')
+    const { default: Tooltip } = await import('bootstrap/js/dist/tooltip')
 
     const tooltip = new Tooltip(el, { html: true, trigger: 'hover focus'})
 

@@ -3,13 +3,17 @@ import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
 import historyIcon from '@/assets/icons/history.png'
 import distributionIcon from '@/assets/icons/distribution.png'
 
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
 import { NotificationType } from '@/notificationManager'
 import type { NotificationManager } from '@/notificationManager'
 import type { HistoryManager } from '@/historyManager'
 import type { UserManager } from '@/userManager'
+
+onMounted(() => {
+  import('bootstrap/js/dist/collapse')
+})
 
 const route = useRoute()
 const currentPath = ref(route.path)
