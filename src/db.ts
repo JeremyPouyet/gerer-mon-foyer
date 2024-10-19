@@ -29,7 +29,6 @@ class DB {
   }
 
   setup() : void {
-    if (typeof localStorage == 'undefined') return
     const unsavedChanges = localStorage.getItem('unsavedChanges')
     if (unsavedChanges)
       this.unsavedChanges.value = +unsavedChanges

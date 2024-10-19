@@ -3,14 +3,12 @@ import './assets/main.scss'
 import App from './App.vue'
 import { ViteSSG } from 'vite-ssg'
 import { tooltip } from './tooltip'
-import { createMemoryHistory, createWebHistory } from 'vue-router'
-
-const isClient = typeof window !== 'undefined'
+import { createWebHistory } from 'vue-router'
 
 export const createApp = ViteSSG(
   App,
   {
-    history: isClient ? createWebHistory(import.meta.env.BASE_URL) : createMemoryHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
       ['Home',      '/',                'Comment gérer le budget de mon foyer ?'] ,
       ['Budget',    '/budget',          'Gérer mon budget'],
@@ -27,8 +25,7 @@ export const createApp = ViteSSG(
 
     router.addRoute({ path: '/:pathMatch(.*)*', redirect: '/not-found' })
     router.beforeEach(to => {
-      if (typeof document !== 'undefined')
-        document.title = to.meta.title as string
+      document.title = to.meta.title as string
     })
   },
 )

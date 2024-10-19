@@ -11,8 +11,7 @@ const activeDate = ref<string | null | undefined>(null)
 const history = ref<Sample[]>(historyManager.history)
 
 onMounted(() => {
-  if (typeof sessionStorage !== 'undefined')
-    activeDate.value = sessionStorage.getItem('currentHistoryDate')
+  activeDate.value = sessionStorage.getItem('currentHistoryDate')
 })
 
 function switchSample(date: string) : void {

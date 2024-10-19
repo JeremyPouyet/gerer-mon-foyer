@@ -9,15 +9,13 @@ import userManager from '@/userManager'
 const expenseValue = ref<string>('')
 
 onMounted(() => {
-  if (typeof sessionStorage !== 'undefined')
-    expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
+  expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
 })
 
 let computedValue = 0
 
 watch(expenseValue, () => {
-  if (typeof sessionStorage !== 'undefined')
-    sessionStorage.setItem('simulatorValue', expenseValue.value)
+  sessionStorage.setItem('simulatorValue', expenseValue.value)
 })
 
 /**
