@@ -82,9 +82,9 @@ async function historicise() {
           </li>
           <li class="nav-item">
             <RouterLink class="nav-link" to="/settings" active-class="active">
-              <img src="@/assets/icons/diskette.png" class="icon-container" alt="">
+              <img src="@/assets/icons/cog.png" class="icon-container" alt="">
               <span>
-                Mes données
+                Paramètres
                 <div
                   v-if="db.unsavedChanges.value > 0"
                   v-tooltip
