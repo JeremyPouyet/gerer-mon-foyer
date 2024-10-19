@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default {
   build: {
-    minify: false
+    minify: true // set to false to analyse the generated js
   },
   plugins: [vue()],
   resolve: {
