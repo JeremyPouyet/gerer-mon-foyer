@@ -3,6 +3,9 @@ import { nextTick, reactive, ref, watch } from 'vue'
 import historyManager, { type Sample } from './historyManager'
 import Account, { AccountType } from './account'
 import userManager from './userManager'
+import SettingsManager from './SettingsManager'
+
+type Persistable = 'account' | 'history' | 'settings' | 'users'
 
 class DB {
   readonly account = reactive<Account>(new Account({}, AccountType.Common))
@@ -25,7 +28,7 @@ class DB {
 
   export() : string {
     this.unsavedChanges.value = 0
-    return JSON.stringify(localStorage, ['account', 'users', 'history'], 2)
+    return JSON.stringify(localStorage, ['account', 'history', 'settings', 'users'], 2)
   }
 
   setup() : void {
@@ -40,9 +43,10 @@ class DB {
       Object.assign(this.account, JSON.parse(account))
 
     historyManager.load()
+    SettingsManager.load()
   }
 
-  private persistChanges(key: 'account' | 'users' | 'history', value: object) : boolean {
+  private persistChanges(key: Persistable, value: object) : boolean {
     const stringifiedItem = JSON.stringify(value)
 
     // Do not update already up to date data
@@ -64,6 +68,7 @@ class DB {
     watch(this.unsavedChanges, value => localStorage.setItem('unsavedChanges', value.toString()))
     watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
+    watch(SettingsManager.settings, updated => this.persistChanges('settings', updated))
 
     historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
   }

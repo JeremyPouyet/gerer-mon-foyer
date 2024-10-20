@@ -84,7 +84,7 @@ function confirmDataDeletion() : void {
     <div class="row mb-4">
       <div class="col-sm-12 col-md-5 mt-2 text-center">
         <h2 class="mb-4">
-          Mes données
+          <img src="@/assets/icons/diskette.png" class="icon-container" alt=""> Mes données
         </h2>
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
@@ -135,12 +135,12 @@ function confirmDataDeletion() : void {
 
       <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4 text-center">
-          Customisation
+          Affichage
         </h2>
 
         <div class="row mb-2">
           <div class="col-7">
-            Afficher les nombres avec 2 décimal
+            Afficher les nombres avec 2 décimales
           </div>
           <div class="col-1">
             <input type="checkbox" value="">
@@ -171,7 +171,7 @@ function confirmDataDeletion() : void {
   </div>
 </template>
 
-<style>
+<style scoped>
 .switch {
   position: relative;
   display: inline-block;
