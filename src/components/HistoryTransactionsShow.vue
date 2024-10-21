@@ -6,7 +6,7 @@ import TableHeader from './TransactionsTable/TableHeader.vue'
 import { toRefs } from 'vue'
 
 import type Account from '@/account'
-import { round, useTransactions, valueAs  } from '@/helpers'
+import { sexyNumber, useTransactions, valueAs  } from '@/helpers'
 import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{
@@ -35,13 +35,13 @@ const { totals, transactionList } = useTransactions(account, transactionType)
           v-tooltip
           :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
         >
-          {{ round(valueAs(transaction, frequency)) }}
+          {{ sexyNumber(valueAs(transaction, frequency)) }}
           <div v-show="transaction.frequency===frequency" class="underline" />
         </span>
       </td>
       <!-- Transaction income percentage -->
       <td v-if="income" class="text-end align-middle">
-        {{ round(valueAs(transaction) / income.value * 100) }}
+        {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
     </tr>
   </tbody>

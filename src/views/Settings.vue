@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
+
 import notificationManager, { NotificationType } from '@/notificationManager'
 import db from '@/db'
 import historyManager from '@/historyManager'
+import SettingsManager from '@/SettingsManager'
 
 function generateDateString() : string {
   const now = new Date()
@@ -77,6 +79,10 @@ function confirmDataDeletion() : void {
     notificationManager.create('Données supprimées avec succès', NotificationType.Success)
   }
 }
+
+function handleCheckboxChange(event: Event) {
+  SettingsManager.settings.twoDecimals = (event.target as HTMLInputElement).checked
+}
 </script>
 
 <template>
@@ -143,7 +149,7 @@ function confirmDataDeletion() : void {
             Afficher les nombres avec 2 décimales
           </div>
           <div class="col-1">
-            <input type="checkbox" value="">
+            <input type="checkbox" :checked="SettingsManager.settings.twoDecimals" @change="handleCheckboxChange">
           </div>
           <div class="col-4" />
         </div>

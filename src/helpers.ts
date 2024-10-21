@@ -5,6 +5,7 @@ import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
+import SettingsManager from './SettingsManager'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -13,6 +14,13 @@ export { limitedEvaluate }
 
 export function round(value: number) : number {
   return math.round(value, 2)
+}
+
+export function sexyNumber(value: number) : string {
+  const rounded = round(value)
+  const stringified = SettingsManager.settings.twoDecimals ? rounded.toFixed(2) : rounded.toString()
+  // , instead of . as a French number format. Change that later if multilingue
+  return stringified.replaceAll('.', ',')
 }
 
 type Multipliers = {

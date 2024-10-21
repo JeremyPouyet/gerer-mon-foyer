@@ -7,7 +7,7 @@ import TableHeader from './TransactionsTable/TableHeader.vue'
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
 import type Account from '@/account'
-import { round, useTransactions, valueAs } from '@/helpers'
+import { round, sexyNumber, useTransactions, valueAs } from '@/helpers'
 import { frequencies, Frequency, type ID, type Transaction, TransactionType } from '@/types'
 
 const props = defineProps<{
@@ -57,7 +57,7 @@ function startEditTransactionValue(transaction: Transaction, newFrequency: Frequ
   editedValueId.value = transaction.id
   editedValue.value = newFrequency === transaction.frequency
     ? transaction.value
-    : round(valueAs(transaction, newFrequency)).toString()
+    : sexyNumber(valueAs(transaction, newFrequency))
   document.addEventListener('mousedown', handleClickOutside)
   nextTick(() => input?.focus())
 }
@@ -131,14 +131,14 @@ function handleClickOutside(event: MouseEvent) : void {
             :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
             @click="() => startEditTransactionValue(transaction, frequency)"
           >
-            {{ round(valueAs(transaction, frequency)) }}
+            {{ sexyNumber(valueAs(transaction, frequency)) }}
             <div v-show="transaction.frequency===frequency" class="underline" />
           </span>
         </template>
       </td>
       <!-- Transaction income percentage -->
       <td v-if="income" class="text-end align-middle">
-        {{ round(valueAs(transaction) / income.value * 100) }}
+        {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
       <!-- Actions -->
       <td class="text-end align-middle text-nowrap">
