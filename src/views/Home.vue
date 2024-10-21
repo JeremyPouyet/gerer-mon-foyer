@@ -6,7 +6,9 @@
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 
-      <a href="/budget" class="btn btn-primary btn-lg mt-3">Commencer maintenant</a>
+      <RouterLink class="btn btn-primary btn-lg mt-3" to="/budget">
+        Commencer maintenant
+      </RouterLink>
     </header>
 
     <section class="mb-5 text-center text-block">

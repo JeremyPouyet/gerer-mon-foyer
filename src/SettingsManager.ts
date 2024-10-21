@@ -1,18 +1,18 @@
 import { reactive } from 'vue'
 
-enum SortTYpe {
+enum SortType {
   Abc = 'abc',
   Desc = 'desc'
 }
 
 interface GlobalSettings {
-  sort: SortTYpe,
+  sort: SortType,
   twoDecimals: boolean
 }
 
 function defaultSettings() : GlobalSettings {
   return {
-    sort: SortTYpe.Desc,
+    sort: SortType.Desc,
     twoDecimals: false
   }
 }
@@ -28,4 +28,5 @@ class SettingsManager {
   }
 }
 
+export { SortType }
 export default new SettingsManager()

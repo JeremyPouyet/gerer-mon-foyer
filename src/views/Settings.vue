@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-
 import notificationManager, { NotificationType } from '@/notificationManager'
 import db from '@/db'
 import historyManager from '@/historyManager'
-import SettingsManager from '@/SettingsManager'
+import SettingsManager, { SortType } from '@/SettingsManager'
 
 function generateDateString() : string {
   const now = new Date()
@@ -82,13 +81,29 @@ function confirmDataDeletion() : void {
 
 function handleCheckboxChange(event: Event) {
   SettingsManager.settings.twoDecimals = (event.target as HTMLInputElement).checked
+  if (SettingsManager.settings.twoDecimals)
+    notificationManager.create('Les nombres seront affichés avec 2 décimales', NotificationType.Success)
+  else
+    notificationManager.create('Les nombres seront simplement arrondis', NotificationType.Success)
+}
+
+function handleSortOrderChange(event: Event) {
+  isAscending.value = (event.target as HTMLInputElement).checked;
+  // Add your logic here for sorting the transactions based on the state
+  if (isAscending.value) {
+    // Sort in ascending order
+    console.log('Sorting in ascending order');
+  } else {
+    // Sort in alphabetical order
+    console.log('Sorting in alphabetical order');
+  }
 }
 </script>
 
 <template>
   <div class="container">
     <div class="row mb-4">
-      <div class="col-sm-12 col-md-5 mt-2 text-center">
+      <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4">
           <img src="@/assets/icons/diskette.png" class="icon-container" alt=""> Mes données
         </h2>
@@ -140,36 +155,42 @@ function handleCheckboxChange(event: Event) {
       </div>
 
       <div class="col-sm-12 col-md-5 mt-2">
-        <h2 class="mb-4 text-center">
+        <h2 class="mb-4">
           Affichage
         </h2>
-
-        <div class="row mb-2">
-          <div class="col-7">
-            Afficher les nombres avec 2 décimales
-          </div>
-          <div class="col-1">
-            <input type="checkbox" :checked="SettingsManager.settings.twoDecimals" @change="handleCheckboxChange">
-          </div>
-          <div class="col-4" />
+        <div class="fw-bold mb-2">
+          Dans
+          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
+          <RouterLink class="text-primary-emphasis" to="/budget">Mon Budget</RouterLink>
+          et
+          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
+          <RouterLink class="text-primary-emphasis" to="/history">l’historique</RouterLink>:
         </div>
-        <div class="row">
-          <div class="col">
+        <div class="form-check form-switch form-check-reverse">
+          <input
+            id="setting2decimals"
+            class="form-check-input"
+            type="checkbox"
+            :checked="SettingsManager.settings.twoDecimals"
+            @change="handleCheckboxChange"
+          >
+          <label class="form-check-label" for="settings2decimals">
+            Afficher les nombres avec 2 décimales
+          </label>
+        </div>
+        <div class="row d-flex">
+          <div class="col-7 my-auto">
             Trier les transactions par ordre:
           </div>
-        </div>
-        <div class="row">
-          <div class="col-7 text-end">
-            croissant
-          </div>
-          <div class="col-1">
-            <label class="switch">
-              <input type="checkbox">
-              <span class="slider" />
-            </label>
-          </div>
-          <div class="col-4">
-            alphabétique
+          <div class="col">
+            <select class="form-select">
+              <option :value="SortType.Abc">
+                Alphabétique
+              </option>
+              <option :value="SortType.Desc">
+                Croissant
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -178,50 +199,10 @@ function handleCheckboxChange(event: Event) {
 </template>
 
 <style scoped>
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 30px;
-  height: 17px;
+div.form-check-reverse {
+  text-align: left !important;
 }
-
-/* Hide the input squared checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+input.form-check-input {
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 17px;
 }
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #4CAF50;
-}
-
-input:checked + .slider:before {
-  transform: translateX(13px);
-}
-
 </style>
