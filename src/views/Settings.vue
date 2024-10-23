@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import notificationManager, { NotificationType } from '@/notificationManager'
 import db from '@/db'
 import historyManager from '@/historyManager'
 import SettingsManager, { SortType } from '@/SettingsManager'
+import { setHead } from '@/helpers'
+import notificationManager, { NotificationType } from '@/notificationManager'
+import { Page } from '@/types'
+
+setHead(Page.Settings)
 
 function generateDateString() : string {
   const now = new Date()

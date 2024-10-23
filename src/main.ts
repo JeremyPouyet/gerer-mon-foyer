@@ -1,23 +1,26 @@
-import './assets/main.scss'
+import '@/assets/main.scss'
 
-import App from './App.vue'
 import { ViteSSG } from 'vite-ssg'
-import { tooltip } from './tooltip'
 import { createWebHistory } from 'vue-router'
+
+import App from '@/App.vue'
+import { tooltip } from '@/tooltip'
+
+import { Page } from '@/types'
 
 export const createApp = ViteSSG(
   App,
   {
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-      ['Home',      '/',                'Comment gérer le budget de mon foyer ?'] ,
-      ['Budget',    '/budget',          'Gérer mon budget'],
-      ['Settings',  '/settings',        'Paramètres'],
-      ['History',   '/history',         'Historique de mon budget'],
-      ['Simulator', '/simulator',       'Simulateur de dépenses ponctuelles'],
-      ['NotFound',  '/not-found',       'Oulà, cette page n’existe pas !']
-    ].map(([fileName, path, title]) => {
-      return { component: () => import(`@/views/${fileName}.vue`), meta: { title }, path }
+      [Page.Home,      '/'],
+      [Page.Budget,    '/budget'],
+      [Page.Settings,  '/settings'],
+      [Page.History,   '/history'],
+      [Page.Simulator, '/simulator'],
+      [Page.NotFound,  '/not-found']
+    ].map(([fileName, path]) => {
+      return { component: () => import(`@/views/${fileName}.vue`), path }
     }),
   },
   ({ app, router }) => {

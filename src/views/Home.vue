@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { Page } from '@/types'
+import { setHead } from '@/helpers'
+
+setHead(Page.Home)
+</script>
+
 <template>
   <section v-once class="container mt-4">
     <header class="text-center mb-5">

@@ -1,3 +1,5 @@
+/**** Frequencies ****/
+
 export enum Frequency {
   monthly = 'monthly',
   quarterly = 'quarterly',
@@ -7,7 +9,20 @@ export enum Frequency {
 
 export const frequencies = Object.freeze(Object.values(Frequency))
 
+/**** ID ****/
+
 export type ID = `${string}-${string}-${string}-${string}-${string}`
+
+/**** Pages ****/
+
+export enum Page {
+  Budget = 'Budget',
+  History = 'History',
+  Home = 'Home',
+  NotFound = 'NotFound',
+  Settings = 'Settings',
+  Simulator = 'Simulator'
+}
 
 /**** Transactions ****/
 
