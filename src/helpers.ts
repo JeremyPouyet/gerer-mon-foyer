@@ -1,10 +1,12 @@
 import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
+import { useHead } from '@unhead/vue'
 
 import { frequencies, Frequency, TransactionType } from './types'
-import type { ID, Transaction } from './types'
+import type { ID, Page, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
+import Texts from '@/texts'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -13,6 +15,23 @@ export { limitedEvaluate }
 
 export function round(value: number) : number {
   return math.round(value, 2)
+}
+
+/**
+ * Set page headers (meta description and page title)
+ *
+ * @param {String} key Page name
+ */
+export function setHead(key: Page) {
+  const pageHeader = Texts.heads[key]
+
+  useHead({
+    meta: [{
+      content: pageHeader.meta.description,
+      name: 'description'
+    }],
+    title: pageHeader.title
+  })
 }
 
 type Multipliers = {
