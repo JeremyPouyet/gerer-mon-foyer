@@ -1,4 +1,5 @@
 import { Frequency, Page, TransactionType } from '@/types'
+import { SortType } from './SettingsManager'
 
 export default {
   frequencies: {
@@ -44,6 +45,10 @@ export default {
       },
       title: 'Simulateur de dépenses ponctuelles'
     }
+  },
+  sortTypes: {
+    [SortType.Abc]: 'Alphabétique',
+    [SortType.Desc]: 'Décroissant'
   },
   transactionTypes: {
     [TransactionType.Expense]: { plural: 'Dépenses contraintes', singular: 'Dépense contrainte' },

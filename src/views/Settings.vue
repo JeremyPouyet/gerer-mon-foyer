@@ -7,6 +7,7 @@ import SettingsManager, { SortType } from '@/SettingsManager'
 import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import { Page } from '@/types'
+import Texts from '@/texts'
 
 setHead(Page.Settings)
 
@@ -83,7 +84,7 @@ function confirmDataDeletion() : void {
   }
 }
 
-function handleCheckboxChange(event: Event) {
+function twoDecimalsChange(event: Event) : void {
   SettingsManager.settings.twoDecimals = (event.target as HTMLInputElement).checked
   if (SettingsManager.settings.twoDecimals)
     notificationManager.create('Les nombres seront affichés avec 2 décimales', NotificationType.Success)
@@ -91,16 +92,11 @@ function handleCheckboxChange(event: Event) {
     notificationManager.create('Les nombres seront simplement arrondis', NotificationType.Success)
 }
 
-function handleSortOrderChange(event: Event) {
-  isAscending.value = (event.target as HTMLInputElement).checked;
-  // Add your logic here for sorting the transactions based on the state
-  if (isAscending.value) {
-    // Sort in ascending order
-    console.log('Sorting in ascending order');
-  } else {
-    // Sort in alphabetical order
-    console.log('Sorting in alphabetical order');
-  }
+function sortTypeChange(event: Event) : void {
+  const selectedValue = (event.target as HTMLSelectElement).value as SortType
+
+  SettingsManager.settings.sort = selectedValue
+  notificationManager.create(`Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}`, NotificationType.Success)
 }
 </script>
 
@@ -176,23 +172,20 @@ function handleSortOrderChange(event: Event) {
             class="form-check-input"
             type="checkbox"
             :checked="SettingsManager.settings.twoDecimals"
-            @change="handleCheckboxChange"
+            @change="twoDecimalsChange"
           >
           <label class="form-check-label" for="settings2decimals">
-            Afficher les nombres avec 2 décimales
+            Afficher les nombres avec 2 décimales:
           </label>
         </div>
         <div class="row d-flex">
           <div class="col-7 my-auto">
-            Trier les transactions par ordre:
+            Trier les dépenses et revenus par ordre:
           </div>
           <div class="col">
-            <select class="form-select">
-              <option :value="SortType.Abc">
-                Alphabétique
-              </option>
-              <option :value="SortType.Desc">
-                Croissant
+            <select class="form-select" @change="sortTypeChange">
+              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="SettingsManager.settings.sort===sortType" :value="sortType">
+                {{ Texts.sortTypes[sortType] }}
               </option>
             </select>
           </div>

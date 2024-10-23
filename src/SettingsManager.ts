@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-enum SortType {
+export enum SortType {
   Abc = 'abc',
   Desc = 'desc'
 }
@@ -28,5 +28,4 @@ class SettingsManager {
   }
 }
 
-export { SortType }
 export default new SettingsManager()
