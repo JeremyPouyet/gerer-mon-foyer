@@ -96,7 +96,7 @@ function sortTypeChange(event: Event) : void {
   const selectedValue = (event.target as HTMLSelectElement).value as SortType
 
   SettingsManager.settings.sort = selectedValue
-  notificationManager.create(`Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}`, NotificationType.Success)
+  notificationManager.create(`Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}.`, NotificationType.Success)
 }
 </script>
 
@@ -105,7 +105,8 @@ function sortTypeChange(event: Event) : void {
     <div class="row mb-4">
       <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4">
-          <img src="@/assets/icons/diskette.png" class="icon-container" alt=""> Mes données
+          <!-- <img src="@/assets/icons/diskette.png" class="icon-container" alt="">  -->
+          Mes données
         </h2>
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
@@ -164,7 +165,7 @@ function sortTypeChange(event: Event) : void {
           <RouterLink class="text-primary-emphasis" to="/budget">Mon Budget</RouterLink>
           et
           <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-          <RouterLink class="text-primary-emphasis" to="/history">l’historique</RouterLink>:
+          l’<RouterLink class="text-primary-emphasis" to="/history">Historique</RouterLink>:
         </div>
         <div class="form-check form-switch form-check-reverse">
           <input

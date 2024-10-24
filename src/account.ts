@@ -3,6 +3,7 @@ import type { ID, Transaction, TransactionFunctional, TransactionList, Transacti
 import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
+import SettingsManager, { SortType } from './SettingsManager'
 
 export enum AccountType {
   Common = 'common',
@@ -28,6 +29,14 @@ interface AccountSettings {
   }
 }
 
+// List of possible transaction sort
+const sorters = {
+  [SortType.Abc]: (a: Transaction, b: Transaction) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+  [SortType.Asc]: (a: Transaction, b: Transaction) => valueAs(a) - valueAs(b),
+  [SortType.Desc]: (a: Transaction, b: Transaction) => valueAs(b) - valueAs(a),
+  [SortType.Zyx]: (a: Transaction, b: Transaction) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
+}
+
 /**
  * Constructs the default account settings based on provided partial settings.
  *
@@ -47,7 +56,7 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
   const trimmedName = transaction.name.trim()
 
   if (!trimmedName) {
-    notificationManager.create(`"${transaction.name}" n’est pas un nom valide`, NotificationType.Error)
+    notificationManager.create(`"${transaction.name}" n’est pas un nom valide.`, NotificationType.Error)
     return false
   }
   transaction.name = trimmedName
@@ -152,7 +161,7 @@ export default class Account {
     return {
       sum: transactionRecord.sum,
       values: Object.values(transactionRecord.values)
-        .sort((a: Transaction, b: Transaction) => valueAs(b) - valueAs(a))
+        .sort(sorters[SettingsManager.settings.sort])
     }
   }
 

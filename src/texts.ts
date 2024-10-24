@@ -48,7 +48,9 @@ export default {
   },
   sortTypes: {
     [SortType.Abc]: 'Alphabétique',
-    [SortType.Desc]: 'Décroissant'
+    [SortType.Asc]: 'Croissant',
+    [SortType.Desc]: 'Décroissant',
+    [SortType.Zyx]: 'Alphabétique inverse'
   },
   transactionTypes: {
     [TransactionType.Expense]: { plural: 'Dépenses contraintes', singular: 'Dépense contrainte' },

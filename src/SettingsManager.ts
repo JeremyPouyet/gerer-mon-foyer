@@ -2,7 +2,9 @@ import { reactive } from 'vue'
 
 export enum SortType {
   Abc = 'abc',
-  Desc = 'desc'
+  Asc = 'asc',
+  Desc = 'desc',
+  Zyx = 'zyx'
 }
 
 interface GlobalSettings {
