@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import { Currency, CurrencyPosition } from './types'
 
 export enum SortType {
   Abc = 'abc',
@@ -8,12 +9,16 @@ export enum SortType {
 }
 
 interface GlobalSettings {
+  currency: Currency,
+  currencyPosition: CurrencyPosition,
   sort: SortType,
   twoDecimals: boolean
 }
 
 function defaultSettings() : GlobalSettings {
   return {
+    currency: Currency.Euro,
+    currencyPosition: CurrencyPosition.After,
     sort: SortType.Desc,
     twoDecimals: false
   }

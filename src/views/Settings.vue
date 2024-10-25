@@ -6,7 +6,7 @@ import historyManager from '@/historyManager'
 import SettingsManager, { SortType } from '@/SettingsManager'
 import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
-import { Page } from '@/types'
+import { Currency, CurrencyPosition, Page } from '@/types'
 import Texts from '@/texts'
 
 setHead(Page.Settings)
@@ -98,6 +98,20 @@ function sortTypeChange(event: Event) : void {
   SettingsManager.settings.sort = selectedValue
   notificationManager.create(`Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}.`, NotificationType.Success)
 }
+
+function currencyChange(event: Event) : void {
+  const selectedValue = (event.target as HTMLSelectElement).value as Currency
+
+  SettingsManager.settings.currency = selectedValue
+  notificationManager.create(`Les montants affichés utiliseront le symbol monétaire ${selectedValue}.`, NotificationType.Success)
+}
+
+function currencyPositionChange(event: Event) : void {
+  const selectedValue = (event.target as HTMLSelectElement).value as CurrencyPosition
+
+  SettingsManager.settings.currencyPosition = selectedValue
+  notificationManager.create(`Le symbol monétaire sera affiché ${Texts.currencyPositions[selectedValue].toLocaleLowerCase()}.`, NotificationType.Success)
+}
 </script>
 
 <template>
@@ -185,8 +199,32 @@ function sortTypeChange(event: Event) : void {
           </div>
           <div class="col">
             <select class="form-select" @change="sortTypeChange">
-              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="SettingsManager.settings.sort===sortType" :value="sortType">
+              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="SettingsManager.settings.sort === sortType" :value="sortType">
                 {{ Texts.sortTypes[sortType] }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <div class="col-7 my-auto">
+            Symbol monétaire:
+          </div>
+          <div class="col">
+            <select class="form-select" @change="currencyChange">
+              <option v-for="currency in Object.values(Currency)" :key="currency" :selected="SettingsManager.settings.currency === currency" :value="currency">
+                {{ currency }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <div class="col-7 my-auto">
+            Position du symbol monétaire:
+          </div>
+          <div class="col">
+            <select class="form-select" @change="currencyPositionChange">
+              <option v-for="position in Object.values(CurrencyPosition)" :key="position" :selected="SettingsManager.settings.currencyPosition === position" :value="position">
+                {{ Texts.currencyPositions[position] }}
               </option>
             </select>
           </div>

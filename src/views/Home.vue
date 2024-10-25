@@ -33,17 +33,17 @@ setHead(Page.Home)
         Exemple simple de répartition
       </h2>
       <p class="text-start">
-        Prenons un foyer dans lequel Camille gagne 2400€ par mois, et Sam 1600€, tout en remboursant un prêt étudiant de 200€.
-        Voici comment seront réparties 500€ de dépenses communes:
+        Prenons un foyer dans lequel Camille gagne 2 400 € par mois, et Sam 1 600 €, tout en remboursant un prêt étudiant de 200 €.
+        Voici comment seront réparties 500 € de dépenses communes:
       </p>
       <ul class="text-start step-list">
         <li>Camille représente 60% des revenus du foyer et Sam 40%.</li>
-        <li>Cependant, le revenu mensuel disponible de Sam est en réalité de 1600€ - 200€ = 1400€.</li>
-        <li>Le revenu total disponible du foyer est donc 2400€ + 1400€ = 3800€.</li>
-        <li>Camille paiera alors 63% des dépenses communes (315€).</li>
-        <li>Sam ne paiera que 37% (185€).</li>
+        <li>Cependant, le revenu mensuel disponible de Sam est en réalité de 1 600 € - 200 € = 1 400 €.</li>
+        <li>Le revenu total disponible du foyer est donc 2 400 € + 1 400 € = 3 800 €.</li>
+        <li>Camille paiera alors 63% des dépenses communes (315 €).</li>
+        <li>Sam ne paiera que 37% (185 €).</li>
       </ul>
-      <p>Avec une répartition 50/50, Sam aurait payé 250€, ce qui représente un avantage de 7 800€ sur 10 ans avec cette méthode.</p>
+      <p>Avec une répartition 50/50, Sam aurait payé 250 €, ce qui représente un avantage de 7 800 € sur 10 ans avec cette méthode.</p>
     </section>
 
     <section class="mb-5 text-center text-block">

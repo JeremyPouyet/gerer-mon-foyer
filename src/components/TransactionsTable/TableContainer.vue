@@ -8,6 +8,7 @@ import type Account from '@/account'
 import Texts from '@/texts'
 import { AccountType } from '@/account'
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
+import SettingsManager from '@/SettingsManager'
 
 const props = defineProps<{
   account: Account,
@@ -95,7 +96,7 @@ const lgClass = computed(() => {
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
-        <span class="input-group-text">€</span>
+        <span class="input-group-text">{{ SettingsManager.settings.currency }}</span>
         <div class="w-100 d-sm-none" />
 
         <select

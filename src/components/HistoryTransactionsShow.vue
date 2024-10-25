@@ -6,7 +6,8 @@ import TableHeader from './TransactionsTable/TableHeader.vue'
 import { toRefs } from 'vue'
 
 import type Account from '@/account'
-import { sexyNumber, useTransactions, valueAs  } from '@/helpers'
+import { sexyNumber } from '@/formaters'
+import { useTransactions, valueAs  } from '@/helpers'
 import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{

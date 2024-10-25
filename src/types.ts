@@ -1,3 +1,20 @@
+/**** Currencies ****/
+
+export enum Currency {
+  CentralAfricanCFAFranc = 'XAF',
+  Dollar = '$',
+  Euro = '€',
+  GuineaFranc = 'GNF',
+  PacificFranc = 'XPF',
+  SwissFranc = 'CHF',
+  WestAfricanCFAFranc = 'XOF',
+}
+
+export enum CurrencyPosition {
+  After = 'after',
+  Before = 'before'
+}
+
 /**** Frequencies ****/
 
 export enum Frequency {

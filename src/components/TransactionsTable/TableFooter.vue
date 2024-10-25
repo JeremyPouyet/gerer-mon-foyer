@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sexyNumber } from '@/helpers'
+import { sexyNumber } from '@/formaters'
 
 defineProps<{ income?: number, totals: number[], withTds: boolean }>()
 </script>

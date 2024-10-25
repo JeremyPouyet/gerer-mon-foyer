@@ -4,6 +4,7 @@ import { round } from '@/helpers'
 import User from '@/user'
 import type Account from '@/account'
 import userManager from '@/userManager'
+import { sexyAmount } from '@/formaters'
 
 const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()
 
@@ -32,21 +33,21 @@ const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12
       <template v-if="user.account.incomes.sum > 0">
         <p class="mb-0">
           Votre foyer gagne
-          <span class="text-danger fw-semibold">{{ monthlyCommonIncomes }}€</span>
+          <span class="text-danger fw-semibold">{{ sexyAmount(monthlyCommonIncomes) }}</span>
           par mois, avec
-          <span class="text-danger fw-semibold">{{ monthlyRemainSum }}€</span>
+          <span class="text-danger fw-semibold">{{ sexyAmount(monthlyRemainSum) }}</span>
           restants après vos dépenses contraintes.
         </p>
         <p class="mb-0">
           Vos dépenses communes contraintes sont de
-          <span class="text-danger fw-semibold">{{ monthlyCommonExpenses }}€</span>
+          <span class="text-danger fw-semibold">{{ sexyAmount(monthlyCommonExpenses) }}</span>
           mensuel.
         </p>
         <p class="mb-0">
           Tu gagnes
-          <span class="text-danger fw-semibold">{{ round(user.account.incomes.sum) }}€</span>,
+          <span class="text-danger fw-semibold">{{ sexyAmount(round(user.account.incomes.sum)) }}</span>,
           mais après tes dépenses contraintes, il te reste
-          <span class="text-danger fw-semibold">{{ round(incomeAfterConstraints) }}€</span>.
+          <span class="text-danger fw-semibold">{{ sexyAmount(round(incomeAfterConstraints)) }}</span>.
         </p>
         <p class="mb-0">
           C’est
@@ -55,20 +56,20 @@ const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12
         </p>
         <p class="mb-0">
           Ta contribution aux dépenses communes sera donc de
-          <span class="text-danger fw-semibold">{{ round(userShare) }}€</span>
+          <span class="text-danger fw-semibold">{{ sexyAmount(round(userShare)) }}</span>
           te laissant
-          <span class="text-danger fw-semibold">{{ round(incomeAfterConstraints - userShare) }}€</span> par mois.
+          <span class="text-danger fw-semibold">{{ sexyAmount(round(incomeAfterConstraints - userShare)) }}</span> par mois.
         </p>
         <p v-if="user.account.personalExpenses.sum > 0" class="mb-0">
           Après tes dépenses personnelles, il te restera
-          <span class="text-danger fw-semibold">{{ round(incomeAfterAllExpenses) }}€</span>
+          <span class="text-danger fw-semibold">{{ sexyAmount(round(incomeAfterAllExpenses)) }}</span>
           par mois.
         </p>
         <p v-if="in10years > 0" class="mb-0">
-          En 10 ans, tu pourrais économiser <span class="text-danger fw-semibold">{{ in10years }}€</span>.
+          En 10 ans, tu pourrais économiser <span class="text-danger fw-semibold">{{ sexyAmount(in10years) }}</span>.
         </p>
         <p v-else-if="in10years < 0" class="mb-0">
-          En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ -in10years }}€</span>.
+          En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ sexyAmount(-in10years) }}</span>.
         </p>
       </template>
       <template v-else>

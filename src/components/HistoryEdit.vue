@@ -3,7 +3,9 @@ import Note from './Note.vue'
 import NoteIcon from './NoteIcon.vue'
 
 import { onMounted, onUnmounted, ref } from 'vue'
+
 import historyManager, { type Sample } from '@/historyManager'
+import { sexyDate } from '@/formaters'
 
 const emit = defineEmits(['switchSample'])
 
@@ -32,20 +34,6 @@ function removeSample(date: string) : void {
 
   activeDate.value = historyManager.activeDate
   emit('switchSample')
-}
-
-/* eslint-disable sort-keys */
-const formatter = new Intl.DateTimeFormat('fr-FR', {
-  minute: 'numeric',
-  hour: 'numeric',
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-})
-/* eslint-enable sort-keys */
-
-function sexyDate(strDate: string) {
-  return formatter.format(new Date(strDate))
 }
 
 onMounted(() => {

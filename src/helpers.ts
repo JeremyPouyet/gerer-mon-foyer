@@ -18,13 +18,6 @@ export function round(value: number) : number {
   return math.round(value, 2)
 }
 
-export function sexyNumber(value: number) : string {
-  const rounded = round(value)
-  const stringified = SettingsManager.settings.twoDecimals ? rounded.toFixed(2) : rounded.toString()
-  // , instead of . as a French number format. Change that later if multilingue
-  return stringified.replaceAll('.', ',')
-}
-
 /**
  * Set page headers (meta description and page title)
  *
