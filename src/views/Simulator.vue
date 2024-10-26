@@ -4,7 +4,7 @@ import '@/assets/secondary.scss'
 import { onMounted, ref, watch } from 'vue'
 
 import { limitedEvaluate, round, setHead } from '@/helpers'
-import { Page } from '@/types'
+import { CurrencyPosition, Page } from '@/types'
 import type User from '@/user'
 import userManager from '@/userManager'
 import SettingsManager from '@/SettingsManager'
@@ -63,6 +63,9 @@ function computeValue(user: User) : number {
         <label for="expenseInput" class="form-label">Valeur ou formule</label>
 
         <div class="input-group mb-3">
+          <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.Before" class="input-group-text">
+            {{ SettingsManager.settings.currency }}
+          </span>
           <input
             id="expenseInput"
             v-model="expenseValue"
@@ -73,7 +76,9 @@ function computeValue(user: User) : number {
             placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
             data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           >
-          <span class="input-group-text">{{ SettingsManager.settings.currency }}</span>
+          <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.After" class="input-group-text">
+            {{ SettingsManager.settings.currency }}
+          </span>
         </div>
       </div>
 

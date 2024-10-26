@@ -7,7 +7,7 @@ import { computed, nextTick, ref, toRefs } from 'vue'
 import type Account from '@/account'
 import Texts from '@/texts'
 import { AccountType } from '@/account'
-import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
+import { Frequency, type TransactionFunctional, TransactionType, CurrencyPosition } from '@/types'
 import SettingsManager from '@/SettingsManager'
 
 const props = defineProps<{
@@ -85,6 +85,9 @@ const lgClass = computed(() => {
           :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
           @keydown.enter="transactionAdd"
         >
+        <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.Before" class="input-group-text">
+          {{ SettingsManager.settings.currency }}
+        </span>
         <input
           v-model="newTransaction.value"
           v-tooltip
@@ -96,7 +99,9 @@ const lgClass = computed(() => {
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
-        <span class="input-group-text">{{ SettingsManager.settings.currency }}</span>
+        <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.After" class="input-group-text">
+          {{ SettingsManager.settings.currency }}
+        </span>
         <div class="w-100 d-sm-none" />
 
         <select

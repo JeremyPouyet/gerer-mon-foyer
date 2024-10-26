@@ -6,7 +6,6 @@ import type { ID, Page, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
-import SettingsManager from './SettingsManager'
 import Texts from '@/texts'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })

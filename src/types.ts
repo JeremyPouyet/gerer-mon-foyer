@@ -15,6 +15,13 @@ export enum CurrencyPosition {
   Before = 'before'
 }
 
+/**** Decimal Separators ****/
+
+export enum DecimalSeparator {
+  Comma = ',',
+  Dot = '.'
+}
+
 /**** Frequencies ****/
 
 export enum Frequency {
