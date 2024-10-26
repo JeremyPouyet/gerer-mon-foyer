@@ -5,6 +5,7 @@ export enum DecimalSeparator {
   Dot = '.'
 }
 
+// ISO 4217 currencies
 export enum Currency {
   Algeria = 'DZD',
   CanadianDollar = 'CAD',
@@ -18,7 +19,8 @@ export enum Currency {
   WestAfricanCFAFranc = 'XOF',
 }
 
-export const CurrencyToLocal: Record<Currency, string> = Object.freeze({
+// IETF BCP 47 language tag
+export const CurrencyToLocale: Record<Currency, string> = Object.freeze({
   [Currency.Algeria]: 'fr-DZ',
   [Currency.CanadianDollar]: 'fr-CA',
   [Currency.CentralAfricanCFAFranc]: 'fr-CM',
@@ -57,20 +59,20 @@ function defaultSettings() : GlobalSettings {
 class SettingsManager {
   readonly settings = reactive<GlobalSettings>(defaultSettings())
 
-  getCurrencySymbol(currency?: Currency, with_iso_code = false) {
+  getCurrencySymbol(currency?: Currency, with_iso_code = false) : string {
     currency ||= this.settings.currency
 
     const one = Intl.NumberFormat(
-      CurrencyToLocal[currency],
+      CurrencyToLocale[currency],
       { currency, style: 'currency'}
     ).format(1).replaceAll(/[ \d.,]/g, '').trim() // trim removes non-breakable spaces
 
     return with_iso_code ? `${one} (${currency})` : one
   }
 
-  isCurrencySymbolOnRight() {
+  isCurrencySymbolOnRight() : boolean {
     return Intl.NumberFormat(
-      CurrencyToLocal[this.settings.currency],
+      CurrencyToLocale[this.settings.currency],
       { currency: this.settings.currency, style: 'currency'}
     ).format(1).startsWith('1')
   }

@@ -1,4 +1,4 @@
-import SettingsManager, { CurrencyToLocal } from './SettingsManager'
+import SettingsManager, { CurrencyToLocale } from './SettingsManager'
 import { round } from './helpers'
 
 const NonBreakingSpace = '\u00A0'
@@ -14,7 +14,7 @@ const dateFormatter = Intl.DateTimeFormat('fr-FR', {
 /* eslint-enable sort-keys */
 
 export function sexyAmount(amount: number) {
-  return Intl.NumberFormat(CurrencyToLocal[SettingsManager.settings.currency], {
+  return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
     currency: SettingsManager.settings.currency,
     currencyDisplay: 'narrowSymbol',
     maximumFractionDigits: 2,
@@ -37,17 +37,9 @@ export function sexyDate(strDate: string) {
  * @returns {String} Formated number
  */
 export function sexyNumber(value: number) : string {
-  const rounded = round(value)
-  const stringified = SettingsManager.settings.twoDecimals ? rounded.toFixed(2) : rounded.toString()
-  const [integerPart, decimalPart] = stringified.split('.')
-  let formated = ''
-
-  for (let i = integerPart.length - 1; i >= 0; i--) {
-    formated = `${integerPart[i]}${formated}`
-    if ((integerPart.length - i) % 3 === 0)
-      formated = `${NonBreakingSpace}${formated}`
-  }
-  if (decimalPart)
-    formated += `${SettingsManager.settings.decimalSeparator}${decimalPart}`
-  return formated
+  return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
+    useGrouping: true
+  }).format(value).replaceAll(/[,.]/g, SettingsManager.settings.decimalSeparator)
 }
