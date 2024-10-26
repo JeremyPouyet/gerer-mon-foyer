@@ -96,22 +96,31 @@ function sortTypeChange(event: Event) : void {
   const selectedValue = (event.target as HTMLSelectElement).value as SortType
 
   SettingsManager.settings.sort = selectedValue
-  notificationManager.create(`Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}.`, NotificationType.Success)
+  notificationManager.create(
+    `Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}.`,
+    NotificationType.Success
+  )
 }
 
 function currencyChange(event: Event) : void {
   const selectedValue = (event.target as HTMLSelectElement).value as Currency
+  const currencyName = SettingsManager.getCurrencySymbol(selectedValue, true)
 
   SettingsManager.settings.currency = selectedValue
-  const currencyName = SettingsManager.getCurrencySymbol(selectedValue, true)
-  notificationManager.create(`Les montants affichés utiliseront le symbol monétaire ${currencyName}.`, NotificationType.Success)
+  notificationManager.create(
+    `Les montants affichés utiliseront le symbol monétaire ${currencyName}.`,
+    NotificationType.Success
+  )
 }
 
 function decimalSeparatorChange(event: Event) : void {
   const selectedValue = (event.target as HTMLSelectElement).value as DecimalSeparator
 
   SettingsManager.settings.decimalSeparator = selectedValue
-  notificationManager.create(`Séparateur décimal choisi: "${selectedValue}".`, NotificationType.Success)
+  notificationManager.create(
+    `Séparateur décimal choisi: "${selectedValue}".`,
+    NotificationType.Success
+  )
 }
 </script>
 
@@ -126,11 +135,7 @@ function decimalSeparatorChange(event: Event) : void {
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
           <p class="mb-0 ms-2">
-            <span class="fw-bold text-decoration-underline">
-              Vos données sont uniquement sauvegardées dans votre navigateur.
-            </span>
-            <br>
-            Pensez donc à les exporter régulièrement !
+            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez donc à les exporter régulièrement !
           </p>
         </div>
 
@@ -174,15 +179,7 @@ function decimalSeparatorChange(event: Event) : void {
         <h2 class="mb-4">
           Affichage
         </h2>
-        <div class="fw-bold mb-2">
-          Dans
-          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-          <RouterLink class="text-primary-emphasis" to="/budget">Mon Budget</RouterLink>
-          et
-          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-          l’<RouterLink class="text-primary-emphasis" to="/history">Historique</RouterLink>:
-        </div>
-        <div class="form-check form-switch form-check-reverse">
+        <div class="form-check form-switch form-check-reverse mb-3">
           <input
             id="setting2decimals"
             class="form-check-input"
@@ -194,7 +191,7 @@ function decimalSeparatorChange(event: Event) : void {
             Afficher les nombres avec 2 décimales:
           </label>
         </div>
-        <div class="row d-flex">
+        <div class="row d-flex mb-3">
           <div class="col-7 my-auto">
             Trier les dépenses et revenus par ordre:
           </div>
@@ -206,9 +203,9 @@ function decimalSeparatorChange(event: Event) : void {
             </select>
           </div>
         </div>
-        <div class="row d-flex">
+        <div class="row d-flex mb-3">
           <div class="col-7 my-auto">
-            Symbol monétaire:
+            Utiliser le symbol monétaire:
           </div>
           <div class="col">
             <select class="form-select" @change="currencyChange">
@@ -220,7 +217,7 @@ function decimalSeparatorChange(event: Event) : void {
         </div>
         <div class="row d-flex">
           <div class="col-7 my-auto">
-            Séparateur décimales:
+            Utiliser le séparateur décimales:
           </div>
           <div class="col">
             <select class="form-select" @change="decimalSeparatorChange">
