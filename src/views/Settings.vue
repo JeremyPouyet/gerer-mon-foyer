@@ -3,10 +3,10 @@ import '@/assets/secondary.scss'
 
 import db from '@/db'
 import historyManager from '@/historyManager'
-import SettingsManager, { SortType } from '@/SettingsManager'
+import SettingsManager, { Currency, DecimalSeparator, SortType } from '@/SettingsManager'
 import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
-import { Currency, CurrencyPosition, DecimalSeparator, Page } from '@/types'
+import { Page } from '@/types'
 import Texts from '@/texts'
 
 setHead(Page.Settings)
@@ -103,14 +103,8 @@ function currencyChange(event: Event) : void {
   const selectedValue = (event.target as HTMLSelectElement).value as Currency
 
   SettingsManager.settings.currency = selectedValue
-  notificationManager.create(`Les montants affichés utiliseront le symbol monétaire ${selectedValue}.`, NotificationType.Success)
-}
-
-function currencyPositionChange(event: Event) : void {
-  const selectedValue = (event.target as HTMLSelectElement).value as CurrencyPosition
-
-  SettingsManager.settings.currencyPosition = selectedValue
-  notificationManager.create(`Le symbol monétaire sera affiché ${Texts.currencyPositions[selectedValue].toLocaleLowerCase()}.`, NotificationType.Success)
+  const currencyName = SettingsManager.getCurrencySymbol(selectedValue, true)
+  notificationManager.create(`Les montants affichés utiliseront le symbol monétaire ${currencyName}.`, NotificationType.Success)
 }
 
 function decimalSeparatorChange(event: Event) : void {
@@ -219,19 +213,7 @@ function decimalSeparatorChange(event: Event) : void {
           <div class="col">
             <select class="form-select" @change="currencyChange">
               <option v-for="currency in Object.values(Currency)" :key="currency" :selected="SettingsManager.settings.currency === currency" :value="currency">
-                {{ currency }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="row d-flex">
-          <div class="col-7 my-auto">
-            Position du symbol monétaire:
-          </div>
-          <div class="col">
-            <select class="form-select" @change="currencyPositionChange">
-              <option v-for="position in Object.values(CurrencyPosition)" :key="position" :selected="SettingsManager.settings.currencyPosition === position" :value="position">
-                {{ Texts.currencyPositions[position] }}
+                {{ SettingsManager.getCurrencySymbol(currency, true) }}
               </option>
             </select>
           </div>

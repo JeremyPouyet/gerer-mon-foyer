@@ -1,11 +1,7 @@
-import { CurrencyPosition, Frequency, Page, TransactionType } from '@/types'
+import { Frequency, Page, TransactionType } from '@/types'
 import { SortType } from './SettingsManager'
 
 export default {
-  currencyPositions: {
-    [CurrencyPosition.After]: 'Après le montant',
-    [CurrencyPosition.Before]: 'Avant le montant'
-  },
   frequencies: {
     [Frequency.monthly]: 'Mois',
     [Frequency.quarterly]: 'Trimestre',

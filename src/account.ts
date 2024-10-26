@@ -64,12 +64,12 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
 }
 
 /**
- * Normalize a transaction value by triming it, removing multiple consequent spaces and replacing comas with dots
+ * Normalize a transaction value by triming it, removing spaces and replacing comas with dots
  *
  * @param {Transaction} transaction The transaction for whom the value should be normalized
  */
 function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Transaction, 'frequency'>>) : boolean {
-  const value = transaction.value.trim().replaceAll(',', '.').replaceAll(/ +/g, ' ')
+  const value = transaction.value.trim().replaceAll(',', '.').replaceAll(' ', '')
 
   try {
     const computedValue = valueAs({ frequency: transaction.frequency || Frequency.monthly, value })

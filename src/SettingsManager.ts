@@ -1,5 +1,35 @@
 import { reactive } from 'vue'
-import { Currency, CurrencyPosition, DecimalSeparator } from './types'
+
+export enum DecimalSeparator {
+  Comma = ',',
+  Dot = '.'
+}
+
+export enum Currency {
+  Algeria = 'DZD',
+  CanadianDollar = 'CAD',
+  CentralAfricanCFAFranc = 'XAF',
+  Euro = 'EUR',
+  GuineaFranc = 'GNF',
+  Marocco = 'MAD',
+  PacificFranc = 'XPF',
+  SwissFranc = 'CHF',
+  Tunisia = 'TND',
+  WestAfricanCFAFranc = 'XOF',
+}
+
+export const CurrencyToLocal: Record<Currency, string> = Object.freeze({
+  [Currency.Algeria]: 'fr-DZ',
+  [Currency.CanadianDollar]: 'fr-CA',
+  [Currency.CentralAfricanCFAFranc]: 'fr-CM',
+  [Currency.Euro]: 'fr-FR',
+  [Currency.GuineaFranc]: 'fr-GN',
+  [Currency.Marocco]: 'fr-MA',
+  [Currency.PacificFranc]: 'fr-PF',
+  [Currency.SwissFranc]: 'fr-CH',
+  [Currency.Tunisia]: 'fr-TN',
+  [Currency.WestAfricanCFAFranc]: 'fr-SN'
+})
 
 export enum SortType {
   Abc = 'abc',
@@ -10,7 +40,6 @@ export enum SortType {
 
 interface GlobalSettings {
   currency: Currency,
-  currencyPosition: CurrencyPosition,
   decimalSeparator: DecimalSeparator,
   sort: SortType,
   twoDecimals: boolean
@@ -19,7 +48,6 @@ interface GlobalSettings {
 function defaultSettings() : GlobalSettings {
   return {
     currency: Currency.Euro,
-    currencyPosition: CurrencyPosition.After,
     decimalSeparator: DecimalSeparator.Comma,
     sort: SortType.Desc,
     twoDecimals: false
@@ -28,6 +56,24 @@ function defaultSettings() : GlobalSettings {
 
 class SettingsManager {
   readonly settings = reactive<GlobalSettings>(defaultSettings())
+
+  getCurrencySymbol(currency?: Currency, with_iso_code = false) {
+    currency ||= this.settings.currency
+
+    const one = Intl.NumberFormat(
+      CurrencyToLocal[currency],
+      { currency, style: 'currency'}
+    ).format(1).replaceAll(/[ \d.,]/g, '').trim() // trim removes non-breakable spaces
+
+    return with_iso_code ? `${one} (${currency})` : one
+  }
+
+  isCurrencySymbolOnRight() {
+    return Intl.NumberFormat(
+      CurrencyToLocal[this.settings.currency],
+      { currency: this.settings.currency, style: 'currency'}
+    ).format(1).startsWith('1')
+  }
 
   load(): void {
     const stringifiedSettings = localStorage.getItem('settings') || '{}'

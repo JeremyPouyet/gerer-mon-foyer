@@ -5,9 +5,9 @@ import type HistoryTransactionsShow from '../HistoryTransactionsShow.vue'
 import { computed, nextTick, ref, toRefs } from 'vue'
 
 import type Account from '@/account'
-import Texts from '@/texts'
 import { AccountType } from '@/account'
-import { Frequency, type TransactionFunctional, TransactionType, CurrencyPosition } from '@/types'
+import Texts from '@/texts'
+import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
 import SettingsManager from '@/SettingsManager'
 
 const props = defineProps<{
@@ -85,8 +85,8 @@ const lgClass = computed(() => {
           :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.Before" class="input-group-text">
-          {{ SettingsManager.settings.currency }}
+        <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ SettingsManager.getCurrencySymbol() }}
         </span>
         <input
           v-model="newTransaction.value"
@@ -99,8 +99,8 @@ const lgClass = computed(() => {
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="SettingsManager.settings.currencyPosition === CurrencyPosition.After" class="input-group-text">
-          {{ SettingsManager.settings.currency }}
+        <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ SettingsManager.getCurrencySymbol() }}
         </span>
         <div class="w-100 d-sm-none" />
 
