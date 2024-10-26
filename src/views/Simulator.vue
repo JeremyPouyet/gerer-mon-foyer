@@ -4,7 +4,6 @@ import '@/assets/secondary.scss'
 import { onMounted, ref, watch } from 'vue'
 
 import { limitedEvaluate, round, setHead } from '@/helpers'
-import Texts from '@/texts'
 import { Page } from '@/types'
 import type User from '@/user'
 import userManager from '@/userManager'

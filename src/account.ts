@@ -88,7 +88,6 @@ export default class Account {
   readonly personalExpenses: TransactionRecord
 
   note?: string
-  readonly onTransactionChange?: () => void
   readonly type: AccountType
   readonly settings: AccountSettings
 
