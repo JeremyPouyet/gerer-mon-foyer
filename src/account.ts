@@ -29,7 +29,7 @@ interface AccountSettings {
   }
 }
 
-// List of possible transaction sort
+// List of possible transactions sort
 const sorters = {
   [SortType.Abc]: (a: Transaction, b: Transaction) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   [SortType.Asc]: (a: Transaction, b: Transaction) => valueAs(a) - valueAs(b),
@@ -64,7 +64,7 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
 }
 
 /**
- * Normalize a transaction value by triming it, removing spaces and replacing comas with dots
+ * Normalizes a transaction value by triming it, removing spaces and replacing comas with dots
  *
  * @param {Transaction} transaction The transaction for whom the value should be normalized
  */
