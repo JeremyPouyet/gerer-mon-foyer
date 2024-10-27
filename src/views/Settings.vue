@@ -118,7 +118,6 @@ const unsavedChangeText = computed(() => {
     <div class="row mb-4">
       <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4">
-          <!-- <img src="@/assets/icons/diskette.png" class="icon-container" alt="">  -->
           Mes données
         </h2>
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
@@ -128,14 +127,16 @@ const unsavedChangeText = computed(() => {
           </p>
         </div>
 
-        <p class="fw-bold">
-          Sauvegarde:
+        <p class="fw-bold d-flex">
+          <img src="@/assets/icons/diskette.png" class="icon-container-small my-auto" alt="">
+          <span class="ms-1">Sauvegarde:</span>
         </p>
         <div class="row d-flex mb-3">
           <div class="col">
             <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
               Importer une sauvegarde
             </button>
+            <small class="text-muted d-block">Cela remplacera vos données actuelles.</small>
           </div>
           <div class="col my-auto">
             <div class="text-end">
@@ -147,8 +148,9 @@ const unsavedChangeText = computed(() => {
           </div>
         </div>
 
-        <p class="fw-bold">
-          Zone dangereuse:
+        <p class="fw-bold d-flex">
+          <img src="@/assets/icons/warning.png" class="icon-container-small my-auto" alt="Attention">
+          <span class="ms-1">Zone dangereuse:</span>
         </p>
         <div>
           <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
@@ -173,6 +175,9 @@ const unsavedChangeText = computed(() => {
           Affichage
         </h2>
         <div class="form-check form-switch form-check-reverse mb-3">
+          <label class="form-check-label" for="settings2decimals">
+            Afficher les nombres avec 2 décimales:
+          </label>
           <input
             id="setting2decimals"
             class="form-check-input"
@@ -180,9 +185,6 @@ const unsavedChangeText = computed(() => {
             :checked="SettingsManager.settings.twoDecimals"
             @change="twoDecimalsChange"
           >
-          <label class="form-check-label" for="settings2decimals">
-            Afficher les nombres avec 2 décimales:
-          </label>
         </div>
         <div class="row d-flex mb-3">
           <div class="col-7 my-auto">
