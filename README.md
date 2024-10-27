@@ -4,11 +4,11 @@ Actuellement déployé sur [gerer-mon-foyer.fr](https://gerer-mon-foyer.fr)
 
 ## Description
 
-Ce projet propose un **outil gratuit** de gestion des dépenses communes et personnelles d'un foyer de manière **équitable**. Il permet à chaque membre du foyer de contribuer aux dépenses partagées en tenant compte de ses revenues et de ses charges personnelles, telles que les crédits étudiant ou les dépenses incompressibles (essence/assurances). Cette approche garantit une répartition juste et évite les déséquilibres financiers.
+Ce projet propose un **outil gratuit** de gestion des dépenses communes et personnelles d'un foyer de manière **équitable**. Il permet à chaque membre du foyer de contribuer aux dépenses partagées en tenant compte de ses revenues et de ses charges personnelles, telles que les crédits étudiant ou les dépenses incompressibles (essence/assurances), pour garantir une répartition juste et éviter les déséquilibres financiers.
 
 ### Fonctionnalités
 
-- **Répartition des dépenses** : Au travers de l’établissement d'un budget par habitant du foyer, la répartition des dépenses commune se fait en respectant les revenus et charges personnelles de chacun pour une répartition équitable.
+- **Répartition des dépenses** : Au travers de l’établissement d'un budget par habitant du foyer, la répartition des dépenses commune se fait en respectant les revenus et charges personnelles de chacun.
 - **Simulation de dépenses ponctuelles** : Un outil pour diviser de manière équitable le coût d'achats uniques.
 - **Suivi de l’historique** : Un historique pour suivre l’évolution de ses budgets et des dépenses au fil du temps.
 
