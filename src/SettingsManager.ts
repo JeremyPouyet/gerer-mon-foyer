@@ -2,11 +2,6 @@ import { reactive } from 'vue'
 import notificationManager from '@/notificationManager'
 import Texts from '@/texts'
 
-export enum DecimalSeparator {
-  Comma = ',',
-  Dot = '.'
-}
-
 // ISO 4217 currencies
 export enum Currency {
   Algeria = 'DZD',
@@ -44,7 +39,6 @@ export enum SortType {
 
 interface GlobalSettings {
   currency: Currency,
-  decimalSeparator: DecimalSeparator,
   sort: SortType,
   twoDecimals: boolean
 }
@@ -53,7 +47,6 @@ type GlobalSettingsKey = keyof GlobalSettings
 function defaultSettings() : GlobalSettings {
   return {
     currency: Currency.Euro,
-    decimalSeparator: DecimalSeparator.Comma,
     sort: SortType.Desc,
     twoDecimals: false
   }
@@ -105,9 +98,6 @@ const notifications: Notifications = {
       `Les montants affichés utiliseront le symbol monétaire ${currencyName}.`
     )
   },
-  decimalSeparator: (value: DecimalSeparator) => notificationManager.create(
-    `Séparateur décimal choisi: "${value}".`
-  ),
   sort: (value: SortType) => notificationManager.create(
     `Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[value].toLocaleLowerCase()}.`,
   ),

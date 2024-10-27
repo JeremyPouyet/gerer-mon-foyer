@@ -14,7 +14,6 @@ const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {
  * Formats a number as a currency amount based on user settings:
  * - 2 digits are always added to the decimal part when SettingsManager.settings.twoDecimals is true
  * - The integer part is separated in groups of 3 digits
- * - Set the user chose decimal separator
  *
  * @param amount - The amount to format
  * @returns The formatted currency amount as a string
@@ -25,8 +24,9 @@ export function sexyAmount(amount: number) {
     currencyDisplay: 'narrowSymbol',
     maximumFractionDigits: 2,
     minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
-    style: 'currency'
-  }).format(amount).replaceAll(/[,.]/g, SettingsManager.settings.decimalSeparator)
+    style: 'currency',
+    useGrouping: true
+  }).format(amount)
 }
 
 /**
@@ -46,7 +46,6 @@ export function sexyDate(strDate: string) {
  * Make a number pretty for it to be printed
  * - 2 digits are always added to the decimal part when SettingsManager.settings.twoDecimals is true
  * - The integer part is separated in groups of 3 digits
- * - Set the user chose decimal separator
  *
  * @param {Number} value Number to format
  * @returns {String} Formated number
@@ -56,5 +55,5 @@ export function sexyNumber(value: number) : string {
     maximumFractionDigits: 2,
     minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
     useGrouping: true
-  }).format(value).replaceAll(/[,.]/g, SettingsManager.settings.decimalSeparator)
+  }).format(value)
 }

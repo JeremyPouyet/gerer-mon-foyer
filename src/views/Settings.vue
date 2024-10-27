@@ -3,7 +3,7 @@ import '@/assets/secondary.scss'
 
 import db from '@/db'
 import historyManager from '@/historyManager'
-import SettingsManager, { Currency, DecimalSeparator, SortType } from '@/SettingsManager'
+import SettingsManager, { Currency, SortType } from '@/SettingsManager'
 import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import { Page } from '@/types'
@@ -101,13 +101,6 @@ function currencyChange(event: Event) : void {
   SettingsManager.update(
     'currency',
     (event.target as HTMLSelectElement).value as Currency
-  )
-}
-
-function decimalSeparatorChange(event: Event) : void {
-  SettingsManager.update(
-    'decimalSeparator',
-    (event.target as HTMLSelectElement).value as DecimalSeparator
   )
 }
 
@@ -211,18 +204,6 @@ const unsavedChangeText = computed(() => {
             <select class="form-select" @change="currencyChange">
               <option v-for="currency in Object.values(Currency)" :key="currency" :selected="SettingsManager.settings.currency === currency" :value="currency">
                 {{ SettingsManager.getCurrencySymbol(currency, true) }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="row d-flex mb-3">
-          <div class="col-7 my-auto">
-            Utiliser le séparateur décimales:
-          </div>
-          <div class="col">
-            <select class="form-select" @change="decimalSeparatorChange">
-              <option v-for="separator in Object.values(DecimalSeparator)" :key="separator" :selected="SettingsManager.settings.decimalSeparator === separator" :value="separator">
-                {{ separator }}
               </option>
             </select>
           </div>
