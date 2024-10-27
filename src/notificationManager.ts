@@ -24,7 +24,7 @@ class NotificationManager {
    * @param text - The content of the notification.
    * @param type - The type of notification (Success, Error).
    */
-  create(text: string, type: NotificationType) : void {
+  create(text: string, type: NotificationType = NotificationType.Success) : void {
     this.notifications.value.set(newId(), { text, type })
   }
 

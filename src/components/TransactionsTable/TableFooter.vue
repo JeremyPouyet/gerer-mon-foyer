@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { round } from '@/helpers'
+import { sexyNumber } from '@/formaters'
 
 defineProps<{ income?: number, totals: number[], withTds: boolean }>()
 </script>
@@ -11,10 +11,10 @@ defineProps<{ income?: number, totals: number[], withTds: boolean }>()
         Total
       </td>
       <td v-for="(total, index) in totals" :key="`total-${index}`" class="text-end">
-        {{ total }}
+        {{ sexyNumber(total) }}
       </td>
       <td v-if="income" class="text-end">
-        {{ round((totals.at(-1) ?? 0) / (income * 12) * 100) }}
+        {{ sexyNumber((totals.at(-1) ?? 0) / (income * 12) * 100) }}
       </td>
       <!-- When the table has no action, additional tds are required -->
       <td v-if="withTds" colspan="2" />

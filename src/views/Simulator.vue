@@ -7,6 +7,8 @@ import { limitedEvaluate, round, setHead } from '@/helpers'
 import { Page } from '@/types'
 import type User from '@/user'
 import userManager from '@/userManager'
+import SettingsManager from '@/SettingsManager'
+import { sexyAmount } from '@/formaters'
 
 setHead(Page.Simulator)
 
@@ -61,6 +63,9 @@ function computeValue(user: User) : number {
         <label for="expenseInput" class="form-label">Valeur ou formule</label>
 
         <div class="input-group mb-3">
+          <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+            {{ SettingsManager.getCurrencySymbol() }}
+          </span>
           <input
             id="expenseInput"
             v-model="expenseValue"
@@ -71,7 +76,9 @@ function computeValue(user: User) : number {
             placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
             data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           >
-          <span class="input-group-text">€</span>
+          <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+            {{ SettingsManager.getCurrencySymbol() }}
+          </span>
         </div>
       </div>
 
@@ -86,7 +93,7 @@ function computeValue(user: User) : number {
               <div class="fw-bold">
                 {{ user.name }}
               </div>
-              {{ computeValue(user) }}€
+              {{ sexyAmount(computeValue(user)) }}
             </div>
             <span class="badge bg-secondary rounded-pill">
               Ratio de {{ round(user.ratio * 100) }}%

@@ -3,9 +3,12 @@ import '@/assets/secondary.scss'
 
 import db from '@/db'
 import historyManager from '@/historyManager'
+import SettingsManager, { Currency, SortType } from '@/SettingsManager'
 import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import { Page } from '@/types'
+import Texts from '@/texts'
+import { computed } from 'vue'
 
 setHead(Page.Settings)
 
@@ -26,6 +29,7 @@ function saveFile() : void {
   link.download = generateDateString()
   link.click()
   URL.revokeObjectURL(link.href)
+  notificationManager.create('Données exportées avec succès')
 }
 
 function uploadFile() : void {
@@ -66,7 +70,7 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 
     db.setup()
     historyManager.activeDate = historyManager.history[0]?.date || ''
-    notificationManager.create('Données importées avec succès', NotificationType.Success)
+    notificationManager.create('Données importées avec succès')
   } catch (error) {
     console.error(error)
     notificationManager.create('Erreur lors de l’importation des données', NotificationType.Error)
@@ -78,49 +82,144 @@ function confirmDataDeletion() : void {
 
   if (confirmation) {
     db.empty()
-    notificationManager.create('Données supprimées avec succès', NotificationType.Success)
+    notificationManager.create('Données supprimées avec succès')
   }
 }
+
+function twoDecimalsChange(event: Event) : void {
+  SettingsManager.update('twoDecimals', (event.target as HTMLInputElement).checked)
+}
+
+function sortTypeChange(event: Event) : void {
+  SettingsManager.update(
+    'sort',
+    (event.target as HTMLSelectElement).value as SortType
+  )
+}
+
+function currencyChange(event: Event) : void {
+  SettingsManager.update(
+    'currency',
+    (event.target as HTMLSelectElement).value as Currency
+  )
+}
+
+const unsavedChangeText = computed(() => {
+  const count = db.unsavedChanges.value
+
+  if (count === 0) return 'Aucune nouvelle donnée à sauvegarder.'
+  if (count === 1) return '1 modification non sauvegardée.'
+  return `${count} modifications non sauvegardées.`
+})
 </script>
 
 <template>
-  <div class="container text-center mt-2">
-    <div class="alert alert-warning d-flex align-items-center justify-content-center mb-5">
-      <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
-      <p class="mb-0 ms-2">
-        <span style="font-size: 0.9rem;font-weight: bold;">
-          Vos données sont uniquement sauvegardées dans votre navigateur
-        </span>.
-        Pensez donc à exporter vos données si vous comptez mettre à jour votre situation régulièrement !
-      </p>
-    </div>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-sm-12 col-md-5 mt-2">
+        <h2 class="mb-4">
+          Mes données
+        </h2>
+        <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
+          <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
+          <p class="mb-0 ms-2">
+            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
+          </p>
+        </div>
 
-    <p v-if="db.unsavedChanges.value === 0">
-      Toutes vos données ont été sauvegardées, mais vous pouvez le refaire quand même :
-    </p>
-    <p v-else-if="db.unsavedChanges.value === 1">
-      {{ db.unsavedChanges }} modification non sauvegardée :
-    </p>
-    <p v-else>
-      {{ db.unsavedChanges }} modifications non sauvegardées :
-    </p>
+        <p class="fw-bold d-flex">
+          <img src="@/assets/icons/diskette.png" class="icon-container-small my-auto" alt="">
+          <span class="ms-1">Sauvegarde:</span>
+        </p>
+        <div class="row d-flex mb-3">
+          <div class="col">
+            <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
+              Importer une sauvegarde
+            </button>
+            <small class="text-muted d-block">Cela remplacera vos données actuelles.</small>
+          </div>
+          <div class="col my-auto">
+            <div class="text-end">
+              <button type="button" class="text-black btn btn-secondary btn-sm" @click="saveFile">
+                Exporter une sauvegarde
+              </button>
+              <small class="text-muted d-block">{{ unsavedChangeText }}</small>
+            </div>
+          </div>
+        </div>
 
-    <button type="button" class="text-black btn btn-secondary btn-sm mb-3" @click="saveFile">
-      Exporter mes données
-    </button>
+        <p class="fw-bold d-flex">
+          <img src="@/assets/icons/warning.png" class="icon-container-small my-auto" alt="Attention">
+          <span class="ms-1">Zone dangereuse:</span>
+        </p>
+        <div>
+          <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
+            Supprimer toutes mes données
+          </button>
+          <small class="text-muted d-block">
+            Cette action est définitive.
+            <br>
+            Pensez à d'abord faire une sauvegarde.</small>
+        </div>
+      </div>
 
-    <div class="mb-4">
-      <p>Ou sinon vous pouvez aussi :</p>
-      <p>
-        <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
-          Importer une sauvegarde
-        </button>
-      </p>
-      <p>
-        <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
-          Supprimer toutes mes données
-        </button>
-      </p>
+      <div class="col-md-1 d-md-flex mt-2">
+        <!-- Vertical Rule for medium and larger screens -->
+        <div class="vr my-auto mx-auto d-none d-md-block" style="height: 400px;" />
+        <!-- Horizontal Rule for small screens -->
+        <hr class="d-md-none w-100 my-4">
+      </div>
+
+      <div class="col-sm-12 col-md-5 mt-2">
+        <h2 class="mb-4">
+          Affichage
+        </h2>
+        <div class="form-check form-switch form-check-reverse mb-4">
+          <label class="form-check-label" for="settings2decimals">
+            Afficher les nombres avec 2 décimales:
+          </label>
+          <input
+            id="setting2decimals"
+            class="form-check-input"
+            type="checkbox"
+            :checked="SettingsManager.settings.twoDecimals"
+            @change="twoDecimalsChange"
+          >
+        </div>
+        <div class="row d-flex mb-3">
+          <div class="col-7 my-auto">
+            Trier les dépenses et revenus par ordre:
+          </div>
+          <div class="col">
+            <select class="form-select" @change="sortTypeChange">
+              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="SettingsManager.settings.sort === sortType" :value="sortType">
+                {{ Texts.sortTypes[sortType] }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row d-flex mb-3">
+          <div class="col-7 my-auto">
+            Utiliser le symbol monétaire:
+          </div>
+          <div class="col">
+            <select class="form-select" @change="currencyChange">
+              <option v-for="currency in Object.values(Currency)" :key="currency" :selected="SettingsManager.settings.currency === currency" :value="currency">
+                {{ SettingsManager.getCurrencySymbol(currency, true) }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+div.form-check-reverse {
+  text-align: left !important;
+}
+input.form-check-input {
+  cursor: pointer;
+}
+</style>

@@ -3,6 +3,7 @@ import type { ID, Transaction, TransactionFunctional, TransactionList, Transacti
 import { Frequency, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
+import SettingsManager, { SortType } from './SettingsManager'
 
 export enum AccountType {
   Common = 'common',
@@ -28,6 +29,14 @@ interface AccountSettings {
   }
 }
 
+// List of possible transactions sort
+const sorters = {
+  [SortType.Abc]: (a: Transaction, b: Transaction) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+  [SortType.Asc]: (a: Transaction, b: Transaction) => valueAs(a) - valueAs(b),
+  [SortType.Desc]: (a: Transaction, b: Transaction) => valueAs(b) - valueAs(a),
+  [SortType.Zyx]: (a: Transaction, b: Transaction) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
+}
+
 /**
  * Constructs the default account settings based on provided partial settings.
  *
@@ -47,7 +56,7 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
   const trimmedName = transaction.name.trim()
 
   if (!trimmedName) {
-    notificationManager.create(`"${transaction.name}" n’est pas un nom valide`, NotificationType.Error)
+    notificationManager.create(`"${transaction.name}" n’est pas un nom valide.`, NotificationType.Error)
     return false
   }
   transaction.name = trimmedName
@@ -55,12 +64,12 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
 }
 
 /**
- * Normalize a transaction value by triming it, removing multiple consequent spaces and replacing comas with dots
+ * Normalizes a transaction value by triming it, removing spaces and replacing comas with dots
  *
  * @param {Transaction} transaction The transaction for whom the value should be normalized
  */
 function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Transaction, 'frequency'>>) : boolean {
-  const value = transaction.value.trim().replaceAll(',', '.').replaceAll(/ +/g, ' ')
+  const value = transaction.value.trim().replaceAll(',', '.').replaceAll(' ', '')
 
   try {
     const computedValue = valueAs({ frequency: transaction.frequency || Frequency.monthly, value })
@@ -79,7 +88,6 @@ export default class Account {
   readonly personalExpenses: TransactionRecord
 
   note?: string
-  readonly onTransactionChange?: () => void
   readonly type: AccountType
   readonly settings: AccountSettings
 
@@ -152,7 +160,7 @@ export default class Account {
     return {
       sum: transactionRecord.sum,
       values: Object.values(transactionRecord.values)
-        .sort((a: Transaction, b: Transaction) => valueAs(b) - valueAs(a))
+        .sort(sorters[SettingsManager.settings.sort])
     }
   }
 
