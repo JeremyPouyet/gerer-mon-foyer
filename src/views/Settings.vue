@@ -8,6 +8,7 @@ import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import { Page } from '@/types'
 import Texts from '@/texts'
+import { computed } from 'vue'
 
 setHead(Page.Settings)
 
@@ -28,6 +29,7 @@ function saveFile() : void {
   link.download = generateDateString()
   link.click()
   URL.revokeObjectURL(link.href)
+  notificationManager.create('Données exportées avec succès', NotificationType.Success)
 }
 
 function uploadFile() : void {
@@ -122,6 +124,14 @@ function decimalSeparatorChange(event: Event) : void {
     NotificationType.Success
   )
 }
+
+const unsavedChangeText = computed(() => {
+  const count = db.unsavedChanges.value
+
+  if (count === 0) return 'Aucune nouvelle donnée à sauvegarder.'
+  if (count === 1) return '1 modification non sauvegardée.'
+  return `${count} modifications non sauvegardées.`
+})
 </script>
 
 <template>
@@ -135,36 +145,40 @@ function decimalSeparatorChange(event: Event) : void {
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
           <p class="mb-0 ms-2">
-            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez donc à les exporter régulièrement !
+            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
           </p>
         </div>
 
-        <p v-if="db.unsavedChanges.value === 0">
-          Toutes vos données ont été sauvegardées, mais vous pouvez le refaire quand même :
+        <p class="fw-bold">
+          Sauvegarde:
         </p>
-        <p v-else-if="db.unsavedChanges.value === 1">
-          {{ db.unsavedChanges }} modification non sauvegardée :
-        </p>
-        <p v-else>
-          {{ db.unsavedChanges }} modifications non sauvegardées :
-        </p>
-
-        <button type="button" class="text-black btn btn-secondary btn-sm mb-3" @click="saveFile">
-          Exporter mes données
-        </button>
-
-        <div>
-          <p>Vous pouvez aussi :</p>
-          <p>
+        <div class="row d-flex mb-3">
+          <div class="col">
             <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
               Importer une sauvegarde
             </button>
-          </p>
-          <p>
-            <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
-              Supprimer toutes mes données
-            </button>
-          </p>
+          </div>
+          <div class="col my-auto">
+            <div class="text-end">
+              <button type="button" class="text-black btn btn-secondary btn-sm" @click="saveFile">
+                Exporter une sauvegarde
+              </button>
+              <small class="text-muted d-block">{{ unsavedChangeText }}</small>
+            </div>
+          </div>
+        </div>
+
+        <p class="fw-bold">
+          Zone dangereuse:
+        </p>
+        <div>
+          <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
+            Supprimer toutes mes données
+          </button>
+          <small class="text-muted d-block">
+            Cette action est définitive.
+            <br>
+            Pensez à d'abord faire une sauvegarde.</small>
         </div>
       </div>
 
@@ -215,7 +229,7 @@ function decimalSeparatorChange(event: Event) : void {
             </select>
           </div>
         </div>
-        <div class="row d-flex">
+        <div class="row d-flex mb-3">
           <div class="col-7 my-auto">
             Utiliser le séparateur décimales:
           </div>
