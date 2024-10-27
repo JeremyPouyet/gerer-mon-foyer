@@ -174,7 +174,7 @@ const unsavedChangeText = computed(() => {
         <h2 class="mb-4">
           Affichage
         </h2>
-        <div class="form-check form-switch form-check-reverse mb-3">
+        <div class="form-check form-switch form-check-reverse mb-4">
           <label class="form-check-label" for="settings2decimals">
             Afficher les nombres avec 2 décimales:
           </label>
