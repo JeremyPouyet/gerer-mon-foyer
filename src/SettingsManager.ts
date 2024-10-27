@@ -44,6 +44,21 @@ interface GlobalSettings {
 }
 type GlobalSettingsKey = keyof GlobalSettings
 
+type Notifications = {
+  [K in GlobalSettingsKey]: (value: GlobalSettings[K]) => void
+}
+const notifications: Notifications = {
+  currency: (value: Currency) => notificationManager.create(
+    Texts.notifications.settings.currency(settingsManager.getCurrencySymbol(value, true))
+  ),
+  sort: (value: SortType) => notificationManager.create(
+    Texts.notifications.settings.sort(Texts.sortTypes[value].toLocaleLowerCase()),
+  ),
+  twoDecimals: (value: boolean) => notificationManager.create(
+    Texts.notifications.settings.twoDecimals[value ? 'true' : 'false']
+  )
+}
+
 function defaultSettings() : GlobalSettings {
   return {
     currency: Currency.Euro,
@@ -80,32 +95,16 @@ class SettingsManager {
     Object.assign(this.settings, settings)
   }
 
+  /**
+   * Updates a setting and generates a notification
+   *
+   * @param {String} setting Name of the setting to update
+   * @param {Any} value New setting value
+   */
   update<K extends GlobalSettingsKey>(setting: K, value: GlobalSettings[K]): void {
     this.settings[setting] = value
 
     notifications[setting](value)
-  }
-}
-
-type Notifications = {
-  [K in GlobalSettingsKey]: (value: GlobalSettings[K]) => void
-}
-const notifications: Notifications = {
-  currency: (value: Currency) => {
-    const currencyName = settingsManager.getCurrencySymbol(value, true)
-
-    notificationManager.create(
-      `Les montants affichés utiliseront le symbol monétaire ${currencyName}.`
-    )
-  },
-  sort: (value: SortType) => notificationManager.create(
-    `Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[value].toLocaleLowerCase()}.`,
-  ),
-  twoDecimals: (value: boolean) => {
-    if (value)
-      notificationManager.create('Les nombres seront affichés avec 2 décimales')
-    else
-      notificationManager.create('Les nombres seront simplement arrondis')
   }
 }
 

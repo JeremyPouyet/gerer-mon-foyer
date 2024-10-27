@@ -46,6 +46,16 @@ export default {
       title: 'Simulateur de dépenses ponctuelles'
     }
   },
+  notifications: {
+    settings: {
+      currency: (txt: string) => `Les montants affichés utiliseront le symbol monétaire ${txt}.`,
+      sort: (txt: string) => `Les dépenses et revenus seront triés dans l’ordre ${txt}.`,
+      twoDecimals: {
+        false: 'Les nombres seront simplement arrondis.',
+        true: 'Les nombres seront affichés avec 2 décimales.'
+      }
+    }
+  },
   sortTypes: {
     [SortType.Abc]: 'Alphabétique',
     [SortType.Asc]: 'Croissant',
