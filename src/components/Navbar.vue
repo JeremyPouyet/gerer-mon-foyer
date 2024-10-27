@@ -6,7 +6,6 @@ import distributionIcon from '@/assets/icons/distribution.png'
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
-import { NotificationType } from '@/notificationManager'
 import type { NotificationManager } from '@/notificationManager'
 import type { HistoryManager } from '@/historyManager'
 import type { UserManager } from '@/userManager'
@@ -46,7 +45,7 @@ async function historicise() {
     await loadManagers()
 
   historyManager.create({ account: db.account, users: userManager.users })
-  notificationManager.create('Répartition historisé !', NotificationType.Success)
+  notificationManager.create('Répartition historisé !')
 }
 </script>
 

@@ -29,7 +29,7 @@ function saveFile() : void {
   link.download = generateDateString()
   link.click()
   URL.revokeObjectURL(link.href)
-  notificationManager.create('Données exportées avec succès', NotificationType.Success)
+  notificationManager.create('Données exportées avec succès')
 }
 
 function uploadFile() : void {
@@ -70,7 +70,7 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 
     db.setup()
     historyManager.activeDate = historyManager.history[0]?.date || ''
-    notificationManager.create('Données importées avec succès', NotificationType.Success)
+    notificationManager.create('Données importées avec succès')
   } catch (error) {
     console.error(error)
     notificationManager.create('Erreur lors de l’importation des données', NotificationType.Error)
@@ -82,46 +82,32 @@ function confirmDataDeletion() : void {
 
   if (confirmation) {
     db.empty()
-    notificationManager.create('Données supprimées avec succès', NotificationType.Success)
+    notificationManager.create('Données supprimées avec succès')
   }
 }
 
 function twoDecimalsChange(event: Event) : void {
-  SettingsManager.settings.twoDecimals = (event.target as HTMLInputElement).checked
-  if (SettingsManager.settings.twoDecimals)
-    notificationManager.create('Les nombres seront affichés avec 2 décimales', NotificationType.Success)
-  else
-    notificationManager.create('Les nombres seront simplement arrondis', NotificationType.Success)
+  SettingsManager.update('twoDecimals', (event.target as HTMLInputElement).checked)
 }
 
 function sortTypeChange(event: Event) : void {
-  const selectedValue = (event.target as HTMLSelectElement).value as SortType
-
-  SettingsManager.settings.sort = selectedValue
-  notificationManager.create(
-    `Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[selectedValue].toLocaleLowerCase()}.`,
-    NotificationType.Success
+  SettingsManager.update(
+    'sort',
+    (event.target as HTMLSelectElement).value as SortType
   )
 }
 
 function currencyChange(event: Event) : void {
-  const selectedValue = (event.target as HTMLSelectElement).value as Currency
-  const currencyName = SettingsManager.getCurrencySymbol(selectedValue, true)
-
-  SettingsManager.settings.currency = selectedValue
-  notificationManager.create(
-    `Les montants affichés utiliseront le symbol monétaire ${currencyName}.`,
-    NotificationType.Success
+  SettingsManager.update(
+    'currency',
+    (event.target as HTMLSelectElement).value as Currency
   )
 }
 
 function decimalSeparatorChange(event: Event) : void {
-  const selectedValue = (event.target as HTMLSelectElement).value as DecimalSeparator
-
-  SettingsManager.settings.decimalSeparator = selectedValue
-  notificationManager.create(
-    `Séparateur décimal choisi: "${selectedValue}".`,
-    NotificationType.Success
+  SettingsManager.update(
+    'decimalSeparator',
+    (event.target as HTMLSelectElement).value as DecimalSeparator
   )
 }
 

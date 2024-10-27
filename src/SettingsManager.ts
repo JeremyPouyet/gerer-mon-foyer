@@ -1,4 +1,6 @@
 import { reactive } from 'vue'
+import notificationManager from '@/notificationManager'
+import Texts from '@/texts'
 
 export enum DecimalSeparator {
   Comma = ',',
@@ -46,6 +48,7 @@ interface GlobalSettings {
   sort: SortType,
   twoDecimals: boolean
 }
+type GlobalSettingsKey = keyof GlobalSettings
 
 function defaultSettings() : GlobalSettings {
   return {
@@ -83,6 +86,38 @@ class SettingsManager {
 
     Object.assign(this.settings, settings)
   }
+
+  update<K extends GlobalSettingsKey>(setting: K, value: GlobalSettings[K]): void {
+    this.settings[setting] = value
+
+    notifications[setting](value)
+  }
 }
 
-export default new SettingsManager()
+type Notifications = {
+  [K in GlobalSettingsKey]: (value: GlobalSettings[K]) => void
+}
+const notifications: Notifications = {
+  currency: (value: Currency) => {
+    const currencyName = settingsManager.getCurrencySymbol(value, true)
+
+    notificationManager.create(
+      `Les montants affichés utiliseront le symbol monétaire ${currencyName}.`
+    )
+  },
+  decimalSeparator: (value: DecimalSeparator) => notificationManager.create(
+    `Séparateur décimal choisi: "${value}".`
+  ),
+  sort: (value: SortType) => notificationManager.create(
+    `Les dépenses et revenus seront triés dans l’ordre ${Texts.sortTypes[value].toLocaleLowerCase()}.`,
+  ),
+  twoDecimals: (value: boolean) => {
+    if (value)
+      notificationManager.create('Les nombres seront affichés avec 2 décimales')
+    else
+      notificationManager.create('Les nombres seront simplement arrondis')
+  }
+}
+
+const settingsManager = new SettingsManager()
+export default settingsManager
