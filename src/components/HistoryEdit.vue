@@ -45,10 +45,32 @@ onMounted(() => {
   historyManager.addEventListener('update', updateHistory)
   onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
 })
+
+const isSticky = ref(false)
+const stickyTopOffset = ref<number>(0)
+
+function handleScroll() {
+  // When the user scrolls past the initial position of the sticky element,
+  // isSticky becomes true
+  isSticky.value = window.scrollY >= stickyTopOffset.value
+}
+
+onMounted(() => {
+  const stickyElement = document.querySelector('.sticky-top')
+  if (stickyElement) {
+    // Save the initial position of the sticky element
+    stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
+
+    // Listen to the scroll event
+    window.addEventListener('scroll', handleScroll)
+  }
+
+  onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+})
 </script>
 
 <template>
-  <div class="row char-width-30">
+  <div :class="['row char-width-30 sticky-top', { 'sticky-offset': isSticky }]">
     <div class="row">
       <h3>Dates</h3>
       <hr>

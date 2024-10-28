@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import UserNameEdit from '@/components/UserNameEdit.vue'
+import UserLine from './UserLine.vue'
 
-import { ref } from 'vue'
-import User from '@/user'
+import { onMounted, onUnmounted, ref } from 'vue'
 import userManager from '@/userManager'
 
 const username = ref<string>('')
@@ -12,31 +11,37 @@ function userCreate() : void {
   username.value = ''
 }
 
-function userDelete(user: User) : void {
-  const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
+const isSticky = ref(false)
+const stickyTopOffset = ref<number>(0)
 
-  if (confirmation) userManager.delete(user)
+function handleScroll() {
+  // When the user scrolls past the initial position of the sticky element,
+  // isSticky becomes true
+  isSticky.value = window.scrollY >= stickyTopOffset.value
 }
+
+onMounted(() => {
+  const stickyElement = document.querySelector('.sticky-top')
+  if (stickyElement) {
+    // Save the initial position of the sticky element
+    stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
+
+    // Listen to the scroll event
+    window.addEventListener('scroll', handleScroll)
+  }
+
+  onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+})
 </script>
 
 <template>
-  <div class="row char-width-30">
+  <div :class="['row char-width-30 sticky-top', { 'sticky-offset': isSticky }]">
     <div class="row">
       <h3>Habitants</h3>
       <hr>
       <ul class="item-list p-0">
         <li v-for="user in userManager.users" :key="user.id" class="item py-2">
-          <div class="d-flex justify-content-between container-fluid align-items-center">
-            <UserNameEdit :user="user" />
-            <img
-              v-tooltip="{ disposeOnClick: true }"
-              src="@/assets/icons/cross.png"
-              :alt="`Supprimer ${user.name} des habitants`"
-              data-bs-title="Supprimer des habitants"
-              class="icon-container-small icon-hoverable"
-              @click="() => userDelete(user)"
-            >
-          </div>
+          <UserLine :user="user" />
         </li>
       </ul>
       <div class="input-group">
