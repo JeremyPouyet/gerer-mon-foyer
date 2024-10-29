@@ -1,3 +1,10 @@
+export enum SortType {
+  Abc = 'abc',
+  Asc = 'asc',
+  Desc = 'desc',
+  Zyx = 'zyx'
+}
+
 /**** Frequencies ****/
 
 export enum Frequency {
@@ -16,12 +23,12 @@ export type ID = `${string}-${string}-${string}-${string}-${string}`
 /**** Pages ****/
 
 export enum Page {
-  Budget = 'Budget',
-  History = 'History',
-  Home = 'Home',
-  NotFound = 'NotFound',
-  Settings = 'Settings',
-  Simulator = 'Simulator'
+  Budget = '/budget',
+  History = '/history',
+  Home = '/',
+  NotFound = '/not-found',
+  Settings = '/settings',
+  Simulator = '/simulator'
 }
 
 /**** Transactions ****/

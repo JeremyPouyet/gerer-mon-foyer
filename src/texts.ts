@@ -1,5 +1,4 @@
-import { Frequency, Page, TransactionType } from '@/types'
-import { SortType } from './SettingsManager'
+import { Frequency, Page, SortType, TransactionType } from '@/types'
 
 export default {
   frequencies: {

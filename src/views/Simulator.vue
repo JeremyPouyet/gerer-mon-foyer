@@ -3,14 +3,11 @@ import '@/assets/secondary.scss'
 
 import { onMounted, ref, watch } from 'vue'
 
-import { limitedEvaluate, round, setHead } from '@/helpers'
-import { Page } from '@/types'
+import { limitedEvaluate, round } from '@/helpers'
 import type User from '@/user'
 import userManager from '@/userManager'
 import SettingsManager from '@/SettingsManager'
 import { sexyAmount } from '@/formaters'
-
-setHead(Page.Simulator)
 
 const expenseValue = ref<string>('')
 

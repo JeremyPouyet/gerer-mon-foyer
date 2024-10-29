@@ -7,11 +7,8 @@ import BudgetShow from '@/components/BudgetShow.vue'
 
 import { computed } from 'vue'
 import db from '@/db'
+import { useFinanceCalculations } from '@/helpers'
 import userManager from '@/userManager'
-import { setHead, useFinanceCalculations } from '@/helpers'
-import { Page } from '@/types'
-
-setHead(Page.Budget)
 
 const account = computed(() => db.account)
 const users = computed(() => userManager.users)

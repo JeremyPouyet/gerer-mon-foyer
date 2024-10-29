@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
-
-import { setHead } from '@/helpers'
-import { Page } from '@/types'
-
-setHead(Page.NotFound)
 </script>
 
 <template>

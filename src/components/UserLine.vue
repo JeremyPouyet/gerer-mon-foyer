@@ -2,7 +2,7 @@
 import { nextTick, ref } from 'vue'
 
 import User from '@/user'
-import userManager from '@/userManager';
+import userManager from '@/userManager'
 
 const props = defineProps<{ user: User }>()
 

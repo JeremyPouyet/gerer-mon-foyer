@@ -6,12 +6,10 @@ import HistoryEdit from '@/components/HistoryEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
 import { computed, onUnmounted, ref, watch } from 'vue'
-import DBSnapshot from '@/dbSnapshot'
-import historyManager, { type Sample } from '@/historyManager'
-import { setHead, useFinanceCalculations } from '@/helpers'
-import { Page } from '@/types'
 
-setHead(Page.History)
+import DBSnapshot from '@/dbSnapshot'
+import { useFinanceCalculations } from '@/helpers'
+import historyManager, { type Sample } from '@/historyManager'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null
