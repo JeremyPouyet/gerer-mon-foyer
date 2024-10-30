@@ -1,37 +1,18 @@
 <script setup lang="ts">
 import UserLine from './UserLine.vue'
 
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
+
+import { useSticky } from '@/helpers'
 import userManager from '@/userManager'
 
 const username = ref<string>('')
+const { isSticky } = useSticky()
 
 function userCreate() : void {
   userManager.create(username.value)
   username.value = ''
 }
-
-const isSticky = ref(false)
-const stickyTopOffset = ref<number>(0)
-
-function handleScroll() {
-  // When the user scrolls past the initial position of the sticky element,
-  // isSticky becomes true
-  isSticky.value = window.scrollY >= stickyTopOffset.value
-}
-
-onMounted(() => {
-  const stickyElement = document.querySelector('.sticky-top')
-  if (stickyElement) {
-    // Save the initial position of the sticky element
-    stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
-
-    // Listen to the scroll event
-    window.addEventListener('scroll', handleScroll)
-  }
-
-  onUnmounted(() => window.removeEventListener('scroll', handleScroll))
-})
 </script>
 
 <template>

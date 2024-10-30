@@ -2,15 +2,17 @@
 import Note from './Note.vue'
 import NoteIcon from './NoteIcon.vue'
 
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-import historyManager, { type Sample } from '@/historyManager'
 import { sexyDate } from '@/formaters'
+import historyManager, { type Sample } from '@/historyManager'
+import { useSticky } from '@/helpers'
 
 const emit = defineEmits(['switchSample'])
 
 const activeDate = ref<string | null | undefined>(null)
 const history = ref<Sample[]>(historyManager.history)
+const { isSticky } = useSticky()
 
 onMounted(() => {
   activeDate.value = sessionStorage.getItem('currentHistoryDate')
@@ -35,38 +37,6 @@ function removeSample(date: string) : void {
   activeDate.value = historyManager.activeDate
   emit('switchSample')
 }
-
-onMounted(() => {
-  const updateHistory = (event: Event) => {
-    const customEvent = event as CustomEvent
-    history.value = [...customEvent.detail]
-  }
-
-  historyManager.addEventListener('update', updateHistory)
-  onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
-})
-
-const isSticky = ref(false)
-const stickyTopOffset = ref<number>(0)
-
-function handleScroll() {
-  // When the user scrolls past the initial position of the sticky element,
-  // isSticky becomes true
-  isSticky.value = window.scrollY >= stickyTopOffset.value
-}
-
-onMounted(() => {
-  const stickyElement = document.querySelector('.sticky-top')
-  if (stickyElement) {
-    // Save the initial position of the sticky element
-    stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
-
-    // Listen to the scroll event
-    window.addEventListener('scroll', handleScroll)
-  }
-
-  onUnmounted(() => window.removeEventListener('scroll', handleScroll))
-})
 </script>
 
 <template>
