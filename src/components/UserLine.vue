@@ -62,6 +62,7 @@ function userDelete(user: User) : void {
     </span>
     <div>
       <img
+        v-if="isEditing === false"
         v-tooltip="{ disposeOnClick: true }"
         :alt="`Éditer le prénom ${user.name}`"
         data-bs-title="Éditer le prénom"
