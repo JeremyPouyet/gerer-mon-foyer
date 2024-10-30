@@ -1,4 +1,4 @@
-import { Frequency, Page, SortType, TransactionType } from '@/types'
+import { Frequency, Path, SortType, TransactionType } from '@/types'
 
 export default {
   frequencies: {
@@ -8,37 +8,37 @@ export default {
     [Frequency.yearly]: 'Année',
   },
   heads: {
-    [Page.Budget]: {
+    [Path.Budget]: {
       meta: {
         description: 'Définissez votre budget commun en renseignant les revenus et dépenses contraintes de tous les membres du foyer.'
       },
       title: 'Gérer mon budget'
     },
-    [Page.History]: {
+    [Path.History]: {
       meta: {
         description: 'Visualisez l’évolution de votre budget et de vos dépenses.'
       },
       title: 'Historique de mon budget'
     },
-    [Page.Home]: {
+    [Path.Home]: {
       meta: {
         description: 'Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer, tout en tenant compte de vos charges personnelles.'
       },
       title: 'Comment gérer le budget de mon foyer ?'
     },
-    [Page.NotFound]: {
+    [Path.NotFound]: {
       meta: {
         description: '404 - Cette page n’existe pas.'
       },
       title: 'Oulà, cette page n’existe pas !'
     },
-    [Page.Settings]: {
+    [Path.Settings]: {
       meta: {
         description: 'Gérez vos paramètres: exportez/importez/supprimez vos données.'
       },
       title: 'Paramètres'
     },
-    [Page.Simulator]: {
+    [Path.Simulator]: {
       meta: {
         description: 'Répartissez le montant de dépenses ponctuelles entre les habitants d’un foyer en fonction de leurs revenus. Entrez une valeur ou une formule et découvrez le montant que chacun devra payer.'
       },

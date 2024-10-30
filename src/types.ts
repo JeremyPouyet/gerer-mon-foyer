@@ -20,9 +20,10 @@ export const frequencies = Object.freeze(Object.values(Frequency))
 
 export type ID = `${string}-${string}-${string}-${string}-${string}`
 
-/**** Pages ****/
+/**** Paths ****/
 
-export enum Page {
+// When a Path is added, its title should be added in Texts too
+export enum Path {
   Budget = '/budget',
   History = '/history',
   Home = '/',
