@@ -16,7 +16,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "mathjs": "^12.4.2",
-    "vite-ssg": "^0.23.8",
+    "vite-ssg": "^0.24.0",
     "vue": "^3.4.21",
     "vue-router": "^4.4.5"
   },

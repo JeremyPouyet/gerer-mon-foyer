@@ -2,15 +2,17 @@
 import Note from './Note.vue'
 import NoteIcon from './NoteIcon.vue'
 
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-import historyManager, { type Sample } from '@/historyManager'
 import { sexyDate } from '@/formaters'
+import historyManager, { type Sample } from '@/historyManager'
+import { useSticky } from '@/helpers'
 
 const emit = defineEmits(['switchSample'])
 
 const activeDate = ref<string | null | undefined>(null)
 const history = ref<Sample[]>(historyManager.history)
+const { isSticky } = useSticky()
 
 onMounted(() => {
   activeDate.value = sessionStorage.getItem('currentHistoryDate')
@@ -35,20 +37,10 @@ function removeSample(date: string) : void {
   activeDate.value = historyManager.activeDate
   emit('switchSample')
 }
-
-onMounted(() => {
-  const updateHistory = (event: Event) => {
-    const customEvent = event as CustomEvent
-    history.value = [...customEvent.detail]
-  }
-
-  historyManager.addEventListener('update', updateHistory)
-  onUnmounted(() => historyManager.removeEventListener('update', updateHistory))
-})
 </script>
 
 <template>
-  <div class="row char-width-30">
+  <div :class="['row char-width-30 sticky-top', { 'sticky-offset': isSticky }]">
     <div class="row">
       <h3>Dates</h3>
       <hr>

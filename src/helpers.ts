@@ -1,12 +1,11 @@
 import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
-import { useHead } from '@unhead/vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 import { frequencies, Frequency, TransactionType } from './types'
-import type { ID, Page, Transaction } from './types'
+import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 import type User from './user'
-import Texts from '@/texts'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -15,23 +14,6 @@ export { limitedEvaluate }
 
 export function round(value: number) : number {
   return math.round(value, 2)
-}
-
-/**
- * Set page headers (meta description and page title)
- *
- * @param {String} key Page name
- */
-export function setHead(key: Page) {
-  const pageHeader = Texts.heads[key]
-
-  useHead({
-    meta: [{
-      content: pageHeader.meta.description,
-      name: 'description'
-    }],
-    title: pageHeader.title
-  })
 }
 
 type Multipliers = {
@@ -61,6 +43,42 @@ export function valueAs(transaction: Pick<Transaction, 'value' | 'frequency'>, a
 export function newId() : ID {
   // only available with https
   return crypto.randomUUID()
+}
+
+/**
+ * A composable function to manage a sticky element that becomes fixed after scrolling past its initial position.
+ *
+ * This function sets up scroll listeners and calculates the `isSticky` state based on
+ * the scroll position relative to the element's top offset.
+ */
+export function useSticky() {
+  const isSticky = ref(false)
+  const stickyTopOffset = ref<number>(0)
+
+  function handleScroll() {
+    isSticky.value = window.scrollY >= stickyTopOffset.value
+  }
+
+  onMounted(() => {
+    const stickyElement = document.querySelector('.sticky-top')
+
+    if (stickyElement) {
+      // Save the initial position of the sticky element
+      stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
+
+      // Listen to the scroll event
+      window.addEventListener('scroll', handleScroll)
+    }
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
+
+  return {
+    isSticky,
+    stickyTopOffset
+  }
 }
 
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {

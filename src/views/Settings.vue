@@ -3,14 +3,11 @@ import '@/assets/secondary.scss'
 
 import db from '@/db'
 import historyManager from '@/historyManager'
-import SettingsManager, { Currency, SortType } from '@/SettingsManager'
-import { setHead } from '@/helpers'
 import notificationManager, { NotificationType } from '@/notificationManager'
-import { Page } from '@/types'
+import SettingsManager, { Currency } from '@/SettingsManager'
+import { SortType } from '@/types'
 import Texts from '@/texts'
 import { computed } from 'vue'
-
-setHead(Page.Settings)
 
 function generateDateString() : string {
   const now = new Date()

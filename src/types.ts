@@ -1,3 +1,10 @@
+export enum SortType {
+  Abc = 'abc',
+  Asc = 'asc',
+  Desc = 'desc',
+  Zyx = 'zyx'
+}
+
 /**** Frequencies ****/
 
 export enum Frequency {
@@ -13,15 +20,16 @@ export const frequencies = Object.freeze(Object.values(Frequency))
 
 export type ID = `${string}-${string}-${string}-${string}-${string}`
 
-/**** Pages ****/
+/**** Paths ****/
 
-export enum Page {
-  Budget = 'Budget',
-  History = 'History',
-  Home = 'Home',
-  NotFound = 'NotFound',
-  Settings = 'Settings',
-  Simulator = 'Simulator'
+// When a Path is added, its title should be added in Texts too
+export enum Path {
+  Budget = '/budget',
+  History = '/history',
+  Home = '/',
+  NotFound = '/not-found',
+  Settings = '/settings',
+  Simulator = '/simulator'
 }
 
 /**** Transactions ****/

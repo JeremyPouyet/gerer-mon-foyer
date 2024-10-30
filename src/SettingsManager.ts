@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import notificationManager from '@/notificationManager'
 import Texts from '@/texts'
+import { SortType } from './types'
 
 // ISO 4217 currencies
 export enum Currency {
@@ -29,13 +30,6 @@ export const CurrencyToLocale: Record<Currency, string> = Object.freeze({
   [Currency.Tunisia]: 'fr-TN',
   [Currency.WestAfricanCFAFranc]: 'fr-SN'
 })
-
-export enum SortType {
-  Abc = 'abc',
-  Asc = 'asc',
-  Desc = 'desc',
-  Zyx = 'zyx'
-}
 
 interface GlobalSettings {
   currency: Currency,

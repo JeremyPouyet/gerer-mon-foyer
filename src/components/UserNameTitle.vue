@@ -22,7 +22,8 @@ const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !
 <template>
   <div class="d-flex justify-content-between">
     <div>
-      <h3>
+      <!-- Set an id to be used as an inner page anchor -->
+      <h3 :id="name">
         {{ name }}
         <NoteIcon :text="props.account.note" :unpaded="true" />
         <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
