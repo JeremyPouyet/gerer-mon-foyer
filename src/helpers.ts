@@ -1,4 +1,4 @@
-import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
+import { create, divideDependencies, evaluateDependencies, roundDependencies, subtractDependencies } from 'mathjs'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 import { Frequency, TransactionType } from './types'
@@ -6,14 +6,10 @@ import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
 
-const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
+const math = create({ divideDependencies, evaluateDependencies, roundDependencies, subtractDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
 
 export { limitedEvaluate }
-
-export function round(value: number) : number {
-  return math.round(value, 2)
-}
 
 type Multipliers = {
   [key in Frequency]: {
