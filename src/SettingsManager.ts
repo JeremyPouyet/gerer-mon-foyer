@@ -64,6 +64,13 @@ function defaultSettings() : GlobalSettings {
 class SettingsManager {
   readonly settings = reactive<GlobalSettings>(defaultSettings())
 
+  /**
+   * Retrieves the currency symbol for a given currency.
+   *
+   * @param {Currency} [currency] - Currency to get the symbol for. Defaults to current setting.
+   * @param {boolean} [with_iso_code=false] - Whether to append the ISO code to the symbol.
+   * @returns {string} The currency symbol, optionally with ISO code.
+   */
   getCurrencySymbol(currency?: Currency, with_iso_code = false) : string {
     currency ||= this.settings.currency
 
@@ -75,6 +82,11 @@ class SettingsManager {
     return with_iso_code ? `${one} (${currency})` : one
   }
 
+  /**
+   * Checks if the currency symbol of the currency in the settings is positioned after the value.
+   *
+   * @returns {boolean} True if symbol is on the right; false otherwise.
+   */
   isCurrencySymbolOnRight() : boolean {
     return Intl.NumberFormat(
       CurrencyToLocale[this.settings.currency],
@@ -82,6 +94,10 @@ class SettingsManager {
     ).format(1).startsWith('1')
   }
 
+  /**
+   * Loads saved settings from local storage.
+   * If no settings exist, applies default settings.
+   */
   load(): void {
     const stringifiedSettings = localStorage.getItem('settings') || '{}'
     const settings = JSON.parse(stringifiedSettings) as Partial<GlobalSettings>
