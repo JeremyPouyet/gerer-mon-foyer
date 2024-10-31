@@ -12,7 +12,7 @@ const emit = defineEmits(['switchSample'])
 
 const activeDate = ref<string | null | undefined>(null)
 const history = ref<Sample[]>(historyManager.history)
-const { isSticky } = useSticky()
+const isSticky = useSticky()
 
 onMounted(() => {
   activeDate.value = sessionStorage.getItem('currentHistoryDate')

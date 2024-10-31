@@ -5,14 +5,8 @@ import TransactionsEdit from '@/components/TransactionsEdit.vue'
 import UsersEdit from '@/components/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
-import { computed } from 'vue'
 import db from '@/db'
-import { useFinanceCalculations } from '@/helpers'
 import userManager from '@/userManager'
-
-const account = computed(() => db.account)
-const users = computed(() => userManager.users)
-const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, users)
 </script>
 
 <template>
@@ -22,11 +16,8 @@ const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, use
         <UsersEdit />
       </div>
       <BudgetShow
-        :account="account"
-        :users="users"
-        :income-sum="incomeSum"
-        :remain-sum="remainSum"
-        :common-bill="commonBill"
+        :account="db.account"
+        :users="userManager.users"
         :with-note="true"
         :component-type="TransactionsEdit"
       />

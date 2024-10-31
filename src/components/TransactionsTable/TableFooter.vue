@@ -1,7 +1,17 @@
 <script setup lang="ts">
-import { sexyNumber } from '@/formaters'
+import { computed } from 'vue'
 
-defineProps<{ income?: number, totals: number[], withTds: boolean }>()
+import { sexyNumber } from '@/formaters'
+import { frequencies, type TransactionList } from '@/types'
+import { valueAs } from '@/helpers'
+
+const props = defineProps<{ income?: number, transactionList: TransactionList, withTds: boolean }>()
+
+const totals = computed<number[]>(() =>
+  frequencies.map(frequency =>
+    props.transactionList.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0)
+  )
+)
 </script>
 
 <template>

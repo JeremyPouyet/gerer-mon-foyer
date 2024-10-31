@@ -3,21 +3,26 @@ import type TransactionsEdit from './TransactionsEdit.vue'
 import type HistoryTransactionsShow from './HistoryTransactionsShow.vue'
 import TableContainer from './TransactionsTable/TableContainer.vue'
 
+import { computed } from 'vue'
+
 import UserNameTitle from '@/components/UserNameTitle.vue'
 import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
 import { TransactionType } from '@/types'
 import Account from '@/account'
 import type User from '@/user'
 
-defineProps<{
+const props = defineProps<{
   account: Account,
   users: User[],
-  incomeSum: number,
-  remainSum: number,
-  commonBill: number,
   withNote: boolean,
   componentType: typeof TransactionsEdit | typeof HistoryTransactionsShow
 }>()
+
+const account = computed(() => props.account)
+const users = computed(() => props.users)
+const commonBill = computed(() => Math.max(account.value.expenses.sum - account.value.incomes.sum, 0))
+const incomeSum = computed(() => users.value.reduce((sum, user) => sum + user.account.incomes.sum, account.value.incomes.sum))
+const remainSum = computed(() => users.value.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
 </script>
 
 <template>

@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 
 const { account, transactionType } = toRefs(props)
-const { totals, transactionList } = useTransactions(account, transactionType)
+const transactionList = useTransactions(account, transactionType)
 
 const editedName = ref<string>('')
 const editedNameId = ref<ID>()
@@ -158,5 +158,5 @@ function handleClickOutside(event: MouseEvent) : void {
       </td>
     </tr>
   </tbody>
-  <TableFooter :income="income?.value" :totals="totals" :with-tds="true" />
+  <TableFooter :income="income?.value" :transaction-list="transactionList" :with-tds="true" />
 </template>

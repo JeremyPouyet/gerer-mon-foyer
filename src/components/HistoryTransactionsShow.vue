@@ -16,7 +16,7 @@ const props = defineProps<{
   transactionType: TransactionType
 }>()
 const { account, transactionType } = toRefs(props)
-const { totals, transactionList } = useTransactions(account, transactionType)
+const transactionList = useTransactions(account, transactionType)
 </script>
 
 <template>
@@ -46,5 +46,5 @@ const { totals, transactionList } = useTransactions(account, transactionType)
       </td>
     </tr>
   </tbody>
-  <TableFooter :income="income?.value" :totals="totals" :with-tds="false" />
+  <TableFooter :income="income?.value" :transaction-list="transactionList" :with-tds="false" />
 </template>

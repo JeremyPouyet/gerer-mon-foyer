@@ -1,11 +1,10 @@
 import { create, divideDependencies, evaluateDependencies, roundDependencies } from 'mathjs'
 import { onMounted, onUnmounted, ref } from 'vue'
 
-import { frequencies, Frequency, TransactionType } from './types'
+import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
 import { computed, type Ref } from 'vue'
 import type Account from './account'
-import type User from './user'
 
 const math = create({ divideDependencies, evaluateDependencies, roundDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -40,9 +39,15 @@ export function valueAs(transaction: Pick<Transaction, 'value' | 'frequency'>, a
   return value * (multipliers[transaction.frequency][asFrequency] ?? 1)
 }
 
+function randomSegment(): string {
+  return Math.round(Math.random()*10000).toString()
+}
+
 export function newId() : ID {
-  // only available with https
-  return crypto.randomUUID()
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
+    return crypto.randomUUID() // only available with https
+  // Only for testing purpose on firefox mobile
+  return `${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}`
 }
 
 /**
@@ -75,28 +80,9 @@ export function useSticky() {
     window.removeEventListener('scroll', handleScroll)
   })
 
-  return {
-    isSticky,
-    stickyTopOffset
-  }
+  return isSticky
 }
 
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
-  const transactionList = computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
-
-  const totals = computed<number[]>(() =>
-    frequencies.map(frequency =>
-      round(transactionList.value.values.reduce((sum, transaction) => sum + valueAs(transaction, frequency), 0))
-    )
-  )
-
-  return { totals, transactionList }
-}
-
-export function useFinanceCalculations(account: Ref<Account>, users: Ref<User[]>) {
-  return {
-    commonBill: computed(() => Math.max(account.value.expenses.sum - account.value.incomes.sum, 0)),
-    incomeSum:  computed(() => users.value.reduce((sum, user) => sum + user.account.incomes.sum, account.value.incomes.sum)),
-    remainSum:  computed(() => users.value.reduce((sum, user) => sum + (user.account.incomes.sum - user.account.expenses.sum), 0))
-  }
+  return computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
 }

@@ -5,10 +5,9 @@ import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import HistoryEdit from '@/components/HistoryEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
-import { useFinanceCalculations } from '@/helpers'
 import historyManager, { type Sample } from '@/historyManager'
 
 let userWatcherCleanup: (() => void) | null = null
@@ -30,10 +29,6 @@ function switchSample() {
 
 const sample = ref<Sample | null | undefined>()
 const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
-
-const account = computed(() => snapshot.value.account)
-const users = computed(() => snapshot.value.users)
-const { commonBill, incomeSum, remainSum } = useFinanceCalculations(account, users)
 
 function updateSampleData(updatedData: Partial<DBSnapshot>) {
   if (sample.value) {
@@ -65,11 +60,8 @@ switchSample()
         <HistoryEdit @switch-sample="() => switchSample()" />
       </div>
       <BudgetShow
-        :account="account"
-        :users="users"
-        :income-sum="incomeSum"
-        :remain-sum="remainSum"
-        :common-bill="commonBill"
+        :account="snapshot.account"
+        :users="snapshot.users"
         :with-note="false"
         :component-type="HistoryTransactionsShow"
       />

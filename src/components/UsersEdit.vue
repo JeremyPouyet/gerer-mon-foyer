@@ -7,7 +7,7 @@ import { useSticky } from '@/helpers'
 import userManager from '@/userManager'
 
 const username = ref<string>('')
-const { isSticky } = useSticky()
+const isSticky = useSticky()
 
 function userCreate() : void {
   userManager.create(username.value)
