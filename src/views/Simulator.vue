@@ -93,7 +93,7 @@ function computeValue(user: User) : number {
               {{ sexyAmount(computeValue(user)) }}
             </div>
             <span class="badge bg-secondary rounded-pill">
-              Ratio de {{ sexyNumber(user.ratio, 'percent') }}%
+              Ratio de {{ sexyNumber(user.ratio, 'percent') }}
             </span>
           </li>
         </ul>
