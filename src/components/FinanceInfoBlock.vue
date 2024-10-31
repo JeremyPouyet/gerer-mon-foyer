@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { round } from '@/helpers'
 import User from '@/user'
 import type Account from '@/account'
 import userManager from '@/userManager'
-import { sexyAmount } from '@/formaters'
+import { sexyAmount, sexyNumber } from '@/formaters'
 
 const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()
 
 const ratio = computed(() => props.user.ratio)
 const monthlyCommonIncomes = computed<number>(() => {
-  const sum = userManager.users.reduce((sum, user) => sum + user.account.incomes.sum, props.commonAccount.incomes.sum)
-  return round(sum)
+  return userManager.users.reduce((sum, user) => sum + user.account.incomes.sum, props.commonAccount.incomes.sum)
 })
 // User's remaining money after paying their compulsory expenditures.
 const incomeAfterConstraints = computed(() => props.user.account.incomes.sum - props.user.account.expenses.sum)
@@ -20,11 +18,11 @@ const userShare = computed(() => ratio.value * props.commonBill)
 // User's remaining money after paying their compulsory expenditures, their common expense share, and their personal expenses.
 const incomeAfterAllExpenses = computed(() => incomeAfterConstraints.value - userShare.value - props.user.account.personalExpenses.sum)
 // The amount the household needs to cover its shared expenses each month
-const monthlyCommonExpenses = computed<number>(() => round(Math.max(props.commonAccount.expenses.sum - props.commonAccount.incomes.sum, 0)))
+const monthlyCommonExpenses = computed<number>(() => Math.max(props.commonAccount.expenses.sum - props.commonAccount.incomes.sum, 0))
 // The total remaining amount after all personal expenses are covered, including shared incomes
-const monthlyRemainSum = computed<number>(() => round(props.remainSum + props.commonAccount.incomes.sum))
+const monthlyRemainSum = computed<number>(() => props.remainSum + props.commonAccount.incomes.sum)
 // The total amount the user can potentially save over 10 years, assuming they save the amount remaining after paying both personal and shared expenses
-const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12 * 10))
+const in10years = computed<number>(() => incomeAfterAllExpenses.value * 12 * 10)
 </script>
 
 <template>
@@ -51,7 +49,7 @@ const in10years = computed<number>(() => round(incomeAfterAllExpenses.value * 12
         </p>
         <p class="mb-0">
           C’est
-          <span class="text-danger fw-semibold">{{ round(ratio * 100) }}%</span>
+          <span class="text-danger fw-semibold">{{ sexyNumber(ratio, 'percent') }}</span>
           des revenus du foyer.
         </p>
         <p class="mb-0">

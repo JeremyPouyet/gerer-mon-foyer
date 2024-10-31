@@ -3,11 +3,11 @@ import '@/assets/secondary.scss'
 
 import { onMounted, ref, watch } from 'vue'
 
-import { limitedEvaluate, round } from '@/helpers'
+import { limitedEvaluate } from '@/helpers'
 import type User from '@/user'
 import userManager from '@/userManager'
 import SettingsManager from '@/SettingsManager'
-import { sexyAmount } from '@/formaters'
+import { sexyAmount, sexyNumber } from '@/formaters'
 
 const expenseValue = ref<string>('')
 
@@ -32,11 +32,11 @@ watch(expenseValue, () => {
  */
 function computeValue(user: User) : number {
   try {
-    const value = round((limitedEvaluate(expenseValue.value) || 0) * user.ratio)
+    const value = (limitedEvaluate(expenseValue.value) || 0) * user.ratio
     if (!Number.isNaN(value))
       computedValue = value
   }
-  catch { /* empty */ }
+  catch { /* empty - otherwise an error would be shown when a user enters a symbol before entering a number */ }
   return computedValue
 }
 </script>
@@ -93,7 +93,7 @@ function computeValue(user: User) : number {
               {{ sexyAmount(computeValue(user)) }}
             </div>
             <span class="badge bg-secondary rounded-pill">
-              Ratio de {{ round(user.ratio * 100) }}%
+              Ratio de {{ sexyNumber(user.ratio, 'percent') }}
             </span>
           </li>
         </ul>

@@ -18,7 +18,7 @@ const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {
  * @param amount - The amount to format
  * @returns The formatted currency amount as a string
  */
-export function sexyAmount(amount: number) {
+export function sexyAmount(amount: number) : string {
   return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
     currency: SettingsManager.settings.currency,
     currencyDisplay: 'narrowSymbol',
@@ -35,7 +35,7 @@ export function sexyAmount(amount: number) {
  * @param strDate - The date as a string
  * @returns The formatted date as a string
  */
-export function sexyDate(strDate: string) {
+export function sexyDate(strDate: string) : string {
   return Intl.DateTimeFormat(
     CurrencyToLocale[SettingsManager.settings.currency],
     dateTimeFormatOptions
@@ -48,12 +48,14 @@ export function sexyDate(strDate: string) {
  * - The integer part is separated in groups of 3 digits
  *
  * @param {Number} value Number to format
+ * @param {String} style Intl.NumberFormatOptions.style possible value
  * @returns {String} Formated number
  */
-export function sexyNumber(value: number) : string {
+export function sexyNumber(value: number, style = 'decimal') : string {
   return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
     maximumFractionDigits: 2,
     minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
+    style,
     useGrouping: true
   }).format(value)
 }
