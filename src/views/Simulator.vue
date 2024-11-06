@@ -30,9 +30,7 @@ onMounted(() => {
   })
 
   watch(currentProject, () => {
-    console.log(JSON.stringify(currentProject))
     localStorage.setItem('currentProject', JSON.stringify(currentProject))
-    console.log(localStorage.getItem('currentProject'))
   })
 })
 
@@ -63,7 +61,7 @@ function expenseAdd() : void {
 function startEditProjectName() {
   isEditing.value = true
   newProjectName.value = currentProject.name
-  document.removeEventListener('mousedown', handleClickOutside)
+  document.addEventListener('mousedown', handleClickOutside)
   nextTick(() => projectNameInput.value?.focus())
 }
 
@@ -188,7 +186,7 @@ function handleClickOutside(event: MouseEvent) : void {
                 <td class="text-end align-middle text-nowrap">
                   <Note
                     :item="expense"
-                    @note="note => expense.note = note"
+                    @update="note => expense.note = note"
                   />
                   <img
                     v-tooltip="{ disposeOnClick: true }"
