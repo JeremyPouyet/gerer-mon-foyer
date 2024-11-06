@@ -4,16 +4,19 @@ import '@/assets/secondary.scss'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
 import SettingsManager from '@/SettingsManager'
 import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
+import BrowserStorage, { StorageKey } from '@/browserStorage'
+
+const simulatorTabStorage = new BrowserStorage(localStorage, StorageKey.SimulatorTab)
 
 type SimulatorTab = 'simple' | 'advanced'
-const activeTab = ref<SimulatorTab>(localStorage.getItem('simulatorTab') as SimulatorTab || 'simple')
+const activeTab = ref<SimulatorTab>(simulatorTabStorage.get('simple') as SimulatorTab)
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
@@ -26,19 +29,18 @@ const isEditing = ref(false)
 const expenses = computed(() => currentProject.expenseSorted())
 
 onMounted(() => {
-  expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
+  const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
+  expenseValue.value = simulatorValueStorage.get('')
 
-  watch(expenseValue, () => {
-    sessionStorage.setItem('simulatorValue', expenseValue.value)
-  })
+  const watchers = [
+    watch(expenseValue, value => simulatorValueStorage.set(value)),
+    watch(activeTab, currentTab => simulatorTabStorage.set(currentTab)),
+    watch(currentProject, () => {
+      localStorage.setItem('currentProject', JSON.stringify(currentProject))
+    })
+  ]
 
-  watch(activeTab, currentTab => {
-    localStorage.setItem('simulatorTab', currentTab)
-  })
-
-  watch(currentProject, () => {
-    localStorage.setItem('currentProject', JSON.stringify(currentProject))
-  })
+  onUnmounted(() => watchers.forEach(stop => stop()))
 })
 
 function setActiveTab(tab: 'simple' | 'advanced') {
