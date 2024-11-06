@@ -12,13 +12,14 @@ import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
 
-const activeTab = ref<'simple' | 'advanced'>('simple')
+type SimulatorTab = 'simple' | 'advanced'
+const activeTab = ref<SimulatorTab>(localStorage.getItem('simulatorTab') as SimulatorTab || 'simple')
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
 const projectStringified = localStorage.getItem('currentProject') || '{}'
 const currentProject = reactive<Project>(new Project(JSON.parse(projectStringified)))
-const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 0 })
+const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
 const newProjectName = ref(currentProject.name)
 const projectNameInput = ref<HTMLInputElement>()
 const isEditing = ref(false)
@@ -29,6 +30,10 @@ onMounted(() => {
 
   watch(expenseValue, () => {
     sessionStorage.setItem('simulatorValue', expenseValue.value)
+  })
+
+  watch(activeTab, currentTab => {
+    localStorage.setItem('simulatorTab', currentTab)
   })
 
   watch(currentProject, () => {
@@ -61,7 +66,7 @@ function expenseAdd() : void {
 
   currentProject.create(newExpense.value)
 
-  newExpense.value = { name: '', price: 0, quantity: 0 }
+  newExpense.value = { name: '', price: 0, quantity: 1 }
 }
 
 function startEditProjectName() {
@@ -97,7 +102,7 @@ function handleClickOutside(event: MouseEvent) : void {
         <RouterLink class="text-primary-emphasis" to="/expense-distribution">création de votre budget</RouterLink> pour
         savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle ou un projet (travaux/vacances...).
       </p>
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-underline">
         <li class="nav-item">
           <a
             class="nav-link"
@@ -183,10 +188,10 @@ function handleClickOutside(event: MouseEvent) : void {
                   Dépense
                 </th>
                 <th class="text-end" scope="col">
-                  Quantitée
+                  Prix
                 </th>
                 <th class="text-end" scope="col">
-                  Prix
+                  Quantitée
                 </th>
                 <th class="text-end" scope="col">
                   Total
@@ -203,10 +208,10 @@ function handleClickOutside(event: MouseEvent) : void {
                   <NoteIcon :text="expense.note" />
                 </td>
                 <td class="align-middle text-end">
-                  {{ expense.quantity }}
+                  {{ expense.price }}
                 </td>
                 <td class="align-middle text-end">
-                  {{ expense.price }}
+                  {{ expense.quantity }}
                 </td>
                 <td class="align-middle text-end">
                   {{ expense.quantity * expense.price }}
@@ -249,17 +254,21 @@ function handleClickOutside(event: MouseEvent) : void {
             @keydown.enter="expenseAdd"
           >
           <input
-            v-model="newExpense.quantity"
+            v-model="newExpense.price"
+            v-tooltip
             class="form-control"
-            placeholder="Quantité"
+            data-bs-title="Prix"
+            placeholder="Prix"
             type="number"
             @keydown.enter="expenseAdd"
           >
           <input
-            v-model="newExpense.price"
+            v-model="newExpense.quantity"
+            v-tooltip
             class="form-control"
+            data-bs-title="Quantité"
             type="number"
-            placeholder="Prix"
+            placeholder="Quantité"
             @keydown.enter="expenseAdd"
           >
           <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
