@@ -12,6 +12,8 @@ import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
 
+const activeTab = ref<'simple' | 'advanced'>('simple')
+
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
 const projectStringified = localStorage.getItem('currentProject') || '{}'
@@ -33,6 +35,10 @@ onMounted(() => {
     localStorage.setItem('currentProject', JSON.stringify(currentProject))
   })
 })
+
+function setActiveTab(tab: 'simple' | 'advanced') {
+  activeTab.value = tab
+}
 
 /**
  * Evaluates the `expenseValue` (which may be a formula) and returns the result.
@@ -91,9 +97,31 @@ function handleClickOutside(event: MouseEvent) : void {
         <RouterLink class="text-primary-emphasis" to="/expense-distribution">création de votre budget</RouterLink> pour
         savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle ou un projet (travaux/vacances...).
       </p>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            :class="{ active: activeTab === 'simple' }"
+            href="#"
+            @click="setActiveTab('simple')"
+          >
+            Dépense ponctuelle
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            :class="{ active: activeTab === 'advanced' }"
+            href="#"
+            @click="setActiveTab('advanced')"
+          >
+            Création de projet
+          </a>
+        </li>
+      </ul>
     </div>
     <!-- Quick simulator -->
-    <div class="row mb-4">
+    <div v-if="activeTab === 'simple'" class="row mb-4">
       <h2>Simulation simple</h2>
       <hr>
       <small class="text-muted d-block mb-4">Pour un achat ponctuel type éléctroménager ou meuble</small>
@@ -120,10 +148,10 @@ function handleClickOutside(event: MouseEvent) : void {
       </div>
       <Distribution :total="computeValue()" />
     </div>
-    <div class="row mb-4">
+    <div v-if="activeTab === 'advanced'" class="row mb-4">
       <h2>Simulation avancé</h2>
       <hr>
-      <small class="text-muted d-block mb-4">Pour un projet plus important, comme budgéter les vacances ou des travaux</small>
+      <small class="text-muted d-block mb-4">Pour un projet plus important, comme budgéter des vacances ou des travaux</small>
       <h3 v-if="isEditing">
         <input
           ref="projectNameInput"
