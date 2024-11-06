@@ -125,22 +125,11 @@ const lgClass = computed(() => {
 </template>
 
 <style scoped>
-.table-title-container {
-  display: flex;
-  padding: 10px 0;
-  margin-bottom: 20px;
-}
-
 .table-title {
   font-size: 1.5em;
   font-weight: normal;
   color: #333333; /* Dark gray text */
   margin: 0;
   text-align: center;
-}
-
-.shadowed-border {
-  border-radius: 10px 10px 0px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

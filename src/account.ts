@@ -1,5 +1,5 @@
 import { newId, valueAs } from './helpers'
-import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
+import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/notificationManager'
 import userManager from './userManager'
@@ -27,6 +27,11 @@ interface AccountSettings {
     [TransactionType.Income]: boolean,
     [TransactionType.PersonalExpense]: boolean
   }
+}
+
+export interface TransactionRecord {
+  values: Record<ID, Transaction>,
+  sum: number
 }
 
 // List of possible transactions sort
