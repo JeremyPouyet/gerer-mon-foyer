@@ -3,7 +3,7 @@ import { nextTick, reactive, ref, watch } from 'vue'
 import historyManager, { type Sample } from './managers/historyManager'
 import Account, { AccountType } from './account'
 import userManager from './managers/userManager'
-import SettingsManager from './managers/SettingsManager'
+import settingsManager from './managers/settingsManager'
 
 type Persistable = 'account' | 'history' | 'settings' | 'users'
 
@@ -43,7 +43,7 @@ class DB {
       Object.assign(this.account, JSON.parse(account))
 
     historyManager.load()
-    SettingsManager.load()
+    settingsManager.load()
   }
 
   private persistChanges(key: Persistable, value: object) : boolean {
@@ -68,7 +68,7 @@ class DB {
     watch(this.unsavedChanges, value => localStorage.setItem('unsavedChanges', value.toString()))
     watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
-    watch(SettingsManager.settings, updated => this.persistChanges('settings', updated))
+    watch(settingsManager.settings, updated => this.persistChanges('settings', updated))
 
     historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
   }

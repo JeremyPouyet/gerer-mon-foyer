@@ -7,7 +7,7 @@ import NoteIcon from '@/components/NoteIcon.vue'
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
-import SettingsManager from '@/managers/SettingsManager'
+import settingsManager from '@/managers/settingsManager'
 import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
@@ -134,7 +134,7 @@ function handleClickOutside(event: MouseEvent) : void {
           <div class="col-md-6">
             <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
             <div class="input-group mb-3">
-              <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+              <span v-if="!settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
                 {{ sexyAmount(computeValue()) }}
               </span>
               <input
@@ -147,7 +147,7 @@ function handleClickOutside(event: MouseEvent) : void {
                 placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
                 data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
               >
-              <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+              <span v-if="settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
                 {{ sexyAmount(computeValue()) }}
               </span>
             </div>

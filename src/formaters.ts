@@ -1,4 +1,4 @@
-import SettingsManager, { CurrencyToLocale } from './managers/SettingsManager'
+import settingsManager, { CurrencyToLocale } from './managers/settingsManager'
 
 /* eslint-disable sort-keys */
 const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {
@@ -12,18 +12,18 @@ const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {
 
 /**
  * Formats a number as a currency amount based on user settings:
- * - 2 digits are always added to the decimal part when SettingsManager.settings.twoDecimals is true
+ * - 2 digits are always added to the decimal part when settingsManager.settings.twoDecimals is true
  * - The integer part is separated in groups of 3 digits
  *
  * @param amount - The amount to format
  * @returns The formatted currency amount as a string
  */
 export function sexyAmount(amount: number) : string {
-  return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
-    currency: SettingsManager.settings.currency,
+  return Intl.NumberFormat(CurrencyToLocale[settingsManager.settings.currency], {
+    currency: settingsManager.settings.currency,
     currencyDisplay: 'narrowSymbol',
     maximumFractionDigits: 2,
-    minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
+    minimumFractionDigits: settingsManager.settings.twoDecimals ? 2 : 0,
     style: 'currency',
     useGrouping: true
   }).format(amount)
@@ -37,24 +37,24 @@ export function sexyAmount(amount: number) : string {
  */
 export function sexyDate(strDate: string) : string {
   return Intl.DateTimeFormat(
-    CurrencyToLocale[SettingsManager.settings.currency],
+    CurrencyToLocale[settingsManager.settings.currency],
     dateTimeFormatOptions
   ).format(new Date(strDate))
 }
 
 /**
  * Make a number pretty for it to be printed
- * - 2 digits are always added to the decimal part when SettingsManager.settings.twoDecimals is true
+ * - 2 digits are always added to the decimal part when settingsManager.settings.twoDecimals is true
  * - The integer part is separated in groups of 3 digits
  *
- * @param {Number} value Number to format
- * @param {String} style Intl.NumberFormatOptions.style possible value
- * @returns {String} Formated number
+ * @param value Number to format
+ * @param style Intl.NumberFormatOptions.style possible value
+ * @returns Formated number
  */
 export function sexyNumber(value: number, style = 'decimal') : string {
-  return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
+  return Intl.NumberFormat(CurrencyToLocale[settingsManager.settings.currency], {
     maximumFractionDigits: 2,
-    minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,
+    minimumFractionDigits: settingsManager.settings.twoDecimals ? 2 : 0,
     style,
     useGrouping: true
   }).format(value)
