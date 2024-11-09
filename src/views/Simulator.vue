@@ -106,55 +106,61 @@ function handleClickOutside(event: MouseEvent) : void {
         </div>
       </div>
       <div class="col">
-        <ul class="nav nav-underline mb-3">
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              :class="{ active: activeTab === 'simple' }"
-              href="#"
-              @click="setActiveTab('simple')"
-            >
-              Dépense ponctuelle
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              :class="{ active: activeTab === 'advanced' }"
-              href="#"
-              @click="setActiveTab('advanced')"
-            >
-              Création de projet
-            </a>
-          </li>
-        </ul>
-        <!-- Quick simulator -->
-        <div v-if="activeTab === 'simple'" class="row mb-4">
-          <small class="text-muted d-block mb-4">Pour un achat ponctuel type éléctroménager ou meuble.</small>
-          <div class="col-md-6">
-            <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
-            <div class="input-group mb-3">
-              <span v-if="!settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-                {{ sexyAmount(computeValue()) }}
-              </span>
-              <input
-                id="expenseInput"
-                v-model="expenseValue"
-                v-tooltip
-                data-bs-placement="bottom"
-                class="form-control"
-                type="text"
-                placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
-                data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
+        <!-- Tabs -->
+        <div class="row">
+          <ul class="nav nav-underline mb-3">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ active: activeTab === 'simple' }"
+                href="#"
+                @click="setActiveTab('simple')"
               >
-              <span v-if="settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-                {{ sexyAmount(computeValue()) }}
-              </span>
-            </div>
-          </div>
-          <Distribution :total="computeValue()" />
+                Dépense ponctuelle
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ active: activeTab === 'advanced' }"
+                href="#"
+                @click="setActiveTab('advanced')"
+              >
+                Création de projet
+              </a>
+            </li>
+          </ul>
         </div>
-        <div v-if="activeTab === 'advanced'" class="row mb-4">
+        <!-- Simple simulator -->
+        <div v-if="activeTab === 'simple'" class="mb-4">
+          <small class="text-muted d-block mb-4">Pour un achat ponctuel type éléctroménager ou meuble.</small>
+          <div class="row">
+            <div class="col-md-5 col-sm-12">
+              <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
+              <div class="input-group mb-3">
+                <span v-if="!settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+                  {{ sexyAmount(computeValue()) }}
+                </span>
+                <input
+                  id="expenseInput"
+                  v-model="expenseValue"
+                  v-tooltip
+                  data-bs-placement="bottom"
+                  class="form-control"
+                  type="text"
+                  placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
+                  data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
+                >
+                <span v-if="settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
+                  {{ sexyAmount(computeValue()) }}
+                </span>
+              </div>
+            </div>
+            <Distribution :total="computeValue()" />
+          </div>
+        </div>
+        <!-- Advanced simulator -->
+        <div v-if="activeTab === 'advanced'" class="mb-4">
           <small class="text-muted d-block mb-4">Pour un projet plus important, comme budgéter des vacances ou des travaux.</small>
           <h3 v-if="isEditing">
             <input
@@ -177,105 +183,107 @@ function handleClickOutside(event: MouseEvent) : void {
               @click="startEditProjectName"
             >
           </h3>
-          <div class="col-sm-12 col-md-6 mb-4">
-            <span class="form-label fw-bold d-block">Dépenses</span>
-            <div class="table-responsive shadowed-border mb-3">
-              <table class="table table-hover mb-0">
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      Dépense
-                    </th>
-                    <th class="text-end" scope="col">
-                      Prix
-                    </th>
-                    <th class="text-end" scope="col">
-                      Quantitée
-                    </th>
-                    <th class="text-end" scope="col">
-                      Total
-                    </th>
-                    <th class="text-end" scope="col">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="expense in expenses.values" :key="expense.id">
-                    <td class="align-middle">
-                      <span>{{ expense.name }}</span>
-                      <NoteIcon :text="expense.note" />
-                    </td>
-                    <td class="align-middle text-end">
-                      {{ expense.price }}
-                    </td>
-                    <td class="align-middle text-end">
-                      {{ expense.quantity }}
-                    </td>
-                    <td class="align-middle text-end">
-                      {{ expense.quantity * expense.price }}
-                    </td>
-                    <td class="text-end align-middle text-nowrap">
-                      <Note
-                        :item="expense"
-                        @update="note => expense.note = note"
-                      />
-                      <img
-                        v-tooltip="{ disposeOnClick: true }"
-                        src="@/assets/icons/cross.png"
-                        alt="Supprimer"
-                        data-bs-title="Supprimer"
-                        class="icon-container-small icon-hoverable ms-2"
-                        @click="() => currentProject.delete(expense.id)"
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td class="fw-bold">
-                      Total
-                    </td>
-                    <td class="text-end" colspan="3">
-                      {{ expenses.sum }}
-                    </td>
-                    <td />
-                  </tr>
-                </tfoot>
-              </table>
+          <div class="row">
+            <div class="col-md-5 col-sm-12">
+              <span class="form-label fw-bold d-block">Dépenses</span>
+              <div class="table-responsive shadowed-border mb-3">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">
+                        Dépense
+                      </th>
+                      <th class="text-end" scope="col">
+                        Prix
+                      </th>
+                      <th class="text-end" scope="col">
+                        Quantitée
+                      </th>
+                      <th class="text-end" scope="col">
+                        Total
+                      </th>
+                      <th class="text-end" scope="col">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="expense in expenses.values" :key="expense.id">
+                      <td class="align-middle">
+                        <span>{{ expense.name }}</span>
+                        <NoteIcon :text="expense.note" />
+                      </td>
+                      <td class="align-middle text-end">
+                        {{ expense.price }}
+                      </td>
+                      <td class="align-middle text-end">
+                        {{ expense.quantity }}
+                      </td>
+                      <td class="align-middle text-end">
+                        {{ expense.quantity * expense.price }}
+                      </td>
+                      <td class="text-end align-middle text-nowrap">
+                        <Note
+                          :item="expense"
+                          @update="note => expense.note = note"
+                        />
+                        <img
+                          v-tooltip="{ disposeOnClick: true }"
+                          src="@/assets/icons/cross.png"
+                          alt="Supprimer"
+                          data-bs-title="Supprimer"
+                          class="icon-container-small icon-hoverable ms-2"
+                          @click="() => currentProject.delete(expense.id)"
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td class="fw-bold">
+                        Total
+                      </td>
+                      <td class="text-end" colspan="3">
+                        {{ expenses.sum }}
+                      </td>
+                      <td />
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="input-group flex-sm-row">
+                <input
+                  v-model="newExpense.name"
+                  class="form-control"
+                  placeholder="Dépense"
+                  type="text"
+                  @keydown.enter="expenseAdd"
+                >
+                <input
+                  v-model="newExpense.price"
+                  v-tooltip
+                  class="form-control"
+                  data-bs-title="Prix"
+                  placeholder="Prix"
+                  type="number"
+                  @keydown.enter="expenseAdd"
+                >
+                <input
+                  v-model="newExpense.quantity"
+                  v-tooltip
+                  class="form-control"
+                  data-bs-title="Quantité"
+                  type="number"
+                  placeholder="Quantité"
+                  @keydown.enter="expenseAdd"
+                >
+                <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
+                  Ajouter
+                </button>
+              </div>
             </div>
-            <div class="input-group flex-sm-row">
-              <input
-                v-model="newExpense.name"
-                class="form-control"
-                placeholder="Dépense"
-                type="text"
-                @keydown.enter="expenseAdd"
-              >
-              <input
-                v-model="newExpense.price"
-                v-tooltip
-                class="form-control"
-                data-bs-title="Prix"
-                placeholder="Prix"
-                type="number"
-                @keydown.enter="expenseAdd"
-              >
-              <input
-                v-model="newExpense.quantity"
-                v-tooltip
-                class="form-control"
-                data-bs-title="Quantité"
-                type="number"
-                placeholder="Quantité"
-                @keydown.enter="expenseAdd"
-              >
-              <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
-                Ajouter
-              </button>
-            </div>
+            <Distribution :total="expenses.sum" />
           </div>
-          <Distribution :total="expenses.sum" />
         </div>
       </div>
     </div>
