@@ -1,7 +1,7 @@
 import { newId } from '@/helpers'
 import type { ID } from '@/types'
 import { SortType } from '@/types'
-import settingsManager from '@/managers/settingsManager'
+import settingManager from '@/managers/settingManager'
 
 export interface Expense {
   readonly id: ID
@@ -50,7 +50,7 @@ export default class Project {
     return {
       sum: Object.values(this.expenses).reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
       values: Object.values(this.expenses)
-        .sort(sorters[settingsManager.settings.sort])
+        .sort(sorters[settingManager.settings.sort])
     }
   }
 }

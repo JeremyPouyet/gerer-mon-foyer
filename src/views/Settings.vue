@@ -4,7 +4,7 @@ import '@/assets/secondary.scss'
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
 import notificationManager, { NotificationType } from '@/managers/notificationManager'
-import settingsManager, { Currency } from '@/managers/settingsManager'
+import settingManager, { Currency } from '@/managers/settingManager'
 import { SortType } from '@/types'
 import Texts from '@/texts'
 import { computed } from 'vue'
@@ -84,18 +84,18 @@ function confirmDataDeletion() : void {
 }
 
 function twoDecimalsChange(event: Event) : void {
-  settingsManager.update('twoDecimals', (event.target as HTMLInputElement).checked)
+  settingManager.update('twoDecimals', (event.target as HTMLInputElement).checked)
 }
 
 function sortTypeChange(event: Event) : void {
-  settingsManager.update(
+  settingManager.update(
     'sort',
     (event.target as HTMLSelectElement).value as SortType
   )
 }
 
 function currencyChange(event: Event) : void {
-  settingsManager.update(
+  settingManager.update(
     'currency',
     (event.target as HTMLSelectElement).value as Currency
   )
@@ -179,7 +179,7 @@ const unsavedChangeText = computed(() => {
             id="setting2decimals"
             class="form-check-input"
             type="checkbox"
-            :checked="settingsManager.settings.twoDecimals"
+            :checked="settingManager.settings.twoDecimals"
             @change="twoDecimalsChange"
           >
         </div>
@@ -189,7 +189,7 @@ const unsavedChangeText = computed(() => {
           </div>
           <div class="col">
             <select class="form-select" @change="sortTypeChange">
-              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="settingsManager.settings.sort === sortType" :value="sortType">
+              <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="settingManager.settings.sort === sortType" :value="sortType">
                 {{ Texts.sortTypes[sortType] }}
               </option>
             </select>
@@ -201,8 +201,8 @@ const unsavedChangeText = computed(() => {
           </div>
           <div class="col">
             <select class="form-select" @change="currencyChange">
-              <option v-for="currency in Object.values(Currency)" :key="currency" :selected="settingsManager.settings.currency === currency" :value="currency">
-                {{ settingsManager.getCurrencySymbol(currency, true) }}
+              <option v-for="currency in Object.values(Currency)" :key="currency" :selected="settingManager.settings.currency === currency" :value="currency">
+                {{ settingManager.getCurrencySymbol(currency, true) }}
               </option>
             </select>
           </div>

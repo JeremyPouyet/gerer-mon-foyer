@@ -8,7 +8,7 @@ import type Account from '@/account'
 import { AccountType } from '@/account'
 import Texts from '@/texts'
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
-import settingsManager from '@/managers/settingsManager'
+import settingManager from '@/managers/settingManager'
 
 const props = defineProps<{
   account: Account,
@@ -85,8 +85,8 @@ const lgClass = computed(() => {
           :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="!settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-          {{ settingsManager.getCurrencySymbol() }}
+        <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ settingManager.getCurrencySymbol() }}
         </span>
         <input
           v-model="newTransaction.value"
@@ -99,8 +99,8 @@ const lgClass = computed(() => {
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="settingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-          {{ settingsManager.getCurrencySymbol() }}
+        <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ settingManager.getCurrencySymbol() }}
         </span>
         <div class="w-100 d-sm-none" />
 

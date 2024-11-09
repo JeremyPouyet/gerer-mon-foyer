@@ -3,7 +3,7 @@ import type { ID, Transaction, TransactionFunctional, TransactionList } from './
 import { Frequency, SortType, TransactionType } from './types'
 import notificationManager, { NotificationType } from '@/managers/notificationManager'
 import userManager from './managers/userManager'
-import settingsManager from './managers/settingsManager'
+import settingManager from './managers/settingManager'
 
 export enum AccountType {
   Common = 'common',
@@ -165,7 +165,7 @@ export default class Account {
     return {
       sum: transactionRecord.sum,
       values: Object.values(transactionRecord.values)
-        .sort(sorters[settingsManager.settings.sort])
+        .sort(sorters[settingManager.settings.sort])
     }
   }
 
