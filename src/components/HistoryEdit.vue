@@ -5,7 +5,7 @@ import NoteIcon from './NoteIcon.vue'
 import { onMounted, ref } from 'vue'
 
 import { sexyDate } from '@/formaters'
-import historyManager, { type Sample } from '@/historyManager'
+import historyManager, { type Sample } from '@/managers/historyManager'
 import { useSticky } from '@/helpers'
 
 const emit = defineEmits(['switchSample'])

@@ -1,4 +1,4 @@
-import SettingsManager, { CurrencyToLocale } from './SettingsManager'
+import SettingsManager, { CurrencyToLocale } from './managers/SettingsManager'
 
 /* eslint-disable sort-keys */
 const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import User from '@/user'
 import type Account from '@/account'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 import { sexyAmount, sexyNumber } from '@/formaters'
 
 const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()

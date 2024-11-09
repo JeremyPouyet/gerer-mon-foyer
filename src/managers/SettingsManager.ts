@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
-import notificationManager from '@/notificationManager'
+import notificationManager from '@/managers/notificationManager'
 import Texts from '@/texts'
-import { SortType } from './types'
+import { SortType } from '../types'
 
 // ISO 4217 currencies
 export enum Currency {
@@ -67,9 +67,9 @@ class SettingsManager {
   /**
    * Retrieves the currency symbol for a given currency.
    *
-   * @param {Currency} [currency] - Currency to get the symbol for. Defaults to current setting.
-   * @param {boolean} [with_iso_code=false] - Whether to append the ISO code to the symbol.
-   * @returns {string} The currency symbol, optionally with ISO code.
+   * @param currency - Currency to get the symbol for. Defaults to current setting.
+   * @param with_iso_code - Whether to append the ISO code to the symbol.
+   * @returns The currency symbol, optionally with ISO code.
    */
   getCurrencySymbol(currency?: Currency, with_iso_code = false) : string {
     currency ||= this.settings.currency
@@ -85,7 +85,7 @@ class SettingsManager {
   /**
    * Checks if the currency symbol of the currency in the settings is positioned after the value.
    *
-   * @returns {boolean} True if symbol is on the right; false otherwise.
+   * @returns True if symbol is on the right; false otherwise.
    */
   isCurrencySymbolOnRight() : boolean {
     return Intl.NumberFormat(
@@ -108,8 +108,8 @@ class SettingsManager {
   /**
    * Updates a setting and generates a notification
    *
-   * @param {String} setting Name of the setting to update
-   * @param {Any} value New setting value
+   * @param setting Name of the setting to update
+   * @param value New setting value
    */
   update<K extends GlobalSettingsKey>(setting: K, value: GlobalSettings[K]): void {
     this.settings[setting] = value

@@ -7,7 +7,7 @@ import NoteIcon from '@/components/NoteIcon.vue'
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
-import SettingsManager from '@/SettingsManager'
+import SettingsManager from '@/managers/SettingsManager'
 import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
@@ -99,14 +99,14 @@ function handleClickOutside(event: MouseEvent) : void {
     <div class="row">
       <div class="col-auto mb-4">
         <div :class="['row char-width-30 sticky-top']">
-          <div class="row">
+          <div v-if="activeTab === 'advanced'" class="row">
             <h3>Mes projets</h3>
             <hr>
           </div>
         </div>
       </div>
       <div class="col">
-        <ul class="nav nav-underline">
+        <ul class="nav nav-underline mb-3">
           <li class="nav-item">
             <a
               class="nav-link"

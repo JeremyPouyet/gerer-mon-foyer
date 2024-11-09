@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
 import type { Transaction } from '@/types'
-import type { Sample } from '@/historyManager'
+import type { Sample } from '@/managers/historyManager'
 import type Account from '@/account'
 import type { Expense } from '@/project'
 

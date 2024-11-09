@@ -6,7 +6,7 @@ import UsersEdit from '@/components/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
 import db from '@/db'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 </script>
 
 <template>

@@ -4,7 +4,7 @@ import UserLine from './UserLine.vue'
 import { ref } from 'vue'
 
 import { useSticky } from '@/helpers'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 
 const username = ref<string>('')
 const isSticky = useSticky()

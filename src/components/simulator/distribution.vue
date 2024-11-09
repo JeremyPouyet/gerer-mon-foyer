@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 import { sexyAmount, sexyNumber } from '@/formaters'
 
 defineProps<{ total: number }>()

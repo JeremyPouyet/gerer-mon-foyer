@@ -2,9 +2,9 @@
 import '@/assets/secondary.scss'
 
 import db from '@/db'
-import historyManager from '@/historyManager'
-import notificationManager, { NotificationType } from '@/notificationManager'
-import SettingsManager, { Currency } from '@/SettingsManager'
+import historyManager from '@/managers/historyManager'
+import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import SettingsManager, { Currency } from '@/managers/SettingsManager'
 import { SortType } from '@/types'
 import Texts from '@/texts'
 import { computed } from 'vue'

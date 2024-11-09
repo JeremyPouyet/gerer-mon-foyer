@@ -1,7 +1,7 @@
 import { newId } from '@/helpers'
 import type { ID } from '@/types'
 import { SortType } from '@/types'
-import SettingsManager from '@/SettingsManager'
+import SettingsManager from '@/managers/SettingsManager'
 
 export interface Expense {
   readonly id: ID

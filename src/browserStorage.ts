@@ -1,4 +1,4 @@
-import notificationManager, { NotificationType } from '@/notificationManager'
+import notificationManager, { NotificationType } from '@/managers/notificationManager'
 
 export enum StorageKey {
   SimulatorTab = 'simulatorTab', // Last active tab on the simulator

@@ -1,9 +1,9 @@
 import { newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
-import notificationManager, { NotificationType } from '@/notificationManager'
-import userManager from './userManager'
-import SettingsManager from './SettingsManager'
+import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import userManager from './managers/userManager'
+import SettingsManager from './managers/SettingsManager'
 
 export enum AccountType {
   Common = 'common',

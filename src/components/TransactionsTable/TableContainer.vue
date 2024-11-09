@@ -8,7 +8,7 @@ import type Account from '@/account'
 import { AccountType } from '@/account'
 import Texts from '@/texts'
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
-import SettingsManager from '@/SettingsManager'
+import SettingsManager from '@/managers/SettingsManager'
 
 const props = defineProps<{
   account: Account,

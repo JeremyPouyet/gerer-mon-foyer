@@ -8,7 +8,7 @@ import BudgetShow from '@/components/BudgetShow.vue'
 import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
-import historyManager, { type Sample } from '@/historyManager'
+import historyManager, { type Sample } from '@/managers/historyManager'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null

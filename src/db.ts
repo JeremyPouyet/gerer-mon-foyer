@@ -1,9 +1,9 @@
 import { nextTick, reactive, ref, watch } from 'vue'
 
-import historyManager, { type Sample } from './historyManager'
+import historyManager, { type Sample } from './managers/historyManager'
 import Account, { AccountType } from './account'
-import userManager from './userManager'
-import SettingsManager from './SettingsManager'
+import userManager from './managers/userManager'
+import SettingsManager from './managers/SettingsManager'
 
 type Persistable = 'account' | 'history' | 'settings' | 'users'
 
