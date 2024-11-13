@@ -1,8 +1,28 @@
 <script setup lang="ts">
-import { useSticky } from '@/helpers'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const { show = true, title } = defineProps<{ show?: boolean, title: string }>()
-const isSticky = useSticky()
+
+const isSticky = ref(false)
+const stickyTopOffset = ref<number>(0)
+
+function handleScroll() {
+  isSticky.value = window.scrollY >= stickyTopOffset.value
+}
+
+onMounted(() => {
+  // Set up a scroll listeners and calculates the `isSticky` state based on
+  // the scroll position relative to the element's top offset.
+  const stickyElement = document.querySelector('.sticky-top')
+
+  if (stickyElement) {
+    // Save the initial position of the sticky element
+    stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
+    // Listen to the scroll event
+    window.addEventListener('scroll', handleScroll)
+  }
+})
+onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 </script>
 
 <template>
@@ -16,3 +36,9 @@ const isSticky = useSticky()
     </div>
   </div>
 </template>
+
+<style lang="css">
+.sticky-offset {
+  top: 1.5rem;
+}
+</style>

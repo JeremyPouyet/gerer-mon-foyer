@@ -111,6 +111,13 @@ function handleClickOutside(event: MouseEvent) : void {
               </span>
               <div>
                 <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
+                <img
+                  v-tooltip="{ disposeOnClick: true }"
+                  src="@/assets/icons/cross.png"
+                  alt="Supprimer"
+                  data-bs-title="Supprimer des projets"
+                  class="icon-container-small icon-hoverable ms-2"
+                >
               </div>
             </div>
           </li>

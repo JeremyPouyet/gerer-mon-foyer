@@ -1,5 +1,4 @@
 import { create, divideDependencies, evaluateDependencies, subtractDependencies } from 'mathjs'
-import { onMounted, onUnmounted, ref } from 'vue'
 
 import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
@@ -44,39 +43,6 @@ export function newId() : ID {
     return crypto.randomUUID() // only available with https
   // Only for testing purpose on firefox mobile
   return `${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}`
-}
-
-/**
- * A composable function to manage a sticky element that becomes fixed after scrolling past its initial position.
- *
- * This function sets up scroll listeners and calculates the `isSticky` state based on
- * the scroll position relative to the element's top offset.
- */
-export function useSticky() {
-  const isSticky = ref(false)
-  const stickyTopOffset = ref<number>(0)
-
-  function handleScroll() {
-    isSticky.value = window.scrollY >= stickyTopOffset.value
-  }
-
-  onMounted(() => {
-    const stickyElement = document.querySelector('.sticky-top')
-
-    if (stickyElement) {
-      // Save the initial position of the sticky element
-      stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
-
-      // Listen to the scroll event
-      window.addEventListener('scroll', handleScroll)
-    }
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
-
-  return isSticky
 }
 
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
