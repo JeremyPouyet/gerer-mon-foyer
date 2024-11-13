@@ -9,6 +9,7 @@ import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
 import historyManager, { type Sample } from '@/managers/historyManager'
+import LeftColumn from '@/components/LeftColumn.vue'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null
@@ -56,9 +57,9 @@ switchSample()
       </p>
     </div>
     <div v-else class="row">
-      <div class="col-auto mb-4">
+      <LeftColumn :title="'Dates'">
         <HistoryEdit @switch-sample="() => switchSample()" />
-      </div>
+      </LeftColumn>
       <BudgetShow
         :account="snapshot.account"
         :users="snapshot.users"

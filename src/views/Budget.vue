@@ -7,14 +7,15 @@ import BudgetShow from '@/components/BudgetShow.vue'
 
 import db from '@/db'
 import userManager from '@/managers/userManager'
+import LeftColumn from '@/components/LeftColumn.vue'
 </script>
 
 <template>
   <div class="container-fluid mt-2">
     <div class="row">
-      <div class="col-auto mb-4">
+      <LeftColumn :title="'Habitants'">
         <UsersEdit />
-      </div>
+      </LeftColumn>
       <BudgetShow
         :account="db.account"
         :users="userManager.users"

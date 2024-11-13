@@ -13,6 +13,7 @@ import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
 import projectManager from '@/managers/projectManager'
+import LeftColumn from '@/components/LeftColumn.vue'
 
 const simulatorTabStorage = new BrowserStorage(localStorage, StorageKey.SimulatorTab)
 
@@ -95,42 +96,36 @@ function handleClickOutside(event: MouseEvent) : void {
 <template>
   <div class="container-fluid mt-2">
     <div class="row">
-      <div class="col-auto mb-4">
-        <div :class="['row char-width-30 sticky-top']">
-          <div v-if="activeTab === 'advanced'" class="row">
-            <h3>Mes projets</h3>
-            <hr>
-            <ul class="item-list p-0">
-              <li v-for="project in projectManager.projects" :key="project.id" class="item py-2">
-                <div class="d-flex justify-content-between container-fluid align-items-center">
-                  <span
-                    v-tooltip
-                    data-bs-placement="right"
-                    data-bs-title="Cliquer pour sélectionner"
-                    style="cursor: pointer"
-                  >
-                    {{ project.name }}
-                    <NoteIcon :text="project.note" :unpaded="true" />
-                  </span>
-                  <div>
-                    <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div class="input-group">
-              <input
-                class="form-control"
-                placeholder="Nom du projet"
-                type="text"
+      <LeftColumn :show="activeTab === 'advanced'" :title="'Mes projets'">
+        <ul class="item-list p-0">
+          <li v-for="project in projectManager.projects" :key="project.id" class="item py-2">
+            <div class="d-flex justify-content-between container-fluid align-items-center">
+              <span
+                v-tooltip
+                data-bs-placement="right"
+                data-bs-title="Cliquer pour sélectionner"
+                style="cursor: pointer"
               >
-              <button type="button" class="btn btn-secondary btn-sm">
-                Créer
-              </button>
+                {{ project.name }}
+                <NoteIcon :text="project.note" :unpaded="true" />
+              </span>
+              <div>
+                <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
+              </div>
             </div>
-          </div>
+          </li>
+        </ul>
+        <div class="input-group">
+          <input
+            class="form-control"
+            placeholder="Nom du projet"
+            type="text"
+          >
+          <button type="button" class="btn btn-secondary btn-sm">
+            Créer
+          </button>
         </div>
-      </div>
+      </LeftColumn>
       <div class="col">
         <!-- Tabs -->
         <div class="row">
