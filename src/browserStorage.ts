@@ -1,6 +1,8 @@
 import notificationManager, { NotificationType } from '@/managers/notificationManager'
 
 export enum StorageKey {
+  CurrentProjectId = 'currentProjectId', // Currently edited/seen project
+  Projects = 'projects', // projects list
   SimulatorTab = 'simulatorTab', // Last active tab on the simulator
   SimulatorValue = 'simulatorValue' // Simple simulator current value
 }

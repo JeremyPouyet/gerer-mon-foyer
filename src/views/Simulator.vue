@@ -12,6 +12,7 @@ import { sexyAmount } from '@/formaters'
 import Project, { type Expense } from '@/project'
 import Distribution from '@/components/simulator/distribution.vue'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
+import projectManager from '@/managers/projectManager'
 
 const simulatorTabStorage = new BrowserStorage(localStorage, StorageKey.SimulatorTab)
 
@@ -20,8 +21,7 @@ const activeTab = ref<SimulatorTab>(simulatorTabStorage.get('simple') as Simulat
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
-const projectStringified = localStorage.getItem('currentProject') || '{}'
-const currentProject = reactive<Project>(new Project(JSON.parse(projectStringified)))
+const currentProject = reactive<Project>(projectManager.getCurrent())
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
 const newProjectName = ref(currentProject.name)
 const projectNameInput = ref<HTMLInputElement>()
@@ -35,9 +35,7 @@ onMounted(() => {
   const watchers = [
     watch(expenseValue, value => simulatorValueStorage.set(value)),
     watch(activeTab, currentTab => simulatorTabStorage.set(currentTab)),
-    watch(currentProject, () => {
-      localStorage.setItem('currentProject', JSON.stringify(currentProject))
-    })
+    watch(currentProject, project => projectManager.update(project))
   ]
 
   onUnmounted(() => watchers.forEach(stop => stop()))
@@ -102,6 +100,34 @@ function handleClickOutside(event: MouseEvent) : void {
           <div v-if="activeTab === 'advanced'" class="row">
             <h3>Mes projets</h3>
             <hr>
+            <ul class="item-list p-0">
+              <li v-for="project in projectManager.projects" :key="project.id" class="item py-2">
+                <div class="d-flex justify-content-between container-fluid align-items-center">
+                  <span
+                    v-tooltip
+                    data-bs-placement="right"
+                    data-bs-title="Cliquer pour sélectionner"
+                    style="cursor: pointer"
+                  >
+                    {{ project.name }}
+                    <NoteIcon :text="project.note" :unpaded="true" />
+                  </span>
+                  <div>
+                    <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="Nom du projet"
+                type="text"
+              >
+              <button type="button" class="btn btn-secondary btn-sm">
+                Créer
+              </button>
+            </div>
           </div>
         </div>
       </div>

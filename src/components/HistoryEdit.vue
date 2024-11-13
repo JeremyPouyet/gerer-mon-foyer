@@ -19,7 +19,7 @@ onMounted(() => {
 })
 
 function switchSample(date: string) : void {
-  const newSample = historyManager.sampleGet(date)
+  const newSample = historyManager.get(date)
 
   activeDate.value = date
   historyManager.activeDate = date

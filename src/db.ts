@@ -4,8 +4,10 @@ import historyManager, { type Sample } from './managers/historyManager'
 import Account, { AccountType } from './account'
 import userManager from './managers/userManager'
 import settingManager from './managers/settingManager'
+import projectManager from './managers/projectManager'
 
-type Persistable = 'account' | 'history' | 'settings' | 'users'
+const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
+type Persistable = typeof persistatbleKeys[number]
 
 class DB {
   readonly account = reactive<Account>(new Account({}, AccountType.Common))
@@ -21,6 +23,7 @@ class DB {
     this.account.empty()
     historyManager.empty()
     sessionStorage.clear()
+    projectManager.empty()
 
     // wait for watchers to save empty values before updating usavedChanges
     nextTick(() => this.unsavedChanges.value = 0)
@@ -28,7 +31,7 @@ class DB {
 
   export() : string {
     this.unsavedChanges.value = 0
-    return JSON.stringify(localStorage, ['account', 'history', 'settings', 'users'], 2)
+    return JSON.stringify(localStorage, [...persistatbleKeys], 2)
   }
 
   setup() : void {
@@ -43,6 +46,7 @@ class DB {
       Object.assign(this.account, JSON.parse(account))
 
     historyManager.load()
+    projectManager.load()
     settingManager.load()
   }
 
