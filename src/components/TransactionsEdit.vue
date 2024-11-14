@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
-import TableFooter from './TransactionsTable/TableFooter.vue'
-import TableHeader from './TransactionsTable/TableHeader.vue'
+import TableFooter from './transactionsTable/TableFooter.vue'
+import TableHeader from './transactionsTable/TableHeader.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
