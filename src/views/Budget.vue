@@ -2,12 +2,12 @@
 import '@/assets/secondary.scss'
 
 import TransactionsEdit from '@/components/TransactionsEdit.vue'
-import UsersEdit from '@/components/UsersEdit.vue'
+import UsersEdit from '@/components/leftColumns/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
 import db from '@/db'
 import userManager from '@/managers/userManager'
-import LeftColumn from '@/components/LeftColumn.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 </script>
 
 <template>

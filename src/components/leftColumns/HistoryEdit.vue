@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Note from './Note.vue'
-import NoteIcon from './NoteIcon.vue'
+import Note from '@/components/Note.vue'
+import NoteIcon from '@/components/NoteIcon.vue'
 
 import { onMounted, ref } from 'vue'
 
@@ -67,10 +67,3 @@ function removeSample(date: string) : void {
     </li>
   </ul>
 </template>
-
-<style scoped>
-.active {
-  font-weight: bold;
-  color: #000;
-}
-</style>

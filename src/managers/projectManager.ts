@@ -2,15 +2,40 @@ import BrowserStorage, { StorageKey } from '@/browserStorage'
 import Project from '@/project'
 import type { ID } from '@/types'
 
-class ProjectManager {
+class ProjectManager extends EventTarget {
   #currentIdStorage: BrowserStorage
   #projects: Map<ID, Project>
   #projectsStorage: BrowserStorage
 
   constructor() {
+    super()
     this.#currentIdStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentProjectId)
     this.#projectsStorage = new BrowserStorage(localStorage, StorageKey.Projects)
     this.#projects = new Map()
+  }
+
+  create(name: string) : void {
+    const trimmedName = name.trim()
+
+    if (!trimmedName) return
+
+    const project = new Project({ name })
+
+    this.#projects.set(project.id, project)
+    this.save()
+  }
+
+  set current(id: ID) {
+    if (this.#currentIdStorage.get() === id) return
+    if (!this.#projects.has(id)) return
+
+    this.#currentIdStorage.set(id)
+    this.dispatchEvent(new Event('switchProject'))
+  }
+
+  delete(id: ID) : void {
+    this.#projects.delete(id)
+    this.save()
   }
 
   empty() : void {
@@ -43,7 +68,9 @@ class ProjectManager {
   }
 
   save() : void {
-    this.#projectsStorage.set(JSON.stringify([...this.#projects.values()]))
+    const projects = [...this.#projects.values()]
+    this.#projectsStorage.set(JSON.stringify(projects))
+    this.dispatchEvent(new CustomEvent('update', { detail :projects }))
   }
 
   update(updates: Partial<Project> & { id: ID }) {

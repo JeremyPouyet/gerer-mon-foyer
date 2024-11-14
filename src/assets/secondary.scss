@@ -10,6 +10,11 @@
 @import '../../node_modules/bootstrap/scss/toasts';
 @import '../../node_modules/bootstrap/scss/helpers/position';
 
+.active {
+  font-weight: bold;
+  color: #000;
+}
+
 .rounded-shadow {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

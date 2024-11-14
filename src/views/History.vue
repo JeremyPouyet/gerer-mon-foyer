@@ -2,14 +2,14 @@
 import '@/assets/secondary.scss'
 
 import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
-import HistoryEdit from '@/components/HistoryEdit.vue'
+import HistoryEdit from '@/components/leftColumns/HistoryEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
 
 import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
 import historyManager, { type Sample } from '@/managers/historyManager'
-import LeftColumn from '@/components/LeftColumn.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null

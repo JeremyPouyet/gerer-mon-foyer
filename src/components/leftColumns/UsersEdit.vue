@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserLine from './UserLine.vue'
+import UserLine from '@/components/UserLine.vue'
 
 import { ref } from 'vue'
 
