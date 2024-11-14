@@ -2,6 +2,11 @@ import BrowserStorage, { StorageKey } from '@/browserStorage'
 import Project from '@/project'
 import type { ID } from '@/types'
 
+/**
+ * Manages project creation, deletion, updates, and storage.
+ * Extends EventTarget to dispatch events on state changes (update, switchProject).
+ * @class
+ */
 class ProjectManager extends EventTarget {
   #currentIdStorage: BrowserStorage
   #projects: Map<ID, Project>
@@ -14,6 +19,11 @@ class ProjectManager extends EventTarget {
     this.#projects = new Map()
   }
 
+  /**
+   * Creates a new project with a specified name and stores it.
+   *
+   * @param name - The name of the project to create.
+   */
   create(name: string) : void {
     const trimmedName = name.trim()
 
@@ -22,9 +32,14 @@ class ProjectManager extends EventTarget {
     const project = new Project({ name })
 
     this.#projects.set(project.id, project)
-    this.save()
+    this.#save()
   }
 
+  /**
+   * Sets the current active project by its ID and dispatches a "switchProject" event.
+   *
+   * @param id - The ID of the project to set as current.
+   */
   set current(id: ID) {
     if (this.#currentIdStorage.get() === id) return
     if (!this.#projects.has(id)) return
@@ -33,16 +48,29 @@ class ProjectManager extends EventTarget {
     this.dispatchEvent(new Event('switchProject'))
   }
 
+  /**
+   * Deletes a project by its ID and saves the updated state.
+   *
+   * @param {ID} id - The ID of the project to delete.
+   */
   delete(id: ID) : void {
     this.#projects.delete(id)
-    this.save()
+    this.#save()
   }
 
+  /**
+   * Clears all projects and saves the updated state.
+   */
   empty() : void {
     this.#projects.clear()
-    this.save()
+    this.#save()
   }
 
+  /**
+   * Retrieves the current project or creates a new one if none is set.
+   *
+   * @return The current project instance.
+   */
   getCurrent() : Project {
     const id = this.#currentIdStorage.get() as ID
 
@@ -55,6 +83,9 @@ class ProjectManager extends EventTarget {
     return this.#projects.get(id) as Project
   }
 
+  /**
+   * Loads projects from storage into the internal projects Map.
+   */
   load() : void {
     this.#projects.clear()
     const stringifiedProjects = this.#projectsStorage.get('[]')
@@ -63,21 +94,35 @@ class ProjectManager extends EventTarget {
     })
   }
 
+  /**
+   * Gets an array of all projects currently stored.
+   *
+   * @return An array of all Project instances.
+   */
   get projects() : Project[] {
     return [...this.#projects.values()]
   }
 
-  save() : void {
+  /**
+   * Saves all projects to storage and dispatches an "update" event.
+   */
+  #save() : void {
     const projects = [...this.#projects.values()]
     this.#projectsStorage.set(JSON.stringify(projects))
-    this.dispatchEvent(new CustomEvent('update', { detail :projects }))
+    this.dispatchEvent(new CustomEvent('update', { detail: projects }))
   }
 
-  update(updates: Partial<Project> & { id: ID }) {
+  /**
+   * Updates a specified project with new data and saves the updated state.
+   *
+   * @param updates - The project updates, including the project ID.
+   */
+  update(updates: Partial<Project> & { id: ID }) : void {
     const project = this.#projects.get(updates.id)
+
     if (project) {
       this.#projects.set(project.id, Object.assign(project, updates))
-      this.save()
+      this.#save()
     }
   }
 }
