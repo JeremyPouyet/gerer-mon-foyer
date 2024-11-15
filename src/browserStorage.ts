@@ -9,14 +9,18 @@ export enum StorageKey {
 
 export default class BrowserStorage {
   /** Memory storage instance (e.g., localStorage or sessionStorage) */
-  readonly memory: Storage
+  #memory: Storage
 
   /** Key used to store and retrieve data */
-  readonly key: string
+  #key: string
+
+  /** Cached value */
+  #value: string
 
   constructor(memory: Storage, key: StorageKey) {
-    this.memory = memory
-    this.key = key
+    this.#memory = memory
+    this.#key = key
+    this.#value = this.#memory.getItem(this.#key) || ''
   }
 
   /**
@@ -26,7 +30,7 @@ export default class BrowserStorage {
    * @return The stored value or the provided default value.
    */
   get(missing = '') {
-    return this.memory.getItem(this.key) || missing
+    return this.#value || missing
   }
 
   /**
@@ -36,7 +40,8 @@ export default class BrowserStorage {
    */
   set(value: string) {
     try {
-      this.memory.setItem(this.key, value)
+      this.#memory.setItem(this.#key, value)
+      this.#value = value
     } catch {
       notificationManager.create('Plus de mémoire… Merci d’envoyer un mail à contact@gerer-mon-foyer.fr avec votre sauvegarde.', NotificationType.Error)
     }

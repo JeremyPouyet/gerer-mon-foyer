@@ -9,20 +9,19 @@ import type { ID } from '@/types'
  */
 class ProjectManager extends EventTarget {
   #currentIdStorage: BrowserStorage
-  #projects: Map<ID, Project>
+  #projects: Map<ID, Project> = new Map<ID, Project>()
   #projectsStorage: BrowserStorage
 
   constructor() {
     super()
     this.#currentIdStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentProjectId)
     this.#projectsStorage = new BrowserStorage(localStorage, StorageKey.Projects)
-    this.#projects = new Map()
   }
 
   /**
    * Creates a new project with a specified name and stores it.
    *
-   * @param name - The name of the project to create.
+   * @param name The name of the project to create.
    */
   create(name: string) : void {
     const trimmedName = name.trim()
@@ -35,10 +34,17 @@ class ProjectManager extends EventTarget {
     this.#save()
   }
 
+  #buildDefaultProject() {
+    const project = new Project()
+    this.#projects.set(project.id, project)
+    this.current = project.id
+    return project
+  }
+
   /**
    * Sets the current active project by its ID and dispatches a "switchProject" event.
    *
-   * @param id - The ID of the project to set as current.
+   * @param id The ID of the project to set as current.
    */
   set current(id: ID) {
     if (this.#currentIdStorage.get() === id) return
@@ -50,10 +56,25 @@ class ProjectManager extends EventTarget {
 
   /**
    * Deletes a project by its ID and saves the updated state.
+   * If the deleted project is the current active one, a new project
+   * will be set as the current active project.
    *
-   * @param {ID} id - The ID of the project to delete.
+   * @param {ID} id The ID of the project to delete.
    */
   delete(id: ID) : void {
+    if (!this.#projects.has(id)) return
+
+    const projects = this.projects
+    const index = projects.findIndex(project => project.id === id)
+
+    // if the current active project is the deleted one
+    if (this.#currentIdStorage.get() === id) {
+      if (this.#projects.size === 1)
+        this.#buildDefaultProject()
+      else
+        this.current = (projects[index - 1] || projects[index + 1]).id
+    }
+
     this.#projects.delete(id)
     this.#save()
   }
@@ -74,12 +95,8 @@ class ProjectManager extends EventTarget {
   getCurrent() : Project {
     const id = this.#currentIdStorage.get() as ID
 
-    if (!id || !this.#projects.has(id)) {
-      const project = new Project()
-      this.#currentIdStorage.set(project.id)
-      this.#projects.set(project.id, project)
-      return project
-    }
+    if (!id || !this.#projects.has(id))
+      return this.#buildDefaultProject()
     return this.#projects.get(id) as Project
   }
 
@@ -95,12 +112,14 @@ class ProjectManager extends EventTarget {
   }
 
   /**
-   * Gets an array of all projects currently stored.
+   * Gets an array of all projects currently stored sorted by creation date.
    *
    * @return An array of all Project instances.
    */
-  get projects() : Project[] {
-    return [...this.#projects.values()]
+  get projects(): Project[] {
+    return Array.from(this.#projects.values()).sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
   }
 
   /**
@@ -109,13 +128,13 @@ class ProjectManager extends EventTarget {
   #save() : void {
     const projects = [...this.#projects.values()]
     this.#projectsStorage.set(JSON.stringify(projects))
-    this.dispatchEvent(new CustomEvent('update', { detail: projects }))
+    this.dispatchEvent(new Event('update'))
   }
 
   /**
    * Updates a specified project with new data and saves the updated state.
    *
-   * @param updates - The project updates, including the project ID.
+   * @param updates The project updates, including the project ID.
    */
   update(updates: Partial<Project> & { id: ID }) : void {
     const project = this.#projects.get(updates.id)

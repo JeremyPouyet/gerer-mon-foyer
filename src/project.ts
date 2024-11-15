@@ -40,21 +40,47 @@ export default class Project {
     this.name = props.name ?? 'Mon super projet'
   }
 
+  /**
+   * Creates a new expense and adds it to the expenses list.
+   *
+   * @param expense The expense details, excluding the id.
+   */
   create(expense: Omit<Expense, 'id'>) {
     const id = newId()
-    this.expenses[id] = Object.assign(expense, { id })
+    this.expenses[id] = { ...expense, id: id }
+    this.#updateTimestamp()
   }
 
+  /**
+   * Deletes an expense by ID.
+   *
+   * @param id The ID of the expense to delete.
+   * @return Whether the deletion was successful.
+   */
   delete(id: ID) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete this.expenses[id]
+    if (delete this.expenses[id])
+      this.#updateTimestamp()
   }
 
+  /**
+   * Gets the sorted list of expenses with the sum of all expenses.
+   *
+   * @param sortType The sorting preference.
+   * @return The sorted list of expenses and their total sum.
+   */
   expenseSorted() : ExpenseList {
     return {
       sum: Object.values(this.expenses).reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
       values: Object.values(this.expenses)
         .sort(sorters[settingManager.settings.sort])
     }
+  }
+
+  /**
+   * Updates the `updatedAt` timestamp to the current time.
+   */
+  #updateTimestamp(): void {
+    this.updatedAt = new Date().toISOString()
   }
 }

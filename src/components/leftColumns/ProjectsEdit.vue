@@ -10,14 +10,16 @@ import type Project from '@/project'
 function projectCreate() : void {
   projectManager.create(projectName.value)
   projectName.value = ''
+  updateProjects()
 }
 
 function projectDelete(id: ID) : void {
   projectManager.delete(id)
+  updateProjects()
 }
 
-function updateProjects(event: Event) {
-  projects.value = (event as CustomEvent<Project[]>).detail
+function updateProjects() {
+  projects.value = projectManager.projects
 }
 
 function switchProject(id: ID) {
@@ -27,7 +29,7 @@ function switchProject(id: ID) {
 const projectName = ref('')
 const projects = ref<Project[]>(projectManager.projects)
 
-onMounted(() => projectManager.addEventListener('update', event => updateProjects(event)))
+onMounted(() => projectManager.addEventListener('update', updateProjects))
 onUnmounted(() => window.removeEventListener('update', updateProjects))
 </script>
 

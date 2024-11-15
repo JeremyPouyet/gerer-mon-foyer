@@ -2,6 +2,7 @@
 import '@/assets/secondary.scss'
 
 import AdvancedSimulator from '@/components/simulator/AdvancedSimulator.vue'
+import Distribution from '@/components/simulator/Distribution.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
 
@@ -11,7 +12,6 @@ import { limitedEvaluate } from '@/helpers'
 import settingManager from '@/managers/settingManager'
 import { sexyAmount } from '@/formaters'
 import Project from '@/project'
-import Distribution from '@/components/simulator/Distribution.vue'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
 import projectManager from '@/managers/projectManager'
 

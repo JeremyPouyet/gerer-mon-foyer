@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Distribution from '@/components/simulator/Distribution.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
