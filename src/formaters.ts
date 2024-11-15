@@ -33,7 +33,7 @@ export function sexyAmount(amount: number) : string {
  * Formats a string date to a readable date format.
  *
  * @param strDate - The date as a string
- * @returns The formatted date as a string
+ * @return The formatted date as a string
  */
 export function sexyDate(strDate: string) : string {
   return Intl.DateTimeFormat(
@@ -49,9 +49,12 @@ export function sexyDate(strDate: string) : string {
  *
  * @param value Number to format
  * @param style Intl.NumberFormatOptions.style possible value
- * @returns Formated number
+ * @return Formated number
  */
 export function sexyNumber(value: number, style = 'decimal') : string {
+  if (!isFinite(value))
+    return 'NC'
+
   return Intl.NumberFormat(CurrencyToLocale[settingManager.settings.currency], {
     maximumFractionDigits: 2,
     minimumFractionDigits: settingManager.settings.twoDecimals ? 2 : 0,
