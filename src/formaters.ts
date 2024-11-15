@@ -33,7 +33,7 @@ export function sexyAmount(amount: number) : string {
  * Formats a string date to a readable date format.
  *
  * @param strDate - The date as a string
- * @returns The formatted date as a string
+ * @return The formatted date as a string
  */
 export function sexyDate(strDate: string) : string {
   return Intl.DateTimeFormat(
@@ -47,11 +47,14 @@ export function sexyDate(strDate: string) : string {
  * - 2 digits are always added to the decimal part when SettingsManager.settings.twoDecimals is true
  * - The integer part is separated in groups of 3 digits
  *
- * @param {Number} value Number to format
- * @param {String} style Intl.NumberFormatOptions.style possible value
- * @returns {String} Formated number
+ * @param value Number to format
+ * @param style Intl.NumberFormatOptions.style possible value
+ * @return Formated number
  */
 export function sexyNumber(value: number, style = 'decimal') : string {
+  if (!isFinite(value))
+    return 'NC'
+
   return Intl.NumberFormat(CurrencyToLocale[SettingsManager.settings.currency], {
     maximumFractionDigits: 2,
     minimumFractionDigits: SettingsManager.settings.twoDecimals ? 2 : 0,

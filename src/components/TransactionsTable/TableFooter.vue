@@ -23,7 +23,7 @@ const totals = computed<number[]>(() =>
       <td v-for="(total, index) in totals" :key="`total-${index}`" class="text-end">
         {{ sexyNumber(total) }}
       </td>
-      <td v-if="income" class="text-end">
+      <td v-if="income != null" class="text-end">
         {{ sexyNumber((totals.at(-1) ?? 0) / (income * 12) * 100) }}
       </td>
       <!-- When the table has no action, additional tds are required -->
