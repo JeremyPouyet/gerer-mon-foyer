@@ -16,6 +16,12 @@ export interface ExpenseList {
   sum: number
 }
 
+export enum ProjectStates {
+  Started = 'started',
+  Frozen = 'frozen',
+  Ended = 'ended'
+}
+
 // List of possible transactions sort
 const sorters = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -31,6 +37,7 @@ export default class Project {
   readonly expenses: Record<ID, Expense>
   name: string
   note?: string
+  state: ProjectStates
 
   constructor(props: Partial<Project> = {}) {
     this.createdAt = props.createdAt ?? new Date().toISOString()
@@ -38,6 +45,7 @@ export default class Project {
     this.id = props.id ?? newId()
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Mon super projet'
+    this.state = props.state ?? ProjectStates.Started
   }
 
   /**

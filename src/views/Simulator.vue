@@ -24,6 +24,10 @@ let computedValue = ref(0)
 const expenseValue = ref<string>('')
 const currentProject = ref<Project>(projectManager.getCurrent())
 
+function switchProject() {
+  currentProject.value = projectManager.getCurrent()
+}
+
 onMounted(() => {
   const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
   expenseValue.value = simulatorValueStorage.get('')
@@ -33,10 +37,11 @@ onMounted(() => {
     watch(activeTab, currentTab => simulatorTabStorage.set(currentTab)),
   ]
 
-  onUnmounted(() => watchers.forEach(stop => stop()))
+  projectManager.addEventListener('switchProject', switchProject)
 
-  projectManager.addEventListener('switchProject', () => {
-    currentProject.value = projectManager.getCurrent()
+  onUnmounted(() => {
+    watchers.forEach(stop => stop())
+    projectManager.removeEventListener('switchProject', switchProject)
   })
 })
 
@@ -95,7 +100,9 @@ function computeValue() : number {
         </div>
         <!-- Simple simulator -->
         <div v-if="activeTab === 'simple'" class="mb-4">
-          <small class="text-muted d-block mb-4">Pour un achat ponctuel type éléctroménager ou meuble.</small>
+          <p class="mb-4">
+            Pour un achat ponctuel type éléctroménager ou meuble.
+          </p>
           <div class="row">
             <div class="col-md-5 col-sm-12">
               <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
@@ -123,7 +130,7 @@ function computeValue() : number {
         </div>
         <!-- Advanced simulator -->
         <div v-if="activeTab === 'advanced'" class="mb-4">
-          <AdvancedSimulator :current-project="currentProject" />
+          <AdvancedSimulator :key="currentProject.id" :current-project="currentProject" />
         </div>
       </div>
     </div>

@@ -52,7 +52,7 @@ function removeSample(date: string) : void {
           {{ sexyDate(sample.date) }}
           <NoteIcon :text="sample.note" :unpaded="true" />
         </span>
-        <div>
+        <div class="text-nowrap">
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"

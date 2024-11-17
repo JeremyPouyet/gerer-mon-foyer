@@ -1,4 +1,5 @@
 import { Frequency, Path, SortType, TransactionType } from '@/types'
+import { ProjectStates } from '@/project'
 
 export default {
   frequencies: {
@@ -54,6 +55,11 @@ export default {
         true: 'Les nombres seront affichés avec 2 décimales.'
       }
     }
+  },
+  projectStates: {
+    [ProjectStates.Started]: 'En cours',
+    [ProjectStates.Frozen]: 'Figé',
+    [ProjectStates.Ended]: 'Terminé'
   },
   sortTypes: {
     [SortType.Abc]: 'Alphabétique',

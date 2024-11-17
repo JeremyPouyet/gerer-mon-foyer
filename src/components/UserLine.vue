@@ -60,7 +60,7 @@ function userDelete(user: User) : void {
         @keydown.esc="cancelEdit"
       >
     </span>
-    <div>
+    <div class="text-nowrap">
       <img
         v-if="isEditing === false"
         v-tooltip="{ disposeOnClick: true }"

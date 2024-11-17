@@ -3,12 +3,13 @@ import Distribution from '@/components/simulator/Distribution.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import Project, { type Expense } from '@/project'
 import projectManager from '@/managers/projectManager'
 
-const { currentProject } = defineProps<{ currentProject: Project }>()
+const props = defineProps<{ currentProject: Project }>()
+const currentProject = reactive(props.currentProject)
 
 function expenseAdd() : void {
   if (!newExpense.value.name) return
@@ -47,37 +48,52 @@ const projectNameInput = ref<HTMLInputElement>()
 const isEditing = ref(false)
 
 onMounted(() => {
-  const stop = watch(() => currentProject, project => projectManager.update(project))
+  const stop = watch(currentProject, project => projectManager.update(project))
 
   onUnmounted(() => stop())
 })
 </script>
 
 <template>
-  <small class="text-muted d-block mb-4">Pour un projet plus important, comme budgéter des vacances ou des travaux.</small>
-  <h3 v-if="isEditing">
-    <input
-      ref="projectNameInput"
-      v-model="newProjectName"
-      type="text"
-      @keydown.enter="executeEditName"
-      @keydown.tab="executeEditName"
-      @keydown.esc="cancelEdit"
-    >
-  </h3>
-  <h3 v-else class="mb-4">
-    {{ currentProject.name }}
-    <img
-      v-tooltip="{ disposeOnClick: true }"
-      alt="Éditer le nom du projet"
-      class="icon-container-small ms-2 icon-hoverable"
-      data-bs-title="Éditer le nom du projet"
-      src="@/assets/icons/pencil.png"
-      @click="startEditProjectName"
-    >
-  </h3>
+  <p class="mb-4">
+    Pour un projet plus important, comme budgéter des vacances ou des travaux.
+  </p>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h3 v-if="isEditing">
+        <input
+          ref="projectNameInput"
+          v-model="newProjectName"
+          type="text"
+          @keydown.enter="executeEditName"
+          @keydown.tab="executeEditName"
+          @keydown.esc="cancelEdit"
+        >
+      </h3>
+      <h3 v-else class="mb-4">
+        {{ currentProject.name }}
+        <img
+          v-tooltip="{ disposeOnClick: true }"
+          alt="Éditer le nom du projet"
+          class="icon-container-small ms-2 icon-hoverable"
+          data-bs-title="Éditer le nom du projet"
+          src="@/assets/icons/pencil.png"
+          @click="startEditProjectName"
+        >
+      </h3>
+    </div>
+    <div>
+      <button
+        v-tooltip="{ disposeOnClick: true }"
+        class="btn btn-secondary"
+        data-bs-title="Le projet ne sera plus éditable, les ratios et les montants seront figés"
+      >
+        Figer le projet
+      </button>
+    </div>
+  </div>
   <div class="row">
-    <div class="col-md-5 col-sm-12">
+    <div class="col-md-6 col-sm-12">
       <span class="form-label fw-bold d-block">Dépenses</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">

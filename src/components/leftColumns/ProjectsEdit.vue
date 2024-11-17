@@ -7,6 +7,9 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import type { ID } from '@/types'
 import type Project from '@/project'
 import { sexyDate } from '@/formaters'
+import texts from '@/texts'
+
+const activeId = ref(projectManager.getCurrent().id)
 
 function projectCreate() : void {
   projectManager.create(projectName.value)
@@ -25,6 +28,7 @@ function updateProjects() {
 
 function switchProject(id: ID) {
   projectManager.current = id
+  activeId.value = projectManager.getCurrent().id
 }
 
 const projectName = ref('')
@@ -45,14 +49,14 @@ onUnmounted(() => window.removeEventListener('update', updateProjects))
             data-bs-placement="right"
             data-bs-title="Cliquer pour sélectionner"
             style="cursor: pointer"
-            :class="{ active: projectManager.getCurrent().id === project.id }"
+            :class="{ active: activeId === project.id }"
             @click="() => switchProject(project.id)"
           >
             {{ project.name }}
             <NoteIcon :text="project.note" :unpaded="true" />
           </span>
         </div>
-        <div>
+        <div class="text-nowrap">
           <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
@@ -65,9 +69,15 @@ onUnmounted(() => window.removeEventListener('update', updateProjects))
         </div>
       </div>
       <div class="container-fluid">
-        <p class="fw-light mb-0">Création: {{ sexyDate(project.createdAt, false) }}</p>
-        <p class="fw-light mb-0">Mis à jour: {{ sexyDate(project.updatedAt, false) }}</p>
-        <p class="fw-light mb-0">État: En cours</p>
+        <small class="d-block">
+          Création: {{ sexyDate(project.createdAt, false) }}
+        </small>
+        <small class="d-block">
+          Mis à jour: {{ sexyDate(project.updatedAt, false) }}
+        </small>
+        <small class="d-block">
+          État: {{ texts.projectStates[project.state] }}
+        </small>
       </div>
     </li>
   </ul>
