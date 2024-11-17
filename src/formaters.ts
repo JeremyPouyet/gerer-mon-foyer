@@ -1,15 +1,5 @@
 import settingManager, { CurrencyToLocale } from './managers/settingManager'
 
-/* eslint-disable sort-keys */
-const dateTimeFormatOptions: Partial<Intl.DateTimeFormatOptions> = {
-  minute: 'numeric',
-  hour: 'numeric',
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric'
-}
-/* eslint-enable sort-keys */
-
 /**
  * Formats a number as a currency amount based on user settings:
  * - 2 digits are always added to the decimal part when settingManager.settings.twoDecimals is true
@@ -33,9 +23,15 @@ export function sexyAmount(amount: number) : string {
  * Formats a string date to a readable date format.
  *
  * @param strDate - The date as a string
+ * @param includeTime - Whether to include hours and minutes (default: true)
  * @return The formatted date as a string
  */
-export function sexyDate(strDate: string) : string {
+export function sexyDate(strDate: string, includeTime = true) : string {
+  const dateTimeFormatOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric'}
+
+  if (includeTime)
+    Object.assign(dateTimeFormatOptions, { hour: 'numeric', minute: 'numeric' })
+
   return Intl.DateTimeFormat(
     CurrencyToLocale[settingManager.settings.currency],
     dateTimeFormatOptions

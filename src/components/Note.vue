@@ -9,8 +9,8 @@ import Project from '@/project'
 const emit = defineEmits<
   (e: 'update', note: string | undefined) => void
 >()
-
 const props = defineProps<{ item: Account | Project | Transaction | Sample | Expense }>()
+
 const currentNote = ref<string | undefined>(props.item.note)
 const showNotePopup = ref<boolean>(false)
 const popupPosition = ref<'above' | 'below'>('above')

@@ -48,7 +48,8 @@ export default class Project {
   create(expense: Omit<Expense, 'id'>) {
     const id = newId()
     this.expenses[id] = { ...expense, id: id }
-    this.#updateTimestamp()
+    console.log(this)
+    this.updateTimestamp()
   }
 
   /**
@@ -60,7 +61,7 @@ export default class Project {
   delete(id: ID) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.expenses[id])
-      this.#updateTimestamp()
+      this.updateTimestamp()
   }
 
   /**
@@ -80,7 +81,7 @@ export default class Project {
   /**
    * Updates the `updatedAt` timestamp to the current time.
    */
-  #updateTimestamp(): void {
+  updateTimestamp(): void {
     this.updatedAt = new Date().toISOString()
   }
 }
