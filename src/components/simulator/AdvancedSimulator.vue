@@ -5,7 +5,7 @@ import NoteIcon from '@/components/NoteIcon.vue'
 
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-import Project, { type Expense } from '@/project'
+import Project, { type Expense, ProjectStates } from '@/project'
 import projectManager from '@/managers/projectManager'
 
 const props = defineProps<{ currentProject: Project }>()
@@ -43,9 +43,23 @@ function handleClickOutside(event: MouseEvent) : void {
 
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
 const expenses = computed(() => currentProject.expenseSorted())
+const projectState = ref(currentProject.state)
 const newProjectName = ref(currentProject.name)
 const projectNameInput = ref<HTMLInputElement>()
 const isEditing = ref(false)
+
+const toNextState = new Map([
+  [ProjectStates.Started, ProjectStates.Frozen],
+  [ProjectStates.Frozen, ProjectStates.Ended]
+])
+
+function moveState() {
+  const nextState = toNextState.get(currentProject.state)
+  if (nextState) {
+    projectManager.update({ id: currentProject.id, state: nextState })
+    projectState.value = nextState
+  }
+}
 
 onMounted(() => {
   const stop = watch(currentProject, project => projectManager.update(project))
@@ -58,7 +72,7 @@ onMounted(() => {
   <p class="mb-4">
     Pour un projet plus important, comme budgéter des vacances ou des travaux.
   </p>
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between col-md-11">
     <div>
       <h3 v-if="isEditing">
         <input
@@ -84,11 +98,22 @@ onMounted(() => {
     </div>
     <div>
       <button
+        v-if="projectState === ProjectStates.Started"
         v-tooltip="{ disposeOnClick: true }"
         class="btn btn-secondary"
-        data-bs-title="Le projet ne sera plus éditable, les ratios et les montants seront figés"
+        data-bs-title="Le projet ne sera plus éditable, les ratios et les montants seront figés. Cela indique que le projet est définis et que les habitants peuvent commencer les payments."
+        @click="moveState"
       >
         Figer le projet
+      </button>
+      <button
+        v-else-if="projectState === ProjectStates.Frozen"
+        v-tooltip="{ disposeOnClick: true }"
+        class="btn btn-secondary"
+        data-bs-title="Le projet sera considéré comme terminé."
+        @click="moveState"
+      >
+        Marquer comme terminé
       </button>
     </div>
   </div>
@@ -103,10 +128,10 @@ onMounted(() => {
                 Dépense
               </th>
               <th class="text-end" scope="col">
-                Prix
+                Quantitée
               </th>
               <th class="text-end" scope="col">
-                Quantitée
+                Prix
               </th>
               <th class="text-end" scope="col">
                 Total
@@ -123,10 +148,10 @@ onMounted(() => {
                 <NoteIcon :text="expense.note" />
               </td>
               <td class="align-middle text-end">
-                {{ expense.price }}
+                {{ expense.quantity }}
               </td>
               <td class="align-middle text-end">
-                {{ expense.quantity }}
+                {{ expense.price }}
               </td>
               <td class="align-middle text-end">
                 {{ expense.quantity * expense.price }}
@@ -160,21 +185,12 @@ onMounted(() => {
           </tfoot>
         </table>
       </div>
-      <div class="input-group flex-sm-row">
+      <div v-if="projectState === ProjectStates.Started" class="input-group flex-sm-row">
         <input
           v-model="newExpense.name"
           class="form-control"
           placeholder="Dépense"
           type="text"
-          @keydown.enter="expenseAdd"
-        >
-        <input
-          v-model="newExpense.price"
-          v-tooltip
-          class="form-control"
-          data-bs-title="Prix"
-          placeholder="Prix"
-          type="number"
           @keydown.enter="expenseAdd"
         >
         <input
@@ -184,6 +200,15 @@ onMounted(() => {
           data-bs-title="Quantité"
           type="number"
           placeholder="Quantité"
+          @keydown.enter="expenseAdd"
+        >
+        <input
+          v-model="newExpense.price"
+          v-tooltip
+          class="form-control"
+          data-bs-title="Prix"
+          placeholder="Prix"
+          type="number"
           @keydown.enter="expenseAdd"
         >
         <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
