@@ -11,6 +11,13 @@ import projectManager from '@/managers/projectManager'
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
+const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
+const expenses = computed(() => currentProject.expenseSorted())
+const projectState = ref(currentProject.state)
+const newProjectName = ref('')
+const projectNameInput = ref<HTMLInputElement>()
+const isEditing = ref(false)
+
 function expenseAdd() : void {
   if (!newExpense.value.name) return
 
@@ -19,7 +26,7 @@ function expenseAdd() : void {
   newExpense.value = { name: '', price: 0, quantity: 1 }
 }
 
-function startEditProjectName() {
+function startEditProjectName() : void {
   isEditing.value = true
   newProjectName.value = currentProject.name
   document.addEventListener('mousedown', handleClickOutside)
@@ -27,7 +34,7 @@ function startEditProjectName() {
 }
 
 function executeEditName() : void {
-  currentProject.name = newProjectName.value
+  projectManager.update({ id: currentProject.id, name: newProjectName.value })
   cancelEdit()
 }
 
@@ -41,30 +48,26 @@ function handleClickOutside(event: MouseEvent) : void {
   if (!projectNameInput.value?.contains(event.target as Node)) executeEditName()
 }
 
-const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
-const expenses = computed(() => currentProject.expenseSorted())
-const projectState = ref(currentProject.state)
-const newProjectName = ref(currentProject.name)
-const projectNameInput = ref<HTMLInputElement>()
-const isEditing = ref(false)
+function moveState() : void {
+  if (currentProject.state === ProjectStates.Ended)
+    return
 
-const toNextState = new Map([
-  [ProjectStates.Started, ProjectStates.Frozen],
-  [ProjectStates.Frozen, ProjectStates.Ended]
-])
+  const nextState = {
+    [ProjectStates.Started]: ProjectStates.Frozen,
+    [ProjectStates.Frozen]: ProjectStates.Ended
+  }[currentProject.state]
 
-function moveState() {
-  const nextState = toNextState.get(currentProject.state)
-  if (nextState) {
-    projectManager.update({ id: currentProject.id, state: nextState })
-    projectState.value = nextState
-  }
+  projectManager.update({ id: currentProject.id, state: nextState })
+  projectState.value = nextState
 }
 
 onMounted(() => {
   const stop = watch(currentProject, project => projectManager.update(project))
 
-  onUnmounted(() => stop())
+  onUnmounted(() => {
+    document.removeEventListener('mousedown', handleClickOutside)
+    stop()
+  })
 })
 </script>
 
@@ -214,6 +217,13 @@ onMounted(() => {
         <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
           Ajouter
         </button>
+      </div>
+      <div v-else>
+        <span class="form-label fw-bold d-block">Payments</span>
+        <div class="table-responsive shadowed-border mb-3">
+          <table class="table table-hover mb-0">
+          </table>
+        </div>
       </div>
     </div>
     <Distribution :total="expenses.sum" />

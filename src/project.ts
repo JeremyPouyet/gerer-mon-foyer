@@ -38,14 +38,16 @@ export default class Project {
   name: string
   note?: string
   state: ProjectStates
+  ratios: Record<string, number>
 
   constructor(props: Partial<Project> = {}) {
     this.createdAt = props.createdAt ?? new Date().toISOString()
     this.updatedAt = props.updatedAt ?? this.createdAt
     this.id = props.id ?? newId()
     this.expenses = props.expenses ?? {}
-    this.name = props.name ?? 'Mon super projet'
+    this.name = props.name ?? 'Notre super projet'
     this.state = props.state ?? ProjectStates.Started
+    this.ratios = props.ratios ?? {}
   }
 
   /**
@@ -56,7 +58,6 @@ export default class Project {
   create(expense: Omit<Expense, 'id'>) {
     const id = newId()
     this.expenses[id] = { ...expense, id: id }
-    console.log(this)
     this.updateTimestamp()
   }
 

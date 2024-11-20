@@ -34,7 +34,9 @@ function switchProject(id: ID) {
 const projectName = ref('')
 const projects = ref<Project[]>(projectManager.projects)
 
-onMounted(() => projectManager.addEventListener('update', updateProjects))
+onMounted(() => {
+  projectManager.addEventListener('update', updateProjects)
+})
 onUnmounted(() => window.removeEventListener('update', updateProjects))
 </script>
 
