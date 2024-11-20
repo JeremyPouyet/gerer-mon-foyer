@@ -12,6 +12,7 @@ const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
+const newPayment = ref({ comment: '', value: null })
 const expenses = computed(() => currentProject.expenseSorted())
 const projectState = ref(currentProject.state)
 const newProjectName = ref('')
@@ -218,82 +219,110 @@ onMounted(() => {
           Ajouter
         </button>
       </div>
-      <div v-else>
-        <span class="form-label fw-bold d-block mt-4">Payments</span>
-        <div class="table-responsive shadowed-border mb-3">
-          <table class="table table-hover mb-0">
-            <tr>
-              <th colspan="3">
-                Hélène - Total: 450
-              </th>
-            </tr>
-            <tr>
-              <th>
-                Date
-              </th>
-              <th>
-                Valeur
-              </th>
-              <th>
-                Commentaire
-              </th>
-            </tr>
-            <tr>
-              <td>
-                12/12/2024
-              </td>
-              <td>
-                250
-              </td>
-              <td>
-                Leroy Merlin
-              </td>
-            </tr>
-            <tr>
-              <th colspan="3">
-                Jérémy - Total: 650
-              </th>
-            </tr>
-            <tr>
-              <th>
-                Date
-              </th>
-              <th>
-                Valeur
-              </th>
-              <th>
-                Commentaire
-              </th>
-            </tr>
-            <tr>
-              <td>
-                12/12/2024
-              </td>
-              <td>
-                250
-              </td>
-              <td>
-                Leroy Merlin
-              </td>
-            </tr>
-            <tr>
-              <td>
-                12/12/2024
-              </td>
-              <td>
-                250
-              </td>
-              <td>
-                Leroy Merlin
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div v-if="projectState === ProjectStates.Frozen">
-          Ajouter une dépense
-        </div>
-      </div>
     </div>
     <Distribution :total="expenses.sum" />
+  </div>
+  <div v-if="projectState !== ProjectStates.Started" class="row">
+    <div class="col-md-6 col-sm-12">
+      <span class="form-label fw-bold d-block">Payments</span>
+      <div class="table-responsive shadowed-border mb-3">
+        <table class="table table-hover mb-0">
+          <tr>
+            <th colspan="3">
+              Hélène - Total: 450
+            </th>
+          </tr>
+          <tr>
+            <th>
+              Date
+            </th>
+            <th>
+              Valeur
+            </th>
+            <th>
+              Commentaire
+            </th>
+          </tr>
+          <tr>
+            <td>
+              12/12/2024
+            </td>
+            <td>
+              250
+            </td>
+            <td>
+              Leroy Merlin
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3">
+              Jérémy - Total: 650
+            </th>
+          </tr>
+          <tr>
+            <th>
+              Date
+            </th>
+            <th>
+              Valeur
+            </th>
+            <th>
+              Commentaire
+            </th>
+          </tr>
+          <tr>
+            <td>
+              12/12/2024
+            </td>
+            <td>
+              250
+            </td>
+            <td>
+              Leroy Merlin
+            </td>
+          </tr>
+          <tr>
+            <td>
+              12/12/2024
+            </td>
+            <td>
+              250
+            </td>
+            <td>
+              Leroy Merlin
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div v-if="projectState === ProjectStates.Frozen" class="input-group flex-sm-row">
+        <select class="form-select mt-2 mt-sm-0">
+          <option>
+            Hélène
+          </option>
+          <option>
+            Jérémy
+          </option>
+        </select>
+        <input
+          v-model="newPayment.value"
+          class="form-control"
+          placeholder="Valeur"
+          type="number"
+          @keydown.enter=""
+        >
+        <input
+          v-model="newPayment.comment"
+          v-tooltip
+          class="form-control"
+          data-bs-title="Commentaire"
+          type="text"
+          placeholder="Commentaire"
+          @keydown.enter=""
+        >
+        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newPayment.comment" @click="expenseAdd">
+          Ajouter
+        </button>
+      </div>
+    </div>
   </div>
 </template>
