@@ -12,7 +12,7 @@ const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
-const newPayment = ref({ comment: '', value: null })
+const newPayment = ref({ comment: '', resident: '', value: null })
 const expenses = computed(() => currentProject.expenseSorted())
 const projectState = ref(currentProject.state)
 const newProjectName = ref('')
@@ -60,6 +60,12 @@ function moveState() : void {
 
   projectManager.update({ id: currentProject.id, state: nextState })
   projectState.value = nextState
+  if (currentProject.state === ProjectStates.Frozen)
+    currentProject.freeze()
+}
+
+function paymentAdd() : void {
+
 }
 
 onMounted(() => {
@@ -227,80 +233,32 @@ onMounted(() => {
       <span class="form-label fw-bold d-block">Payments</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
-          <tr>
-            <th colspan="3">
-              Hélène - Total: 450
-            </th>
-          </tr>
-          <tr>
-            <th>
-              Date
-            </th>
-            <th>
-              Valeur
-            </th>
-            <th>
-              Commentaire
-            </th>
-          </tr>
-          <tr>
-            <td>
-              12/12/2024
-            </td>
-            <td>
-              250
-            </td>
-            <td>
-              Leroy Merlin
-            </td>
-          </tr>
-          <tr>
-            <th colspan="3">
-              Jérémy - Total: 650
-            </th>
-          </tr>
-          <tr>
-            <th>
-              Date
-            </th>
-            <th>
-              Valeur
-            </th>
-            <th>
-              Commentaire
-            </th>
-          </tr>
-          <tr>
-            <td>
-              12/12/2024
-            </td>
-            <td>
-              250
-            </td>
-            <td>
-              Leroy Merlin
-            </td>
-          </tr>
-          <tr>
-            <td>
-              12/12/2024
-            </td>
-            <td>
-              250
-            </td>
-            <td>
-              Leroy Merlin
-            </td>
-          </tr>
+          <template v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident">
+            <tr>
+              <th colspan="3">
+                {{ resident }} - Total 450
+              </th>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <th>Valeur</th>
+              <th>Commentaire</th>
+            </tr>
+            <tr v-for="payment in payments" :key="payment.id">
+              <td>{{ payment.date }}</td>
+              <td>{{ payment.value }}</td>
+              <td>{{ payment.comment }}</td>
+            </tr>
+          </template>
         </table>
       </div>
       <div v-if="projectState === ProjectStates.Frozen" class="input-group flex-sm-row">
-        <select class="form-select mt-2 mt-sm-0">
-          <option>
-            Hélène
-          </option>
-          <option>
-            Jérémy
+        <select
+          v-model="newPayment.resident"
+          class="form-select mt-2 mt-sm-0"
+        >
+          <option v-for="resident in currentProject.residents" :key="resident.name">
+            {{ resident.name }}
           </option>
         </select>
         <input
@@ -308,7 +266,7 @@ onMounted(() => {
           class="form-control"
           placeholder="Valeur"
           type="number"
-          @keydown.enter=""
+          @keydown.enter="paymentAdd"
         >
         <input
           v-model="newPayment.comment"
@@ -317,9 +275,13 @@ onMounted(() => {
           data-bs-title="Commentaire"
           type="text"
           placeholder="Commentaire"
-          @keydown.enter=""
+          @keydown.enter="paymentAdd"
         >
-        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newPayment.comment" @click="expenseAdd">
+        <button
+          class="btn btn-secondary mt-2 mt-sm-0"
+          :disabled="!(newPayment.value && newPayment.resident)"
+          @click="paymentAdd"
+        >
           Ajouter
         </button>
       </div>

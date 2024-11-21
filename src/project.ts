@@ -2,6 +2,7 @@ import { newId } from '@/helpers'
 import type { ID } from '@/types'
 import { SortType } from '@/types'
 import settingManager from '@/managers/settingManager'
+import userManager from './managers/userManager'
 
 export interface Expense {
   readonly id: ID
@@ -14,6 +15,19 @@ export interface Expense {
 export interface ExpenseList {
   values: Expense[],
   sum: number
+}
+
+export interface Payment {
+  comment: string,
+  date: string,
+  id: ID,
+  resident: string,
+  value: number
+}
+
+export interface Resident {
+  name: string,
+  ratio: number
 }
 
 export enum ProjectStates {
@@ -38,7 +52,8 @@ export default class Project {
   name: string
   note?: string
   state: ProjectStates
-  ratios: Record<string, number>
+  residents: Resident[]
+  payments: Payment[]
 
   constructor(props: Partial<Project> = {}) {
     this.createdAt = props.createdAt ?? new Date().toISOString()
@@ -47,7 +62,8 @@ export default class Project {
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Notre super projet'
     this.state = props.state ?? ProjectStates.Started
-    this.ratios = props.ratios ?? {}
+    this.residents = props.residents ?? []
+    this.payments = props.payments ?? []
   }
 
   /**
@@ -85,6 +101,28 @@ export default class Project {
       values: Object.values(this.expenses)
         .sort(sorters[settingManager.settings.sort])
     }
+  }
+
+  /**
+   * Saves project residents and ratios
+   */
+  freeze() : void {
+    userManager.users.forEach(user => this.residents.push({ name: user.name, ratio: user.ratio }))
+  }
+
+  /**
+   * Group payments by resident name
+   */
+  paymentsSorted() : Record<string, Payment[]> {
+    const sortedPayments: Record<string, Payment[]> = {}
+
+    this.payments.forEach(payment => {
+      if (!sortedPayments[payment.resident])
+        sortedPayments[payment.resident] = []
+      sortedPayments[payment.resident].push(payment)
+    })
+
+    return sortedPayments
   }
 
   /**
