@@ -7,12 +7,13 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from
 
 import Project, { type Expense, ProjectStates } from '@/project'
 import projectManager from '@/managers/projectManager'
+import { sexyDate } from '@/formaters'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
-const newPayment = ref({ comment: '', resident: '', value: null })
+const newPayment = ref({ comment: '', resident: '', value: 0 })
 const expenses = computed(() => currentProject.expenseSorted())
 const projectState = ref(currentProject.state)
 const newProjectName = ref('')
@@ -22,7 +23,7 @@ const isEditing = ref(false)
 function expenseAdd() : void {
   if (!newExpense.value.name) return
 
-  currentProject.create(newExpense.value)
+  currentProject.expenseCreate(newExpense.value)
 
   newExpense.value = { name: '', price: 0, quantity: 1 }
 }
@@ -65,7 +66,8 @@ function moveState() : void {
 }
 
 function paymentAdd() : void {
-
+  if (newPayment.value.resident)
+    currentProject.paymentCreate(newPayment.value)
 }
 
 onMounted(() => {
@@ -177,7 +179,7 @@ onMounted(() => {
                   alt="Supprimer"
                   data-bs-title="Supprimer"
                   class="icon-container-small icon-hoverable ms-2"
-                  @click="() => currentProject.delete(expense.id)"
+                  @click="() => currentProject.expenseDelete(expense.id)"
                 >
               </td>
             </tr>
@@ -240,7 +242,7 @@ onMounted(() => {
         <table class="table table-hover mb-0">
           <template v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident">
             <tr>
-              <th colspan="3">
+              <th colspan="4">
                 {{ resident }} - Total 450
               </th>
             </tr>
@@ -248,11 +250,22 @@ onMounted(() => {
               <th>Date</th>
               <th>Valeur</th>
               <th>Commentaire</th>
+              <th>Action</th>
             </tr>
             <tr v-for="payment in payments" :key="payment.id">
-              <td>{{ payment.date }}</td>
+              <td>{{ sexyDate(payment.date, false) }}</td>
               <td>{{ payment.value }}</td>
               <td>{{ payment.comment }}</td>
+              <td>
+                <img
+                  v-tooltip="{ disposeOnClick: true }"
+                  src="@/assets/icons/cross.png"
+                  alt="Supprimer le payment"
+                  data-bs-title="Supprimer le payment"
+                  class="icon-container-small icon-hoverable ms-2"
+                  @click="() => currentProject.paymentDelete(currentProject.id)"
+                >
+              </td>
             </tr>
           </template>
         </table>

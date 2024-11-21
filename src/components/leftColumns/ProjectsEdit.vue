@@ -12,9 +12,12 @@ import texts from '@/texts'
 const activeId = ref(projectManager.getCurrent().id)
 
 function projectCreate() : void {
-  projectManager.create(projectName.value)
-  projectName.value = ''
-  updateProjects()
+  const newProject = projectManager.create(projectName.value)
+  if (newProject) {
+    projectName.value = ''
+    updateProjects()
+    switchProject(newProject.id)
+  }
 }
 
 function projectDelete(id: ID) : void {

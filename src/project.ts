@@ -3,6 +3,7 @@ import type { ID } from '@/types'
 import { SortType } from '@/types'
 import settingManager from '@/managers/settingManager'
 import userManager from './managers/userManager'
+import notificationManager, { NotificationType } from './managers/notificationManager'
 
 export interface Expense {
   readonly id: ID
@@ -71,9 +72,15 @@ export default class Project {
    *
    * @param expense The expense details, excluding the id.
    */
-  create(expense: Omit<Expense, 'id'>) {
+  expenseCreate(expense: Omit<Expense, 'id'>) {
+    const trimmedName = expense.name
+
+    if (!trimmedName) {
+      notificationManager.create(`"${expense.name}" n’est pas un nom valide.`, NotificationType.Error)
+      return
+    }
     const id = newId()
-    this.expenses[id] = { ...expense, id: id }
+    this.expenses[id] = { ...expense, id: id, name: trimmedName }
     this.updateTimestamp()
   }
 
@@ -83,7 +90,7 @@ export default class Project {
    * @param id The ID of the expense to delete.
    * @return Whether the deletion was successful.
    */
-  delete(id: ID) {
+  expenseDelete(id: ID) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.expenses[id])
       this.updateTimestamp()
@@ -110,6 +117,26 @@ export default class Project {
     userManager.users.forEach(user => this.residents.push({ name: user.name, ratio: user.ratio }))
   }
 
+  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : void {
+    const trimmedName = payment.resident
+
+    if (!trimmedName) {
+      notificationManager.create(`"${payment.resident}" n’est pas un nom valide.`, NotificationType.Error)
+      return
+    }
+    const newPayment = {
+      ...payment,
+      date: new Date().toISOString(),
+      id: newId(),
+      resident: trimmedName
+    }
+    this.payments.push(newPayment)
+  }
+
+  paymentDelete(id: ID) : void {
+
+  }
+
   /**
    * Group payments by resident name
    */
@@ -121,7 +148,6 @@ export default class Project {
         sortedPayments[payment.resident] = []
       sortedPayments[payment.resident].push(payment)
     })
-
     return sortedPayments
   }
 

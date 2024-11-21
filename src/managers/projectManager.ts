@@ -22,16 +22,18 @@ class ProjectManager extends EventTarget {
    * Creates a new project with a specified name and stores it.
    *
    * @param name The name of the project to create.
+   * @return Zhther the project has been created
    */
-  create(name: string) : void {
+  create(name: string) : Project | null {
     const trimmedName = name.trim()
 
-    if (!trimmedName) return
+    if (!trimmedName) return null
 
     const project = new Project({ name })
 
     this.#projects.set(project.id, project)
     this.#save()
+    return project
   }
 
   #buildDefaultProject() {
