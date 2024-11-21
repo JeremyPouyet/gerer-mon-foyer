@@ -128,8 +128,8 @@ onMounted(() => {
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 col-sm-12">
-      <span class="form-label fw-bold d-block">Dépenses</span>
+    <div class="col-md-6 col-sm-12 mb-3">
+      <span class="form-label fw-bold d-block">Liste des dépenses nécessaires</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
           <thead>
@@ -228,10 +228,15 @@ onMounted(() => {
     </div>
     <Distribution :total="expenses.sum" />
   </div>
-  <div v-if="projectState !== ProjectStates.Started" class="row">
+  <div class="row">
     <div class="col-md-6 col-sm-12">
-      <span class="form-label fw-bold d-block">Payments</span>
-      <div class="table-responsive shadowed-border mb-3">
+      <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
+      <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">
+        <p>
+          Aucun payment n’a encore été fait.
+        </p>
+      </div>
+      <div v-else class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
           <template v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident">
             <tr>
@@ -252,9 +257,12 @@ onMounted(() => {
           </template>
         </table>
       </div>
-      <div v-if="projectState === ProjectStates.Frozen" class="input-group flex-sm-row">
+      <div v-if="projectState !== ProjectStates.Ended" class="input-group flex-sm-row">
         <select
           v-model="newPayment.resident"
+          v-tooltip
+          data-bs-placement="bottom"
+          data-bs-title="Nom de l’habitant"
           class="form-select mt-2 mt-sm-0"
         >
           <option v-for="resident in currentProject.residents" :key="resident.name">
@@ -263,7 +271,10 @@ onMounted(() => {
         </select>
         <input
           v-model="newPayment.value"
+          v-tooltip
           class="form-control"
+          data-bs-placement="bottom"
+          data-bs-title="Valeur du payment"
           placeholder="Valeur"
           type="number"
           @keydown.enter="paymentAdd"
@@ -272,6 +283,7 @@ onMounted(() => {
           v-model="newPayment.comment"
           v-tooltip
           class="form-control"
+          data-bs-placement="bottom"
           data-bs-title="Commentaire"
           type="text"
           placeholder="Commentaire"
