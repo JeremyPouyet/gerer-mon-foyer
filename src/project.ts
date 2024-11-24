@@ -131,10 +131,16 @@ export default class Project {
       resident: trimmedName
     }
     this.payments.push(newPayment)
+    this.updateTimestamp()
   }
 
   paymentDelete(id: ID) : void {
+    const index = this.payments.findIndex(payment => payment.id === id)
 
+    if (index === -1) return
+
+    this.payments.splice(index, 1)
+    this.updateTimestamp()
   }
 
   /**

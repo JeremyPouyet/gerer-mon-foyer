@@ -239,35 +239,51 @@ onMounted(() => {
         </p>
       </div>
       <div v-else class="table-responsive shadowed-border mb-3">
-        <table class="table table-hover mb-0">
-          <template v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident">
+        <table v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident" class="table table-hover mb-0">
+          <thead>
             <tr>
               <th colspan="4">
                 {{ resident }} - Total 450
               </th>
             </tr>
             <tr>
-              <th>Date</th>
-              <th>Valeur</th>
-              <th>Commentaire</th>
-              <th>Action</th>
+              <th scope="col">
+                Date
+              </th>
+              <th scope="col" class="text-end">
+                Valeur
+              </th>
+              <th scope="col" class="text-end">
+                Commentaire
+              </th>
+              <th scope="col" class="text-end">
+                Actions
+              </th>
             </tr>
+          </thead>
+          <tbody>
             <tr v-for="payment in payments" :key="payment.id">
-              <td>{{ sexyDate(payment.date, false) }}</td>
-              <td>{{ payment.value }}</td>
-              <td>{{ payment.comment }}</td>
               <td>
+                {{ sexyDate(payment.date, false) }}
+              </td>
+              <td class="text-end align-middle">
+                {{ payment.value }}
+              </td>
+              <td class="text-end align-middle">
+                {{ payment.comment }}
+              </td>
+              <td class="text-end align-middle text-nowrap">
                 <img
                   v-tooltip="{ disposeOnClick: true }"
                   src="@/assets/icons/cross.png"
                   alt="Supprimer le payment"
                   data-bs-title="Supprimer le payment"
                   class="icon-container-small icon-hoverable ms-2"
-                  @click="() => currentProject.paymentDelete(currentProject.id)"
+                  @click="() => currentProject.paymentDelete(payment.id)"
                 >
               </td>
             </tr>
-          </template>
+          </tbody>
         </table>
       </div>
       <div v-if="projectState !== ProjectStates.Ended" class="input-group flex-sm-row">
