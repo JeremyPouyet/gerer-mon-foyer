@@ -7,7 +7,7 @@ import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from
 
 import Project, { type Expense, ProjectStates } from '@/project'
 import projectManager from '@/managers/projectManager'
-import { sexyDate } from '@/formaters'
+import { sexyAmount, sexyDate } from '@/formaters'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -66,8 +66,10 @@ function moveState() : void {
 }
 
 function paymentAdd() : void {
-  if (newPayment.value.resident)
+  if (newPayment.value.resident) {
     currentProject.paymentCreate(newPayment.value)
+    newPayment.value = { comment: '', resident: '', value: 0 }
+  }
 }
 
 onMounted(() => {
@@ -243,7 +245,7 @@ onMounted(() => {
           <thead>
             <tr>
               <th colspan="4">
-                {{ resident }} - Total 450
+                {{ resident }} - Total payé : {{ sexyAmount(payments.sum) }}
               </th>
             </tr>
             <tr>
@@ -262,7 +264,7 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="payment in payments" :key="payment.id">
+            <tr v-for="payment in payments.list" :key="payment.id">
               <td>
                 {{ sexyDate(payment.date, false) }}
               </td>

@@ -146,13 +146,14 @@ export default class Project {
   /**
    * Group payments by resident name
    */
-  paymentsSorted() : Record<string, Payment[]> {
-    const sortedPayments: Record<string, Payment[]> = {}
+  paymentsSorted() : Record<string, { list: Payment[], sum: number }> {
+    const sortedPayments: Record<string, { list: Payment[], sum: number }> = {}
 
     this.payments.forEach(payment => {
       if (!sortedPayments[payment.resident])
-        sortedPayments[payment.resident] = []
-      sortedPayments[payment.resident].push(payment)
+        sortedPayments[payment.resident] = { list: [], sum: 0 }
+      sortedPayments[payment.resident].list.push(payment)
+      sortedPayments[payment.resident].sum += payment.value
     })
     return sortedPayments
   }
