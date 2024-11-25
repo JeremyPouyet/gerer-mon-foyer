@@ -3,30 +3,56 @@ import Distribution from '@/components/simulator/Distribution.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-import Project, { type Expense, ProjectStates } from '@/project'
+import Project, { type Expense } from '@/project'
 import projectManager from '@/managers/projectManager'
 import { sexyAmount, sexyDate } from '@/formaters'
+import userManager from '@/managers/userManager'
+import { ID } from '@/types'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
-const newPayment = ref({ comment: '', resident: '', value: 0 })
+const newPayment = ref({ comment: '', resident: userManager.users[0]?.name, value: 0 })
 const expenses = computed(() => currentProject.expenseSorted())
-const projectState = ref(currentProject.state)
 const newProjectName = ref('')
 const projectNameInput = ref<HTMLInputElement>()
 const isEditing = ref(false)
 
-function expenseAdd() : void {
-  if (!newExpense.value.name) return
+let input : HTMLInputElement
 
-  currentProject.expenseCreate(newExpense.value)
-
-  newExpense.value = { name: '', price: 0, quantity: 1 }
+function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
+  if (el)
+    input = el as HTMLInputElement
 }
+
+const editedId = ref<ID>()
+const editedExpenseName = ref('')
+
+/** Edit expense name */
+function cancelEditExpenseName() {
+  editedId.value = undefined
+  editedExpenseName.value = ''
+  document.removeEventListener('mousedown', handleClickOutside)
+}
+
+function executeEditExpenseName() {
+  if (editedExpenseName.value) {
+    // Add real update
+    cancelEditExpenseName()
+  }
+}
+
+function startEditExpenseName(expense: Expense) {
+  editedId.value = expense.id
+  editedExpenseName.value = expense.name
+  document.addEventListener('mousedown', handleClickOutside)
+  nextTick(() => input?.focus())
+}
+
+/** Edit project name */
 
 function startEditProjectName() : void {
   isEditing.value = true
@@ -35,34 +61,30 @@ function startEditProjectName() : void {
   nextTick(() => projectNameInput.value?.focus())
 }
 
-function executeEditName() : void {
+function executeEditProjectName() : void {
   projectManager.update({ id: currentProject.id, name: newProjectName.value })
-  cancelEdit()
+  cancelEditProjectName()
 }
 
-function cancelEdit() : void {
+function cancelEditProjectName() : void {
   isEditing.value = false
   newProjectName.value = ''
   document.removeEventListener('mousedown', handleClickOutside)
 }
 
 function handleClickOutside(event: MouseEvent) : void {
-  if (!projectNameInput.value?.contains(event.target as Node)) executeEditName()
+  if (!projectNameInput.value?.contains(event.target as Node)) {
+    executeEditProjectName()
+    executeEditExpenseName()
+  }
 }
 
-function moveState() : void {
-  if (currentProject.state === ProjectStates.Ended)
-    return
+function expenseAdd() : void {
+  if (!newExpense.value.name) return
 
-  const nextState = {
-    [ProjectStates.Started]: ProjectStates.Frozen,
-    [ProjectStates.Frozen]: ProjectStates.Ended
-  }[currentProject.state]
+  currentProject.expenseCreate(newExpense.value)
 
-  projectManager.update({ id: currentProject.id, state: nextState })
-  projectState.value = nextState
-  if (currentProject.state === ProjectStates.Frozen)
-    currentProject.freeze()
+  newExpense.value = { name: '', price: 0, quantity: 1 }
 }
 
 function paymentAdd() : void {
@@ -93,9 +115,9 @@ onMounted(() => {
           ref="projectNameInput"
           v-model="newProjectName"
           type="text"
-          @keydown.enter="executeEditName"
-          @keydown.tab="executeEditName"
-          @keydown.esc="cancelEdit"
+          @keydown.enter="executeEditProjectName"
+          @keydown.tab="executeEditProjectName"
+          @keydown.esc="cancelEditProjectName"
         >
       </h3>
       <h3 v-else class="mb-4">
@@ -109,26 +131,6 @@ onMounted(() => {
           @click="startEditProjectName"
         >
       </h3>
-    </div>
-    <div>
-      <button
-        v-if="projectState === ProjectStates.Started"
-        v-tooltip="{ disposeOnClick: true }"
-        class="btn btn-secondary"
-        data-bs-title="Le projet ne sera plus éditable, les ratios et les montants seront figés. Cela indique que le projet est définis et que les habitants peuvent commencer les payments."
-        @click="moveState"
-      >
-        Figer le projet
-      </button>
-      <button
-        v-else-if="projectState === ProjectStates.Frozen"
-        v-tooltip="{ disposeOnClick: true }"
-        class="btn btn-secondary"
-        data-bs-title="Le projet sera considéré comme terminé."
-        @click="moveState"
-      >
-        Marquer comme terminé
-      </button>
     </div>
   </div>
   <div class="row">
@@ -158,8 +160,23 @@ onMounted(() => {
           <tbody>
             <tr v-for="expense in expenses.values" :key="expense.id">
               <td class="align-middle">
-                <span>{{ expense.name }}</span>
-                <NoteIcon :text="expense.note" />
+                <template v-if="editedId === expense.id">
+                  <input
+                    :ref="el => setActiveInput(el)"
+                    v-model="editedExpenseName"
+                    class="char-width-20"
+                    type="text"
+                    @keydown.esc="cancelEditExpenseName"
+                    @keydown.enter="executeEditExpenseName"
+                    @keydown.tab="executeEditExpenseName"
+                  >
+                </template>
+                <template v-else>
+                  <span class="editable-text" @click="() => startEditExpenseName(expense)">
+                    {{ expense.name }}
+                  </span>
+                  <NoteIcon :text="expense.note" />
+                </template>
               </td>
               <td class="align-middle text-end">
                 {{ expense.quantity }}
@@ -199,10 +216,13 @@ onMounted(() => {
           </tfoot>
         </table>
       </div>
-      <div v-if="projectState === ProjectStates.Started" class="input-group flex-sm-row">
+      <div class="input-group flex-sm-row">
         <input
           v-model="newExpense.name"
+          v-tooltip
           class="form-control"
+          data-bs-placement="bottom"
+          data-bs-title="Nom de la dépense"
           placeholder="Dépense"
           type="text"
           @keydown.enter="expenseAdd"
@@ -211,6 +231,7 @@ onMounted(() => {
           v-model="newExpense.quantity"
           v-tooltip
           class="form-control"
+          data-bs-placement="bottom"
           data-bs-title="Quantité"
           type="number"
           placeholder="Quantité"
@@ -220,6 +241,7 @@ onMounted(() => {
           v-model="newExpense.price"
           v-tooltip
           class="form-control"
+          data-bs-placement="bottom"
           data-bs-title="Prix"
           placeholder="Prix"
           type="number"
@@ -265,7 +287,7 @@ onMounted(() => {
           </thead>
           <tbody>
             <tr v-for="payment in payments.list" :key="payment.id">
-              <td>
+              <td class="text-nowrap">
                 {{ sexyDate(payment.date, false) }}
               </td>
               <td class="text-end align-middle">
@@ -288,7 +310,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-      <div v-if="projectState !== ProjectStates.Ended" class="input-group flex-sm-row">
+      <div class="input-group flex-sm-row">
         <select
           v-model="newPayment.resident"
           v-tooltip
@@ -296,7 +318,7 @@ onMounted(() => {
           data-bs-title="Nom de l’habitant"
           class="form-select mt-2 mt-sm-0"
         >
-          <option v-for="resident in currentProject.residents" :key="resident.name">
+          <option v-for="resident in userManager.users" :key="resident.name">
             {{ resident.name }}
           </option>
         </select>

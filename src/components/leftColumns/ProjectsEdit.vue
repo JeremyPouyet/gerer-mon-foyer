@@ -80,9 +80,6 @@ onUnmounted(() => window.removeEventListener('update', updateProjects))
         <small class="d-block">
           Mis à jour: {{ sexyDate(project.updatedAt, false) }}
         </small>
-        <small class="d-block">
-          État: {{ texts.projectStates[project.state] }}
-        </small>
       </div>
     </li>
   </ul>

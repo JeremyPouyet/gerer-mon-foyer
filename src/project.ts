@@ -31,12 +31,6 @@ export interface Resident {
   ratio: number
 }
 
-export enum ProjectStates {
-  Started = 'started',
-  Frozen = 'frozen',
-  Ended = 'ended'
-}
-
 // List of possible transactions sort
 const sorters = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -52,7 +46,6 @@ export default class Project {
   readonly expenses: Record<ID, Expense>
   name: string
   note?: string
-  state: ProjectStates
   residents: Resident[]
   payments: Payment[]
 
@@ -62,7 +55,6 @@ export default class Project {
     this.id = props.id ?? newId()
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Notre super projet'
-    this.state = props.state ?? ProjectStates.Started
     this.residents = props.residents ?? []
     this.payments = props.payments ?? []
   }
