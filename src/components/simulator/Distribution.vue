@@ -6,7 +6,7 @@ defineProps<{ total: number }>()
 </script>
 
 <template>
-  <div class="col-md-5 col-sm-12 mt-4 mt-md-0">
+  <div class="col-md-5 col-sm-12 mt-0 mb-4">
     <span class="form-label fw-bold d-block">Répartition</span>
     <p v-if="userManager.users.length === 0">
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->

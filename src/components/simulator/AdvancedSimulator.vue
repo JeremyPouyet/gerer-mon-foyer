@@ -9,7 +9,7 @@ import Project, { type Expense } from '@/project'
 import projectManager from '@/managers/projectManager'
 import { sexyAmount, sexyDate } from '@/formaters'
 import userManager from '@/managers/userManager'
-import { ID } from '@/types'
+import type { ID } from '@/types'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -18,24 +18,23 @@ const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
 const newPayment = ref({ comment: '', resident: userManager.users[0]?.name, value: 0 })
 const expenses = computed(() => currentProject.expenseSorted())
 const newProjectName = ref('')
+const isEditingProjectName = ref(false)
+
+let inputRef : HTMLInputElement
 const projectNameInput = ref<HTMLInputElement>()
-const isEditing = ref(false)
-
-let input : HTMLInputElement
-
-function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
-  if (el)
-    input = el as HTMLInputElement
-}
 
 const editedId = ref<ID>()
 const editedExpenseName = ref('')
+
+function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
+  if (el)
+    inputRef = el as HTMLInputElement
+}
 
 /** Edit expense name */
 function cancelEditExpenseName() {
   editedId.value = undefined
   editedExpenseName.value = ''
-  document.removeEventListener('mousedown', handleClickOutside)
 }
 
 function executeEditExpenseName() {
@@ -48,42 +47,32 @@ function executeEditExpenseName() {
 function startEditExpenseName(expense: Expense) {
   editedId.value = expense.id
   editedExpenseName.value = expense.name
-  document.addEventListener('mousedown', handleClickOutside)
-  nextTick(() => input?.focus())
+  nextTick(() => inputRef?.focus())
 }
 
 /** Edit project name */
 
 function startEditProjectName() : void {
-  isEditing.value = true
+  isEditingProjectName.value = true
   newProjectName.value = currentProject.name
-  document.addEventListener('mousedown', handleClickOutside)
   nextTick(() => projectNameInput.value?.focus())
 }
 
 function executeEditProjectName() : void {
-  projectManager.update({ id: currentProject.id, name: newProjectName.value })
+  if (newProjectName.value)
+    projectManager.update({ id: currentProject.id, name: newProjectName.value })
   cancelEditProjectName()
 }
 
 function cancelEditProjectName() : void {
-  isEditing.value = false
+  isEditingProjectName.value = false
   newProjectName.value = ''
-  document.removeEventListener('mousedown', handleClickOutside)
-}
-
-function handleClickOutside(event: MouseEvent) : void {
-  if (!projectNameInput.value?.contains(event.target as Node)) {
-    executeEditProjectName()
-    executeEditExpenseName()
-  }
 }
 
 function expenseAdd() : void {
   if (!newExpense.value.name) return
 
   currentProject.expenseCreate(newExpense.value)
-
   newExpense.value = { name: '', price: 0, quantity: 1 }
 }
 
@@ -95,6 +84,14 @@ function paymentAdd() : void {
 }
 
 onMounted(() => {
+  function handleClickOutside(event: MouseEvent) : void {
+    if (!projectNameInput.value?.contains(event.target as Node)) {
+      executeEditProjectName()
+      executeEditExpenseName()
+    }
+  }
+
+  document.addEventListener('mousedown', handleClickOutside)
   const stop = watch(currentProject, project => projectManager.update(project))
 
   onUnmounted(() => {
@@ -110,7 +107,7 @@ onMounted(() => {
   </p>
   <div class="d-flex justify-content-between col-md-11">
     <div>
-      <h3 v-if="isEditing">
+      <h3 v-if="isEditingProjectName">
         <input
           ref="projectNameInput"
           v-model="newProjectName"
@@ -134,7 +131,7 @@ onMounted(() => {
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 col-sm-12 mb-3">
+    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">Liste des dépenses nécessaires</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
@@ -255,7 +252,7 @@ onMounted(() => {
     <Distribution :total="expenses.sum" />
   </div>
   <div class="row">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
       <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">
         <p>

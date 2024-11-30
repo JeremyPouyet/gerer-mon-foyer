@@ -7,7 +7,6 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import type { ID } from '@/types'
 import type Project from '@/project'
 import { sexyDate } from '@/formaters'
-import texts from '@/texts'
 
 const activeId = ref(projectManager.getCurrent().id)
 
