@@ -5,11 +5,14 @@ import NoteIcon from '@/components/NoteIcon.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-import Project, { type Expense } from '@/project'
+import Project, { type Expense, type Payment } from '@/project'
 import projectManager from '@/managers/projectManager'
 import { sexyAmount, sexyDate } from '@/formaters'
 import userManager from '@/managers/userManager'
 import type { ID } from '@/types'
+
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -24,21 +27,26 @@ let inputRef : HTMLInputElement
 const projectNameInput = ref<HTMLInputElement>()
 
 const editedId = ref<ID>()
+const editedType = ref('')
 const editedExpenseName = ref('')
+const editedPaymentDate = ref<Date>()
 
 function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
   if (el)
     inputRef = el as HTMLInputElement
 }
 
-/** Edit expense name */
+/**** Edit expense name */
+
 function cancelEditExpenseName() {
   editedId.value = undefined
   editedExpenseName.value = ''
+  editedType.value = ''
 }
 
 function executeEditExpenseName() {
-  if (editedExpenseName.value) {
+  if (editedId.value && editedExpenseName.value) {
+    projectManager.updateCurrentProjectExpense(editedId.value, { name: editedExpenseName.value})
     // Add real update
     cancelEditExpenseName()
   }
@@ -46,11 +54,33 @@ function executeEditExpenseName() {
 
 function startEditExpenseName(expense: Expense) {
   editedId.value = expense.id
+  editedType.value = 'expenseName'
   editedExpenseName.value = expense.name
   nextTick(() => inputRef?.focus())
 }
 
-/** Edit project name */
+/**** Edit payment date */
+
+function startEditPaymentDate(payment: Payment) {
+  editedType.value = 'paymentDate'
+  editedId.value = payment.id
+  editedPaymentDate.value = new Date(payment.date)
+}
+
+function executeEditPaymentDate() {
+  if (editedId.value && editedPaymentDate.value) {
+    projectManager.updateCurrentProjectPayment(editedId.value, { date: editedPaymentDate.value.toISOString() })
+    cancelEditPaymentDate()
+  }
+}
+
+function cancelEditPaymentDate() {
+  editedId.value = undefined
+  editedPaymentDate.value = undefined
+  editedType.value = ''
+}
+
+/**** Edit project name */
 
 function startEditProjectName() : void {
   isEditingProjectName.value = true
@@ -69,6 +99,7 @@ function cancelEditProjectName() : void {
   newProjectName.value = ''
 }
 
+/**** Create objects */
 function expenseAdd() : void {
   if (!newExpense.value.name) return
 
@@ -84,11 +115,10 @@ function paymentAdd() : void {
 }
 
 onMounted(() => {
-  function handleClickOutside(event: MouseEvent) : void {
-    if (!projectNameInput.value?.contains(event.target as Node)) {
-      executeEditProjectName()
-      executeEditExpenseName()
-    }
+  function handleClickOutside() : void {
+    executeEditProjectName()
+    executeEditExpenseName()
+    executeEditPaymentDate()
   }
 
   document.addEventListener('mousedown', handleClickOutside)
@@ -157,7 +187,7 @@ onMounted(() => {
           <tbody>
             <tr v-for="expense in expenses.values" :key="expense.id">
               <td class="align-middle">
-                <template v-if="editedId === expense.id">
+                <template v-if="editedId === expense.id && editedType === 'expenseName'">
                   <input
                     :ref="el => setActiveInput(el)"
                     v-model="editedExpenseName"
@@ -285,7 +315,25 @@ onMounted(() => {
           <tbody>
             <tr v-for="payment in payments.list" :key="payment.id">
               <td class="text-nowrap">
-                {{ sexyDate(payment.date, false) }}
+                <template v-if="editedId === payment.id && editedType === 'paymentDate'">
+                  <VueDatePicker
+                    v-model="editedPaymentDate"
+                    :teleport="true"
+                    locale="fr"
+                    cancel-text="Annuler"
+                    select-text="Sélectionner"
+                    :max-date="new Date()"
+                    :prevent-min-max-navigation="true"
+                    :hide-offset-dates="true"
+                    :time-picker-inline="true"
+                    @update:model-value="executeEditPaymentDate"
+                  />
+                </template>
+                <template v-else>
+                  <span class="editable-text" @click="() => startEditPaymentDate(payment)">
+                    {{ sexyDate(payment.date, false) }}
+                  </span>
+                </template>
               </td>
               <td class="text-end align-middle">
                 {{ payment.value }}

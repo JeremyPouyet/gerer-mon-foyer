@@ -47,7 +47,7 @@ export default class Project {
   name: string
   note?: string
   residents: Resident[]
-  payments: Payment[]
+  readonly payments: Record<ID, Payment>
 
   constructor(props: Partial<Project> = {}) {
     this.createdAt = props.createdAt ?? new Date().toISOString()
@@ -56,7 +56,7 @@ export default class Project {
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Notre super projet'
     this.residents = props.residents ?? []
-    this.payments = props.payments ?? []
+    this.payments = props.payments ?? {}
   }
 
   /**
@@ -122,17 +122,14 @@ export default class Project {
       id: newId(),
       resident: trimmedName
     }
-    this.payments.push(newPayment)
+    this.payments[newPayment.id] = newPayment
     this.updateTimestamp()
   }
 
   paymentDelete(id: ID) : void {
-    const index = this.payments.findIndex(payment => payment.id === id)
-
-    if (index === -1) return
-
-    this.payments.splice(index, 1)
-    this.updateTimestamp()
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    if (delete this.payments[id])
+      this.updateTimestamp()
   }
 
   /**
@@ -141,7 +138,7 @@ export default class Project {
   paymentsSorted() : Record<string, { list: Payment[], sum: number }> {
     const sortedPayments: Record<string, { list: Payment[], sum: number }> = {}
 
-    this.payments.forEach(payment => {
+    Object.values(this.payments).forEach(payment => {
       if (!sortedPayments[payment.resident])
         sortedPayments[payment.resident] = { list: [], sum: 0 }
       sortedPayments[payment.resident].list.push(payment)
