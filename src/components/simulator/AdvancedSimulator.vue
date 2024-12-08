@@ -11,6 +11,7 @@ import userManager from '@/managers/userManager'
 import type { ID } from '@/types'
 
 import PaymentsTable from './PaymentsTable.vue'
+import { sexyNumber } from '@/formaters'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -183,7 +184,7 @@ onMounted(() => {
                 {{ expense.price }}
               </td>
               <td class="align-middle text-end">
-                {{ expense.quantity * expense.price }}
+                {{ sexyNumber(expense.quantity * expense.price) }}
               </td>
               <td class="text-end align-middle text-nowrap">
                 <Note
@@ -252,7 +253,7 @@ onMounted(() => {
     </div>
     <Distribution :total="expenses.sum" />
   </div>
-  <div class="row">
+  <div v-if="userManager.users.length > 0" class="row">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
       <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">

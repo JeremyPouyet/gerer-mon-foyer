@@ -27,9 +27,9 @@ const unsavedChangesText = computed(() : string => {
 
 const menuItems: [string, string, string][] = [
   ['/budget',    'Budget',     taxCalculateIcon],
-  ['/history',   'Historique', historyIcon],
+  ['/projects',  'Projets',    projectIcon],
   ['/simulator', 'Simulateur', distributionIcon],
-  ['/projects',  'Projets',    projectIcon]
+  ['/history',   'Historique', historyIcon],
 ]
 
 let notificationManager: NotificationManager

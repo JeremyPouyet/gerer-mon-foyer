@@ -15,16 +15,14 @@ import projectManager from '@/managers/projectManager'
 
 const currentProject = ref<Project>(projectManager.getCurrent())
 
-function switchProject() {
-  currentProject.value = projectManager.getCurrent()
-}
-
 onMounted(() => {
+  function switchProject() {
+    currentProject.value = projectManager.getCurrent()
+  }
+
   projectManager.addEventListener('switchProject', switchProject)
 
-  onUnmounted(() => {
-    projectManager.removeEventListener('switchProject', switchProject)
-  })
+  onUnmounted(() => projectManager.removeEventListener('switchProject', switchProject))
 })
 </script>
 

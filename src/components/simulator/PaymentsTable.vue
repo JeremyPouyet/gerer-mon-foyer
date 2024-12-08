@@ -24,13 +24,24 @@ function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
     inputRef = el as HTMLInputElement
 }
 
+/*** Generic edit functions */
+function startEdit(id: ID, type: string, value: number|string|Date, next: () => void) {
+  editedType.value = type
+  editedId.value = id
+  editedValue.value = value
+  nextTick(next)
+}
+
+function cancelEdit() {
+  editedId.value = undefined
+  editedValue.value = undefined
+  editedType.value = ''
+}
+
 /**** Edit payment date */
 
 function startEditDate(payment: Payment) {
-  editedType.value = 'date'
-  editedId.value = payment.id
-  editedValue.value = new Date(payment.date)
-  nextTick(() => datepicker.value[0]?.openMenu())
+  startEdit(payment.id, 'date', new Date(payment.date), () => datepicker.value[0]?.openMenu())
 }
 
 function executeEditDate(newDate: Date) {
@@ -44,10 +55,7 @@ function executeEditDate(newDate: Date) {
 /**** Edit payment value */
 
 function startEditValue(payment: Payment) {
-  editedType.value = 'value'
-  editedId.value = payment.id
-  editedValue.value = payment.value
-  nextTick(() => inputRef?.focus())
+  startEdit(payment.id, 'value', payment.value, () => inputRef?.focus())
 }
 
 function executeEditValue() {
@@ -60,10 +68,7 @@ function executeEditValue() {
 /**** Edit payment comment */
 
 function startEditComment(payment: Payment) {
-  editedType.value = 'comment'
-  editedId.value = payment.id
-  editedValue.value = payment.comment
-  nextTick(() => inputRef?.focus())
+  startEdit(payment.id, 'comment', payment.comment, () => inputRef?.focus())
 }
 
 function executeEditComment() {
@@ -71,12 +76,6 @@ function executeEditComment() {
     projectManager.updateCurrentProjectPayment(editedId.value, { comment: editedValue.value })
     cancelEdit()
   }
-}
-
-function cancelEdit() {
-  editedId.value = undefined
-  editedValue.value = undefined
-  editedType.value = ''
 }
 
 onMounted(() => {
@@ -88,9 +87,7 @@ onMounted(() => {
 
   document.addEventListener('mousedown', handleClickOutside)
 
-  onUnmounted(() => {
-    document.removeEventListener('mousedown', handleClickOutside)
-  })
+  onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
 })
 
 </script>
