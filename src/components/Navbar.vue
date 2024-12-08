@@ -2,6 +2,7 @@
 import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
 import historyIcon from '@/assets/icons/history.png'
 import distributionIcon from '@/assets/icons/distribution.png'
+import projectIcon from '@/assets/icons/criteria.png'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
@@ -25,9 +26,10 @@ const unsavedChangesText = computed(() : string => {
 })
 
 const menuItems: [string, string, string][] = [
-  ['/budget',    'Mon budget', taxCalculateIcon],
+  ['/budget',    'Budget',     taxCalculateIcon],
   ['/history',   'Historique', historyIcon],
-  ['/simulator', 'Simulateur', distributionIcon]
+  ['/simulator', 'Simulateur', distributionIcon],
+  ['/projects',  'Projets',    projectIcon]
 ]
 
 let notificationManager: NotificationManager

@@ -106,10 +106,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <p class="mb-4">
-    Pour un projet plus important, comme budgéter des vacances ou des travaux.
-  </p>
-  <div class="d-flex justify-content-between col-md-11">
+  <div class="d-flex justify-content-between col-md-11 mt-4">
     <div>
       <h3 v-if="isEditingProjectName">
         <input

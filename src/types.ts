@@ -28,6 +28,7 @@ export enum Path {
   History = '/history',
   Home = '/',
   NotFound = '/not-found',
+  Projects = '/projects',
   Settings = '/settings',
   Simulator = '/simulator'
 }

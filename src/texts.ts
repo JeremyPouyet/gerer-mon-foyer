@@ -32,6 +32,12 @@ export default {
       },
       title: 'Oulà, cette page n’existe pas !'
     },
+    [Path.Projects]: {
+      meta: {
+        description: 'Planifiez vos projets (travaux/vacances/mariage...) en répartissant les dépenses équitablement.'
+      },
+      title: 'Planifier mes projets.'
+    },
     [Path.Settings]: {
       meta: {
         description: 'Gérez vos paramètres: exportez/importez/supprimez vos données.'
@@ -40,7 +46,7 @@ export default {
     },
     [Path.Simulator]: {
       meta: {
-        description: 'Répartissez le montant de dépenses ponctuelles entre les habitants d’un foyer en fonction de leurs revenus. Entrez une valeur ou une formule et découvrez le montant que chacun devra payer.'
+        description: 'Répartissez une dépense ponctuelle (meuble/éléctroménager/...) entre les habitants de votre foyer, en fonction de leurs revenus.'
       },
       title: 'Simulateur de dépenses ponctuelles'
     }
