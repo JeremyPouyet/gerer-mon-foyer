@@ -1,9 +1,9 @@
 import { newId, valueAs } from './helpers'
-import type { ID, Transaction, TransactionFunctional, TransactionList, TransactionRecord } from './types'
+import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
-import notificationManager, { NotificationType } from '@/notificationManager'
-import userManager from './userManager'
-import SettingsManager from './SettingsManager'
+import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import userManager from './managers/userManager'
+import settingManager from './managers/settingManager'
 
 export enum AccountType {
   Common = 'common',
@@ -27,6 +27,11 @@ interface AccountSettings {
     [TransactionType.Income]: boolean,
     [TransactionType.PersonalExpense]: boolean
   }
+}
+
+export interface TransactionRecord {
+  values: Record<ID, Transaction>,
+  sum: number
 }
 
 // List of possible transactions sort
@@ -160,7 +165,7 @@ export default class Account {
     return {
       sum: transactionRecord.sum,
       values: Object.values(transactionRecord.values)
-        .sort(sorters[SettingsManager.settings.sort])
+        .sort(sorters[settingManager.settings.sort])
     }
   }
 

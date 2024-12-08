@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import User from './user'
+import User from '../user'
 
 class UserManager {
   readonly users = reactive<User[]>([])

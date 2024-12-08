@@ -1,11 +1,13 @@
 import { nextTick, reactive, ref, watch } from 'vue'
 
-import historyManager, { type Sample } from './historyManager'
+import historyManager, { type Sample } from './managers/historyManager'
 import Account, { AccountType } from './account'
-import userManager from './userManager'
-import SettingsManager from './SettingsManager'
+import userManager from './managers/userManager'
+import settingManager from './managers/settingManager'
+import projectManager from './managers/projectManager'
 
-type Persistable = 'account' | 'history' | 'settings' | 'users'
+const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
+type Persistable = typeof persistatbleKeys[number]
 
 class DB {
   readonly account = reactive<Account>(new Account({}, AccountType.Common))
@@ -21,6 +23,7 @@ class DB {
     this.account.empty()
     historyManager.empty()
     sessionStorage.clear()
+    projectManager.empty()
 
     // wait for watchers to save empty values before updating usavedChanges
     nextTick(() => this.unsavedChanges.value = 0)
@@ -28,7 +31,7 @@ class DB {
 
   export() : string {
     this.unsavedChanges.value = 0
-    return JSON.stringify(localStorage, ['account', 'history', 'settings', 'users'], 2)
+    return JSON.stringify(localStorage, [...persistatbleKeys], 2)
   }
 
   setup() : void {
@@ -43,7 +46,8 @@ class DB {
       Object.assign(this.account, JSON.parse(account))
 
     historyManager.load()
-    SettingsManager.load()
+    projectManager.load()
+    settingManager.load()
   }
 
   private persistChanges(key: Persistable, value: object) : boolean {
@@ -68,7 +72,7 @@ class DB {
     watch(this.unsavedChanges, value => localStorage.setItem('unsavedChanges', value.toString()))
     watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
-    watch(SettingsManager.settings, updated => this.persistChanges('settings', updated))
+    watch(settingManager.settings, updated => this.persistChanges('settings', updated))
 
     historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
   }

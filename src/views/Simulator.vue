@@ -1,24 +1,53 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import { onMounted, ref, watch } from 'vue'
+import AdvancedSimulator from '@/components/simulator/AdvancedSimulator.vue'
+import Distribution from '@/components/simulator/Distribution.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
+
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
-import userManager from '@/userManager'
-import SettingsManager from '@/SettingsManager'
-import { sexyAmount, sexyNumber } from '@/formaters'
+import settingManager from '@/managers/settingManager'
+import { sexyAmount } from '@/formaters'
+import Project from '@/project'
+import BrowserStorage, { StorageKey } from '@/browserStorage'
+import projectManager from '@/managers/projectManager'
 
-const expenseValue = ref<string>('')
+const simulatorTabStorage = new BrowserStorage(localStorage, StorageKey.SimulatorTab)
 
-onMounted(() => {
-  expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
-})
+type SimulatorTab = 'simple' | 'advanced'
+const activeTab = ref<SimulatorTab>(simulatorTabStorage.get('simple') as SimulatorTab)
 
 let computedValue = ref(0)
+const expenseValue = ref<string>('')
+const currentProject = ref<Project>(projectManager.getCurrent())
 
-watch(expenseValue, () => {
-  sessionStorage.setItem('simulatorValue', expenseValue.value)
+function switchProject() {
+  currentProject.value = projectManager.getCurrent()
+}
+
+onMounted(() => {
+  const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
+  expenseValue.value = simulatorValueStorage.get('')
+
+  const watchers = [
+    watch(expenseValue, value => simulatorValueStorage.set(value)),
+    watch(activeTab, currentTab => simulatorTabStorage.set(currentTab)),
+  ]
+
+  projectManager.addEventListener('switchProject', switchProject)
+
+  onUnmounted(() => {
+    watchers.forEach(stop => stop())
+    projectManager.removeEventListener('switchProject', switchProject)
+  })
 })
+
+function setActiveTab(tab: 'simple' | 'advanced') {
+  activeTab.value = tab
+}
 
 /**
  * Evaluates the `expenseValue` (which may be a formula) and returns the result.
@@ -38,60 +67,71 @@ function computeValue() : number {
 </script>
 
 <template>
-  <div class="container mt-2">
-    <div v-if="!userManager.users.length">
-      <p class="text-center">
-        Ajoutez des utilisateurs pour voir la distribution d’une dépense ponctuelle
-      </p>
-    </div>
-    <div v-else class="row">
-      <div class="col-md-6">
-        <p>
-          Ici on réutilise les ratios calculés lors de la
-          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-          <RouterLink class="text-primary-emphasis" to="/expense-distribution">répartition des dépenses</RouterLink> pour
-          savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle.
-        </p>
-        <label for="expenseInput" class="form-label fw-bold">Valeur ou formule</label>
-
-        <div class="input-group mb-3">
-          <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computedValue) }}
-          </span>
-          <input
-            id="expenseInput"
-            v-model="expenseValue"
-            v-tooltip
-            data-bs-placement="bottom"
-            class="form-control"
-            type="text"
-            placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
-            data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
-          >
-          <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computedValue) }}
-          </span>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <LeftColumn :show="activeTab === 'advanced'" :title="'Mes projets'">
+        <ProjectsEdit />
+      </LeftColumn>
+      <div class="col">
+        <!-- Tabs -->
+        <div class="row">
+          <ul class="nav nav-underline mb-3">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ active: activeTab === 'simple' }"
+                href="#"
+                @click="setActiveTab('simple')"
+              >
+                Dépense ponctuelle
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                :class="{ active: activeTab === 'advanced' }"
+                href="#"
+                @click="setActiveTab('advanced')"
+              >
+                Création de projet
+              </a>
+            </li>
+          </ul>
         </div>
-      </div>
-
-      <div class="col-md-6 mt-4 mt-md-0 mb-4">
-        <ul class="list-group">
-          <li
-            v-for="user in userManager.users"
-            :key="user.id"
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <div>
-              <div class="fw-bold">
-                {{ user.name }}
+        <!-- Simple simulator -->
+        <div v-if="activeTab === 'simple'" class="mb-4">
+          <p class="mb-4">
+            Pour un achat ponctuel type éléctroménager ou meuble.
+          </p>
+          <div class="row">
+            <div class="col-md-5 col-sm-12">
+              <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
+              <div class="input-group mb-3">
+                <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+                  {{ sexyAmount(computeValue()) }}
+                </span>
+                <input
+                  id="expenseInput"
+                  v-model="expenseValue"
+                  v-tooltip
+                  data-bs-placement="bottom"
+                  class="form-control"
+                  type="text"
+                  placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
+                  data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
+                >
+                <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+                  {{ sexyAmount(computeValue()) }}
+                </span>
               </div>
-              {{ sexyAmount(computeValue() * user.ratio) }}
             </div>
-            <span class="badge bg-secondary rounded-pill">
-              Ratio de {{ sexyNumber(user.ratio, 'percent') }}
-            </span>
-          </li>
-        </ul>
+            <Distribution :total="computeValue()" />
+          </div>
+        </div>
+        <!-- Advanced simulator -->
+        <div v-if="activeTab === 'advanced'" class="mb-4">
+          <AdvancedSimulator :key="currentProject.id" :current-project="currentProject" />
+        </div>
       </div>
     </div>
   </div>

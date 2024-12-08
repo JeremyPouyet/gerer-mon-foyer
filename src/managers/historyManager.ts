@@ -35,7 +35,7 @@ class HistoryManager extends EventTarget {
    *                               Returns undefined if no sample is found.
    */
   get activeSample() : Sample | undefined {
-    return this.sampleGet(this.activeDate)
+    return this.get(this.activeDate)
   }
 
   /**
@@ -85,6 +85,17 @@ class HistoryManager extends EventTarget {
   }
 
   /**
+   * Gets a specific sample from the history based on a date.
+   *
+   * @param {string | null} [date] The date string of the history sample to retrieve.
+   *                               When absent, the most recent sample (first in the array) is returned.
+   * @returns {Sample | undefined} The matching sample from the history or undefined if not found.
+   */
+  get(date?: string | null) : Sample | undefined {
+    return date ? this.findSample(date, sample => sample) : this.#_history[0]
+  }
+
+  /**
    * Gets the entire history of samples.
    *
    * @returns {Sample[]} The array of samples representing the history.
@@ -101,17 +112,6 @@ class HistoryManager extends EventTarget {
    */
   load() : void {
     this.#_history = JSON.parse(localStorage.getItem('history') ?? '[]') as Sample[]
-  }
-
-  /**
-   * Gets a specific sample from the history based on a date.
-   *
-   * @param {string | null} [date] The date string of the history sample to retrieve.
-   *                               When absent, the most recent sample (first in the array) is returned.
-   * @returns {Sample | undefined} The matching sample from the history or undefined if not found.
-   */
-  sampleGet(date?: string | null) : Sample | undefined {
-    return date ? this.findSample(date, sample => sample) : this.#_history[0]
   }
 
   /**

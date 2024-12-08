@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type TransactionsEdit from './TransactionsEdit.vue'
 import type HistoryTransactionsShow from './HistoryTransactionsShow.vue'
-import TableContainer from './TransactionsTable/TableContainer.vue'
+import TableContainer from './transactionsTable/TableContainer.vue'
 
 import { computed } from 'vue'
 

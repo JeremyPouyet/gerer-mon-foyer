@@ -2,7 +2,7 @@
 import { nextTick, ref } from 'vue'
 
 import User from '@/user'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 
 const props = defineProps<{ user: User }>()
 
@@ -60,7 +60,7 @@ function userDelete(user: User) : void {
         @keydown.esc="cancelEdit"
       >
     </span>
-    <div>
+    <div class="text-nowrap">
       <img
         v-if="isEditing === false"
         v-tooltip="{ disposeOnClick: true }"

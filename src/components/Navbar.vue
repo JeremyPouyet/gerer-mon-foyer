@@ -6,9 +6,9 @@ import distributionIcon from '@/assets/icons/distribution.png'
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import db from '@/db'
-import type { NotificationManager } from '@/notificationManager'
-import type { HistoryManager } from '@/historyManager'
-import type { UserManager } from '@/userManager'
+import type { NotificationManager } from '@/managers/notificationManager'
+import type { HistoryManager } from '@/managers/historyManager'
+import type { UserManager } from '@/managers/userManager'
 
 onMounted(() => {
   import('bootstrap/js/dist/collapse')
@@ -35,9 +35,9 @@ let historyManager: HistoryManager
 let userManager: UserManager
 
 const loadManagers = async () => {
-  notificationManager = (await import('@/notificationManager')).default
-  historyManager = (await import('@/historyManager')).default
-  userManager = (await import('@/userManager')).default
+  notificationManager = (await import('@/managers/notificationManager')).default
+  historyManager = (await import('@/managers/historyManager')).default
+  userManager = (await import('@/managers/userManager')).default
 }
 
 async function historicise() {
