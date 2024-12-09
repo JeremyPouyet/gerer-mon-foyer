@@ -10,7 +10,7 @@ export default {
   heads: {
     [Path.Budget]: {
       meta: {
-        description: 'Définissez votre budget commun en renseignant les revenus et dépenses contraintes de tous les membres du foyer.'
+        description: 'Définissez votre budget commun en renseignant les revenus et les dépenses contraintes de tous les membres du foyer.'
       },
       title: 'Gérer mon budget'
     },
@@ -30,34 +30,34 @@ export default {
       meta: {
         description: '404 - Cette page n’existe pas.'
       },
-      title: 'Oulà, cette page n’existe pas !'
+      title: 'Oups, cette page n’existe pas !'
     },
     [Path.Projects]: {
       meta: {
-        description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés 😉'
+        description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés 😉.'
       },
       title: 'Planifier mes projets'
     },
     [Path.Settings]: {
       meta: {
-        description: 'Exportez, importez ou supprimez vos données et modifiez l’interface.'
+        description: 'Exportez, importez ou supprimez vos données, et modifiez l’interface.'
       },
       title: 'Paramètres'
     },
     [Path.Simulator]: {
       meta: {
-        description: 'Répartissez le coût d’une dépense ponctuelle (meuble, éléctroménager, etc.) entre les habitants de votre foyer, en fonction de leurs revenus.'
+        description: 'Répartissez le coût d’une dépense ponctuelle (meuble, électroménager, etc.) entre les habitants de votre foyer, en fonction de leurs revenus.'
       },
       title: 'Simuler une dépense ponctuelle'
     }
   },
   notifications: {
     settings: {
-      currency: (txt: string) => `Les montants affichés utiliseront le symbol monétaire ${txt}.`,
+      currency: (txt: string) => `Les montants affichés utiliseront le symbole monétaire ${txt}.`,
       sort: (txt: string) => `Les dépenses et revenus seront triés dans l’ordre ${txt}.`,
       twoDecimals: {
         false: 'Les nombres seront simplement arrondis.',
-        true: 'Les nombres seront affichés avec 2 décimales.'
+        true: 'Les nombres seront affichés avec deux décimales.'
       }
     }
   },
