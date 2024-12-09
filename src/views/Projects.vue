@@ -7,11 +7,11 @@ import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
 
 import { onMounted, onUnmounted, ref } from 'vue'
 
-import Texts from '@/texts'
 import { Path } from '@/types'
 import Project from '@/project'
 
 import projectManager from '@/managers/projectManager'
+import ViewTitle from '@/components/ViewTitle.vue'
 
 const currentProject = ref<Project>(projectManager.getCurrent())
 
@@ -33,10 +33,7 @@ onMounted(() => {
         <ProjectsEdit />
       </LeftColumn>
       <div class="col">
-        <h1>Gestion de projets</h1>
-        <p>
-          {{ Texts.heads[Path.Projects].meta.description }}
-        </p>
+        <ViewTitle :path="Path.Projects" />
         <AdvancedSimulator :key="currentProject.id" :current-project="currentProject" />
       </div>
     </div>

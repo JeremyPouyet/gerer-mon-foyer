@@ -2,6 +2,7 @@
 import '@/assets/secondary.scss'
 
 import Distribution from '@/components/simulator/Distribution.vue'
+import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
@@ -9,7 +10,6 @@ import { limitedEvaluate } from '@/helpers'
 import settingManager from '@/managers/settingManager'
 import { sexyAmount } from '@/formaters'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
-import Texts from '@/texts'
 import { Path } from '@/types'
 
 let computedValue = ref(0)
@@ -47,10 +47,7 @@ function computeValue() : number {
 
 <template>
   <div class="container mt-2">
-    <h1>Simulateur de dépense ponctuelle</h1>
-    <p>
-      {{ Texts.heads[Path.Simulator].meta.description }}
-    </p>
+    <ViewTitle :path="Path.Simulator" />
     <div class="row mb-4 mt-4">
       <div class="col-md-5 col-sm-12">
         <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>

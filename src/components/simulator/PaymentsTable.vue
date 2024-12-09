@@ -3,14 +3,13 @@ import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
-import { type ComponentPublicInstance, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { type ComponentPublicInstance, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import type Project from '@/project'
 import type { Payment } from '@/project'
 import projectManager from '@/managers/projectManager'
 import type { ID } from '@/types'
 
-const props = defineProps<{ currentProject: Project }>()
-const currentProject = reactive(props.currentProject)
+defineProps<{ currentProject: Project }>()
 
 let inputRef : HTMLInputElement
 const editedValue = ref<number|string|Date>()
@@ -38,6 +37,13 @@ function cancelEdit() {
   editedType.value = ''
 }
 
+function executeEdit(field: keyof Payment, value: number | string) {
+  if (editedId.value) {
+    projectManager.updateCurrentProjectPayment(editedId.value, { [field]: value })
+    cancelEdit()
+  }
+}
+
 /**** Edit payment date */
 
 function startEditDate(payment: Payment) {
@@ -46,10 +52,8 @@ function startEditDate(payment: Payment) {
 
 function executeEditDate(newDate: Date) {
   editedValue.value = newDate
-  if (editedId.value && editedValue.value) {
-    projectManager.updateCurrentProjectPayment(editedId.value, { date: editedValue.value.toISOString() })
-    cancelEdit()
-  }
+  if (editedValue.value instanceof Date)
+    executeEdit('date', editedValue.value?.toISOString())
 }
 
 /**** Edit payment value */
@@ -59,10 +63,8 @@ function startEditValue(payment: Payment) {
 }
 
 function executeEditValue() {
-  if (editedId.value && typeof editedValue.value === 'number') {
-    projectManager.updateCurrentProjectPayment(editedId.value, { value: editedValue.value })
-    cancelEdit()
-  }
+  if (typeof editedValue.value === 'number')
+    executeEdit('value', editedValue.value)
 }
 
 /**** Edit payment comment */
@@ -72,10 +74,8 @@ function startEditComment(payment: Payment) {
 }
 
 function executeEditComment() {
-  if (editedId.value && typeof editedValue.value === 'string') {
-    projectManager.updateCurrentProjectPayment(editedId.value, { comment: editedValue.value })
-    cancelEdit()
-  }
+  if (typeof editedValue.value === 'string')
+    executeEdit('comment', editedValue.value)
 }
 
 onMounted(() => {

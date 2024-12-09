@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
+import ViewTitle from '@/components/ViewTitle.vue'
+
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
 import notificationManager, { NotificationType } from '@/managers/notificationManager'
 import settingManager, { Currency } from '@/managers/settingManager'
-import { SortType } from '@/types'
+import { Path, SortType } from '@/types'
+
 import Texts from '@/texts'
 import { computed } from 'vue'
 
@@ -113,6 +116,7 @@ const unsavedChangeText = computed(() => {
 <template>
   <div class="container">
     <div class="row mb-4">
+      <ViewTitle :path="Path.Settings" />
       <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4">
           Mes données
