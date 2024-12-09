@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
+import BudgetShow from '@/components/BudgetShow.vue'
 import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import HistoryEdit from '@/components/leftColumns/HistoryEdit.vue'
-import BudgetShow from '@/components/BudgetShow.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
 import historyManager, { type Sample } from '@/managers/historyManager'
-import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import { Path } from '@/types'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null
@@ -51,6 +53,7 @@ switchSample()
 
 <template>
   <div class="container-fluid mt-2">
+    <ViewTitle :path="Path.History" emoji="📜" />
     <div v-if="!sample">
       <p class="text-center">
         Pas de données dans l’historique

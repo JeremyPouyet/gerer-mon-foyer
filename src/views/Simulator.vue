@@ -47,7 +47,7 @@ function computeValue() : number {
 
 <template>
   <div class="container mt-2">
-    <ViewTitle :path="Path.Simulator" />
+    <ViewTitle :path="Path.Simulator" emoji="🛋️" unpaded />
     <div class="row mb-4 mt-4">
       <div class="col-md-5 col-sm-12">
         <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>

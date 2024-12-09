@@ -107,7 +107,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-between col-md-11 mt-4">
+  <div class="d-flex justify-content-between col-md-11">
     <div>
       <h3 v-if="isEditingProjectName">
         <input

@@ -16,7 +16,7 @@ export default {
     },
     [Path.History]: {
       meta: {
-        description: 'Visualisez l’évolution de votre budget et de vos dépenses.'
+        description: 'Visualisez l’évolution de votre budget et de vos dépenses'
       },
       title: 'Historique de mon budget'
     },
@@ -34,19 +34,19 @@ export default {
     },
     [Path.Projects]: {
       meta: {
-        description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés 😉.'
+        description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés'
       },
       title: 'Planifier mes projets'
     },
     [Path.Settings]: {
       meta: {
-        description: 'Exportez, importez ou supprimez vos données, et modifiez l’interface.'
+        description: 'Exportez, importez ou supprimez vos données, et modifiez l’interface'
       },
       title: 'Paramètres'
     },
     [Path.Simulator]: {
       meta: {
-        description: 'Répartissez le coût d’une dépense ponctuelle (meuble, électroménager, etc.) entre les habitants de votre foyer, en fonction de leurs revenus.'
+        description: 'Répartissez le coût d’une dépense ponctuelle (meuble, électroménager, etc.) entre les habitants de votre foyer, en fonction de leurs revenus'
       },
       title: 'Simuler une dépense ponctuelle'
     }
