@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 
-const { show = true, title } = defineProps<{ show?: boolean, title: string }>()
+defineProps<{ title: string }>()
 
 const isSticky = ref(false)
 const stickyTopOffset = ref<number>(0)
@@ -28,9 +28,9 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 <template>
   <div class="col-auto mb-4">
     <div :class="['row char-width-30 sticky-top', { 'sticky-offset': isSticky }]">
-      <div v-if="show" class="row">
+      <div class="container">
         <h3>{{ title }}</h3>
-        <hr>
+        <hr class="mb-3 mt-0">
         <slot />
       </div>
     </div>

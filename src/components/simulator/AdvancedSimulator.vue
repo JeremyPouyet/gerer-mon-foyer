@@ -108,30 +108,29 @@ onMounted(() => {
 
 <template>
   <div class="d-flex justify-content-between col-md-11">
-    <div>
-      <h3 v-if="isEditingProjectName">
-        <input
-          ref="projectNameInput"
-          v-model="newProjectName"
-          type="text"
-          @keydown.enter="executeEditProjectName"
-          @keydown.tab="executeEditProjectName"
-          @keydown.esc="cancelEditProjectName"
-        >
-      </h3>
-      <h3 v-else class="mb-4">
-        {{ currentProject.name }}
-        <img
-          v-tooltip="{ disposeOnClick: true }"
-          alt="Éditer le nom du projet"
-          class="icon-container-small ms-2 icon-hoverable"
-          data-bs-title="Éditer le nom du projet"
-          src="@/assets/icons/pencil.png"
-          @click="startEditProjectName"
-        >
-      </h3>
-    </div>
+    <h3 v-if="isEditingProjectName">
+      <input
+        ref="projectNameInput"
+        v-model="newProjectName"
+        type="text"
+        @keydown.enter="executeEditProjectName"
+        @keydown.tab="executeEditProjectName"
+        @keydown.esc="cancelEditProjectName"
+      >
+    </h3>
+    <h3 v-else>
+      {{ currentProject.name }}
+      <img
+        v-tooltip="{ disposeOnClick: true }"
+        alt="Éditer le nom du projet"
+        class="icon-container-small ms-2 icon-hoverable"
+        data-bs-title="Éditer le nom du projet"
+        src="@/assets/icons/pencil.png"
+        @click="startEditProjectName"
+      >
+    </h3>
   </div>
+  <hr class="mb-4 mt-0">
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">Liste des dépenses nécessaires</span>
