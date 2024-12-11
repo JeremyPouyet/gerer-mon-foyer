@@ -114,7 +114,7 @@ const unsavedChangeText = computed(() => {
 </script>
 
 <template>
-  <div class="container mt-2">
+  <div class="container">
     <ViewTitle :path="Path.Settings" emoji="💅" unpaded />
     <div class="row mb-4">
       <div class="col-sm-12 col-md-5 mt-2">

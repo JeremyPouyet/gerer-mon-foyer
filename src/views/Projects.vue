@@ -27,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container-fluid mt-2">
+  <div class="container-fluid">
     <ViewTitle :path="Path.Projects" emoji="🗂️" />
     <div class="row">
       <LeftColumn :title="'Mes projets'">

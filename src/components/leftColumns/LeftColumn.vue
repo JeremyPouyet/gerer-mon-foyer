@@ -10,6 +10,12 @@ function handleScroll() {
   isSticky.value = window.scrollY >= stickyTopOffset.value
 }
 
+const isSmallScreen = ref(false)
+
+function handleResize() {
+  isSmallScreen.value = window.innerWidth <= 700
+}
+
 onMounted(() => {
   // Set up a scroll listeners and calculates the `isSticky` state based on
   // the scroll position relative to the element's top offset.
@@ -21,13 +27,22 @@ onMounted(() => {
     // Listen to the scroll event
     window.addEventListener('scroll', handleScroll)
   }
+
+  handleResize()
+  window.addEventListener('resize', handleResize)
 })
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <template>
-  <div class="col-auto mb-4">
-    <div :class="['row char-width-30 sticky-top', { 'sticky-offset': isSticky }]">
+  <div
+    class="col-auto mb-4"
+    :class="[isSmallScreen ? 'full-width' : 'char-width-30']"
+  >
+    <div :class="['row sticky-top', { 'sticky-offset': isSticky }]">
       <div class="container">
         <h3>{{ title }}</h3>
         <hr class="mb-3 mt-0">
@@ -40,5 +55,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 <style lang="css">
 .sticky-offset {
   top: 1.5rem;
+}
+.full-width {
+  width: 100%;
 }
 </style>

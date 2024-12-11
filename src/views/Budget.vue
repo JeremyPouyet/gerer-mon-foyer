@@ -15,7 +15,7 @@ import { Path } from '@/types'
 </script>
 
 <template>
-  <div class="container-fluid mt-2">
+  <div class="container-fluid">
     <ViewTitle :path="Path.Budget" emoji="💸" />
 
     <div class="row">

@@ -53,7 +53,7 @@ const lgClass = computed(() => {
         <img
           v-tooltip="{ disposeOnClick: true }"
           src="@/assets/icons/hide.png"
-          class="icon-container icon-hoverable position-absolute end-0"
+          class="icon-container icon-hoverable position-absolute me-2 end-0"
           alt="Cacher"
           data-bs-placement="left"
           data-bs-title="Cacher"

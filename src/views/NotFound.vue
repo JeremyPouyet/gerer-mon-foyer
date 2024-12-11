@@ -3,7 +3,7 @@ import '@/assets/secondary.scss'
 </script>
 
 <template>
-  <div class="container mt-2">
+  <div class="container">
     <header>
       <h1>J’ai pas encore dev cette page :/</h1>
     </header>

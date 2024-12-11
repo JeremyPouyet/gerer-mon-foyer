@@ -46,7 +46,7 @@ function computeValue() : number {
 </script>
 
 <template>
-  <div class="container mt-2">
+  <div class="container">
     <ViewTitle :path="Path.Simulator" emoji="🛋️" unpaded />
     <div class="row mb-4 mt-4">
       <div class="col-md-5 col-sm-12">

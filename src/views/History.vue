@@ -52,7 +52,7 @@ switchSample()
 </script>
 
 <template>
-  <div class="container-fluid mt-2">
+  <div class="container-fluid">
     <ViewTitle :path="Path.History" emoji="📜" />
     <div v-if="!sample">
       <p class="text-center">

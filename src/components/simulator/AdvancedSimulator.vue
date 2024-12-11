@@ -231,10 +231,11 @@ onMounted(() => {
           placeholder="Quantité"
           @keydown.enter="expenseAdd"
         >
+        <div class="w-100 d-sm-none" />
         <input
           v-model="newExpense.price"
           v-tooltip
-          class="form-control"
+          class="form-control mt-2 mt-sm-0"
           data-bs-placement="bottom"
           data-bs-title="Prix"
           placeholder="Prix"
@@ -274,17 +275,18 @@ onMounted(() => {
         <input
           v-model="newPayment.value"
           v-tooltip
-          class="form-control"
+          class="form-control mt-2 mt-sm-0"
           data-bs-placement="bottom"
           data-bs-title="Valeur du payment"
           placeholder="Valeur"
           type="number"
           @keydown.enter="paymentAdd"
         >
+        <div class="w-100 d-sm-none" />
         <input
           v-model="newPayment.comment"
           v-tooltip
-          class="form-control"
+          class="form-control mt-2 mt-sm-0"
           data-bs-placement="bottom"
           data-bs-title="Commentaire"
           type="text"
