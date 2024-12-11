@@ -135,10 +135,8 @@ onMounted(() => {
             @close="cancelEdit"
           />
         </td>
-        <td v-else @click="() => startEditDate(payment)">
-          <span class="editable-text">
-            {{ sexyDate(payment.date, false) }}
-          </span>
+        <td v-else class="editable-cell" @click="() => startEditDate(payment)">
+          <span>{{ sexyDate(payment.date, false) }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'value'" class="align-middle">
           <input
@@ -151,10 +149,8 @@ onMounted(() => {
             @keydown.tab="executeEditValue"
           >
         </td>
-        <td v-else @click="() => startEditValue(payment)">
-          <span class="editable-text">
-            {{ sexyNumber(payment.value) }}
-          </span>
+        <td v-else class="editable-cell" @click="() => startEditValue(payment)">
+          <span>{{ sexyNumber(payment.value) }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">
           <input
@@ -167,10 +163,8 @@ onMounted(() => {
             @keydown.tab="executeEditComment"
           >
         </td>
-        <td v-else @click="() => startEditComment(payment)">
-          <span class="editable-text">
-            {{ payment.comment || 'N/D' }}
-          </span>
+        <td v-else class="editable-cell" @click="() => startEditComment(payment)">
+          <span>{{ payment.comment || 'N/D' }}</span>
         </td>
         <td class="text-end align-middle text-nowrap">
           <img

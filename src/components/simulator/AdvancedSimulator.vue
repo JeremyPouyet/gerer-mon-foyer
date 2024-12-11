@@ -157,24 +157,20 @@ onMounted(() => {
           </thead>
           <tbody>
             <tr v-for="expense in expenses.values" :key="expense.id">
-              <td class="align-middle">
-                <template v-if="editedId === expense.id && editedType === 'expenseName'">
-                  <input
-                    :ref="el => setActiveInput(el)"
-                    v-model="editedExpenseName"
-                    class="char-width-20"
-                    type="text"
-                    @keydown.esc="cancelEditExpenseName"
-                    @keydown.enter="executeEditExpenseName"
-                    @keydown.tab="executeEditExpenseName"
-                  >
-                </template>
-                <template v-else>
-                  <span class="editable-text" @click="() => startEditExpenseName(expense)">
-                    {{ expense.name }}
-                  </span>
-                  <NoteIcon :text="expense.note" />
-                </template>
+              <td v-if="editedId === expense.id && editedType === 'expenseName'" class="align-middle">
+                <input
+                  :ref="el => setActiveInput(el)"
+                  v-model="editedExpenseName"
+                  class="char-width-20"
+                  type="text"
+                  @keydown.esc="cancelEditExpenseName"
+                  @keydown.enter="executeEditExpenseName"
+                  @keydown.tab="executeEditExpenseName"
+                >
+              </td>
+              <td v-else class="editable-cell" @click="() => startEditExpenseName(expense)">
+                <span>{{ expense.name }}</span>
+                <NoteIcon :text="expense.note" />
               </td>
               <td class="align-middle text-end">
                 {{ expense.quantity }}

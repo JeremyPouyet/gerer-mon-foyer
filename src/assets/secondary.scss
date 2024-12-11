@@ -21,12 +21,12 @@
   justify-content: center;
 }
 
-/* Basic clickable and editable text style */
-.editable-text {
+/* Clickable and editable cell style */
+.editable-cell {
   cursor: pointer;
 
-  &:hover {
-    border-bottom: 1px solid #0056b3;
+  &:hover span {
+    text-decoration: underline solid $dark;
   }
 }
 
