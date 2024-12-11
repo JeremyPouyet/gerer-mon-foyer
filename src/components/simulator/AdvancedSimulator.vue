@@ -96,7 +96,7 @@ onMounted(() => {
     executeEditExpenseName()
   }
 
-  //document.addEventListener('mousedown', handleClickOutside)
+  document.addEventListener('mousedown', handleClickOutside)
   const stop = watch(currentProject, project => projectManager.update(project))
 
   onUnmounted(() => {
@@ -248,7 +248,7 @@ onMounted(() => {
     </div>
     <Distribution :total="expenses.sum" />
   </div>
-  <div v-if="userManager.users.length > 0" class="row">
+  <div v-if="userManager.users.length > 0" class="row mt-3">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
       <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">

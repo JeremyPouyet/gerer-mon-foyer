@@ -101,16 +101,16 @@ onMounted(() => {
         </th>
       </tr>
       <tr>
-        <th scope="col">
+        <th scope="col" style="width:20%">
           Date
         </th>
-        <th scope="col">
+        <th scope="col" style="width:20%">
           Valeur
         </th>
-        <th scope="col">
+        <th scope="col" style="width:50%">
           Commentaire
         </th>
-        <th scope="col" class="text-end">
+        <th scope="col" class="text-end" style="width:10%">
           Actions
         </th>
       </tr>
