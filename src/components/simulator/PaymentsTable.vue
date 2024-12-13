@@ -3,45 +3,29 @@ import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
-import { type ComponentPublicInstance, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
 import type Project from '@/project'
 import type { Payment } from '@/project'
 import projectManager from '@/managers/projectManager'
-import type { ID } from '@/types'
+import { useEditable } from '@/helpers'
 
 defineProps<{ currentProject: Project }>()
 
-let inputRef : HTMLInputElement
-const editedValue = ref<number|string|Date>()
-const editedId = ref<ID>()
-const editedType = ref('')
+const {
+  editedValue,
+  editedId,
+  editedType,
+  startEdit,
+  cancelEdit,
+  executeEdit,
+} = useEditable<number | string | Date>()
 
+let inputRef : HTMLInputElement
 const datepicker = ref<DatePickerInstance[]>([])
 
 function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
   if (el)
     inputRef = el as HTMLInputElement
-}
-
-/*** Generic edit functions */
-function startEdit(id: ID, type: string, value: number|string|Date, next: () => void) {
-  editedType.value = type
-  editedId.value = id
-  editedValue.value = value
-  nextTick(next)
-}
-
-function cancelEdit() {
-  editedId.value = undefined
-  editedValue.value = undefined
-  editedType.value = ''
-}
-
-function executeEdit(field: keyof Payment, value: number | string) {
-  if (editedId.value) {
-    projectManager.updateCurrentProjectPayment(editedId.value, { [field]: value })
-    cancelEdit()
-  }
 }
 
 /**** Edit payment date */
@@ -52,8 +36,13 @@ function startEditDate(payment: Payment) {
 
 function executeEditDate(newDate: Date) {
   editedValue.value = newDate
-  if (editedValue.value instanceof Date)
-    executeEdit('date', editedValue.value?.toISOString())
+
+  executeEdit('date', (id, value) => {
+    if (value instanceof Date)
+      projectManager.updateCurrentProjectPayment(id, {
+        date: value.toISOString()
+      })
+  })
 }
 
 /**** Edit payment value */
@@ -63,8 +52,10 @@ function startEditValue(payment: Payment) {
 }
 
 function executeEditValue() {
-  if (typeof editedValue.value === 'number')
-    executeEdit('value', editedValue.value)
+  executeEdit('value', (id, value) => {
+    if (typeof value === 'number')
+      projectManager.updateCurrentProjectPayment(id, { value })
+  })
 }
 
 /**** Edit payment comment */
@@ -74,8 +65,10 @@ function startEditComment(payment: Payment) {
 }
 
 function executeEditComment() {
-  if (typeof editedValue.value === 'string')
-    executeEdit('comment', editedValue.value)
+  executeEdit('comment', (id, value) => {
+    if (typeof value === 'string')
+      projectManager.updateCurrentProjectPayment(id, { comment: value })
+  })
 }
 
 onMounted(() => {

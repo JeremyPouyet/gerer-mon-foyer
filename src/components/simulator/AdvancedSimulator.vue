@@ -12,6 +12,8 @@ import type { ID } from '@/types'
 
 import PaymentsTable from './PaymentsTable.vue'
 import { sexyNumber } from '@/formaters'
+import { useEditable } from '@/helpers'
+import { exp } from 'mathjs'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -25,9 +27,14 @@ const isEditingProjectName = ref(false)
 let inputRef : HTMLInputElement
 const projectNameInput = ref<HTMLInputElement>()
 
-const editedId = ref<ID>()
-const editedType = ref('')
-const editedExpenseName = ref('')
+const {
+  editedValue,
+  editedId,
+  editedType,
+  startEdit,
+  cancelEdit,
+  executeEdit,
+} = useEditable<number | string | undefined>()
 
 function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
   if (el)
@@ -36,24 +43,27 @@ function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
 
 /**** Edit expense name */
 
-function cancelEditExpenseName() {
-  editedId.value = undefined
-  editedExpenseName.value = ''
-  editedType.value = ''
-}
-
 function executeEditExpenseName() {
-  if (editedId.value && editedExpenseName.value) {
-    projectManager.updateCurrentProjectExpense(editedId.value, { name: editedExpenseName.value})
-    cancelEditExpenseName()
-  }
+  executeEdit('name', (id, value) => {
+    if (typeof value === 'string')
+      projectManager.updateCurrentProjectExpense(id, { name: value })
+  })
 }
 
-function startEditExpenseName(expense: Expense) {
-  editedId.value = expense.id
-  editedType.value = 'expenseName'
-  editedExpenseName.value = expense.name
-  nextTick(() => inputRef?.focus())
+function executeEditExpenseQuantity() {
+  executeEdit('quantity', (id, value) => {
+    if (typeof value === 'number') {
+      projectManager.updateCurrentProjectExpense(id, { quantity: value})
+    }
+  })
+}
+
+function executeEditExpensePrice() {
+  executeEdit('price', (id, value) => {
+    if (typeof value === 'number') {
+      projectManager.updateCurrentProjectExpense(id, { price: value})
+    }
+  })
 }
 
 /**** Edit project name */
@@ -91,9 +101,13 @@ function paymentAdd() : void {
 }
 
 onMounted(() => {
-  function handleClickOutside() : void {
-    executeEditProjectName()
-    executeEditExpenseName()
+  function handleClickOutside(event: MouseEvent) : void {
+    if (!inputRef?.contains(event.target as Node)) {
+      executeEditProjectName()
+      executeEditExpenseName()
+      executeEditExpensePrice()
+      executeEditExpenseQuantity()
+    }
   }
 
   document.addEventListener('mousedown', handleClickOutside)
@@ -141,13 +155,13 @@ onMounted(() => {
               <th scope="col">
                 Dépense
               </th>
-              <th class="text-end" scope="col">
+              <th scope="col">
                 Quantitée
               </th>
-              <th class="text-end" scope="col">
+              <th scope="col">
                 Prix
               </th>
-              <th class="text-end" scope="col">
+              <th scope="col">
                 Total
               </th>
               <th class="text-end" scope="col">
@@ -157,28 +171,50 @@ onMounted(() => {
           </thead>
           <tbody>
             <tr v-for="expense in expenses.values" :key="expense.id">
-              <td v-if="editedId === expense.id && editedType === 'expenseName'" class="align-middle">
+              <td v-if="editedId === expense.id && editedType === 'name'" class="align-middle">
                 <input
                   :ref="el => setActiveInput(el)"
-                  v-model="editedExpenseName"
+                  v-model="editedValue"
                   class="char-width-20"
                   type="text"
-                  @keydown.esc="cancelEditExpenseName"
+                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpenseName"
                   @keydown.tab="executeEditExpenseName"
                 >
               </td>
-              <td v-else class="editable-cell" @click="() => startEditExpenseName(expense)">
+              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'name', expense.name, () => inputRef?.focus)">
                 <span>{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
-              <td class="align-middle text-end">
-                {{ expense.quantity }}
+              <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle">
+                <input
+                  :ref="el => setActiveInput(el)"
+                  v-model="editedValue"
+                  class="char-width-20"
+                  type="number"
+                  @keydown.esc="cancelEdit"
+                  @keydown.enter="executeEditExpenseQuantity"
+                  @keydown.tab="executeEditExpenseQuantity"
+                >
               </td>
-              <td class="align-middle text-end">
-                {{ expense.price }}
+              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus)">
+                <span>{{ expense.quantity }}</span>
               </td>
-              <td class="align-middle text-end">
+              <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle">
+                <input
+                  :ref="el => setActiveInput(el)"
+                  v-model="editedValue"
+                  class="char-width-20"
+                  type="number"
+                  @keydown.esc="cancelEdit"
+                  @keydown.enter="executeEditExpensePrice"
+                  @keydown.tab="executeEditExpensePrice"
+                >
+              </td>
+              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'price', expense.price, () => inputRef?.focus)">
+                <span>{{ expense.price }}</span>
+              </td>
+              <td class="align-middle">
                 {{ sexyNumber(expense.quantity * expense.price) }}
               </td>
               <td class="text-end align-middle text-nowrap">
