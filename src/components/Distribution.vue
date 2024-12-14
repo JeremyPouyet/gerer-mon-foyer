@@ -10,7 +10,7 @@ defineProps<{ total: number }>()
     <span class="form-label fw-bold d-block">Répartition</span>
     <p v-if="userManager.users.length === 0">
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-      <RouterLink class="text-primary-emphasis" to="/expense-distribution">Ajoutez des habitants et leurs revenus</RouterLink> pour voir la répartition des dépenses.
+      <RouterLink class="text-primary-emphasis" to="/budget">Ajoutez des habitants et leurs revenus</RouterLink> pour voir la répartition des dépenses.
     </p>
     <ul class="list-group">
       <li
