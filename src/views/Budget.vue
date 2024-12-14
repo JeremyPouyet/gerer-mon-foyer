@@ -1,20 +1,27 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import TransactionsEdit from '@/components/TransactionsEdit.vue'
-import UsersEdit from '@/components/UsersEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import TransactionsEdit from '@/components/TransactionsEdit.vue'
+import UsersEdit from '@/components/leftColumns/UsersEdit.vue'
+import ViewTitle from '@/components/ViewTitle.vue'
 
 import db from '@/db'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
+
+import { Path } from '@/types'
+
 </script>
 
 <template>
-  <div class="container-fluid mt-2">
+  <div class="container-fluid">
+    <ViewTitle :path="Path.Budget" emoji="💸" />
+
     <div class="row">
-      <div class="col-auto mb-4">
+      <LeftColumn :title="'Habitants'">
         <UsersEdit />
-      </div>
+      </LeftColumn>
       <BudgetShow
         :account="db.account"
         :users="userManager.users"

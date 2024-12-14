@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import Texts from '@/texts'
+import { Path } from '@/types'
+
+const props = defineProps<{ emoji: string, path: Path, unpaded?: boolean }>()
+const unpadedClass = props.unpaded ? 'ps-0' : ''
+
+</script>
+
+<template>
+  <div class="container mb-4" :class="unpadedClass">
+    <h1 class="text-center">
+      {{ Texts.heads[path].title }}
+    </h1>
+    <p class="text-center">
+      <span class="fst-italic fw-lighter">
+        {{ Texts.heads[path].meta.description }}
+      </span>
+      <span class="ms-1 fw-normal">{{ emoji }}</span>
+    </p>
+  </div>
+</template>

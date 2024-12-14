@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import NoteIcon from './NoteIcon.vue'
-import TableFooter from './TransactionsTable/TableFooter.vue'
-import TableHeader from './TransactionsTable/TableHeader.vue'
+import TableFooter from './transactionsTable/TableFooter.vue'
+import TableHeader from './transactionsTable/TableHeader.vue'
 
 import { toRefs } from 'vue'
 

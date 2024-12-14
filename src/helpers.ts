@@ -1,5 +1,4 @@
 import { create, divideDependencies, evaluateDependencies, subtractDependencies } from 'mathjs'
-import { onMounted, onUnmounted, ref } from 'vue'
 
 import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
@@ -46,39 +45,62 @@ export function newId() : ID {
   return `${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}-${randomSegment()}`
 }
 
-/**
- * A composable function to manage a sticky element that becomes fixed after scrolling past its initial position.
- *
- * This function sets up scroll listeners and calculates the `isSticky` state based on
- * the scroll position relative to the element's top offset.
- */
-export function useSticky() {
-  const isSticky = ref(false)
-  const stickyTopOffset = ref<number>(0)
-
-  function handleScroll() {
-    isSticky.value = window.scrollY >= stickyTopOffset.value
-  }
-
-  onMounted(() => {
-    const stickyElement = document.querySelector('.sticky-top')
-
-    if (stickyElement) {
-      // Save the initial position of the sticky element
-      stickyTopOffset.value = stickyElement.getBoundingClientRect().top + window.scrollY
-
-      // Listen to the scroll event
-      window.addEventListener('scroll', handleScroll)
-    }
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
-
-  return isSticky
-}
-
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
   return computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
+}
+
+import { nextTick, ref } from 'vue'
+
+/**
+ * Provides reactive state for editable data.
+ * @template T The type of the editable value.
+ */
+export function useEditable<T>() {
+  const editedValue = ref<T | undefined>()
+  const editedId = ref<ID>()
+  const editedType = ref<string>('')
+
+  /**
+   * Initiates editing mode for a given item.
+   * @param id - The ID of the item to edit.
+   * @param type - The type/category of the item.
+   * @param value - The current value of the item.
+   * @param onEditStart - Optional callback executed after starting the edit.
+   */
+  function startEdit(id: ID, type: string, value: T, onEditStart?: () => void) {
+    editedType.value = type
+    editedId.value = id
+    editedValue.value = value
+    nextTick(onEditStart)
+  }
+
+
+  /**
+   * Cancels the editing mode and resets state.
+   */
+  function cancelEdit() {
+    editedId.value = undefined
+    editedValue.value = undefined
+    editedType.value = ''
+  }
+
+  /**
+   * Executes the edit operation using a callback and resets state.
+   * @param callback - A function to handle the edit operation.
+   */
+  function executeEdit(type: string, callback: (id: ID, value: T | undefined) => void) {
+    if (editedId.value !== undefined && editedType.value === type) {
+      callback(editedId.value, editedValue.value)
+      cancelEdit()
+    }
+  }
+
+  return {
+    cancelEdit,
+    editedId,
+    editedType,
+    editedValue,
+    executeEdit,
+    startEdit,
+  }
 }

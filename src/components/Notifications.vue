@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type ID } from '@/types'
-import notificationManager, { NotificationType } from '@/notificationManager'
+import notificationManager, { NotificationType } from '@/managers/notificationManager'
 
 import { onMounted, onUpdated } from 'vue'
 

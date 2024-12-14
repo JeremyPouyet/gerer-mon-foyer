@@ -8,7 +8,7 @@ import type Account from '@/account'
 import { AccountType } from '@/account'
 import Texts from '@/texts'
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
-import SettingsManager from '@/SettingsManager'
+import settingManager from '@/managers/settingManager'
 
 const props = defineProps<{
   account: Account,
@@ -53,7 +53,7 @@ const lgClass = computed(() => {
         <img
           v-tooltip="{ disposeOnClick: true }"
           src="@/assets/icons/hide.png"
-          class="icon-container icon-hoverable position-absolute end-0"
+          class="icon-container icon-hoverable position-absolute me-2 end-0"
           alt="Cacher"
           data-bs-placement="left"
           data-bs-title="Cacher"
@@ -85,8 +85,8 @@ const lgClass = computed(() => {
           :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-          {{ SettingsManager.getCurrencySymbol() }}
+        <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ settingManager.getCurrencySymbol() }}
         </span>
         <input
           v-model="newTransaction.value"
@@ -99,8 +99,8 @@ const lgClass = computed(() => {
           aria-label="Valeur de la transaction"
           @keydown.enter="transactionAdd"
         >
-        <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-          {{ SettingsManager.getCurrencySymbol() }}
+        <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+          {{ settingManager.getCurrencySymbol() }}
         </span>
         <div class="w-100 d-sm-none" />
 
@@ -125,22 +125,11 @@ const lgClass = computed(() => {
 </template>
 
 <style scoped>
-.table-title-container {
-  display: flex;
-  padding: 10px 0;
-  margin-bottom: 20px;
-}
-
 .table-title {
   font-size: 1.5em;
   font-weight: normal;
   color: #333333; /* Dark gray text */
   margin: 0;
   text-align: center;
-}
-
-.shadowed-border {
-  border-radius: 10px 10px 0px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
-import HistoryEdit from '@/components/HistoryEdit.vue'
 import BudgetShow from '@/components/BudgetShow.vue'
+import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
+import HistoryEdit from '@/components/leftColumns/HistoryEdit.vue'
+import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onUnmounted, ref, watch } from 'vue'
 
 import DBSnapshot from '@/dbSnapshot'
-import historyManager, { type Sample } from '@/historyManager'
+import historyManager, { type Sample } from '@/managers/historyManager'
+import { Path } from '@/types'
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null
@@ -49,16 +52,17 @@ switchSample()
 </script>
 
 <template>
-  <div class="container-fluid mt-2">
+  <div class="container-fluid">
+    <ViewTitle :path="Path.History" emoji="📜" />
     <div v-if="!sample">
       <p class="text-center">
         Pas de données dans l’historique
       </p>
     </div>
     <div v-else class="row">
-      <div class="col-auto mb-4">
+      <LeftColumn :title="'Dates'">
         <HistoryEdit @switch-sample="() => switchSample()" />
-      </div>
+      </LeftColumn>
       <BudgetShow
         :account="snapshot.account"
         :users="snapshot.users"

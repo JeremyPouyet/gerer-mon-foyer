@@ -28,6 +28,7 @@ export enum Path {
   History = '/history',
   Home = '/',
   NotFound = '/not-found',
+  Projects = '/projects',
   Settings = '/settings',
   Simulator = '/simulator'
 }
@@ -48,10 +49,6 @@ export interface Transaction {
   value: string // Not a number to allow math formulas
 }
 
-export interface TransactionRecord {
-  values: Record<ID, Transaction>,
-  sum: number
-}
 export interface TransactionList {
   values: Transaction[],
   sum: number

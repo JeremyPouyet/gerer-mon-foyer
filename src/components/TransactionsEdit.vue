@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
 import NoteIcon from './NoteIcon.vue'
-import TableFooter from './TransactionsTable/TableFooter.vue'
-import TableHeader from './TransactionsTable/TableHeader.vue'
+import TableFooter from './transactionsTable/TableFooter.vue'
+import TableHeader from './transactionsTable/TableHeader.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
@@ -90,31 +90,24 @@ function handleClickOutside(event: MouseEvent) : void {
   <tbody>
     <tr v-for="transaction in transactionList.values" :key="transaction.id">
       <!-- Transaction name -->
-      <td class="align-middle">
-        <template v-if="editedNameId === transaction.id">
-          <input
-            :ref="el => setActiveInput(el)"
-            v-model="editedName"
-            class="char-width-20"
-            type="text"
-            @keydown.esc="cancelEditTransactionName"
-            @keydown.enter="executeEditTransactionName"
-            @keydown.tab="executeEditTransactionName"
-          >
-        </template>
-        <template v-else>
-          <span
-            class="editable-text"
-            @click="() => startEditTransactionName(transaction)"
-          >
-            {{ transaction.name }}
-          </span>
-          <NoteIcon :text="transaction.note" />
-        </template>
+      <td v-if="editedNameId === transaction.id">
+        <input
+          :ref="el => setActiveInput(el)"
+          v-model="editedName"
+          class="char-width-20"
+          type="text"
+          @keydown.esc="cancelEditTransactionName"
+          @keydown.enter="executeEditTransactionName"
+          @keydown.tab="executeEditTransactionName"
+        >
+      </td>
+      <td v-else class="align-middle editable-cell" @click="() => startEditTransactionName(transaction)">
+        <span>{{ transaction.name }}</span>
+        <NoteIcon :text="transaction.note" />
       </td>
       <!-- Transaction value by frequency -->
-      <td v-for="frequency in frequencies" :key="frequency" class="text-end align-middle">
-        <template v-if="editedValueId == transaction.id && editedFrequency == frequency">
+      <template v-for="frequency in frequencies" :key="frequency">
+        <td v-if="editedValueId == transaction.id && editedFrequency == frequency">
           <input
             :ref="el => setActiveInput(el)"
             v-model="editedValue"
@@ -124,19 +117,17 @@ function handleClickOutside(event: MouseEvent) : void {
             @keydown.enter="executeEditTransactionValue"
             @keydown.tab="executeEditTransactionValue"
           >
-        </template>
-        <template v-else>
+        </td>
+        <td v-else class="text-end align-middle editable-cell" @click="() => startEditTransactionValue(transaction, frequency)">
           <span
             v-tooltip="{ disposeOnClick: true }"
-            class="editable-text"
             :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
-            @click="() => startEditTransactionValue(transaction, frequency)"
           >
             {{ sexyNumber(valueAs(transaction, frequency)) }}
             <div v-show="transaction.frequency===frequency" class="underline" />
           </span>
-        </template>
-      </td>
+        </td>
+      </template>
       <!-- Transaction income percentage -->
       <td v-if="income" class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction) / income.value * 100) }}

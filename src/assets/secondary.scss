@@ -10,18 +10,23 @@
 @import '../../node_modules/bootstrap/scss/toasts';
 @import '../../node_modules/bootstrap/scss/helpers/position';
 
+.active {
+  font-weight: bold;
+  color: #000;
+}
+
 .rounded-shadow {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   justify-content: center;
 }
 
-/* Basic clickable and editable text style */
-.editable-text {
+/* Clickable and editable cell style */
+.editable-cell {
   cursor: pointer;
 
-  &:hover {
-    border-bottom: 1px solid #0056b3;
+  &:hover span {
+    text-decoration: underline solid $dark;
   }
 }
 
@@ -39,10 +44,6 @@
 
 .char-width-30 {
   width: 30ch;
-}
-
-.sticky-offset {
-  top: 1.5rem;
 }
 
 /**** Left column with history dates or users ****/
@@ -85,4 +86,15 @@ table {
       }
     }
   }
+}
+
+.shadowed-border {
+  border-radius: 10px 10px 0px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table-title-container {
+  display: flex;
+  padding: 10px 0;
+  margin-bottom: 20px;
 }

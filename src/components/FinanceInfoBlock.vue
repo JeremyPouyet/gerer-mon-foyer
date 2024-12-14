@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import User from '@/user'
 import type Account from '@/account'
-import userManager from '@/userManager'
+import userManager from '@/managers/userManager'
 import { sexyAmount, sexyNumber } from '@/formaters'
 
 const props = defineProps<{ commonAccount: Account, commonBill: number, remainSum: number, user: User }>()
@@ -67,7 +67,7 @@ const in10years = computed<number>(() => incomeAfterAllExpenses.value * 12 * 10)
           En 10 ans, tu pourrais économiser <span class="text-danger fw-semibold">{{ sexyAmount(in10years) }}</span>.
         </p>
         <p v-else-if="in10years < 0" class="mb-0">
-          En 10 ans, tu t’endetterais de <span class="danger fw-semibold">{{ sexyAmount(-in10years) }}</span>.
+          En 10 ans, tu t’endetterais de <span class="text-danger fw-semibold">{{ sexyAmount(-in10years) }}</span>.
         </p>
       </template>
       <template v-else>

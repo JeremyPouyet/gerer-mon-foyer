@@ -1,5 +1,5 @@
 <template>
-  <section v-once class="container mt-4">
+  <section v-once class="container">
     <header class="text-center mb-5">
       <h1>Répartissez vos dépenses communes de manière équitable</h1>
       <p class="lead">

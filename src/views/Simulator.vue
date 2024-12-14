@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import { onMounted, ref, watch } from 'vue'
+import Distribution from '@/components/Distribution.vue'
+import ViewTitle from '@/components/ViewTitle.vue'
+
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
-import userManager from '@/userManager'
-import SettingsManager from '@/SettingsManager'
-import { sexyAmount, sexyNumber } from '@/formaters'
+import settingManager from '@/managers/settingManager'
+import { sexyAmount } from '@/formaters'
+import BrowserStorage, { StorageKey } from '@/browserStorage'
+import { Path } from '@/types'
 
+let computedValue = ref(0)
 const expenseValue = ref<string>('')
 
 onMounted(() => {
-  expenseValue.value = sessionStorage.getItem('simulatorValue') || ''
-})
+  const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
+  expenseValue.value = simulatorValueStorage.get('')
 
-let computedValue = ref(0)
+  const watchers = [
+    watch(expenseValue, value => simulatorValueStorage.set(value)),
+  ]
 
-watch(expenseValue, () => {
-  sessionStorage.setItem('simulatorValue', expenseValue.value)
+  onUnmounted(() => {
+    watchers.forEach(stop => stop())
+  })
 })
 
 /**
@@ -38,25 +46,14 @@ function computeValue() : number {
 </script>
 
 <template>
-  <div class="container mt-2">
-    <div v-if="!userManager.users.length">
-      <p class="text-center">
-        Ajoutez des utilisateurs pour voir la distribution d’une dépense ponctuelle
-      </p>
-    </div>
-    <div v-else class="row">
-      <div class="col-md-6">
-        <p>
-          Ici on réutilise les ratios calculés lors de la
-          <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-          <RouterLink class="text-primary-emphasis" to="/expense-distribution">répartition des dépenses</RouterLink> pour
-          savoir la somme que chaque habitant du foyer doit donner pour une dépense ponctuelle.
-        </p>
-        <label for="expenseInput" class="form-label fw-bold">Valeur ou formule</label>
-
+  <div class="container">
+    <ViewTitle :path="Path.Simulator" emoji="🛋️" unpaded />
+    <div class="row mb-4 mt-4">
+      <div class="col-md-5 col-sm-12">
+        <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
         <div class="input-group mb-3">
-          <span v-if="!SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computedValue) }}
+          <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+            {{ sexyAmount(computeValue()) }}
           </span>
           <input
             id="expenseInput"
@@ -68,31 +65,12 @@ function computeValue() : number {
             placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
             data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           >
-          <span v-if="SettingsManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computedValue) }}
+          <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
+            {{ sexyAmount(computeValue()) }}
           </span>
         </div>
       </div>
-
-      <div class="col-md-6 mt-4 mt-md-0 mb-4">
-        <ul class="list-group">
-          <li
-            v-for="user in userManager.users"
-            :key="user.id"
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <div>
-              <div class="fw-bold">
-                {{ user.name }}
-              </div>
-              {{ sexyAmount(computeValue() * user.ratio) }}
-            </div>
-            <span class="badge bg-secondary rounded-pill">
-              Ratio de {{ sexyNumber(user.ratio, 'percent') }}
-            </span>
-          </li>
-        </ul>
-      </div>
+      <Distribution :total="computeValue()" />
     </div>
   </div>
 </template>

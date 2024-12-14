@@ -20,30 +20,32 @@ const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !
 </script>
 
 <template>
-  <div class="d-flex justify-content-between">
-    <div>
-      <!-- Set an id to be used as an inner page anchor -->
-      <h3 :id="name">
-        {{ name }}
-        <NoteIcon :text="props.account.note" :unpaded="true" />
-        <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
-      </h3>
-    </div>
-    <div class="d-flex gap-3">
-      <div
-        v-for="transactionType in visibleTransactionTypes"
-        :key="transactionType"
-        v-tooltip="{ disposeOnClick: true }"
-        :data-bs-title="'Aggrandir'"
-        class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-        @click="account.settings.show[transactionType] = true"
-      >
-        {{ Texts.transactionTypes[transactionType].plural }}
-        <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <div>
+        <!-- Set an id to be used as an inner page anchor -->
+        <h3 :id="name">
+          {{ name }}
+          <NoteIcon :text="props.account.note" :unpaded="true" />
+          <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
+        </h3>
+      </div>
+      <div class="d-flex gap-3">
+        <div
+          v-for="transactionType in visibleTransactionTypes"
+          :key="transactionType"
+          v-tooltip="{ disposeOnClick: true }"
+          :data-bs-title="'Aggrandir'"
+          class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
+          @click="account.settings.show[transactionType] = true"
+        >
+          {{ Texts.transactionTypes[transactionType].plural }}
+          <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
+        </div>
       </div>
     </div>
+    <hr class="mb-4 mt-0">
   </div>
-  <hr>
 </template>
 
 <style scope>
