@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import AdvancedSimulator from '@/components/simulator/AdvancedSimulator.vue'
+import ProjectEditor from '@/components/project/ProjectEditor.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
@@ -34,7 +34,7 @@ onMounted(() => {
         <ProjectsEdit />
       </LeftColumn>
       <div class="col">
-        <AdvancedSimulator :key="currentProject.id" :current-project="currentProject" />
+        <ProjectEditor :key="currentProject.id" :current-project="currentProject" />
       </div>
     </div>
   </div>

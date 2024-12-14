@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Distribution from '@/components/simulator/Distribution.vue'
+import Distribution from '@/components/Distribution.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
@@ -8,12 +8,10 @@ import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounte
 import Project, { type Expense } from '@/project'
 import projectManager from '@/managers/projectManager'
 import userManager from '@/managers/userManager'
-import type { ID } from '@/types'
 
-import PaymentsTable from './PaymentsTable.vue'
+import PaymentsTable from '@/components/project/PaymentsTable.vue'
 import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
-import { exp } from 'mathjs'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -155,16 +153,16 @@ onMounted(() => {
               <th scope="col">
                 Dépense
               </th>
-              <th scope="col">
+              <th scope="col" class="text-end">
                 Quantitée
               </th>
-              <th scope="col">
+              <th scope="col" class="text-end">
                 Prix
               </th>
-              <th scope="col">
+              <th scope="col" class="text-end">
                 Total
               </th>
-              <th class="text-end" scope="col">
+              <th scope="col" class="text-end">
                 Actions
               </th>
             </tr>
@@ -197,7 +195,7 @@ onMounted(() => {
                   @keydown.tab="executeEditExpenseQuantity"
                 >
               </td>
-              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus)">
+              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus)">
                 <span>{{ expense.quantity }}</span>
               </td>
               <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle">
@@ -211,10 +209,10 @@ onMounted(() => {
                   @keydown.tab="executeEditExpensePrice"
                 >
               </td>
-              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'price', expense.price, () => inputRef?.focus)">
-                <span>{{ expense.price }}</span>
+              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'price', expense.price, () => inputRef?.focus)">
+                <span>{{ sexyNumber(expense.price) }}</span>
               </td>
-              <td class="align-middle">
+              <td class="align-middle text-end">
                 {{ sexyNumber(expense.quantity * expense.price) }}
               </td>
               <td class="text-end align-middle text-nowrap">
@@ -239,7 +237,7 @@ onMounted(() => {
                 Total
               </td>
               <td class="text-end" colspan="3">
-                {{ expenses.sum }}
+                {{ sexyNumber(expenses.sum) }}
               </td>
               <td />
             </tr>

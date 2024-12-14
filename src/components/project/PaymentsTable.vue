@@ -97,7 +97,7 @@ onMounted(() => {
         <th scope="col" style="width:20%">
           Date
         </th>
-        <th scope="col" style="width:20%">
+        <th class="text-end" scope="col" style="width:20%">
           Valeur
         </th>
         <th scope="col" style="width:50%">
@@ -142,7 +142,7 @@ onMounted(() => {
             @keydown.tab="executeEditValue"
           >
         </td>
-        <td v-else class="editable-cell" @click="() => startEditValue(payment)">
+        <td v-else class="editable-cell text-end" @click="() => startEditValue(payment)">
           <span>{{ sexyNumber(payment.value) }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import Distribution from '@/components/simulator/Distribution.vue'
+import Distribution from '@/components/Distribution.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onMounted, onUnmounted, ref, watch } from 'vue'

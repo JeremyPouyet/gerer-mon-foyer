@@ -9,7 +9,9 @@ const unpadedClass = props.unpaded ? 'ps-0' : ''
 
 <template>
   <div class="container mb-4" :class="unpadedClass">
-    <h1 class="text-center">{{ Texts.heads[path].title }}</h1>
+    <h1 class="text-center">
+      {{ Texts.heads[path].title }}
+    </h1>
     <p class="text-center">
       <span class="fst-italic fw-lighter">
         {{ Texts.heads[path].meta.description }}
