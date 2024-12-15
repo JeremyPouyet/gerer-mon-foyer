@@ -32,7 +32,7 @@ export interface Resident {
 }
 
 // List of possible transactions sort
-const sorters = {
+const sorters: Record<SortType, (a: Expense, b: Expense) => number> = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   [SortType.Asc]: (a: Expense, b: Expense) => a.price * a.quantity - b.price * b.quantity,
   [SortType.Desc]: (a: Expense, b: Expense) => b.price * b.quantity - a.price * a.quantity,
@@ -55,6 +55,7 @@ export default class Project {
     this.id = props.id ?? newId()
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Notre super projet'
+    this.note = props.note
     this.residents = props.residents ?? []
     this.payments = props.payments ?? {}
   }
@@ -63,6 +64,7 @@ export default class Project {
    * Creates a new expense and adds it to the expenses list.
    *
    * @param expense The expense details, excluding the id.
+   * @return Whether the creation is successful.
    */
   expenseCreate(expense: Omit<Expense, 'id'>) : boolean {
     const trimmedName = (expense.name || '').trim()
@@ -90,7 +92,6 @@ export default class Project {
    * Deletes an expense by ID.
    *
    * @param id The ID of the expense to delete.
-   * @return Whether the deletion was successful.
    */
   expenseDelete(id: ID) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -105,10 +106,10 @@ export default class Project {
    * @return The sorted list of expenses and their total sum.
    */
   expenseSorted() : ExpenseList {
+    const expenses = Object.values(this.expenses)
     return {
-      sum: Object.values(this.expenses).reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
-      values: Object.values(this.expenses)
-        .sort(sorters[settingManager.settings.sort])
+      sum: expenses.reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
+      values: expenses.sort(sorters[settingManager.settings.sort])
     }
   }
 
