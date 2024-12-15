@@ -1,4 +1,4 @@
-import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import notificationManager from '@/managers/notificationManager'
 
 export enum StorageKey {
   CurrentProjectId = 'currentProjectId', // Currently edited/seen project
@@ -43,7 +43,7 @@ export default class BrowserStorage {
       this.#memory.setItem(this.#key, value)
       this.#value = value
     } catch {
-      notificationManager.create('Plus de mémoire… Merci d’envoyer un mail à contact@gerer-mon-foyer.fr avec votre sauvegarde.', NotificationType.Error)
+      notificationManager.error('Plus de mémoire… Merci d’envoyer un mail à contact@gerer-mon-foyer.fr avec votre sauvegarde.')
     }
   }
 }

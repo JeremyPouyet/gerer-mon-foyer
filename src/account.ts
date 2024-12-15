@@ -1,7 +1,7 @@
 import { newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
-import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import notificationManager from '@/managers/notificationManager'
 import userManager from './managers/userManager'
 import settingManager from './managers/settingManager'
 
@@ -61,7 +61,7 @@ function formatName(transaction: Pick<Transaction, 'name'>) : boolean {
   const trimmedName = transaction.name.trim()
 
   if (!trimmedName) {
-    notificationManager.create(`"${transaction.name}" n’est pas un nom valide.`, NotificationType.Error)
+    notificationManager.error(`"${transaction.name}" n’est pas un nom valide.`)
     return false
   }
   transaction.name = trimmedName
@@ -82,7 +82,7 @@ function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Tran
     transaction.value = value
     return true
   } catch {
-    notificationManager.create(`"${transaction.value}" n’est pas un montant valide`, NotificationType.Error)
+    notificationManager.error(`"${transaction.value}" n’est pas un montant valide`)
     return false
   }
 }

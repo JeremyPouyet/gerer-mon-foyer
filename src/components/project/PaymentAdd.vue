@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Project from '@/project'
+import Project, { type Payment } from '@/project'
 
 import userManager from '@/managers/userManager'
 
 const props = defineProps<{ currentProject: Project }>()
 const firstInputRef = ref<HTMLSelectElement | null>(null)
-const newPayment = ref({ comment: '', resident: userManager.users[0]?.name, value: 0 })
+const newPayment = ref({ comment: '', resident: userManager.users[0]?.name, value: undefined })
 
 function paymentAdd() : void {
-  if (!newPayment.value.resident) return
+  const payment = { ...newPayment.value } as unknown as Omit<Payment, 'id' | 'date'>
 
-  props.currentProject.paymentCreate(newPayment.value)
-  newPayment.value = { comment: '', resident: newPayment.value.resident, value: 0 }
-  firstInputRef.value?.focus()
+  if (props.currentProject.paymentCreate(payment)) {
+    newPayment.value = { comment: '', resident: newPayment.value.resident, value: undefined }
+    firstInputRef.value?.focus()
+  }
 }
 </script>
 
@@ -47,6 +48,7 @@ function paymentAdd() : void {
       v-model="newPayment.value"
       v-tooltip
       class="form-control mt-2 mt-sm-0"
+      min="0"
       data-bs-placement="bottom"
       data-bs-title="Valeur du payment"
       placeholder="Valeur"
@@ -55,7 +57,7 @@ function paymentAdd() : void {
     >
     <button
       class="btn btn-secondary mt-2 mt-sm-0"
-      :disabled="!(newPayment.value && newPayment.resident)"
+      :disabled="!(typeof newPayment.value === 'number' && newPayment.resident)"
       @click="paymentAdd"
     >
       Ajouter

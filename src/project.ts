@@ -3,7 +3,7 @@ import type { ID } from '@/types'
 import { SortType } from '@/types'
 import settingManager from '@/managers/settingManager'
 import userManager from './managers/userManager'
-import notificationManager, { NotificationType } from './managers/notificationManager'
+import notificationManager from './managers/notificationManager'
 
 export interface Expense {
   readonly id: ID
@@ -68,7 +68,7 @@ export default class Project {
     const trimmedName = expense.name
 
     if (!trimmedName) {
-      notificationManager.create(`"${expense.name}" n’est pas un nom valide.`, NotificationType.Error)
+      notificationManager.error(`"${expense.name}" n’est pas un nom valide.`)
       return
     }
     const id = newId()
@@ -109,12 +109,20 @@ export default class Project {
     userManager.users.forEach(user => this.residents.push({ name: user.name, ratio: user.ratio }))
   }
 
-  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : void {
+  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
     const trimmedName = payment.resident
 
     if (!trimmedName) {
-      notificationManager.create(`"${payment.resident}" n’est pas un nom valide.`, NotificationType.Error)
-      return
+      notificationManager.error(`"${payment.resident}" n’est pas un nom valide.`)
+      return false
+    }
+    if (typeof payment.value !== 'number') {
+      notificationManager.error(`"${payment.value}" n’est pas un nombre valide.`)
+      return false
+    }
+    if (payment.value < 0) {
+      notificationManager.error('La valeur d’un payment ne peut être inférieur à 0.')
+      return false
     }
     const newPayment = {
       ...payment,
@@ -124,6 +132,7 @@ export default class Project {
     }
     this.payments[newPayment.id] = newPayment
     this.updateTimestamp()
+    return true
   }
 
   paymentDelete(id: ID) : void {

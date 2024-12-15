@@ -5,7 +5,7 @@ import ViewTitle from '@/components/ViewTitle.vue'
 
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
-import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import notificationManager from '@/managers/notificationManager'
 import settingManager, { Currency } from '@/managers/settingManager'
 import { Path, SortType } from '@/types'
 
@@ -29,7 +29,7 @@ function saveFile() : void {
   link.download = generateDateString()
   link.click()
   URL.revokeObjectURL(link.href)
-  notificationManager.create('Données exportées avec succès')
+  notificationManager.success('Données exportées avec succès')
 }
 
 function uploadFile() : void {
@@ -70,10 +70,10 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 
     db.setup()
     historyManager.activeDate = historyManager.history[0]?.date || ''
-    notificationManager.create('Données importées avec succès')
+    notificationManager.success('Données importées avec succès')
   } catch (error) {
     console.error(error)
-    notificationManager.create('Erreur lors de l’importation des données', NotificationType.Error)
+    notificationManager.error('Erreur lors de l’importation des données')
   }
 }
 
@@ -82,7 +82,7 @@ function confirmDataDeletion() : void {
 
   if (confirmation) {
     db.empty()
-    notificationManager.create('Données supprimées avec succès')
+    notificationManager.success('Données supprimées avec succès')
   }
 }
 

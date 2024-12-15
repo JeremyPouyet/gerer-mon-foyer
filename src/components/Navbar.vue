@@ -47,7 +47,7 @@ async function historicise() {
     await loadManagers()
 
   historyManager.create({ account: db.account, users: userManager.users })
-  notificationManager.create('Répartition historisé !')
+  notificationManager.success('Répartition historisé !')
 }
 </script>
 
