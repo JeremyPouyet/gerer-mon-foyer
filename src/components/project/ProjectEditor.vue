@@ -169,7 +169,7 @@ onMounted(() => {
                 <span>{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
-              <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle">
+              <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle text-end">
                 <input
                   :ref="el => setActiveInput(el)"
                   v-model="editedValue"
@@ -183,7 +183,7 @@ onMounted(() => {
               <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())">
                 <span>{{ expense.quantity }}</span>
               </td>
-              <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle">
+              <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle  text-end">
                 <input
                   :ref="el => setActiveInput(el)"
                   v-model="editedValue"
