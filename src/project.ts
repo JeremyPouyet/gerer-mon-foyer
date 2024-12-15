@@ -64,16 +64,26 @@ export default class Project {
    *
    * @param expense The expense details, excluding the id.
    */
-  expenseCreate(expense: Omit<Expense, 'id'>) {
-    const trimmedName = expense.name
+  expenseCreate(expense: Omit<Expense, 'id'>) : boolean {
+    const trimmedName = (expense.name || '').trim()
+    const price = expense.price ?? -1
+    const quantity = expense.quantity ?? -1
+    let err = null
 
-    if (!trimmedName) {
-      notificationManager.error(`"${expense.name}" n’est pas un nom valide.`)
-      return
+    if (!trimmedName)
+      err = `"${expense.name}" n’est pas un nom valide.`
+    else if (price < 0)
+      err = 'Le prix d’une dépense ne peut être inférieur à 0.'
+    else if (quantity < 0)
+      err = 'La quantité d’une dépense ne peut être inférieur à 0.'
+    if (err) {
+      notificationManager.error(err)
+      return false
     }
     const id = newId()
-    this.expenses[id] = { ...expense, id: id, name: trimmedName }
+    this.expenses[id] = { id: id, name: trimmedName, price, quantity }
     this.updateTimestamp()
+    return true
   }
 
   /**
@@ -110,26 +120,24 @@ export default class Project {
   }
 
   paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
-    const trimmedName = payment.resident
+    const resident = (payment.resident || '').trim()
+    const value = payment.value ?? -1
+    const comment = payment.comment ?? ''
+    let err = null
 
-    if (!trimmedName)
-      notificationManager.error(`"${payment.resident}" n’est pas un nom valide.`)
-    else if (typeof payment.value !== 'number')
-      notificationManager.error(`"${payment.value}" n’est pas un nombre valide.`)
-    else if (payment.value < 0)
-      notificationManager.error('La valeur d’un payment ne peut être inférieur à 0.')
-    else {
-      const newPayment = {
-        ...payment,
-        date: new Date().toISOString(),
-        id: newId(),
-        resident: trimmedName
-      }
-      this.payments[newPayment.id] = newPayment
-      this.updateTimestamp()
-      return true
+    if (!resident)
+      err = `"${payment.resident}" n’est pas un nom valide.`
+    else if (value < 0)
+      err = 'La valeur d’un payment ne peut être inférieur à 0.'
+    if (err) {
+      notificationManager.error(err)
+      return false
     }
-    return false
+    const date = new Date().toISOString()
+    const newPayment = { comment, date, id: newId(), resident, value }
+    this.payments[newPayment.id] = newPayment
+    this.updateTimestamp()
+    return true
   }
 
   paymentDelete(id: ID) : void {

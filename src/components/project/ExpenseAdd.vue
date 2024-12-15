@@ -5,15 +5,16 @@ import type { Expense } from '@/project'
 import Project from '@/project'
 
 const props = defineProps<{ currentProject: Project }>()
-const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
+const newExpense = ref({ name: '', price: undefined, quantity: undefined })
 const firstInputRef = ref<HTMLInputElement | null>(null)
 
 function expenseAdd() : void {
-  if (!newExpense.value.name) return
+  const expense = { ...newExpense.value } as unknown as Omit<Expense, 'id'>
 
-  props.currentProject.expenseCreate(newExpense.value)
-  newExpense.value = { name: '', price: 0, quantity: 1 }
-  firstInputRef.value?.focus()
+  if (props.currentProject.expenseCreate(expense)) {
+    newExpense.value = { name: '', price: undefined, quantity: undefined }
+    firstInputRef.value?.focus()
+  }
 }
 </script>
 
@@ -51,7 +52,11 @@ function expenseAdd() : void {
       type="number"
       @keydown.enter="expenseAdd"
     >
-    <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
+    <button
+      class="btn btn-secondary mt-2 mt-sm-0"
+      :disabled="!(newExpense.name && typeof newExpense.price === 'number' && typeof newExpense.quantity === 'number')"
+      @click="expenseAdd"
+    >
       Ajouter
     </button>
   </div>
