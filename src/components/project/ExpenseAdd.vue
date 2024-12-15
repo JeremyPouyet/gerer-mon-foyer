@@ -5,7 +5,6 @@ import type { Expense } from '@/project'
 import Project from '@/project'
 
 const props = defineProps<{ currentProject: Project }>()
-
 const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
 const firstInputRef = ref<HTMLInputElement | null>(null)
 

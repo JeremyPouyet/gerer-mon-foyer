@@ -112,27 +112,24 @@ export default class Project {
   paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
     const trimmedName = payment.resident
 
-    if (!trimmedName) {
+    if (!trimmedName)
       notificationManager.error(`"${payment.resident}" n’est pas un nom valide.`)
-      return false
-    }
-    if (typeof payment.value !== 'number') {
+    else if (typeof payment.value !== 'number')
       notificationManager.error(`"${payment.value}" n’est pas un nombre valide.`)
-      return false
-    }
-    if (payment.value < 0) {
+    else if (payment.value < 0)
       notificationManager.error('La valeur d’un payment ne peut être inférieur à 0.')
-      return false
+    else {
+      const newPayment = {
+        ...payment,
+        date: new Date().toISOString(),
+        id: newId(),
+        resident: trimmedName
+      }
+      this.payments[newPayment.id] = newPayment
+      this.updateTimestamp()
+      return true
     }
-    const newPayment = {
-      ...payment,
-      date: new Date().toISOString(),
-      id: newId(),
-      resident: trimmedName
-    }
-    this.payments[newPayment.id] = newPayment
-    this.updateTimestamp()
-    return true
+    return false
   }
 
   paymentDelete(id: ID) : void {
