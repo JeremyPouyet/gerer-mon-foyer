@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import UserLine from '@/components/UserLine.vue'
 
-import { ref } from 'vue'
+import isMobile from 'is-mobile'
+import { onMounted, ref } from 'vue'
 
 import userManager from '@/managers/userManager'
 
 const username = ref<string>('')
+const inputRef = ref<HTMLInputElement | null>(null)
 
 function userCreate() : void {
   userManager.create(username.value)
   username.value = ''
+  inputRef.value?.focus()
 }
+
+onMounted(() => {
+  if (!isMobile() && userManager.users.length === 0 && inputRef.value)
+    inputRef.value.focus()
+})
 </script>
 
 <template>
@@ -21,6 +29,7 @@ function userCreate() : void {
   </ul>
   <div class="input-group">
     <input
+      ref="inputRef"
       v-model="username"
       type="text"
       placeholder="Prénom"

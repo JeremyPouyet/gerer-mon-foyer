@@ -4,6 +4,7 @@ import '@/assets/secondary.scss'
 import Distribution from '@/components/Distribution.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
+import isMobile from 'is-mobile'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { limitedEvaluate } from '@/helpers'
@@ -14,6 +15,7 @@ import { Path } from '@/types'
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
+const inputRef = ref<HTMLInputElement | null>(null)
 
 onMounted(() => {
   const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
@@ -22,6 +24,8 @@ onMounted(() => {
   const watchers = [
     watch(expenseValue, value => simulatorValueStorage.set(value)),
   ]
+
+  if (!isMobile()) inputRef.value?.focus()
 
   onUnmounted(() => {
     watchers.forEach(stop => stop())
@@ -57,6 +61,7 @@ function computeValue() : number {
           </span>
           <input
             id="expenseInput"
+            ref="inputRef"
             v-model="expenseValue"
             v-tooltip
             data-bs-placement="bottom"

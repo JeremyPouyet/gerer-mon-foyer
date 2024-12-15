@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import Distribution from '@/components/Distribution.vue'
+import ExpenseAdd from '@/components/project/ExpenseAdd.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
+import PaymentAdd from '@/components/project/PaymentAdd.vue'
+import PaymentsTable from '@/components/project/PaymentsTable.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-import Project, { type Expense } from '@/project'
+import Project from '@/project'
 import projectManager from '@/managers/projectManager'
 import userManager from '@/managers/userManager'
 
-import PaymentsTable from '@/components/project/PaymentsTable.vue'
 import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
 
-const newExpense = ref<Omit<Expense, 'id'>>({ name: '', price: 0, quantity: 1 })
-const newPayment = ref({ comment: '', resident: userManager.users[0]?.name, value: 0 })
 const expenses = computed(() => currentProject.expenseSorted())
 const newProjectName = ref('')
 const isEditingProjectName = ref(false)
@@ -81,21 +81,6 @@ function executeEditProjectName() : void {
 function cancelEditProjectName() : void {
   isEditingProjectName.value = false
   newProjectName.value = ''
-}
-
-/**** Create objects */
-function expenseAdd() : void {
-  if (!newExpense.value.name) return
-
-  currentProject.expenseCreate(newExpense.value)
-  newExpense.value = { name: '', price: 0, quantity: 1 }
-}
-
-function paymentAdd() : void {
-  if (newPayment.value.resident) {
-    currentProject.paymentCreate(newPayment.value)
-    newPayment.value = { comment: '', resident: '', value: 0 }
-  }
 }
 
 onMounted(() => {
@@ -244,42 +229,7 @@ onMounted(() => {
           </tfoot>
         </table>
       </div>
-      <div class="input-group flex-sm-row">
-        <input
-          v-model="newExpense.name"
-          v-tooltip
-          class="form-control"
-          data-bs-placement="bottom"
-          data-bs-title="Nom de la dépense"
-          placeholder="Dépense"
-          type="text"
-          @keydown.enter="expenseAdd"
-        >
-        <input
-          v-model="newExpense.quantity"
-          v-tooltip
-          class="form-control"
-          data-bs-placement="bottom"
-          data-bs-title="Quantité"
-          type="number"
-          placeholder="Quantité"
-          @keydown.enter="expenseAdd"
-        >
-        <div class="w-100 d-sm-none" />
-        <input
-          v-model="newExpense.price"
-          v-tooltip
-          class="form-control mt-2 mt-sm-0"
-          data-bs-placement="bottom"
-          data-bs-title="Prix"
-          placeholder="Prix"
-          type="number"
-          @keydown.enter="expenseAdd"
-        >
-        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newExpense.name" @click="expenseAdd">
-          Ajouter
-        </button>
-      </div>
+      <ExpenseAdd :current-project="currentProject" />
     </div>
     <Distribution :total="expenses.sum" />
   </div>
@@ -294,47 +244,7 @@ onMounted(() => {
       <div v-else class="table-responsive shadowed-border mb-3">
         <PaymentsTable :current-project="currentProject" />
       </div>
-      <div class="input-group flex-sm-row">
-        <select
-          v-model="newPayment.resident"
-          v-tooltip
-          data-bs-placement="bottom"
-          data-bs-title="Nom de l’habitant"
-          class="form-select mt-2 mt-sm-0"
-        >
-          <option v-for="resident in userManager.users" :key="resident.name">
-            {{ resident.name }}
-          </option>
-        </select>
-        <input
-          v-model="newPayment.value"
-          v-tooltip
-          class="form-control mt-2 mt-sm-0"
-          data-bs-placement="bottom"
-          data-bs-title="Valeur du payment"
-          placeholder="Valeur"
-          type="number"
-          @keydown.enter="paymentAdd"
-        >
-        <div class="w-100 d-sm-none" />
-        <input
-          v-model="newPayment.comment"
-          v-tooltip
-          class="form-control mt-2 mt-sm-0"
-          data-bs-placement="bottom"
-          data-bs-title="Commentaire"
-          type="text"
-          placeholder="Commentaire"
-          @keydown.enter="paymentAdd"
-        >
-        <button
-          class="btn btn-secondary mt-2 mt-sm-0"
-          :disabled="!(newPayment.value && newPayment.resident)"
-          @click="paymentAdd"
-        >
-          Ajouter
-        </button>
-      </div>
+      <PaymentAdd :current-project="currentProject" />
     </div>
   </div>
 </template>

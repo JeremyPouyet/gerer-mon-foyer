@@ -97,11 +97,11 @@ onMounted(() => {
         <th scope="col" style="width:20%">
           Date
         </th>
-        <th class="text-end" scope="col" style="width:20%">
-          Valeur
-        </th>
         <th scope="col" style="width:50%">
           Commentaire
+        </th>
+        <th class="text-end" scope="col" style="width:20%">
+          Valeur
         </th>
         <th scope="col" class="text-end" style="width:10%">
           Actions
@@ -131,20 +131,6 @@ onMounted(() => {
         <td v-else class="editable-cell" @click="() => startEditDate(payment)">
           <span>{{ sexyDate(payment.date, false) }}</span>
         </td>
-        <td v-if="editedId === payment.id && editedType === 'value'" class="align-middle">
-          <input
-            :ref="el => setActiveInput(el)"
-            v-model="editedValue"
-            class="char-width-20"
-            type="number"
-            @keydown.esc="cancelEdit"
-            @keydown.enter="executeEditValue"
-            @keydown.tab="executeEditValue"
-          >
-        </td>
-        <td v-else class="editable-cell text-end" @click="() => startEditValue(payment)">
-          <span>{{ sexyNumber(payment.value) }}</span>
-        </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">
           <input
             :ref="el => setActiveInput(el)"
@@ -158,6 +144,20 @@ onMounted(() => {
         </td>
         <td v-else class="editable-cell" @click="() => startEditComment(payment)">
           <span>{{ payment.comment || 'N/D' }}</span>
+        </td>
+        <td v-if="editedId === payment.id && editedType === 'value'" class="align-middle">
+          <input
+            :ref="el => setActiveInput(el)"
+            v-model="editedValue"
+            class="char-width-20"
+            type="number"
+            @keydown.esc="cancelEdit"
+            @keydown.enter="executeEditValue"
+            @keydown.tab="executeEditValue"
+          >
+        </td>
+        <td v-else class="editable-cell text-end" @click="() => startEditValue(payment)">
+          <span>{{ sexyNumber(payment.value) }}</span>
         </td>
         <td class="text-end align-middle text-nowrap">
           <img
