@@ -6,7 +6,8 @@ export enum NotificationType {
   Success = 'success',
   Error = 'error'
 }
-export interface Notification {
+
+interface Notification {
   type: NotificationType,
   text: string
 }
@@ -19,13 +20,12 @@ class NotificationManager {
   readonly notifications: Ref<Map<ID, Notification>> = ref(new Map())
 
   /**
-   * Creates and adds a new notification to the collection.
+   * Creates and adds a new Error notification to the collection.
    *
    * @param text - The content of the notification.
-   * @param type - The type of notification (Success, Error).
    */
-  create(text: string, type: NotificationType = NotificationType.Success) : void {
-    this.notifications.value.set(newId(), { text, type })
+  error(text: string) : void {
+    this.notifications.value.set(newId(), { text, type: NotificationType.Error })
   }
 
   /**
@@ -35,6 +35,15 @@ class NotificationManager {
    */
   delete(id: ID) {
     this.notifications.value.delete(id)
+  }
+
+  /**
+   * Creates and adds a new Success notification to the collection.
+   *
+   * @param text - The content of the notification.
+   */
+  success(text: string) : void {
+    this.notifications.value.set(newId(), { text, type: NotificationType.Success})
   }
 }
 

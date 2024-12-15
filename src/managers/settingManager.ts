@@ -42,13 +42,13 @@ type Notifications = {
   [K in GlobalSettingsKey]: (value: GlobalSettings[K]) => void
 }
 const notifications: Notifications = {
-  currency: (value: Currency) => notificationManager.create(
+  currency: (value: Currency) => notificationManager.success(
     Texts.notifications.settings.currency(settingManager.getCurrencySymbol(value, true))
   ),
-  sort: (value: SortType) => notificationManager.create(
+  sort: (value: SortType) => notificationManager.success(
     Texts.notifications.settings.sort(Texts.sortTypes[value].toLocaleLowerCase()),
   ),
-  twoDecimals: (value: boolean) => notificationManager.create(
+  twoDecimals: (value: boolean) => notificationManager.success(
     Texts.notifications.settings.twoDecimals[value ? 'true' : 'false']
   )
 }

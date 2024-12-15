@@ -10,6 +10,13 @@
 @import '../../node_modules/bootstrap/scss/toasts';
 @import '../../node_modules/bootstrap/scss/helpers/position';
 
+input:focus, select:focus {
+  outline: none !important; /* Remove default style */
+  border: 2px solid #4CAF50 !important;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.8) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
 .active {
   font-weight: bold;
   color: #000;

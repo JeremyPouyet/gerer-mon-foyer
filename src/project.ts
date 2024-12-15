@@ -3,7 +3,7 @@ import type { ID } from '@/types'
 import { SortType } from '@/types'
 import settingManager from '@/managers/settingManager'
 import userManager from './managers/userManager'
-import notificationManager, { NotificationType } from './managers/notificationManager'
+import notificationManager from './managers/notificationManager'
 
 export interface Expense {
   readonly id: ID
@@ -32,7 +32,7 @@ export interface Resident {
 }
 
 // List of possible transactions sort
-const sorters = {
+const sorters: Record<SortType, (a: Expense, b: Expense) => number> = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   [SortType.Asc]: (a: Expense, b: Expense) => a.price * a.quantity - b.price * b.quantity,
   [SortType.Desc]: (a: Expense, b: Expense) => b.price * b.quantity - a.price * a.quantity,
@@ -55,6 +55,7 @@ export default class Project {
     this.id = props.id ?? newId()
     this.expenses = props.expenses ?? {}
     this.name = props.name ?? 'Notre super projet'
+    this.note = props.note
     this.residents = props.residents ?? []
     this.payments = props.payments ?? {}
   }
@@ -63,24 +64,34 @@ export default class Project {
    * Creates a new expense and adds it to the expenses list.
    *
    * @param expense The expense details, excluding the id.
+   * @return Whether the creation is successful.
    */
-  expenseCreate(expense: Omit<Expense, 'id'>) {
-    const trimmedName = expense.name
+  expenseCreate(expense: Omit<Expense, 'id'>) : boolean {
+    const trimmedName = (expense.name || '').trim()
+    const price = expense.price ?? -1
+    const quantity = expense.quantity ?? -1
+    let err = null
 
-    if (!trimmedName) {
-      notificationManager.create(`"${expense.name}" n’est pas un nom valide.`, NotificationType.Error)
-      return
+    if (!trimmedName)
+      err = `"${expense.name}" n’est pas un nom valide.`
+    else if (price < 0)
+      err = 'Le prix d’une dépense ne peut être inférieur à 0.'
+    else if (quantity < 0)
+      err = 'La quantité d’une dépense ne peut être inférieur à 0.'
+    if (err) {
+      notificationManager.error(err)
+      return false
     }
     const id = newId()
-    this.expenses[id] = { ...expense, id: id, name: trimmedName }
+    this.expenses[id] = { id: id, name: trimmedName, price, quantity }
     this.updateTimestamp()
+    return true
   }
 
   /**
    * Deletes an expense by ID.
    *
    * @param id The ID of the expense to delete.
-   * @return Whether the deletion was successful.
    */
   expenseDelete(id: ID) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -95,10 +106,10 @@ export default class Project {
    * @return The sorted list of expenses and their total sum.
    */
   expenseSorted() : ExpenseList {
+    const expenses = Object.values(this.expenses)
     return {
-      sum: Object.values(this.expenses).reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
-      values: Object.values(this.expenses)
-        .sort(sorters[settingManager.settings.sort])
+      sum: expenses.reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
+      values: expenses.sort(sorters[settingManager.settings.sort])
     }
   }
 
@@ -109,21 +120,25 @@ export default class Project {
     userManager.users.forEach(user => this.residents.push({ name: user.name, ratio: user.ratio }))
   }
 
-  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : void {
-    const trimmedName = payment.resident
+  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
+    const resident = (payment.resident || '').trim()
+    const value = payment.value ?? -1
+    const comment = payment.comment ?? ''
+    let err = null
 
-    if (!trimmedName) {
-      notificationManager.create(`"${payment.resident}" n’est pas un nom valide.`, NotificationType.Error)
-      return
+    if (!resident)
+      err = `"${payment.resident}" n’est pas un nom valide.`
+    else if (value < 0)
+      err = 'La valeur d’un payment ne peut être inférieur à 0.'
+    if (err) {
+      notificationManager.error(err)
+      return false
     }
-    const newPayment = {
-      ...payment,
-      date: new Date().toISOString(),
-      id: newId(),
-      resident: trimmedName
-    }
+    const date = new Date().toISOString()
+    const newPayment = { comment, date, id: newId(), resident, value }
     this.payments[newPayment.id] = newPayment
     this.updateTimestamp()
+    return true
   }
 
   paymentDelete(id: ID) : void {

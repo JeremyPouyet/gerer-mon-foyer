@@ -10,11 +10,7 @@ const limitedEvaluate = math.evaluate.bind(math)
 
 export { limitedEvaluate }
 
-type Multipliers = {
-  [key in Frequency]: {
-    [key in Frequency]?: number
-  }
-}
+type Multipliers = Record<Frequency, Partial<Record<Frequency, number>>>
 
 const multipliers : Multipliers = {
   [Frequency.monthly]:   { [Frequency.quarterly]: 3,  [Frequency.biannual]: 6,    [Frequency.yearly]: 12 },
