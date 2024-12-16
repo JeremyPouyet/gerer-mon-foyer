@@ -27,6 +27,7 @@ export enum Path {
   Budget = '/budget',
   History = '/history',
   Home = '/',
+  Legals = '/legals',
   NotFound = '/not-found',
   Projects = '/projects',
   Settings = '/settings',

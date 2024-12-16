@@ -55,6 +55,9 @@
           </p>
         </div>
       </div>
+      <RouterLink class="text-primary-emphasis" to="/legals">
+        Mentions légales
+      </RouterLink>
     </div>
   </footer>
 </template>
