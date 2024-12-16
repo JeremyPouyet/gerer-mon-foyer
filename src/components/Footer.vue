@@ -51,13 +51,15 @@
             Code source disponible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" target="_blank" rel="noopener noreferrer">Github</a>
           </p>
           <p>
+            <RouterLink class="text-primary-emphasis" to="/legals">
+              Mentions légales
+            </RouterLink>
+          </p>
+          <p>
             Développeur fait avec amour par sa mère et son père ❤️
           </p>
         </div>
       </div>
-      <RouterLink class="text-primary-emphasis" to="/legals">
-        Mentions légales
-      </RouterLink>
     </div>
   </footer>
 </template>
