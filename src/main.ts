@@ -37,6 +37,7 @@ export const createApp = ViteSSG(
       ['History',   Path.History],
       ['Simulator', Path.Simulator],
       ['Projects',  Path.Projects],
+      ['Legals',    Path.Legals],
       ['NotFound',  Path.NotFound]
     ].map(([fileName, path]) => {
       return { component: () => import(`@/views/${fileName}.vue`), path }

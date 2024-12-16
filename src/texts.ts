@@ -26,6 +26,12 @@ export default {
       },
       title: 'Comment gérer le budget de mon foyer ?'
     },
+    [Path.Legals]: {
+      meta: {
+        description: 'Tout ce qu’il faut savoir sur Gérer Mon Foyer'
+      },
+      title: 'Mentions légales'
+    },
     [Path.NotFound]: {
       meta: {
         description: '404 - Cette page n’existe pas.'
