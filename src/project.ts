@@ -143,7 +143,7 @@ export default class Project {
    *
    * @param id The ID of the expense to delete.
    */
-  expenseDelete(id: ID) {
+  expenseDelete(id: ID): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.expenses[id])
       this.updateTimestamp()
@@ -154,7 +154,7 @@ export default class Project {
    *
    * @return The sorted list of expenses and their total sum.
    */
-  expenseSorted() : ExpenseList {
+  expenseSorted(): ExpenseList {
     const expenses = Object.values(this.expenses)
 
     return {
@@ -189,7 +189,7 @@ export default class Project {
    * @param payment The payment details, excluding the ID and date.
    * @returns Whether the creation was successful.
    */
-  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
+  paymentCreate(payment: Omit<Payment, 'id' | 'date'>): boolean {
     const newPayment: Payment = { ...payment, date: new Date().toISOString(), id: newId() }
 
     if (!handleValidation(newPayment, paymentValidate))
@@ -205,7 +205,7 @@ export default class Project {
    *
    * @param id The ID of the payment to delete.
    */
-  paymentDelete(id: ID) : void {
+  paymentDelete(id: ID): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.payments[id])
       this.updateTimestamp()
