@@ -1,9 +1,10 @@
 import notificationManager from '@/managers/notificationManager'
+import db from './db'
 
 export enum StorageKey {
   CurrentProjectId = 'currentProjectId', // Currently edited/seen project
   Projects = 'projects', // projects list
-  SimulatorTab = 'simulatorTab', // Last active tab on the simulator
+  Settings = 'settings',
   SimulatorValue = 'simulatorValue' // Simple simulator current value
 }
 
@@ -39,9 +40,13 @@ export default class BrowserStorage {
    * @param value - The value to store.
    */
   set(value: string) {
+    if (value === this.#value)
+      return
+
     try {
       this.#memory.setItem(this.#key, value)
       this.#value = value
+      ++db.unsavedChanges.value
     } catch {
       notificationManager.error('Plus de mémoire… Merci d’envoyer un mail à contact@gerer-mon-foyer.fr avec votre sauvegarde.')
     }

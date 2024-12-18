@@ -6,7 +6,6 @@ import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
 import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
 import type Project from '@/project'
 import type { Payment } from '@/project'
-import projectManager from '@/managers/projectManager'
 import { useEditable } from '@/helpers'
 
 const props = defineProps<{ currentProject: Project }>()
