@@ -33,11 +33,18 @@ export interface Resident {
 /**
  * Mapping of possible sorting types for expenses to their respective sorting functions.
  */
-const sorters: Record<SortType, (a: Expense, b: Expense) => number> = {
+const expenseSorters: Record<SortType, (a: Expense, b: Expense) => number> = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   [SortType.Asc]: (a: Expense, b: Expense) => a.price * a.quantity - b.price * b.quantity,
   [SortType.Desc]: (a: Expense, b: Expense) => b.price * b.quantity - a.price * a.quantity,
   [SortType.Zyx]: (a: Expense, b: Expense) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
+}
+
+const paymentSorters: Record<SortType, (a: Payment, b: Payment) => number> = {
+  [SortType.Abc]: (a: Payment, b: Payment) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  [SortType.Asc]: (a: Payment, b: Payment) => a.value - b.value,
+  [SortType.Desc]: (a: Payment, b: Payment) => b.value - a.value,
+  [SortType.Zyx]: (a: Payment, b: Payment) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 }
 
 /**
@@ -152,7 +159,7 @@ export default class Project {
 
     return {
       sum: expenses.reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
-      values: expenses.sort(sorters[settingManager.settings.sort])
+      values: expenses.sort(expenseSorters[settingManager.settings.sort])
     }
   }
 
@@ -230,13 +237,18 @@ export default class Project {
    * @returns A record of payments grouped by resident.
    */
   paymentsSorted(): Record<string, { list: Payment[], sum: number }> {
-    return Object.values(this.payments).reduce((acc, payment) => {
+    const payments = Object.values(this.payments).reduce((acc, payment) => {
       if (!acc[payment.resident])
         acc[payment.resident] = { list: [], sum: 0 }
       acc[payment.resident].list.push(payment)
       acc[payment.resident].sum += payment.value
       return acc
     }, {} as Record<string, { list: Payment[]; sum: number }>)
+
+    for (const key in payments)
+      payments[key].list = payments[key].list.sort(paymentSorters[settingManager.settings.sort])
+
+    return payments
   }
 
   /**

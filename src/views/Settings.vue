@@ -198,6 +198,9 @@ const unsavedChangeText = computed(() => {
               </option>
             </select>
           </div>
+          <span class="fw-lighter">
+            Pour un tableau indexé par date, l’ordre alphabétique s’applique à la date.
+          </span>
         </div>
         <div class="row d-flex mb-3">
           <div class="col-7 my-auto">
