@@ -9,19 +9,15 @@ import type Project from '@/project'
 import { sexyDate } from '@/formaters'
 
 const activeId = ref(projectManager.getCurrent().id)
+const projectName = ref('')
+const projects = ref<Project[]>(projectManager.projects)
 
 function projectCreate() : void {
   const newProject = projectManager.create(projectName.value)
   if (newProject) {
     projectName.value = ''
-    updateProjects()
     switchProject(newProject.id)
   }
-}
-
-function projectDelete(id: ID) : void {
-  projectManager.delete(id)
-  updateProjects()
 }
 
 function updateProjects() {
@@ -33,13 +29,10 @@ function switchProject(id: ID) {
   activeId.value = projectManager.getCurrent().id
 }
 
-const projectName = ref('')
-const projects = ref<Project[]>(projectManager.projects)
-
 onMounted(() => {
   projectManager.addEventListener('update', updateProjects)
+  onUnmounted(() => projectManager.removeEventListener('update', updateProjects))
 })
-onUnmounted(() => window.removeEventListener('update', updateProjects))
 </script>
 
 <template>
@@ -68,7 +61,7 @@ onUnmounted(() => window.removeEventListener('update', updateProjects))
             alt="Supprimer"
             data-bs-title="Supprimer des projets"
             class="icon-container-small icon-hoverable ms-2"
-            @click="projectDelete(project.id)"
+            @click="() => projectManager.delete(project.id)"
           >
         </div>
       </div>

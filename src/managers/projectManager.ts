@@ -1,5 +1,5 @@
 import BrowserStorage, { StorageKey } from '@/browserStorage'
-import Project, { type Expense, type Payment } from '@/project'
+import Project from '@/project'
 import type { ID } from '@/types'
 
 /**
@@ -145,28 +145,6 @@ class ProjectManager extends EventTarget {
       this.#projects.set(project.id, Object.assign(project, updates))
       this.#save()
     }
-  }
-
-  updateCurrentProjectExpense(id: ID, updates: Partial<Expense>) {
-    const project = this.getCurrent()
-
-    if (!project || !project.expenses[id]) return
-
-    const expense = project.expenses[id]
-
-    Object.assign(expense, updates)
-    this.#save()
-  }
-
-  updateCurrentProjectPayment(id: ID, updates: Partial<Payment>) {
-    const project = this.getCurrent()
-
-    if (!project || !project.payments[id]) return
-
-    const payment = project.payments[id]
-
-    Object.assign(payment, updates)
-    this.#save()
   }
 }
 
