@@ -40,6 +40,55 @@ const sorters: Record<SortType, (a: Expense, b: Expense) => number> = {
   [SortType.Zyx]: (a: Expense, b: Expense) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
 }
 
+/**
+ * Validates the details of an expense.
+ *
+ * @param expense The expense to validate.
+ * @returns An error message if invalid, or null if valid.
+ */
+function expenseValidate(expense: Expense): string | null {
+  expense.name = (expense.name || '').trim()
+  expense.price = expense.price ?? 0
+  expense.quantity = expense.quantity ?? 0
+
+  if (expense.name === '') return `"${expense.name}" n’est pas un nom valide.`
+  if (expense.price < 0) return 'Le prix d’une dépense ne peut être inférieur à 0.'
+  if (expense.quantity < 0) return 'La quantité d’une dépense ne peut être inférieur à 0.'
+  return null
+}
+
+/**
+ * Validates the details of a payment.
+ *
+ * @param payment The payment to validate.
+ * @returns An error message if invalid, or null if valid.
+ */
+function paymentValidate(payment: Payment): string | null {
+  payment.resident = (payment.resident || '').trim()
+  payment.value = payment.value ?? 0
+
+  if (payment.resident === '') return `"${payment.resident}" n’est pas un nom valide.`
+  if (payment.value < 0) return 'La valeur d’un paiement ne peut être inférieur à 0.'
+  return null
+}
+
+/**
+ * Validates a Payment or an Expense. When an error is detected, a notification is shown.
+ *
+ * @param item Payment/Expense
+ * @param validateFn A function to validate the item
+ * @returns whether the validation succeedded
+ */
+function handleValidation<T>(item: T, validateFn: (item: T) => string | null): boolean {
+  const error = validateFn(item)
+
+  if (error) {
+    notificationManager.error(error)
+    return false
+  }
+  return true
+}
+
 export default class Project {
   createdAt: string
   updatedAt: string
@@ -73,12 +122,9 @@ export default class Project {
    */
   expenseCreate(expense: Omit<Expense, 'id'>) : boolean {
     const newExpense: Expense = { ...expense, id: newId() }
-    const err = this.expenseValidate(newExpense)
 
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(newExpense, expenseValidate))
       return false
-    }
 
     this.expenses[newExpense.id] = newExpense
     this.updateTimestamp()
@@ -121,33 +167,13 @@ export default class Project {
     if (!this.expenses[id]) return false
 
     const updatedExpense = { ...this.expenses[id], ...updates }
-    const err = this.expenseValidate(updatedExpense)
 
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(updatedExpense, expenseValidate))
       return false
-    }
 
     Object.assign(this.expenses[id], updatedExpense)
     this.updateTimestamp()
     return true
-  }
-
-  /**
-   * Validates the details of an expense.
-   *
-   * @param expense The expense to validate.
-   * @returns An error message if invalid, or null if valid.
-   */
-  expenseValidate(expense: Partial<Expense>): string | null {
-    expense.name = (expense.name || '').trim()
-    expense.price = expense.price ?? 0
-    expense.quantity = expense.quantity ?? 0
-
-    if (expense.name === '') return `"${expense.name}" n’est pas un nom valide.`
-    if (expense.price < 0) return 'Le prix d’une dépense ne peut être inférieur à 0.'
-    if (expense.quantity < 0) return 'La quantité d’une dépense ne peut être inférieur à 0.'
-    return null
   }
 
   /**
@@ -158,12 +184,9 @@ export default class Project {
    */
   paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
     const newPayment: Payment = { ...payment, date: new Date().toISOString(), id: newId() }
-    const err = this.paymentValidate(newPayment)
 
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(newPayment, paymentValidate))
       return false
-    }
 
     this.payments[newPayment.id] = newPayment
     this.updateTimestamp()
@@ -192,12 +215,9 @@ export default class Project {
     if (!this.payments[id]) return false
 
     const updatedPayment = { ...this.payments[id], ...updates }
-    const err = this.paymentValidate(updatedPayment)
 
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(updatedPayment, paymentValidate))
       return false
-    }
 
     Object.assign(this.payments[id], updatedPayment)
     this.updateTimestamp()
@@ -209,31 +229,14 @@ export default class Project {
    *
    * @returns A record of payments grouped by resident.
    */
-  paymentsSorted() : Record<string, { list: Payment[], sum: number }> {
-    const sortedPayments: Record<string, { list: Payment[], sum: number }> = {}
-
-    Object.values(this.payments).forEach(payment => {
-      if (!sortedPayments[payment.resident])
-        sortedPayments[payment.resident] = { list: [], sum: 0 }
-      sortedPayments[payment.resident].list.push(payment)
-      sortedPayments[payment.resident].sum += payment.value
-    })
-    return sortedPayments
-  }
-
-  /**
-   * Validates the details of a payment.
-   *
-   * @param payment The payment to validate.
-   * @returns An error message if invalid, or null if valid.
-   */
-  paymentValidate(payment: Partial<Payment>): string | null {
-    payment.resident = (payment.resident || '').trim()
-    payment.value = payment.value ?? 0
-
-    if (payment.resident === '') return `"${payment.resident}" n’est pas un nom valide.`
-    if (payment.value < 0) return 'La valeur d’un paiement ne peut être inférieur à 0.'
-    return null
+  paymentsSorted(): Record<string, { list: Payment[], sum: number }> {
+    return Object.values(this.payments).reduce((acc, payment) => {
+      if (!acc[payment.resident])
+        acc[payment.resident] = { list: [], sum: 0 }
+      acc[payment.resident].list.push(payment)
+      acc[payment.resident].sum += payment.value
+      return acc
+    }, {} as Record<string, { list: Payment[]; sum: number }>)
   }
 
   /**
