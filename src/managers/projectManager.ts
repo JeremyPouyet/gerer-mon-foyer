@@ -16,7 +16,7 @@ class ProjectManager extends EventTarget {
     super()
     this.#currentIdStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentProjectId)
     this.#projectsStorage = new BrowserStorage(localStorage, StorageKey.Projects)
-    this.#load()
+    this.load()
   }
 
   /**
@@ -106,7 +106,7 @@ class ProjectManager extends EventTarget {
   /**
    * Loads projects from storage into the internal projects Map.
    */
-  #load() : void {
+  load() : void {
     this.#projects.clear()
     const stringifiedProjects = this.#projectsStorage.get('[]')
     JSON.parse(stringifiedProjects).forEach((project: Project) => {

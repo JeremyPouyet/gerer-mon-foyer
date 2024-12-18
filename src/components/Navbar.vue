@@ -10,6 +10,7 @@ import db from '@/db'
 import type { NotificationManager } from '@/managers/notificationManager'
 import type { HistoryManager } from '@/managers/historyManager'
 import type { UserManager } from '@/managers/userManager'
+import unsavedManager from '@/managers/unsavedManager'
 
 onMounted(() => {
   import('bootstrap/js/dist/collapse')
@@ -20,7 +21,7 @@ const currentPath = ref(route.path)
 watch(route, newRoute => currentPath.value = newRoute.path)
 
 const unsavedChangesText = computed(() : string => {
-  const count = db.unsavedChanges.value
+  const count = unsavedManager.count.value
 
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
@@ -87,13 +88,13 @@ async function historicise() {
               <span>
                 Paramètres
                 <div
-                  v-if="db.unsavedChanges.value > 0"
+                  v-if="unsavedManager.count.value > 0"
                   v-tooltip
                   :data-bs-title="unsavedChangesText"
                   data-bs-placement="bottom"
                   class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary"
                 >
-                  {{ db.unsavedChanges }}
+                  {{ unsavedManager.count }}
                 </div>
               </span>
             </RouterLink>

@@ -11,6 +11,7 @@ import { Path, SortType } from '@/types'
 
 import Texts from '@/texts'
 import { computed } from 'vue'
+import unsavedManager from '@/managers/unsavedManager'
 
 function generateDateString() : string {
   const now = new Date()
@@ -55,8 +56,6 @@ function uploadFile() : void {
 }
 
 function onFileUploaded(event: ProgressEvent<FileReader>) : void {
-  db.empty()
-
   try {
     const reader = event.target
 
@@ -65,6 +64,7 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 
     const data = JSON.parse(reader.result as string) as Record<string, string>
 
+    db.empty()
     for (const [key, value] of Object.entries(data))
       localStorage.setItem(key, value)
 
@@ -105,7 +105,7 @@ function currencyChange(event: Event) : void {
 }
 
 const unsavedChangeText = computed(() => {
-  const count = db.unsavedChanges.value
+  const count = unsavedManager.count.value
 
   if (count === 0) return 'Aucune nouvelle donnée à sauvegarder.'
   if (count === 1) return '1 modification non sauvegardée.'

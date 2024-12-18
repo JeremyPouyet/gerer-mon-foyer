@@ -1,8 +1,16 @@
 import { reactive } from 'vue'
-import User from '../user'
+
+import User from '@/user'
+import BrowserStorage, { StorageKey } from '@/browserStorage'
 
 class UserManager {
   readonly users = reactive<User[]>([])
+  #storage: BrowserStorage
+
+  constructor() {
+    this.#storage = new BrowserStorage(localStorage, StorageKey.Users)
+    this.load()
+  }
 
   /**
    * Computes the shared expense ratio of each user ((what they earn - what they spend) / user number)
@@ -61,13 +69,15 @@ class UserManager {
   /**
    * Loads users from local storage ('users' key) and repopulates the users array.
    */
-  load() : void {
+  load(): void {
     this.empty()
-    const stringifiedUsers = localStorage.getItem('users') || '[]'
+    const stringifiedUsers = this.#storage.get('[]')
     const users = JSON.parse(stringifiedUsers) as Partial<User>[]
 
-    for (const user of users)
+    for (const user of users) {
+      console.log('ADD NEW USER', user)
       this.users.push(new User(user))
+    }
   }
 }
 

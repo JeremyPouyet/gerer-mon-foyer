@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
-import type { ID } from '../types'
-import { newId } from '../helpers'
+import type { ID } from '@/types'
+import { newId } from '@/helpers'
 
 export enum NotificationType {
   Success = 'success',
