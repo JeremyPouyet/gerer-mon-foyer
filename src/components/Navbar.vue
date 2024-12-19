@@ -6,10 +6,6 @@ import projectIcon from '@/assets/icons/criteria.png'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import db from '@/db'
-import type { NotificationManager } from '@/managers/notificationManager'
-import type { HistoryManager } from '@/managers/historyManager'
-import type { UserManager } from '@/managers/userManager'
 import unsavedManager from '@/managers/unsavedManager'
 
 onMounted(() => {
@@ -26,30 +22,17 @@ const unsavedChangesText = computed(() : string => {
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
 
+const historicize = async () => {
+  const db = await import('@/db')
+  db.default.historicize()
+}
+
 const menuItems: [string, string, string][] = [
   ['/budget',    'Budget',     taxCalculateIcon],
   ['/projects',  'Projets',    projectIcon],
   ['/simulator', 'Simulateur', distributionIcon],
   ['/history',   'Historique', historyIcon],
 ]
-
-let notificationManager: NotificationManager
-let historyManager: HistoryManager
-let userManager: UserManager
-
-const loadManagers = async () => {
-  notificationManager = (await import('@/managers/notificationManager')).default
-  historyManager = (await import('@/managers/historyManager')).default
-  userManager = (await import('@/managers/userManager')).default
-}
-
-async function historicise() {
-  if (!notificationManager || !historyManager || !userManager)
-    await loadManagers()
-
-  historyManager.create({ account: db.account, users: userManager.users })
-  notificationManager.success('Répartition historisé !')
-}
 </script>
 
 <template>
@@ -101,7 +84,7 @@ async function historicise() {
           </li>
         </ul>
       </div>
-      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicise">
+      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicize">
         Historiser
       </button>
     </div>

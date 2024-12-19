@@ -2,7 +2,6 @@ import { newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
 import notificationManager from '@/managers/notificationManager'
-import userManager from './managers/userManager'
 import settingManager from './managers/settingManager'
 
 export enum AccountType {
@@ -126,7 +125,6 @@ export default class Account {
 
     this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
-    if (this.type === AccountType.Personal) userManager.computeRatios()
     return true
   }
 
@@ -140,7 +138,6 @@ export default class Account {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this[transactionType].values[transaction.id]
     this.updateSum(transactionType)
-    if (this.type === AccountType.Personal) userManager.computeRatios()
   }
 
   empty() {
@@ -193,7 +190,6 @@ export default class Account {
 
     if (draft.value !== undefined || draft.frequency !== undefined) {
       this.updateSum(transactionType)
-      if (this.type === AccountType.Personal) userManager.computeRatios()
     }
     return true
   }

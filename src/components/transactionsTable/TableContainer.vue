@@ -9,6 +9,7 @@ import { AccountType } from '@/account'
 import Texts from '@/texts'
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
 import settingManager from '@/managers/settingManager'
+import userManager from '@/managers/userManager'
 
 const props = defineProps<{
   account: Account,
@@ -23,6 +24,9 @@ const newTransactionInputName = ref<HTMLInputElement>()
 function transactionAdd() : void {
   if (!account.value.create(props.transactionType, newTransaction.value))
     return
+
+  if (account.value.type === AccountType.Personal)
+    userManager.computeRatios()
 
   newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
 

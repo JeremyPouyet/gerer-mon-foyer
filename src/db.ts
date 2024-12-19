@@ -1,10 +1,11 @@
 import { nextTick, reactive, watch } from 'vue'
 
 import userManager from '@/managers/userManager'
-import historyManager, { type Sample } from '@/managers/historyManager'
+import historyManager from '@/managers/historyManager'
 import Account, { AccountType } from '@/account'
 import projectManager from '@/managers/projectManager'
 import unsavedManager from '@/managers/unsavedManager'
+import notificationManager from './managers/notificationManager'
 
 const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
 type Persistable = typeof persistatbleKeys[number]
@@ -32,6 +33,11 @@ class DB {
   export() : string {
     unsavedManager.reset()
     return JSON.stringify(localStorage, [...persistatbleKeys], 2)
+  }
+
+  historicize() {
+    historyManager.create({ account: this.account, users: userManager.users })
+    notificationManager.success('Répartition historisé !')
   }
 
   setup() : void {
