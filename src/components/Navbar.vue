@@ -22,17 +22,17 @@ const unsavedChangesText = computed(() : string => {
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
 
-const historicize = async () => {
-  const db = await import('@/db')
-  db.default.historicize()
-}
-
 const menuItems: [string, string, string][] = [
   ['/budget',    'Budget',     taxCalculateIcon],
   ['/projects',  'Projets',    projectIcon],
   ['/simulator', 'Simulateur', distributionIcon],
   ['/history',   'Historique', historyIcon],
 ]
+
+async function historicize() {
+  const db = await import('@/db')
+  db.default.historicize()
+}
 </script>
 
 <template>
