@@ -68,7 +68,7 @@ class SettingsManager {
 
   constructor() {
     this.#storage = new BrowserStorage(localStorage, StorageKey.Settings)
-    this.#load()
+    this.load()
   }
 
   /**
@@ -105,7 +105,7 @@ class SettingsManager {
    * Loads saved settings from local storage.
    * If no settings exist, applies default settings.
    */
-  #load(): void {
+  load(): void {
     const stringifiedSettings = this.#storage.get('{}')
     const settings = JSON.parse(stringifiedSettings) as Partial<GlobalSettings>
 

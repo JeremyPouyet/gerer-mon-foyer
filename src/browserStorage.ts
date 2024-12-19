@@ -18,13 +18,9 @@ export default class BrowserStorage {
   /** Key used to store and retrieve data */
   #key: string
 
-  /** Cached value */
-  #value: string
-
   constructor(memory: Storage, key: StorageKey) {
     this.#memory = memory
     this.#key = key
-    this.#value = this.#memory.getItem(this.#key) || ''
   }
 
   /**
@@ -34,7 +30,7 @@ export default class BrowserStorage {
    * @return The stored value or the provided default value.
    */
   get(missing = '') {
-    return this.#value || missing
+    return this.#memory.getItem(this.#key) || missing
   }
 
   /**
@@ -43,12 +39,8 @@ export default class BrowserStorage {
    * @param value - The value to store.
    */
   set(value: string) {
-    if (value === this.#value)
-      return
-
     try {
       this.#memory.setItem(this.#key, value)
-      this.#value = value
       if (this.#memory === localStorage)
         unsavedManager.increment()
     } catch {

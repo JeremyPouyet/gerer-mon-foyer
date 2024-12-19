@@ -20,8 +20,10 @@ class DB {
     userManager.empty()
     this.account.empty()
     historyManager.empty()
-    sessionStorage.clear()
     projectManager.empty()
+
+    localStorage.clear()
+    sessionStorage.clear()
 
     // wait for watchers to save empty values before updating usavedChanges
     nextTick(() => unsavedManager.reset())

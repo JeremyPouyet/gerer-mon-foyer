@@ -87,7 +87,6 @@ class ProjectManager extends EventTarget {
    */
   empty() : void {
     this.#projects.clear()
-    this.#save()
   }
 
   /**
@@ -107,7 +106,7 @@ class ProjectManager extends EventTarget {
    * Loads projects from storage into the internal projects Map.
    */
   load() : void {
-    this.#projects.clear()
+    this.empty()
     const stringifiedProjects = this.#projectsStorage.get('[]')
     JSON.parse(stringifiedProjects).forEach((project: Project) => {
       this.#projects.set(project.id, new Project(project))

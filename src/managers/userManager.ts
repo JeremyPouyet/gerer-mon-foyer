@@ -74,10 +74,8 @@ class UserManager {
     const stringifiedUsers = this.#storage.get('[]')
     const users = JSON.parse(stringifiedUsers) as Partial<User>[]
 
-    for (const user of users) {
-      console.log('ADD NEW USER', user)
+    for (const user of users)
       this.users.push(new User(user))
-    }
   }
 }
 

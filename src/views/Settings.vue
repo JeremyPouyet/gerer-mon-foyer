@@ -64,7 +64,6 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 
     const data = JSON.parse(reader.result as string) as Record<string, string>
 
-    db.empty()
     for (const [key, value] of Object.entries(data))
       localStorage.setItem(key, value)
 
