@@ -90,8 +90,10 @@ function handleClickOutside(event: MouseEvent) : void {
 }
 
 function deleteTransaction(transaction: Transaction) {
-  account.value.delete(props.transactionType, transaction)
-  if (account.value.type === AccountType.Personal) userManager.computeRatios()
+  if (!account.value.delete(props.transactionType, transaction))
+    return
+  if (account.value.type === AccountType.Personal)
+    userManager.computeRatios()
 }
 </script>
 
