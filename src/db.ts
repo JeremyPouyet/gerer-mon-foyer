@@ -5,7 +5,8 @@ import historyManager from '@/managers/historyManager'
 import Account, { AccountType } from '@/account'
 import projectManager from '@/managers/projectManager'
 import unsavedManager from '@/managers/unsavedManager'
-import notificationManager from './managers/notificationManager'
+import notificationManager from '@/managers/notificationManager'
+import settingManager from '@/managers/settingManager'
 
 const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
 type Persistable = typeof persistatbleKeys[number]
@@ -18,10 +19,11 @@ class DB {
   }
 
   empty() : void {
-    userManager.empty()
-    this.account.empty()
     historyManager.empty()
     projectManager.empty()
+    userManager.empty()
+
+    this.account.empty()
 
     localStorage.clear()
     sessionStorage.clear()
@@ -41,9 +43,11 @@ class DB {
   }
 
   setup() : void {
-    userManager.load()
     historyManager.load()
     projectManager.load()
+    settingManager.load()
+    userManager.load()
+
     const account = localStorage.getItem('account')
     if (account)
       Object.assign(this.account, JSON.parse(account))

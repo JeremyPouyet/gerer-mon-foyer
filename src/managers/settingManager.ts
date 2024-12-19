@@ -130,5 +130,4 @@ class SettingsManager {
   }
 }
 
-const settingManager = new SettingsManager()
-export default settingManager
+export default new SettingsManager()
