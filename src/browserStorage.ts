@@ -1,10 +1,14 @@
 import notificationManager from '@/managers/notificationManager'
+import unsavedManager from './managers/unsavedManager'
 
 export enum StorageKey {
-  CurrentProjectId = 'currentProjectId', // Currently edited/seen project
-  Projects = 'projects', // projects list
-  SimulatorTab = 'simulatorTab', // Last active tab on the simulator
-  SimulatorValue = 'simulatorValue' // Simple simulator current value
+  CurrentHistoryDate = 'currentHistoryDate',  // CUrrently shown history sample
+  CurrentProjectId = 'currentProjectId',      // Currently edited/seen project
+  History = 'history',                        // History samples
+  Projects = 'projects',                      // projects list
+  Settings = 'settings',                      // Settings
+  SimulatorValue = 'simulatorValue',          // Simple simulator current value
+  Users = 'users'                             // Users
 }
 
 export default class BrowserStorage {
@@ -14,13 +18,9 @@ export default class BrowserStorage {
   /** Key used to store and retrieve data */
   #key: string
 
-  /** Cached value */
-  #value: string
-
   constructor(memory: Storage, key: StorageKey) {
     this.#memory = memory
     this.#key = key
-    this.#value = this.#memory.getItem(this.#key) || ''
   }
 
   /**
@@ -30,7 +30,7 @@ export default class BrowserStorage {
    * @return The stored value or the provided default value.
    */
   get(missing = '') {
-    return this.#value || missing
+    return this.#memory.getItem(this.#key) || missing
   }
 
   /**
@@ -41,7 +41,8 @@ export default class BrowserStorage {
   set(value: string) {
     try {
       this.#memory.setItem(this.#key, value)
-      this.#value = value
+      if (this.#memory === localStorage)
+        unsavedManager.increment()
     } catch {
       notificationManager.error('Plus de mémoire… Merci d’envoyer un mail à contact@gerer-mon-foyer.fr avec votre sauvegarde.')
     }

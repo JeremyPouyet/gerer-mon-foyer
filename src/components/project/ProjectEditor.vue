@@ -44,23 +44,21 @@ function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
 function executeEditExpenseName() {
   executeEdit('name', (id, value) => {
     if (typeof value === 'string')
-      projectManager.updateCurrentProjectExpense(id, { name: value })
+      currentProject.expenseUpdate(id, { name: value })
   })
 }
 
 function executeEditExpenseQuantity() {
   executeEdit('quantity', (id, value) => {
-    if (typeof value === 'number') {
-      projectManager.updateCurrentProjectExpense(id, { quantity: value})
-    }
+    if (typeof value === 'number')
+      currentProject.expenseUpdate(id, { quantity: value})
   })
 }
 
 function executeEditExpensePrice() {
   executeEdit('price', (id, value) => {
-    if (typeof value === 'number') {
-      projectManager.updateCurrentProjectExpense(id, { price: value})
-    }
+    if (typeof value === 'number')
+      currentProject.expenseUpdate(id, { price: value})
   })
 }
 

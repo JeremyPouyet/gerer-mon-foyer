@@ -2,7 +2,6 @@ import { newId, valueAs } from './helpers'
 import type { ID, Transaction, TransactionFunctional, TransactionList } from './types'
 import { Frequency, SortType, TransactionType } from './types'
 import notificationManager from '@/managers/notificationManager'
-import userManager from './managers/userManager'
 import settingManager from './managers/settingManager'
 
 export enum AccountType {
@@ -113,9 +112,9 @@ export default class Account {
   /**
    * Adds a new transaction to the specified transaction type.
    *
-   * @param {TransactionType} transactionType The type of transaction to add (either Income or Expense).
-   * @param {TransactionFunctional} transaction The transaction details to add.
-   * @returns {boolean} Whether the transaction has been created.
+   * @param transactionType The type of transaction to add (either Income or Expense).
+   * @param transaction The transaction details to add.
+   * @returns Whether the transaction has been created.
    */
   create(transactionType: TransactionType, transaction: TransactionFunctional) : boolean {
     const { name, frequency, value } = transaction
@@ -126,21 +125,23 @@ export default class Account {
 
     this[transactionType].values[draft.id] = draft
     this.updateSum(transactionType)
-    if (this.type === AccountType.Personal) userManager.computeRatios()
     return true
   }
 
   /**
    * Deletes a transaction from the specified transaction type.
    *
-   * @param {TransactionType} transactionType The type of transaction to delete (either Income or Expense).
-   * @param {Transaction} transaction The transaction to delete.
+   * @param transactionType The type of transaction to delete (either Income or Expense).
+   * @param transaction The transaction to delete.
+   * @returns Whether the transaction has been deleted
    */
-  delete(transactionType: TransactionType, transaction: Transaction) : void {
+  delete(transactionType: TransactionType, transaction: Transaction) : boolean {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete this[transactionType].values[transaction.id]
-    this.updateSum(transactionType)
-    if (this.type === AccountType.Personal) userManager.computeRatios()
+    if (delete this[transactionType].values[transaction.id]) {
+      this.updateSum(transactionType)
+      return true
+    }
+    return false
   }
 
   empty() {
@@ -156,8 +157,8 @@ export default class Account {
   /**
    * Retrieves a sorted list of transactions for a specified transaction type.
    *
-   * @param {TransactionType} transactionType The type of transactions to retrieve (either Income or Expense).
-   * @returns {TransactionList} A list of transactions sorted by value in descending order.
+   * @param transactionType The type of transactions to retrieve (either Income or Expense).
+   * @returns A list of transactions sorted by value in descending order.
    */
   transactionSorted(transactionType: TransactionType) : TransactionList {
     const transactionRecord = this[transactionType]
@@ -172,10 +173,10 @@ export default class Account {
   /**
    * Updates an existing transaction with new details.
    *
-   * @param {TransactionType} transactionType The type of transaction to update (either Income or Expense).
-   * @param {ID} id The ID of the transaction to update.
-   * @param {Partial<Transaction>} updates The updates to apply to the transaction.
-   * @returns {boolean} Whether the transaction has been updated.
+   * @param transactionType The type of transaction to update (either Income or Expense).
+   * @param id The ID of the transaction to update.
+   * @param updates The updates to apply to the transaction.
+   * @returns Whether the transaction has been updated.
    */
   update(transactionType: TransactionType, id: ID, updates: Partial<Transaction>) : boolean {
     const transaction = this[transactionType].values[id]
@@ -193,7 +194,6 @@ export default class Account {
 
     if (draft.value !== undefined || draft.frequency !== undefined) {
       this.updateSum(transactionType)
-      if (this.type === AccountType.Personal) userManager.computeRatios()
     }
     return true
   }
@@ -201,7 +201,7 @@ export default class Account {
   /**
    * Updates the sum of transactions for a specified transaction type.
    *
-   * @param {TransactionType} transactionType The type of transactions to update (either Income or Expense).
+   * @param transactionType The type of transactions to update (either Income or Expense).
    */
   updateSum(transactionType: TransactionType) {
     this[transactionType].sum = Object.values(this[transactionType].values).reduce((sum, transaction) => sum + valueAs(transaction), 0)

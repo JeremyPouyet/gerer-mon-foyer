@@ -1,5 +1,5 @@
 import BrowserStorage, { StorageKey } from '@/browserStorage'
-import Project, { type Expense, type Payment } from '@/project'
+import Project from '@/project'
 import type { ID } from '@/types'
 
 /**
@@ -16,6 +16,7 @@ class ProjectManager extends EventTarget {
     super()
     this.#currentIdStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentProjectId)
     this.#projectsStorage = new BrowserStorage(localStorage, StorageKey.Projects)
+    this.load()
   }
 
   /**
@@ -86,7 +87,6 @@ class ProjectManager extends EventTarget {
    */
   empty() : void {
     this.#projects.clear()
-    this.#save()
   }
 
   /**
@@ -106,7 +106,7 @@ class ProjectManager extends EventTarget {
    * Loads projects from storage into the internal projects Map.
    */
   load() : void {
-    this.#projects.clear()
+    this.empty()
     const stringifiedProjects = this.#projectsStorage.get('[]')
     JSON.parse(stringifiedProjects).forEach((project: Project) => {
       this.#projects.set(project.id, new Project(project))
@@ -145,28 +145,6 @@ class ProjectManager extends EventTarget {
       this.#projects.set(project.id, Object.assign(project, updates))
       this.#save()
     }
-  }
-
-  updateCurrentProjectExpense(id: ID, updates: Partial<Expense>) {
-    const project = this.getCurrent()
-
-    if (!project || !project.expenses[id]) return
-
-    const expense = project.expenses[id]
-
-    Object.assign(expense, updates)
-    this.#save()
-  }
-
-  updateCurrentProjectPayment(id: ID, updates: Partial<Payment>) {
-    const project = this.getCurrent()
-
-    if (!project || !project.payments[id]) return
-
-    const payment = project.payments[id]
-
-    Object.assign(payment, updates)
-    this.#save()
   }
 }
 

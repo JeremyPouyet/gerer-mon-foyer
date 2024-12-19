@@ -10,6 +10,8 @@ import type Account from '@/account'
 import { useTransactions, valueAs } from '@/helpers'
 import { frequencies, Frequency, type ID, type Transaction, TransactionType } from '@/types'
 import { sexyNumber } from '@/formaters'
+import { AccountType } from '@/account'
+import userManager from '@/managers/userManager'
 
 const props = defineProps<{
   account: Account,
@@ -73,8 +75,11 @@ function cancelEditTransactionValue() : void {
 function executeEditTransactionValue() : void {
   const draft = { frequency: editedFrequency.value, value: editedValue.value }
 
-  if (editedValueId.value && account.value.update(props.transactionType, editedValueId.value, draft))
+  if (editedValueId.value && account.value.update(props.transactionType, editedValueId.value, draft)) {
     cancelEditTransactionValue()
+    if (account.value.type === AccountType.Personal)
+      userManager.computeRatios()
+  }
 }
 
 function handleClickOutside(event: MouseEvent) : void {
@@ -82,6 +87,13 @@ function handleClickOutside(event: MouseEvent) : void {
     executeEditTransactionName()
     executeEditTransactionValue()
   }
+}
+
+function deleteTransaction(transaction: Transaction) {
+  if (!account.value.delete(props.transactionType, transaction))
+    return
+  if (account.value.type === AccountType.Personal)
+    userManager.computeRatios()
 }
 </script>
 
@@ -144,7 +156,7 @@ function handleClickOutside(event: MouseEvent) : void {
           alt="Supprimer"
           data-bs-title="Supprimer"
           class="icon-container-small icon-hoverable ms-2"
-          @click="() => account.delete(props.transactionType, transaction)"
+          @click="() => deleteTransaction(transaction)"
         >
       </td>
     </tr>
