@@ -129,5 +129,5 @@ class SettingsManager {
     this.#save()
   }
 }
-
-export default new SettingsManager()
+const settingManager = new SettingsManager()
+export default settingManager
