@@ -7,15 +7,20 @@ import projectManager from '@/managers/projectManager'
 import unsavedManager from '@/managers/unsavedManager'
 import notificationManager from '@/managers/notificationManager'
 import settingManager from '@/managers/settingManager'
+import BrowserStorage, { StorageKey } from './browserStorage'
 
 const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
-type Persistable = typeof persistatbleKeys[number]
 
 class DB {
   readonly account = reactive<Account>(new Account({}, AccountType.Common))
+  #accountStorage: BrowserStorage
 
   constructor() {
-    this.watch()
+    this.#accountStorage = new BrowserStorage(localStorage, StorageKey.CommonAccount)
+    this.#load()
+    watch(this.account, updated => {
+      this.#accountStorage.set(JSON.stringify(updated))
+    })
   }
 
   empty() : void {
@@ -42,37 +47,18 @@ class DB {
     notificationManager.success('Répartition historisé !')
   }
 
+  #load() : void {
+    const account = this.#accountStorage.get('{}')
+    Object.assign(this.account, JSON.parse(account))
+  }
+
   setup() : void {
     historyManager.load()
     projectManager.load()
     settingManager.load()
     userManager.load()
 
-    const account = localStorage.getItem('account')
-    if (account)
-      Object.assign(this.account, JSON.parse(account))
-  }
-
-  private persistChanges(key: Persistable, value: object) : boolean {
-    const stringifiedItem = JSON.stringify(value)
-
-    // Do not update already up to date data
-    if (stringifiedItem === localStorage.getItem(key))
-      return true
-
-    try {
-      localStorage.setItem(key, stringifiedItem)
-      unsavedManager.increment()
-    }
-    catch(err) {
-      console.error(`Failed to persist ${key}:`, err)
-      return false
-    }
-    return true
-  }
-
-  private watch() : void {
-    watch(this.account, updated => this.persistChanges('account', updated))
+    this.#load()
   }
 }
 

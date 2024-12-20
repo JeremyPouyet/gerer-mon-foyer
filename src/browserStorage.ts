@@ -2,13 +2,14 @@ import notificationManager from '@/managers/notificationManager'
 import unsavedManager from './managers/unsavedManager'
 
 export enum StorageKey {
+  CommonAccount      = 'account',             // Users common account
   CurrentHistoryDate = 'currentHistoryDate',  // CUrrently shown history sample
-  CurrentProjectId = 'currentProjectId',      // Currently edited/seen project
-  History = 'history',                        // History samples
-  Projects = 'projects',                      // projects list
-  Settings = 'settings',                      // Settings
-  SimulatorValue = 'simulatorValue',          // Simple simulator current value
-  Users = 'users'                             // Users
+  CurrentProjectId   = 'currentProjectId',    // Currently edited/seen project
+  History            = 'history',             // History samples
+  Projects           = 'projects',            // projects list
+  Settings           = 'settings',            // Settings
+  SimulatorValue     = 'simulatorValue',      // Simple simulator current value
+  Users              = 'users'                // Users
 }
 
 export default class BrowserStorage {
