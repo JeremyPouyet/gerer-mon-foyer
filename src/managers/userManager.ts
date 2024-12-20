@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 import User from '@/user'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
@@ -10,6 +10,7 @@ class UserManager {
   constructor() {
     this.#storage = new BrowserStorage(localStorage, StorageKey.Users)
     this.load()
+    watch(this.users, () => this.#save(), { deep: true })
   }
 
   /**
@@ -29,6 +30,7 @@ class UserManager {
     this.users.forEach(user => {
       user.ratio = remainSum === 0 ? 1 / userCount : (remains.get(user.id) ?? 0) / remainSum
     })
+    this.#save()
   }
 
   /**
@@ -76,6 +78,10 @@ class UserManager {
 
     for (const user of users)
       this.users.push(new User(user))
+  }
+
+  #save(): void {
+    this.#storage.set(JSON.stringify(this.users))
   }
 }
 

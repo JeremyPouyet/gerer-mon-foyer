@@ -57,7 +57,7 @@ class HistoryManager {
     const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
     this.#_history.unshift(sample)
     this.activeDate = sample.date
-    this.save()
+    this.#save()
   }
 
   /**
@@ -71,7 +71,7 @@ class HistoryManager {
   delete(date: string) : void {
     this.findSample(date, (sample, index) => {
       this.#_history.splice(index, 1)
-      this.save()
+      this.#save()
 
       if (date !== this.activeDate) return
 
@@ -127,7 +127,7 @@ class HistoryManager {
       this.#_history.push(sample)
   }
 
-  save() : void {
+  #save() : void {
     this.#historyStorage.set(JSON.stringify(this.#_history))
   }
 
@@ -140,7 +140,7 @@ class HistoryManager {
   update(date: string, updates: Partial<Sample>) : void {
     this.findSample(date, sample => {
       Object.assign(sample, updates)
-      this.save()
+      this.#save()
     })
   }
 

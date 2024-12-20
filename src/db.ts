@@ -72,7 +72,6 @@ class DB {
   }
 
   private watch() : void {
-    watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
     watch(this.account, updated => this.persistChanges('account', updated))
   }
 }
