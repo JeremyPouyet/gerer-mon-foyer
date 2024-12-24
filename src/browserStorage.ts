@@ -40,6 +40,9 @@ export default class BrowserStorage {
    * @param value - The value to store.
    */
   set(value: string) {
+    if (this.get() === value)
+      return
+
     try {
       this.#memory.setItem(this.#key, value)
       if (this.#memory === localStorage)
