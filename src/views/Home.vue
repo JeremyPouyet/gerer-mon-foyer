@@ -4,7 +4,7 @@
       <h1 class="mb-3">
         Répartissez vos dépenses communes équitablement
       </h1>
-      <p class="lead text-muted">
+      <p class="lead text-body-secondary">
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 

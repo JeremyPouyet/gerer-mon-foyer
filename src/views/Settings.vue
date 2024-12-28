@@ -136,14 +136,14 @@ const unsavedChangeText = computed(() => {
             <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
               Importer une sauvegarde
             </button>
-            <small class="text-muted d-block">Cela remplacera vos données actuelles.</small>
+            <small class="text-body-secondary d-block">Cela remplacera vos données actuelles.</small>
           </div>
           <div class="col my-auto">
             <div class="text-end">
               <button type="button" class="text-black btn btn-secondary btn-sm" @click="saveFile">
                 Exporter une sauvegarde
               </button>
-              <small class="text-muted d-block">{{ unsavedChangeText }}</small>
+              <small class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ const unsavedChangeText = computed(() => {
           <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
             Supprimer toutes mes données
           </button>
-          <small class="text-muted d-block">
+          <small class="text-body-secondary d-block">
             Cette action est définitive.
             <br>
             Pensez à d'abord faire une sauvegarde.</small>
@@ -197,7 +197,7 @@ const unsavedChangeText = computed(() => {
               </option>
             </select>
           </div>
-          <small class="text-muted d-block">
+          <small class="text-body-secondary d-block">
             Pour un tableau indexé par date, l’ordre alphabétique s’applique à la date.
           </small>
         </div>

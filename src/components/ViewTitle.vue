@@ -13,7 +13,7 @@ const unpadedClass = props.unpaded ? 'ps-0' : ''
       {{ Texts.heads[path].title }}
     </h1>
     <p class="text-center">
-      <span class="fst-italic fw-lighter">
+      <span class="fst-italic text-body-secondary ">
         {{ Texts.heads[path].meta.description }}
       </span>
       <span class="ms-1 fw-normal">{{ emoji }}</span>
