@@ -49,6 +49,7 @@ export default ts.config(
       'sort-imports': ['error', { allowSeparatedGroups: true, ignoreCase: true, ignoreDeclarationSort: true }],
       'sort-keys': ['error', 'asc', { 'caseSensitive': true, 'natural': true }],
       'sort-vars': ['error'],
+      'vue/attributes-order': ['error', { alphabetical: true }],
       'vue/max-attributes-per-line': ['error', { multiline: { max: 1 }, singleline: { max: 5 } }],
       'vue/multi-word-component-names': 'off',
       'vue/no-mutating-props': ['error', { shallowOnly: true }],

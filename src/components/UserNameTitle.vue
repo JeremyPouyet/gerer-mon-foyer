@@ -17,6 +17,10 @@ const transactionTypes: TransactionType[] = [
 ]
 
 const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !props.account.settings.show[type]))
+
+function showTransactions(transactionType: TransactionType) {
+  props.account.settings.show[transactionType] = true
+}
 </script>
 
 <template>
@@ -35,12 +39,15 @@ const visibleTransactionTypes = computed(() => transactionTypes.filter(type => !
           v-for="transactionType in visibleTransactionTypes"
           :key="transactionType"
           v-tooltip="{ disposeOnClick: true }"
-          :data-bs-title="'Aggrandir'"
+          role="button"
+          tabindex="0"
+          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural}`"
           class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-          @click="account.settings.show[transactionType] = true"
+          @click="showTransactions(transactionType)"
+          @keydown.enter="showTransactions(transactionType)"
         >
           {{ Texts.transactionTypes[transactionType].plural }}
-          <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="Aggrandir">
+          <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="">
         </div>
       </div>
     </div>

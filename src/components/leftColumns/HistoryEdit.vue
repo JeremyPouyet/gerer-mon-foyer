@@ -42,8 +42,11 @@ function removeSample(date: string) : void {
           data-bs-placement="right"
           data-bs-title="Cliquer pour sélectionner"
           style="cursor: pointer"
+          tabindex="0"
+          :aria-pressed="activeDate === sample.date"
           :class="{ active: activeDate === sample.date }"
           @click="switchSample(sample.date)"
+          @keydown.enter="switchSample(sample.date)"
         >
           {{ sexyDate(sample.date) }}
           <NoteIcon :text="sample.note" :unpaded="true" />
@@ -52,6 +55,7 @@ function removeSample(date: string) : void {
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
+            tabindex="0"
             src="@/assets/icons/cross.png"
             alt="Supprimer"
             data-bs-title="Supprimer de l’historique"

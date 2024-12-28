@@ -61,7 +61,7 @@ switchSample()
     </div>
     <div v-else class="row">
       <LeftColumn :title="'Dates'">
-        <HistoryEdit @switch-sample="() => switchSample()" />
+        <HistoryEdit @switch-sample="switchSample()" />
       </LeftColumn>
       <BudgetShow
         :account="snapshot.account"
