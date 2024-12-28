@@ -2,19 +2,15 @@
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import { sexyDate } from '@/formaters'
 import historyManager, { type Sample } from '@/managers/historyManager'
 
 const emit = defineEmits(['switchSample'])
 
-const activeDate = ref<string | null | undefined>(null)
+const activeDate = ref<string | null | undefined>(historyManager.activeDate)
 const history = ref<Sample[]>(historyManager.history)
-
-onMounted(() => {
-  activeDate.value = sessionStorage.getItem('currentHistoryDate')
-})
 
 function switchSample(date: string) : void {
   const newSample = historyManager.get(date)
@@ -47,7 +43,7 @@ function removeSample(date: string) : void {
           data-bs-title="Cliquer pour sélectionner"
           style="cursor: pointer"
           :class="{ active: activeDate === sample.date }"
-          @click="() => switchSample(sample.date)"
+          @click="switchSample(sample.date)"
         >
           {{ sexyDate(sample.date) }}
           <NoteIcon :text="sample.note" :unpaded="true" />
@@ -60,7 +56,7 @@ function removeSample(date: string) : void {
             alt="Supprimer"
             data-bs-title="Supprimer de l’historique"
             class="icon-container-small icon-hoverable ms-2"
-            @click="() => removeSample(sample.date)"
+            @click="removeSample(sample.date)"
           >
         </div>
       </div>

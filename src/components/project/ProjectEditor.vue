@@ -163,7 +163,7 @@ onMounted(() => {
                   @keydown.tab="executeEditExpenseName"
                 >
               </td>
-              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())">
+              <td v-else class="editable-cell" @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())">
                 <span>{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
@@ -178,7 +178,7 @@ onMounted(() => {
                   @keydown.tab="executeEditExpenseQuantity"
                 >
               </td>
-              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())">
+              <td v-else class="editable-cell text-end" @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())">
                 <span>{{ expense.quantity }}</span>
               </td>
               <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle  text-end">
@@ -192,7 +192,7 @@ onMounted(() => {
                   @keydown.tab="executeEditExpensePrice"
                 >
               </td>
-              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())">
+              <td v-else class="editable-cell text-end" @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())">
                 <span>{{ sexyNumber(expense.price) }}</span>
               </td>
               <td class="align-middle text-end">
@@ -209,7 +209,7 @@ onMounted(() => {
                   alt="Supprimer"
                   data-bs-title="Supprimer"
                   class="icon-container-small icon-hoverable ms-2"
-                  @click="() => currentProject.expenseDelete(expense.id)"
+                  @click="currentProject.expenseDelete(expense.id)"
                 >
               </td>
             </tr>

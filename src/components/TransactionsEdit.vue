@@ -113,7 +113,7 @@ function deleteTransaction(transaction: Transaction) {
           @keydown.tab="executeEditTransactionName"
         >
       </td>
-      <td v-else class="align-middle editable-cell" @click="() => startEditTransactionName(transaction)">
+      <td v-else class="align-middle editable-cell" @click="startEditTransactionName(transaction)">
         <span>{{ transaction.name }}</span>
         <NoteIcon :text="transaction.note" />
       </td>
@@ -130,7 +130,7 @@ function deleteTransaction(transaction: Transaction) {
             @keydown.tab="executeEditTransactionValue"
           >
         </td>
-        <td v-else class="text-end align-middle editable-cell" @click="() => startEditTransactionValue(transaction, frequency)">
+        <td v-else class="text-end align-middle editable-cell" @click="startEditTransactionValue(transaction, frequency)">
           <span
             v-tooltip="{ disposeOnClick: true }"
             :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
@@ -156,7 +156,7 @@ function deleteTransaction(transaction: Transaction) {
           alt="Supprimer"
           data-bs-title="Supprimer"
           class="icon-container-small icon-hoverable ms-2"
-          @click="() => deleteTransaction(transaction)"
+          @click="deleteTransaction(transaction)"
         >
       </td>
     </tr>

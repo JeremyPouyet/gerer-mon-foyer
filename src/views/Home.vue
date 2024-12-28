@@ -2,9 +2,9 @@
   <section v-once class="container">
     <header class="text-center mb-5">
       <h1 class="mb-3">
-        Répartissez vos dépenses communes de manière équitable
+        Répartissez vos dépenses communes équitablement
       </h1>
-      <p class="lead">
+      <p class="lead text-muted">
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 

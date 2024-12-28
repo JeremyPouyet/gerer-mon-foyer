@@ -34,7 +34,13 @@ class HistoryManager {
    * @returns {string | null} The currently active date from session storage or null if not set.
    */
   get activeDate() : string | null {
-    return this.#currentDateStorage.get()
+    let date = this.#currentDateStorage.get()
+    if (!date && this.#_history.length > 0) {
+      const { date: sampleDate } = this.#_history[0]
+      date = sampleDate
+      this.activeDate = sampleDate
+    }
+    return date
   }
 
   /**

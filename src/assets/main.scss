@@ -36,6 +36,11 @@ $secondary: #F7B32B;
 
 body {
   background-color: var(--color-vanilla) !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
 }
 
 .icon-container {
@@ -61,7 +66,6 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 #app {

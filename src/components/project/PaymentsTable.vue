@@ -125,7 +125,7 @@ onMounted(() => {
             @close="cancelEdit"
           />
         </td>
-        <td v-else class="editable-cell" @click="() => startEditDate(payment)">
+        <td v-else class="editable-cell" @click="startEditDate(payment)">
           <span>{{ sexyDate(payment.date, false) }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">
@@ -139,7 +139,7 @@ onMounted(() => {
             @keydown.tab="executeEditComment"
           >
         </td>
-        <td v-else class="editable-cell" @click="() => startEditComment(payment)">
+        <td v-else class="editable-cell" @click="startEditComment(payment)">
           <span>{{ payment.comment || 'N/D' }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'value'" class="align-middle">
@@ -153,7 +153,7 @@ onMounted(() => {
             @keydown.tab="executeEditValue"
           >
         </td>
-        <td v-else class="editable-cell text-end" @click="() => startEditValue(payment)">
+        <td v-else class="editable-cell text-end" @click="startEditValue(payment)">
           <span>{{ sexyNumber(payment.value) }}</span>
         </td>
         <td class="text-end align-middle text-nowrap">
@@ -163,7 +163,7 @@ onMounted(() => {
             alt="Supprimer le payment"
             data-bs-title="Supprimer le payment"
             class="icon-container-small icon-hoverable ms-2"
-            @click="() => currentProject.paymentDelete(payment.id)"
+            @click="currentProject.paymentDelete(payment.id)"
           >
         </td>
       </tr>

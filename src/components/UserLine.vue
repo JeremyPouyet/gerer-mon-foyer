@@ -76,7 +76,7 @@ function userDelete(user: User) : void {
         :alt="`Supprimer ${user.name} des habitants`"
         data-bs-title="Supprimer des habitants"
         class="icon-container-small icon-hoverable"
-        @click="() => userDelete(user)"
+        @click="userDelete(user)"
       >
     </div>
   </div>

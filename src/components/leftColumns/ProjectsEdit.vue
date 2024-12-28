@@ -47,7 +47,7 @@ onMounted(() => {
             data-bs-title="Cliquer pour sélectionner"
             style="cursor: pointer"
             :class="{ active: activeId === project.id }"
-            @click="() => switchProject(project.id)"
+            @click="switchProject(project.id)"
           >
             {{ project.name }}
             <NoteIcon :text="project.note" :unpaded="true" />
@@ -61,7 +61,7 @@ onMounted(() => {
             alt="Supprimer"
             data-bs-title="Supprimer des projets"
             class="icon-container-small icon-hoverable ms-2"
-            @click="() => projectManager.delete(project.id)"
+            @click="projectManager.delete(project.id)"
           >
         </div>
       </div>
