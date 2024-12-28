@@ -23,10 +23,10 @@
         <div class="col-md-6 text-center mb-3 mb-md-0 px-5">
           <h5 class="section-title text-center">
             <div class="d-flex justify-content-center align-items-center">
-              <div class="d-inline-block align-middle me-2">
+              <div class="align-middle me-2">
                 À propos de
               </div>
-              <div class="d-inline-block border p-2">
+              <div class="border p-2">
                 <p class="mb-0 lh-1 py-0">
                   Gérer
                 </p>

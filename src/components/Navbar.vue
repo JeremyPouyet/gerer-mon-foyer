@@ -36,7 +36,7 @@ async function historicize() {
 </script>
 
 <template>
-  <nav class="bg-primary navbar navbar-expand-md mb-4">
+  <nav class="bg-primary navbar navbar-expand-md mb-4 shadow-sm">
     <div class="container-fluid">
       <RouterLink class="navbar-brand py-0" to="/" active-class="active">
         <p class="text-center mb-0 lh-1">
