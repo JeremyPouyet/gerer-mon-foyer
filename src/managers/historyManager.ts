@@ -1,3 +1,4 @@
+import BrowserStorage, { StorageKey } from '@/browserStorage'
 import DBSnapshot from '@/dbSnapshot'
 
 export interface Sample {
@@ -6,8 +7,16 @@ export interface Sample {
   note?: string
 }
 
-class HistoryManager extends EventTarget {
+class HistoryManager {
   #_history: Sample[] = []
+  #currentDateStorage: BrowserStorage
+  #historyStorage: BrowserStorage
+
+  constructor() {
+    this.#currentDateStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentHistoryDate)
+    this.#historyStorage = new BrowserStorage(localStorage, StorageKey.History)
+    this.load()
+  }
 
   /**
    * Sets the active date in the session storage.
@@ -16,7 +25,7 @@ class HistoryManager extends EventTarget {
    *                      If the value is empty, an empty string is stored.
    */
   set activeDate(date: string) {
-    sessionStorage.setItem('currentHistoryDate', date || '')
+    this.#currentDateStorage.set(date || '')
   }
 
   /**
@@ -25,7 +34,7 @@ class HistoryManager extends EventTarget {
    * @returns {string | null} The currently active date from session storage or null if not set.
    */
   get activeDate() : string | null {
-    return sessionStorage.getItem('currentHistoryDate')
+    return this.#currentDateStorage.get()
   }
 
   /**
@@ -48,7 +57,7 @@ class HistoryManager extends EventTarget {
     const sample: Sample = { data: JSON.stringify(snapshot), date: new Date().toISOString() }
     this.#_history.unshift(sample)
     this.activeDate = sample.date
-    this.dispatchUpdate()
+    this.#save()
   }
 
   /**
@@ -62,7 +71,7 @@ class HistoryManager extends EventTarget {
   delete(date: string) : void {
     this.findSample(date, (sample, index) => {
       this.#_history.splice(index, 1)
-      this.dispatchUpdate()
+      this.#save()
 
       if (date !== this.activeDate) return
 
@@ -80,8 +89,8 @@ class HistoryManager extends EventTarget {
    * Removes all Sample from the history
    */
   empty() : void {
-    this.#_history = []
-    this.dispatchUpdate()
+    this.#_history.splice(0)
+    this.activeDate = ''
   }
 
   /**
@@ -111,7 +120,15 @@ class HistoryManager extends EventTarget {
    * and pushes the new samples into the history array.
    */
   load() : void {
-    this.#_history = JSON.parse(localStorage.getItem('history') ?? '[]') as Sample[]
+    this.empty()
+    const samples = JSON.parse(this.#historyStorage.get('[]')) as Sample[]
+
+    for (const sample of samples)
+      this.#_history.push(sample)
+  }
+
+  #save() : void {
+    this.#historyStorage.set(JSON.stringify(this.#_history))
   }
 
   /**
@@ -120,18 +137,11 @@ class HistoryManager extends EventTarget {
    * @param {string} date The date of the sample to update.
    * @param {string} updates The new data to be assigned to the sample.
    */
-  update(date: string, updates: Partial<Sample>) {
+  update(date: string, updates: Partial<Sample>) : void {
     this.findSample(date, sample => {
       Object.assign(sample, updates)
-      this.dispatchUpdate()
+      this.#save()
     })
-  }
-
-  /**
-   * Dispatches an update event to notify subscribers of changes to the history.
-   */
-  private dispatchUpdate() : void {
-    this.dispatchEvent(new CustomEvent('update', { detail: this.#_history }))
   }
 
   /**

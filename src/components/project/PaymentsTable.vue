@@ -6,10 +6,9 @@ import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
 import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
 import type Project from '@/project'
 import type { Payment } from '@/project'
-import projectManager from '@/managers/projectManager'
 import { useEditable } from '@/helpers'
 
-defineProps<{ currentProject: Project }>()
+const props = defineProps<{ currentProject: Project }>()
 
 const {
   editedValue,
@@ -39,9 +38,7 @@ function executeEditDate(newDate: Date) {
 
   executeEdit('date', (id, value) => {
     if (value instanceof Date)
-      projectManager.updateCurrentProjectPayment(id, {
-        date: value.toISOString()
-      })
+      props.currentProject.paymentUpdate(id, { date: value.toISOString() })
   })
 }
 
@@ -54,7 +51,7 @@ function startEditValue(payment: Payment) {
 function executeEditValue() {
   executeEdit('value', (id, value) => {
     if (typeof value === 'number')
-      projectManager.updateCurrentProjectPayment(id, { value })
+      props.currentProject.paymentUpdate(id, { value })
   })
 }
 
@@ -67,7 +64,7 @@ function startEditComment(payment: Payment) {
 function executeEditComment() {
   executeEdit('comment', (id, value) => {
     if (typeof value === 'string')
-      projectManager.updateCurrentProjectPayment(id, { comment: value })
+      props.currentProject.paymentUpdate(id, { comment: value })
   })
 }
 

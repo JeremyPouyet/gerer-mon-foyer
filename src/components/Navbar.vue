@@ -6,10 +6,7 @@ import projectIcon from '@/assets/icons/criteria.png'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import db from '@/db'
-import type { NotificationManager } from '@/managers/notificationManager'
-import type { HistoryManager } from '@/managers/historyManager'
-import type { UserManager } from '@/managers/userManager'
+import unsavedManager from '@/managers/unsavedManager'
 
 onMounted(() => {
   import('bootstrap/js/dist/collapse')
@@ -20,7 +17,7 @@ const currentPath = ref(route.path)
 watch(route, newRoute => currentPath.value = newRoute.path)
 
 const unsavedChangesText = computed(() : string => {
-  const count = db.unsavedChanges.value
+  const count = unsavedManager.count.value
 
   return count === 1 ? `${count} modification non sauvegardée` : `${count} modifications non sauvegardées`
 })
@@ -32,22 +29,9 @@ const menuItems: [string, string, string][] = [
   ['/history',   'Historique', historyIcon],
 ]
 
-let notificationManager: NotificationManager
-let historyManager: HistoryManager
-let userManager: UserManager
-
-const loadManagers = async () => {
-  notificationManager = (await import('@/managers/notificationManager')).default
-  historyManager = (await import('@/managers/historyManager')).default
-  userManager = (await import('@/managers/userManager')).default
-}
-
-async function historicise() {
-  if (!notificationManager || !historyManager || !userManager)
-    await loadManagers()
-
-  historyManager.create({ account: db.account, users: userManager.users })
-  notificationManager.success('Répartition historisé !')
+async function historicize() {
+  const db = await import('@/db')
+  db.default.historicize()
 }
 </script>
 
@@ -87,20 +71,20 @@ async function historicise() {
               <span>
                 Paramètres
                 <div
-                  v-if="db.unsavedChanges.value > 0"
+                  v-if="unsavedManager.count.value > 0"
                   v-tooltip
                   :data-bs-title="unsavedChangesText"
                   data-bs-placement="bottom"
                   class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary"
                 >
-                  {{ db.unsavedChanges }}
+                  {{ unsavedManager.count }}
                 </div>
               </span>
             </RouterLink>
           </li>
         </ul>
       </div>
-      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicise">
+      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicize">
         Historiser
       </button>
     </div>

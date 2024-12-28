@@ -11,6 +11,7 @@ import { Path, SortType } from '@/types'
 
 import Texts from '@/texts'
 import { computed } from 'vue'
+import unsavedManager from '@/managers/unsavedManager'
 
 function generateDateString() : string {
   const now = new Date()
@@ -55,8 +56,6 @@ function uploadFile() : void {
 }
 
 function onFileUploaded(event: ProgressEvent<FileReader>) : void {
-  db.empty()
-
   try {
     const reader = event.target
 
@@ -105,7 +104,7 @@ function currencyChange(event: Event) : void {
 }
 
 const unsavedChangeText = computed(() => {
-  const count = db.unsavedChanges.value
+  const count = unsavedManager.count.value
 
   if (count === 0) return 'Aucune nouvelle donnée à sauvegarder.'
   if (count === 1) return '1 modification non sauvegardée.'
@@ -198,6 +197,9 @@ const unsavedChangeText = computed(() => {
               </option>
             </select>
           </div>
+          <small class="text-muted d-block">
+            Pour un tableau indexé par date, l’ordre alphabétique s’applique à la date.
+          </small>
         </div>
         <div class="row d-flex mb-3">
           <div class="col-7 my-auto">

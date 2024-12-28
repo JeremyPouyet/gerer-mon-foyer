@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 import notificationManager from '@/managers/notificationManager'
 import Texts from '@/texts'
 import { SortType } from '../types'
+import BrowserStorage, { StorageKey } from '@/browserStorage'
 
 // ISO 4217 currencies
 export enum Currency {
@@ -63,6 +64,12 @@ function defaultSettings() : GlobalSettings {
 
 class SettingsManager {
   readonly settings = reactive<GlobalSettings>(defaultSettings())
+  #storage: BrowserStorage
+
+  constructor() {
+    this.#storage = new BrowserStorage(localStorage, StorageKey.Settings)
+    this.load()
+  }
 
   /**
    * Retrieves the currency symbol for a given currency.
@@ -99,10 +106,14 @@ class SettingsManager {
    * If no settings exist, applies default settings.
    */
   load(): void {
-    const stringifiedSettings = localStorage.getItem('settings') || '{}'
+    const stringifiedSettings = this.#storage.get('{}')
     const settings = JSON.parse(stringifiedSettings) as Partial<GlobalSettings>
 
     Object.assign(this.settings, settings)
+  }
+
+  #save(): void {
+    this.#storage.set(JSON.stringify(this.settings))
   }
 
   /**
@@ -115,8 +126,8 @@ class SettingsManager {
     this.settings[setting] = value
 
     notifications[setting](value)
+    this.#save()
   }
 }
-
 const settingManager = new SettingsManager()
 export default settingManager

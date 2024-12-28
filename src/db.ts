@@ -1,80 +1,64 @@
-import { nextTick, reactive, ref, watch } from 'vue'
+import { nextTick, reactive, watch } from 'vue'
 
-import historyManager, { type Sample } from './managers/historyManager'
-import Account, { AccountType } from './account'
-import userManager from './managers/userManager'
-import settingManager from './managers/settingManager'
-import projectManager from './managers/projectManager'
+import userManager from '@/managers/userManager'
+import historyManager from '@/managers/historyManager'
+import Account, { AccountType } from '@/account'
+import projectManager from '@/managers/projectManager'
+import unsavedManager from '@/managers/unsavedManager'
+import notificationManager from '@/managers/notificationManager'
+import settingManager from '@/managers/settingManager'
+import BrowserStorage, { StorageKey } from './browserStorage'
 
 const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
-type Persistable = typeof persistatbleKeys[number]
 
 class DB {
   readonly account = reactive<Account>(new Account({}, AccountType.Common))
-  readonly unsavedChanges = ref<number>(0)
+  #accountStorage: BrowserStorage
 
   constructor() {
-    this.setup()
-    this.watch()
+    this.#accountStorage = new BrowserStorage(localStorage, StorageKey.CommonAccount)
+    this.#load()
+    watch(this.account, updated => {
+      this.#accountStorage.set(JSON.stringify(updated))
+    })
   }
 
   empty() : void {
-    userManager.empty()
-    this.account.empty()
     historyManager.empty()
-    sessionStorage.clear()
     projectManager.empty()
+    userManager.empty()
+
+    this.account.empty()
+
+    localStorage.clear()
+    sessionStorage.clear()
 
     // wait for watchers to save empty values before updating usavedChanges
-    nextTick(() => this.unsavedChanges.value = 0)
+    nextTick(() => unsavedManager.reset())
   }
 
   export() : string {
-    this.unsavedChanges.value = 0
+    unsavedManager.reset()
     return JSON.stringify(localStorage, [...persistatbleKeys], 2)
   }
 
+  historicize() {
+    historyManager.create({ account: this.account, users: userManager.users })
+    notificationManager.success('Répartition historisé !')
+  }
+
+  #load() : void {
+    const account = this.#accountStorage.get('{}')
+    Object.assign(this.account, JSON.parse(account))
+  }
+
   setup() : void {
-    const unsavedChanges = localStorage.getItem('unsavedChanges')
-    if (unsavedChanges)
-      this.unsavedChanges.value = +unsavedChanges
-
-    userManager.load()
-
-    const account = localStorage.getItem('account')
-    if (account)
-      Object.assign(this.account, JSON.parse(account))
-
     historyManager.load()
     projectManager.load()
     settingManager.load()
-  }
+    userManager.load()
 
-  private persistChanges(key: Persistable, value: object) : boolean {
-    const stringifiedItem = JSON.stringify(value)
-
-    // Do not update already up to date data
-    if (stringifiedItem === localStorage.getItem(key))
-      return true
-
-    try {
-      localStorage.setItem(key, stringifiedItem)
-      ++this.unsavedChanges.value
-    }
-    catch(err) {
-      console.error(`Failed to persist ${key}:`, err)
-      return false
-    }
-    return true
-  }
-
-  private watch() : void {
-    watch(this.unsavedChanges, value => localStorage.setItem('unsavedChanges', value.toString()))
-    watch(userManager.users, updated => this.persistChanges('users', updated), { deep: true })
-    watch(this.account, updated => this.persistChanges('account', updated))
-    watch(settingManager.settings, updated => this.persistChanges('settings', updated))
-
-    historyManager.addEventListener('update', event => this.persistChanges('history', (event as CustomEvent<Sample[]>).detail))
+    this.#load()
   }
 }
 

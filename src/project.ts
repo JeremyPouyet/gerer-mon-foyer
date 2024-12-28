@@ -2,7 +2,6 @@ import { newId } from '@/helpers'
 import type { ID } from '@/types'
 import { SortType } from '@/types'
 import settingManager from '@/managers/settingManager'
-import userManager from './managers/userManager'
 import notificationManager from './managers/notificationManager'
 
 export interface Expense {
@@ -31,12 +30,70 @@ export interface Resident {
   ratio: number
 }
 
-// List of possible transactions sort
-const sorters: Record<SortType, (a: Expense, b: Expense) => number> = {
+/**
+ * Mapping of possible sorting types for expenses to their respective sorting functions.
+ */
+const expenseSorters: Record<SortType, (a: Expense, b: Expense) => number> = {
   [SortType.Abc]: (a: Expense, b: Expense) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
   [SortType.Asc]: (a: Expense, b: Expense) => a.price * a.quantity - b.price * b.quantity,
   [SortType.Desc]: (a: Expense, b: Expense) => b.price * b.quantity - a.price * a.quantity,
   [SortType.Zyx]: (a: Expense, b: Expense) => b.name.localeCompare(a.name, undefined, { sensitivity: 'base' })
+}
+
+const paymentSorters: Record<SortType, (a: Payment, b: Payment) => number> = {
+  [SortType.Abc]: (a: Payment, b: Payment) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  [SortType.Asc]: (a: Payment, b: Payment) => a.value - b.value,
+  [SortType.Desc]: (a: Payment, b: Payment) => b.value - a.value,
+  [SortType.Zyx]: (a: Payment, b: Payment) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+}
+
+/**
+ * Validates the details of an expense.
+ *
+ * @param expense The expense to validate.
+ * @returns An error message if invalid, or null if valid.
+ */
+function expenseValidate(expense: Expense): string | null {
+  expense.name = (expense.name || '').trim()
+  expense.price = expense.price ?? 0
+  expense.quantity = expense.quantity ?? 0
+
+  if (expense.name === '') return `"${expense.name}" n’est pas un nom valide.`
+  if (expense.price < 0) return 'Le prix d’une dépense ne peut être inférieur à 0.'
+  if (expense.quantity < 0) return 'La quantité d’une dépense ne peut être inférieur à 0.'
+  return null
+}
+
+/**
+ * Validates the details of a payment.
+ *
+ * @param payment The payment to validate.
+ * @returns An error message if invalid, or null if valid.
+ */
+function paymentValidate(payment: Payment): string | null {
+  payment.resident = (payment.resident || '').trim()
+  payment.value = payment.value ?? 0
+
+  if (payment.resident === '') return `"${payment.resident}" n’est pas un nom valide.`
+  if (payment.value < 0) return 'La valeur d’un paiement ne peut être inférieur à 0.'
+  return null
+}
+
+/**
+ * Validates a Payment or an Expense. When an error is detected, a notification is shown.
+ *
+ * @param item Payment/Expense
+ * @param validateFn A function to validate the item
+ * @returns whether the validation succeedded
+ */
+function handleValidation<T>(item: T, validateFn: (item: T) => string | null): boolean {
+  const error = validateFn(item)
+
+  if (error) {
+    notificationManager.error(error)
+    return false
+  }
+  return true
 }
 
 export default class Project {
@@ -49,6 +106,10 @@ export default class Project {
   residents: Resident[]
   readonly payments: Record<ID, Payment>
 
+  /**
+   * Creates a new project instance.
+   * @param props Partial initial properties to set up the project.
+   */
   constructor(props: Partial<Project> = {}) {
     this.createdAt = props.createdAt ?? new Date().toISOString()
     this.updatedAt = props.updatedAt ?? this.createdAt
@@ -67,23 +128,12 @@ export default class Project {
    * @return Whether the creation is successful.
    */
   expenseCreate(expense: Omit<Expense, 'id'>) : boolean {
-    const trimmedName = (expense.name || '').trim()
-    const price = expense.price ?? -1
-    const quantity = expense.quantity ?? -1
-    let err = null
+    const newExpense: Expense = { ...expense, id: newId() }
 
-    if (!trimmedName)
-      err = `"${expense.name}" n’est pas un nom valide.`
-    else if (price < 0)
-      err = 'Le prix d’une dépense ne peut être inférieur à 0.'
-    else if (quantity < 0)
-      err = 'La quantité d’une dépense ne peut être inférieur à 0.'
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(newExpense, expenseValidate))
       return false
-    }
-    const id = newId()
-    this.expenses[id] = { id: id, name: trimmedName, price, quantity }
+
+    this.expenses[newExpense.id] = newExpense
     this.updateTimestamp()
     return true
   }
@@ -93,73 +143,112 @@ export default class Project {
    *
    * @param id The ID of the expense to delete.
    */
-  expenseDelete(id: ID) {
+  expenseDelete(id: ID): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.expenses[id])
       this.updateTimestamp()
   }
 
   /**
-   * Gets the sorted list of expenses with the sum of all expenses.
+   * Retrieves a sorted list of expenses along with their total sum.
    *
-   * @param sortType The sorting preference.
    * @return The sorted list of expenses and their total sum.
    */
-  expenseSorted() : ExpenseList {
+  expenseSorted(): ExpenseList {
     const expenses = Object.values(this.expenses)
+
     return {
       sum: expenses.reduce((sum, expense) => sum + expense.quantity * expense.price, 0),
-      values: expenses.sort(sorters[settingManager.settings.sort])
+      values: expenses.sort(expenseSorters[settingManager.settings.sort])
     }
   }
 
   /**
-   * Saves project residents and ratios
+   * Updates an existing expense by its ID.
+   *
+   * @param id The ID of the expense to update.
+   * @param updates The updates to apply.
+   * @returns Whether the update was successful.
    */
-  freeze() : void {
-    userManager.users.forEach(user => this.residents.push({ name: user.name, ratio: user.ratio }))
+  expenseUpdate(id: ID, updates: Partial<Expense>): boolean {
+    if (!this.expenses[id]) return false
+
+    const updatedExpense = { ...this.expenses[id], ...updates }
+
+    if (!handleValidation(updatedExpense, expenseValidate))
+      return false
+
+    Object.assign(this.expenses[id], updatedExpense)
+    this.updateTimestamp()
+    return true
   }
 
-  paymentCreate(payment: Omit<Payment, 'id' | 'date'>) : boolean {
-    const resident = (payment.resident || '').trim()
-    const value = payment.value ?? -1
-    const comment = payment.comment ?? ''
-    let err = null
+  /**
+   * Creates a new payment and adds it to the project.
+   *
+   * @param payment The payment details, excluding the ID and date.
+   * @returns Whether the creation was successful.
+   */
+  paymentCreate(payment: Omit<Payment, 'id' | 'date'>): boolean {
+    const newPayment: Payment = { ...payment, date: new Date().toISOString(), id: newId() }
 
-    if (!resident)
-      err = `"${payment.resident}" n’est pas un nom valide.`
-    else if (value < 0)
-      err = 'La valeur d’un payment ne peut être inférieur à 0.'
-    if (err) {
-      notificationManager.error(err)
+    if (!handleValidation(newPayment, paymentValidate))
       return false
-    }
-    const date = new Date().toISOString()
-    const newPayment = { comment, date, id: newId(), resident, value }
+
     this.payments[newPayment.id] = newPayment
     this.updateTimestamp()
     return true
   }
 
-  paymentDelete(id: ID) : void {
+  /**
+   * Deletes a payment by its ID.
+   *
+   * @param id The ID of the payment to delete.
+   */
+  paymentDelete(id: ID): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (delete this.payments[id])
       this.updateTimestamp()
   }
 
   /**
-   * Group payments by resident name
+   * Updates an existing payment by its ID.
+   *
+   * @param id The ID of the payment to update.
+   * @param updates The updates to apply.
+   * @returns Whether the update was successful.
    */
-  paymentsSorted() : Record<string, { list: Payment[], sum: number }> {
-    const sortedPayments: Record<string, { list: Payment[], sum: number }> = {}
+  paymentUpdate(id: ID, updates: Partial<Payment>): boolean {
+    if (!this.payments[id]) return false
 
-    Object.values(this.payments).forEach(payment => {
-      if (!sortedPayments[payment.resident])
-        sortedPayments[payment.resident] = { list: [], sum: 0 }
-      sortedPayments[payment.resident].list.push(payment)
-      sortedPayments[payment.resident].sum += payment.value
-    })
-    return sortedPayments
+    const updatedPayment = { ...this.payments[id], ...updates }
+
+    if (!handleValidation(updatedPayment, paymentValidate))
+      return false
+
+    Object.assign(this.payments[id], updatedPayment)
+    this.updateTimestamp()
+    return true
+  }
+
+  /**
+   * Groups payments by resident name and calculates their total values.
+   *
+   * @returns A record of payments grouped by resident.
+   */
+  paymentsSorted(): Record<string, { list: Payment[], sum: number }> {
+    const payments = Object.values(this.payments).reduce((acc, payment) => {
+      if (!acc[payment.resident])
+        acc[payment.resident] = { list: [], sum: 0 }
+      acc[payment.resident].list.push(payment)
+      acc[payment.resident].sum += payment.value
+      return acc
+    }, {} as Record<string, { list: Payment[]; sum: number }>)
+
+    for (const key in payments)
+      payments[key].list = payments[key].list.sort(paymentSorters[settingManager.settings.sort])
+
+    return payments
   }
 
   /**
