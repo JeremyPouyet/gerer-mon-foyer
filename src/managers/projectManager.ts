@@ -1,6 +1,6 @@
 import BrowserStorage, { StorageKey } from '@/browserStorage'
-import Project from '@/project'
 import type { ID } from '@/types'
+import Project from '@/project'
 
 /**
  * Manages project creation, deletion, updates, and storage.

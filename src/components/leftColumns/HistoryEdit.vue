@@ -4,8 +4,8 @@ import NoteIcon from '@/components/NoteIcon.vue'
 
 import { ref } from 'vue'
 
-import { sexyDate } from '@/formaters'
 import historyManager, { type Sample } from '@/managers/historyManager'
+import { sexyDate } from '@/formaters'
 
 const emit = defineEmits(['switchSample'])
 
@@ -39,12 +39,12 @@ function removeSample(date: string) : void {
       <div class="d-flex justify-content-between container-fluid align-items-center">
         <span
           v-tooltip
+          :aria-pressed="activeDate === sample.date"
+          :class="{ active: activeDate === sample.date }"
           data-bs-placement="right"
           data-bs-title="Cliquer pour sélectionner"
           style="cursor: pointer"
           tabindex="0"
-          :aria-pressed="activeDate === sample.date"
-          :class="{ active: activeDate === sample.date }"
           @click="switchSample(sample.date)"
           @keydown.enter="switchSample(sample.date)"
         >
@@ -55,11 +55,11 @@ function removeSample(date: string) : void {
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            tabindex="0"
-            src="@/assets/icons/cross.png"
             alt="Supprimer"
-            data-bs-title="Supprimer de l’historique"
             class="icon-container-small icon-hoverable ms-2"
+            data-bs-title="Supprimer de l’historique"
+            src="@/assets/icons/cross.png"
+            tabindex="0"
             @click="removeSample(sample.date)"
           >
         </div>

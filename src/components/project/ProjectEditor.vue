@@ -109,8 +109,8 @@ onMounted(() => {
         v-model="newProjectName"
         type="text"
         @keydown.enter="executeEditProjectName"
-        @keydown.tab="executeEditProjectName"
         @keydown.esc="cancelEditProjectName"
+        @keydown.tab="executeEditProjectName"
       >
     </h3>
     <h3 v-else>
@@ -136,16 +136,16 @@ onMounted(() => {
               <th scope="col">
                 Dépense
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Quantitée
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Prix
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Total
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Actions
               </th>
             </tr>
@@ -158,8 +158,8 @@ onMounted(() => {
                   v-model="editedValue"
                   class="char-width-20"
                   type="text"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpenseName"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpenseName"
                 >
               </td>
@@ -173,8 +173,8 @@ onMounted(() => {
                   v-model="editedValue"
                   class="char-width-20"
                   type="number"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpenseQuantity"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpenseQuantity"
                 >
               </td>
@@ -187,8 +187,8 @@ onMounted(() => {
                   v-model="editedValue"
                   class="char-width-20"
                   type="number"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpensePrice"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpensePrice"
                 >
               </td>
@@ -205,10 +205,10 @@ onMounted(() => {
                 />
                 <img
                   v-tooltip="{ disposeOnClick: true }"
-                  src="@/assets/icons/cross.png"
                   alt="Supprimer"
-                  data-bs-title="Supprimer"
                   class="icon-container-small icon-hoverable ms-2"
+                  data-bs-title="Supprimer"
+                  src="@/assets/icons/cross.png"
                   @click="currentProject.expenseDelete(expense.id)"
                 >
               </td>

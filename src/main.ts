@@ -5,9 +5,9 @@ import { createWebHistory } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
 import App from '@/App.vue'
+import { Path } from '@/types'
 import Texts from '@/texts'
 import { tooltip } from '@/tooltip'
-import { Path } from '@/types'
 
 /**
  * Set page headers (meta description and page title)

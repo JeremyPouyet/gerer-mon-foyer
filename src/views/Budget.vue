@@ -16,7 +16,7 @@ import { Path } from '@/types'
 
 <template>
   <div class="container-fluid">
-    <ViewTitle :path="Path.Budget" emoji="💸" />
+    <ViewTitle emoji="💸" :path="Path.Budget" />
 
     <div class="row">
       <LeftColumn :title="'Habitants'">
@@ -24,9 +24,9 @@ import { Path } from '@/types'
       </LeftColumn>
       <BudgetShow
         :account="db.account"
+        :component-type="TransactionsEdit"
         :users="userManager.users"
         :with-note="true"
-        :component-type="TransactionsEdit"
       />
     </div>
   </div>

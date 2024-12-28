@@ -5,10 +5,10 @@ import TableHeader from './transactionsTable/TableHeader.vue'
 
 import { toRefs } from 'vue'
 
+import { TransactionType, frequencies } from '@/types'
+import { useTransactions, valueAs  } from '@/helpers'
 import type Account from '@/account'
 import { sexyNumber } from '@/formaters'
-import { useTransactions, valueAs  } from '@/helpers'
-import { frequencies, TransactionType } from '@/types'
 
 const props = defineProps<{
   account: Account,

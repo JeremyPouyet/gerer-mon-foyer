@@ -2,15 +2,15 @@
 import '@/assets/secondary.scss'
 
 import BudgetShow from '@/components/BudgetShow.vue'
-import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import HistoryEdit from '@/components/leftColumns/HistoryEdit.vue'
+import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onUnmounted, ref, watch } from 'vue'
 
-import DBSnapshot from '@/dbSnapshot'
 import historyManager, { type Sample } from '@/managers/historyManager'
+import DBSnapshot from '@/dbSnapshot'
 import { Path } from '@/types'
 
 let userWatcherCleanup: (() => void) | null = null
@@ -53,7 +53,7 @@ switchSample()
 
 <template>
   <div class="container-fluid">
-    <ViewTitle :path="Path.History" emoji="📜" />
+    <ViewTitle emoji="📜" :path="Path.History" />
     <div v-if="!sample">
       <p class="text-center">
         Pas de données dans l’historique
@@ -65,9 +65,9 @@ switchSample()
       </LeftColumn>
       <BudgetShow
         :account="snapshot.account"
+        :component-type="HistoryTransactionsShow"
         :users="snapshot.users"
         :with-note="false"
-        :component-type="HistoryTransactionsShow"
       />
     </div>
   </div>

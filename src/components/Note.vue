@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
-import type { Transaction } from '@/types'
-import type { Sample } from '@/managers/historyManager'
+
 import type Account from '@/account'
 import type { Expense } from '@/project'
 import Project from '@/project'
+import type { Sample } from '@/managers/historyManager'
+import type { Transaction } from '@/types'
 
 const emit = defineEmits<
   (e: 'update', note: string | undefined) => void
@@ -57,20 +58,20 @@ function noteCancel() : void {
     <div class="form-floating">
       <textarea
         v-model="currentNote"
-        rows="4"
         cols="30"
         placeholder="Entrez une note"
-        @keydown.esc="noteCancel"
+        rows="4"
         @keydown.ctrl.enter="noteUpdate"
+        @keydown.esc="noteCancel"
       />
       <div class="input-group">
-        <button type="button" class="btn btn-secondary btn-sm" @click="noteUpdate">
+        <button class="btn btn-secondary btn-sm" type="button" @click="noteUpdate">
           Valider
         </button>
-        <button type="button" class="text-black btn btn-danger btn-sm" @click="noteDelete">
+        <button class="text-black btn btn-danger btn-sm" type="button" @click="noteDelete">
           Supprimer
         </button>
-        <button type="button" class="text-white btn btn-dark btn-sm" @click="noteCancel">
+        <button class="text-white btn btn-dark btn-sm" type="button" @click="noteCancel">
           Annuler
         </button>
       </div>
@@ -78,11 +79,11 @@ function noteCancel() : void {
   </div>
   <img
     v-tooltip="{ disposeOnClick: true }"
-    tabindex="0"
-    src="@/assets/icons/take-note.png"
     alt="Annoter"
-    data-bs-title="Annoter"
     class="icon-container-small icon-hoverable"
+    data-bs-title="Annoter"
+    src="@/assets/icons/take-note.png"
+    tabindex="0"
     @click="toggleNotePopup"
   >
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { type TransactionList, frequencies } from '@/types'
 import { sexyNumber } from '@/formaters'
-import { frequencies, type TransactionList } from '@/types'
 import { valueAs } from '@/helpers'
 
 const props = defineProps<{ income?: number, transactionList: TransactionList, withTds: boolean }>()

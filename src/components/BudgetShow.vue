@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type TransactionsEdit from './TransactionsEdit.vue'
 import type HistoryTransactionsShow from './HistoryTransactionsShow.vue'
 import TableContainer from './transactionsTable/TableContainer.vue'
+import type TransactionsEdit from './TransactionsEdit.vue'
 
 import { computed } from 'vue'
 
-import UserNameTitle from '@/components/UserNameTitle.vue'
+import Account from '@/account'
 import FinanceInfoBlock from '@/components/FinanceInfoBlock.vue'
 import { TransactionType } from '@/types'
-import Account from '@/account'
 import type User from '@/user'
+import UserNameTitle from '@/components/UserNameTitle.vue'
 
 const props = defineProps<{
   account: Account,
@@ -35,7 +35,7 @@ const remainSum = computed(() => users.value.reduce((sum, user) => sum + (user.a
         :income="{ label: '% des revenus commun', value: incomeSum }"
         :transaction-type="TransactionType.Expense"
       />
-      <TableContainer :component-type="componentType" :account="account" :transaction-type="TransactionType.Income" />
+      <TableContainer :account="account" :component-type="componentType" :transaction-type="TransactionType.Income" />
     </div>
     <div v-for="user in users" :key="user.id" class="row">
       <UserNameTitle :account="user.account" :name="user.name" :with-note="withNote" />
@@ -52,7 +52,7 @@ const remainSum = computed(() => users.value.reduce((sum, user) => sum + (user.a
         :transaction-type="TransactionType.PersonalExpense"
       />
       <TableContainer :account="user.account" :component-type="componentType" :transaction-type="TransactionType.Income" />
-      <FinanceInfoBlock :user="user" :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" />
+      <FinanceInfoBlock :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" :user="user" />
     </div>
   </div>
 </template>

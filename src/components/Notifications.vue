@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type ID } from '@/types'
 import notificationManager, { NotificationType } from '@/managers/notificationManager'
+import { type ID } from '@/types'
 
 import { onMounted, onUpdated } from 'vue'
 
@@ -39,17 +39,17 @@ onUpdated(() => {
     <div
       v-for="[id, notif] in notificationManager.notifications.value"
       :key="id"
-      class="toast"
-      role="alert"
-      aria-live="assertive"
       aria-atomic="true"
+      aria-live="assertive"
+      class="toast"
       :data-id="id"
+      role="alert"
     >
       <div class="toast-header">
-        <img :src="urls[notif.type].href" class="rounded me-2 icon-container" :alt="notif.type">
+        <img :alt="notif.type" class="rounded me-2 icon-container" :src="urls[notif.type].href">
         <strong v-if="notif.type === NotificationType.Error" class="me-auto">Erreur</strong>
         <strong v-else class="me-auto">Succès</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" />
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button" />
       </div>
       <div class="toast-body">
         {{ notif.text }}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Texts from '@/texts'
 import { Path } from '@/types'
+import Texts from '@/texts'
 
 const props = defineProps<{ emoji: string, path: Path, unpaded?: boolean }>()
 const unpadedClass = props.unpaded ? 'ps-0' : ''

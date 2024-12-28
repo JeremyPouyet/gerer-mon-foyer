@@ -8,15 +8,15 @@
           </h5>
           <p>
             Icons créés par
-            <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>
+            <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" rel="noopener noreferrer" target="_blank">juicy_fish</a>
             sur
-            <a class="text-primary-emphasis" href="https://www.flaticon.com" target="_blank" rel="noopener noreferrer">Flaticon</a>
+            <a class="text-primary-emphasis" href="https://www.flaticon.com" rel="noopener noreferrer" target="_blank">Flaticon</a>
           </p>
           <p>
             Développé avec
-            <a class="text-primary-emphasis" href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue.js</a>
+            <a class="text-primary-emphasis" href="https://vuejs.org/" rel="noopener noreferrer" target="_blank">Vue.js</a>
             et
-            <a class="text-primary-emphasis" href="https://getbootstrap.com/docs/5.3/" target="_blank" rel="noopener noreferrer">Bootstrap 5</a>
+            <a class="text-primary-emphasis" href="https://getbootstrap.com/docs/5.3/" rel="noopener noreferrer" target="_blank">Bootstrap 5</a>
           </p>
         </div>
 
@@ -30,7 +30,7 @@
                 <p class="mb-0 lh-1 py-0">
                   Gérer
                 </p>
-                Mon <img src="@/assets/icons/home.png" class="icon-container-small" alt=""> Foyer
+                Mon <img alt="" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
               </div>
             </div>
           </h5>
@@ -48,7 +48,7 @@
             Ressources
           </h5>
           <p>
-            Code source disponible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" target="_blank" rel="noopener noreferrer">Github</a>
+            Code source disponible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" rel="noopener noreferrer" target="_blank">Github</a>
           </p>
           <p>
             <RouterLink class="text-primary-emphasis" to="/legals">

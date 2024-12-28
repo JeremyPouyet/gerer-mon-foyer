@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
-import ProjectEditor from '@/components/project/ProjectEditor.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import ProjectEditor from '@/components/project/ProjectEditor.vue'
 import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
@@ -28,7 +28,7 @@ onMounted(() => {
 
 <template>
   <div class="container-fluid">
-    <ViewTitle :path="Path.Projects" emoji="🗂️" />
+    <ViewTitle emoji="🗂️" :path="Path.Projects" />
     <div class="row">
       <LeftColumn :title="'Mes projets'">
         <ProjectsEdit />

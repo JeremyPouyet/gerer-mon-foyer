@@ -8,14 +8,14 @@ import { Path } from '@/types'
 
 <template>
   <div v-once class="container">
-    <ViewTitle :path="Path.Legals" emoji="🚓" />
+    <ViewTitle emoji="🚓" :path="Path.Legals" />
 
     <div class="row justify-content-around">
       <section class="mb-4 text-block col-sm-12 col-md-5 justified">
         <h2>Éditeur</h2>
         Jérémy Pouyet<br>
-        Email: <a href="mailto:contact@gerer-mon-foyer.fr" class="text-dark">contact@gerer-mon-foyer.fr</a><br>
-        Me retrouver: <a href="https://github.com/JeremyPouyet" class="text-dark" target="_blank" rel="noopener noreferrer">Github</a> | <a href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-pouyet-b8b3407a/" class="text-dark" target="_blank" rel="noopener noreferrer">LinkedIn</a><br>
+        Email: <a class="text-dark" href="mailto:contact@gerer-mon-foyer.fr">contact@gerer-mon-foyer.fr</a><br>
+        Me retrouver: <a class="text-dark" href="https://github.com/JeremyPouyet" rel="noopener noreferrer" target="_blank">Github</a> | <a class="text-dark" href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-pouyet-b8b3407a/" rel="noopener noreferrer" target="_blank">LinkedIn</a><br>
       </section>
       <section class="mb-4 text-block col-sm-12 col-md-5 justified">
         <h2>Gestion des données</h2>
@@ -44,9 +44,9 @@ import { Path } from '@/types'
         </p>
 
         <p>
-          <a href="https://github.com/JeremyPouyet/gerer-mon-foyer/blob/master/LICENSE.md" target="_blank" rel="noopener noreferrer" class="text-dark">Voir la license complète</a>.<br>
-          Le code source du site est accessible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" target="_blank" rel="noopener noreferrer">GitHub</a>.<br>
-          Les icônes ont été créées par <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" target="_blank" rel="noopener noreferrer">juicy_fish</a>.<br>
+          <a class="text-dark" href="https://github.com/JeremyPouyet/gerer-mon-foyer/blob/master/LICENSE.md" rel="noopener noreferrer" target="_blank">Voir la license complète</a>.<br>
+          Le code source du site est accessible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" rel="noopener noreferrer" target="_blank">GitHub</a>.<br>
+          Les icônes ont été créées par <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" rel="noopener noreferrer" target="_blank">juicy_fish</a>.<br>
         </p>
       </section>
       <section class="mb-4 text-block col-sm-12 col-md-5 justified">

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
+import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
+
 import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
-import type Project from '@/project'
+import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
 import type { Payment } from '@/project'
+import type Project from '@/project'
 import { useEditable } from '@/helpers'
 
 const props = defineProps<{ currentProject: Project }>()
@@ -100,7 +101,7 @@ onMounted(() => {
         <th class="text-end" scope="col" style="width:20%">
           Valeur
         </th>
-        <th scope="col" class="text-end" style="width:10%">
+        <th class="text-end" scope="col" style="width:10%">
           Actions
         </th>
       </tr>
@@ -110,19 +111,19 @@ onMounted(() => {
         <td v-if="editedId === payment.id && editedType === 'date'" class="text-nowrap">
           <VueDatePicker
             ref="datepicker"
-            :v-model="editedValue"
-            :teleport="true"
-            locale="fr"
             cancel-text="Annuler"
-            select-text="Sélectionner"
+            :focus-start-date="true"
+            :hide-offset-dates="true"
+            locale="fr"
             :max-date="new Date()"
             :prevent-min-max-navigation="true"
-            :hide-offset-dates="true"
-            :time-picker-inline="true"
-            :focus-start-date="true"
+            select-text="Sélectionner"
             :start-date="new Date(payment.date)"
-            @update:model-value="(newDate: Date) => executeEditDate(newDate)"
+            :teleport="true"
+            :time-picker-inline="true"
+            :v-model="editedValue"
             @close="cancelEdit"
+            @update:model-value="(newDate: Date) => executeEditDate(newDate)"
           />
         </td>
         <td v-else class="editable-cell" @click="startEditDate(payment)">
@@ -134,8 +135,8 @@ onMounted(() => {
             v-model="editedValue"
             class="char-width-20"
             type="text"
-            @keydown.esc="cancelEdit"
             @keydown.enter="executeEditComment"
+            @keydown.esc="cancelEdit"
             @keydown.tab="executeEditComment"
           >
         </td>
@@ -148,8 +149,8 @@ onMounted(() => {
             v-model="editedValue"
             class="char-width-20"
             type="number"
-            @keydown.esc="cancelEdit"
             @keydown.enter="executeEditValue"
+            @keydown.esc="cancelEdit"
             @keydown.tab="executeEditValue"
           >
         </td>
@@ -159,10 +160,10 @@ onMounted(() => {
         <td class="text-end align-middle text-nowrap">
           <img
             v-tooltip="{ disposeOnClick: true }"
-            src="@/assets/icons/cross.png"
             alt="Supprimer le payment"
-            data-bs-title="Supprimer le payment"
             class="icon-container-small icon-hoverable ms-2"
+            data-bs-title="Supprimer le payment"
+            src="@/assets/icons/cross.png"
             @click="currentProject.paymentDelete(payment.id)"
           >
         </td>

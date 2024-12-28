@@ -37,8 +37,8 @@ function expenseAdd() : void {
       class="form-control"
       data-bs-placement="bottom"
       data-bs-title="Quantité"
-      type="number"
       placeholder="Quantité"
+      type="number"
       @keydown.enter="expenseAdd"
     >
     <div class="w-100 d-sm-none" />

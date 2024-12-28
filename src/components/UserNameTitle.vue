@@ -39,15 +39,15 @@ function showTransactions(transactionType: TransactionType) {
           v-for="transactionType in visibleTransactionTypes"
           :key="transactionType"
           v-tooltip="{ disposeOnClick: true }"
+          class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
+          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural}`"
           role="button"
           tabindex="0"
-          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural}`"
-          class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
           @click="showTransactions(transactionType)"
           @keydown.enter="showTransactions(transactionType)"
         >
           {{ Texts.transactionTypes[transactionType].plural }}
-          <img src="@/assets/icons/show.png" class="icon-container-small ms-2" alt="">
+          <img alt="" class="icon-container-small ms-2" src="@/assets/icons/show.png">
         </div>
       </div>
     </div>

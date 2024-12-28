@@ -24,9 +24,9 @@ function paymentAdd() : void {
     <select
       v-model="newPayment.resident"
       v-tooltip
+      class="form-select mt-2 mt-sm-0"
       data-bs-placement="bottom"
       data-bs-title="Nom de l’habitant"
-      class="form-select mt-2 mt-sm-0"
     >
       <option v-for="resident in userManager.users" :key="resident.name">
         {{ resident.name }}
@@ -39,8 +39,8 @@ function paymentAdd() : void {
       class="form-control mt-2 mt-sm-0"
       data-bs-placement="bottom"
       data-bs-title="Commentaire"
-      type="text"
       placeholder="Commentaire"
+      type="text"
       @keydown.enter="paymentAdd"
     >
     <div class="w-100 d-sm-none" />
@@ -48,9 +48,9 @@ function paymentAdd() : void {
       v-model="newPayment.value"
       v-tooltip
       class="form-control mt-2 mt-sm-0"
-      min="0"
       data-bs-placement="bottom"
       data-bs-title="Valeur du payment"
+      min="0"
       placeholder="Valeur"
       type="number"
       @keydown.enter="paymentAdd"
