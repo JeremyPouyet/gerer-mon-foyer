@@ -121,7 +121,9 @@ onMounted(() => {
         class="icon-container-small ms-2 icon-hoverable"
         data-bs-title="Éditer le nom du projet"
         src="@/assets/icons/pencil.png"
+        tabindex="0"
         @click="startEditProjectName"
+        @keydown.enter="startEditProjectName"
       >
     </h3>
   </div>
