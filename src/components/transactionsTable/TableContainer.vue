@@ -127,7 +127,14 @@ function hideTransactions(transactionType: TransactionType) {
             {{ name }}
           </option>
         </select>
-        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
+        <button
+          aria-label="Ajouter une entrée"
+          class="btn btn-secondary mt-2 mt-sm-0"
+          :disabled="!newTransaction.name || !newTransaction.value"
+          tabindex="0"
+          @click="transactionAdd"
+          @keydown.enter="transactionAdd"
+        >
           Ajouter
         </button>
       </div>

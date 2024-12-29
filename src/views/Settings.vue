@@ -136,7 +136,6 @@ const unsavedChangeText = computed(() => {
             <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
               Importer une sauvegarde
             </button>
-            <small class="text-body-secondary d-block">Cela remplacera vos données actuelles.</small>
           </div>
           <div class="col my-auto">
             <div class="text-end">
@@ -175,7 +174,7 @@ const unsavedChangeText = computed(() => {
           Affichage
         </h2>
         <div class="form-check form-switch form-check-reverse mb-4">
-          <label class="form-check-label" for="settings2decimals">
+          <label class="form-check-label" for="setting2decimals">
             Afficher les nombres avec 2 décimales:
           </label>
           <input
@@ -187,11 +186,15 @@ const unsavedChangeText = computed(() => {
           >
         </div>
         <div class="row d-flex mb-3">
-          <div class="col-7 my-auto">
+          <label class="col-7 my-auto" for="settingSort">
             Trier les dépenses et revenus par ordre:
-          </div>
+          </label>
           <div class="col">
-            <select class="form-select" @change="sortTypeChange">
+            <select
+              id="settingSort"
+              class="form-select"
+              @change="sortTypeChange"
+            >
               <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="settingManager.settings.sort === sortType" :value="sortType">
                 {{ Texts.sortTypes[sortType] }}
               </option>
@@ -202,11 +205,15 @@ const unsavedChangeText = computed(() => {
           </small>
         </div>
         <div class="row d-flex mb-3">
-          <div class="col-7 my-auto">
+          <label class="col-7 my-auto" for="settingSymbol">
             Utiliser le symbol monétaire:
-          </div>
+          </label>
           <div class="col">
-            <select class="form-select" @change="currencyChange">
+            <select
+              id="settingSymbol"
+              class="form-select"
+              @change="currencyChange"
+            >
               <option v-for="currency in Object.values(Currency)" :key="currency" :selected="settingManager.settings.currency === currency" :value="currency">
                 {{ settingManager.getCurrencySymbol(currency, true) }}
               </option>
