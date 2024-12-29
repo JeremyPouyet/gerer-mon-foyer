@@ -62,7 +62,9 @@ onMounted(() => {
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer des projets"
             src="@/assets/icons/cross.png"
+            tabindex="0"
             @click="projectManager.delete(project.id)"
+            @keydown.enter="projectManager.delete(project.id)"
           >
         </div>
       </div>
