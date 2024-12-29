@@ -41,6 +41,10 @@ const lgClass = computed(() => {
     ? 'col-lg-12' // Then show the transaction array full screen
     : 'col-lg-6'  // Otherwise a transaction array takes 50% of the screen to show both
 })
+
+function hideTransactions(transactionType: TransactionType) {
+  props.account.settings.show[transactionType] = false
+}
 </script>
 
 <template>
@@ -56,12 +60,15 @@ const lgClass = computed(() => {
         </h1>
         <img
           v-tooltip="{ disposeOnClick: true }"
-          alt="Cacher"
+          :alt="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
           class="icon-container icon-hoverable position-absolute me-2 end-0"
           data-bs-placement="left"
-          data-bs-title="Cacher"
+          :data-bs-title="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
+          role="button"
           src="@/assets/icons/hide.png"
-          @click="() => props.account.settings.show[props.transactionType] = false"
+          tabindex="0"
+          @click="hideTransactions(transactionType)"
+          @keydown.enter="hideTransactions(transactionType)"
         >
       </div>
 

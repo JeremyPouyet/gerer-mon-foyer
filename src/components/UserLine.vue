@@ -68,7 +68,9 @@ function userDelete(user: User) : void {
         class="icon-container-small icon-hoverable me-2"
         data-bs-title="Éditer le prénom"
         src="@/assets/icons/pencil.png"
+        tabindex="0"
         @click="startEditName"
+        @keydown.enter="startEditName"
       >
       <img
         v-tooltip="{ disposeOnClick: true }"
@@ -76,7 +78,9 @@ function userDelete(user: User) : void {
         class="icon-container-small icon-hoverable"
         data-bs-title="Supprimer des habitants"
         src="@/assets/icons/cross.png"
+        tabindex="0"
         @click="userDelete(user)"
+        @keydown.enter="userDelete(user)"
       >
     </div>
   </div>

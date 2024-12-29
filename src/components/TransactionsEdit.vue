@@ -156,7 +156,9 @@ function deleteTransaction(transaction: Transaction) {
           class="icon-container-small icon-hoverable ms-2"
           data-bs-title="Supprimer"
           src="@/assets/icons/cross.png"
+          tabindex="0"
           @click="deleteTransaction(transaction)"
+          @keydown.enter="deleteTransaction(transaction)"
         >
       </td>
     </tr>
