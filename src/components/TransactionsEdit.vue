@@ -10,6 +10,7 @@ import { Frequency, type ID, type Transaction, TransactionType, frequencies } fr
 import { useTransactions, valueAs } from '@/helpers'
 import type Account from '@/account'
 import { AccountType } from '@/account'
+import Texts from '@/texts'
 import { sexyNumber } from '@/formaters'
 import userManager from '@/managers/userManager'
 
@@ -115,6 +116,7 @@ function deleteTransaction(transaction: Transaction) {
       </td>
       <td
         v-else
+        :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}`"
         class="align-middle editable-cell"
         tabindex="0"
         @click="startEditTransactionName(transaction)"
@@ -138,6 +140,7 @@ function deleteTransaction(transaction: Transaction) {
         </td>
         <td
           v-else
+          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]})`"
           class="text-end align-middle editable-cell"
           tabindex="0"
           @click="startEditTransactionValue(transaction, frequency)"
