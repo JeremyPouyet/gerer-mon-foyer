@@ -225,7 +225,7 @@ onMounted(() => {
                 />
                 <img
                   v-tooltip="{ disposeOnClick: true }"
-                  alt="Supprimer"
+                  alt="Supprimer la dépense"
                   class="icon-container-small icon-hoverable ms-2"
                   data-bs-title="Supprimer"
                   src="@/assets/icons/cross.png"

@@ -126,7 +126,13 @@ onMounted(() => {
             @update:model-value="(newDate: Date) => executeEditDate(newDate)"
           />
         </td>
-        <td v-else class="editable-cell" @click="startEditDate(payment)">
+        <td
+          v-else
+          class="editable-cell"
+          tabindex="0"
+          @click="startEditDate(payment)"
+          @keydown.enter="startEditDate(payment)"
+        >
           <span>{{ sexyDate(payment.date, false) }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">
@@ -140,7 +146,13 @@ onMounted(() => {
             @keydown.tab="executeEditComment"
           >
         </td>
-        <td v-else class="editable-cell" @click="startEditComment(payment)">
+        <td
+          v-else
+          class="editable-cell"
+          tabindex="0"
+          @click="startEditComment(payment)"
+          @keydown.enter="startEditComment(payment)"
+        >
           <span>{{ payment.comment || 'N/D' }}</span>
         </td>
         <td v-if="editedId === payment.id && editedType === 'value'" class="align-middle">
@@ -154,7 +166,13 @@ onMounted(() => {
             @keydown.tab="executeEditValue"
           >
         </td>
-        <td v-else class="editable-cell text-end" @click="startEditValue(payment)">
+        <td
+          v-else
+          class="editable-cell text-end"
+          tabindex="0"
+          @click="startEditValue(payment)"
+          @keydown.enter="startEditValue(payment)"
+        >
           <span>{{ sexyNumber(payment.value) }}</span>
         </td>
         <td class="text-end align-middle text-nowrap">
@@ -162,9 +180,11 @@ onMounted(() => {
             v-tooltip="{ disposeOnClick: true }"
             alt="Supprimer le payment"
             class="icon-container-small icon-hoverable ms-2"
-            data-bs-title="Supprimer le payment"
+            data-bs-title="Supprimer"
             src="@/assets/icons/cross.png"
+            tabindex="0"
             @click="currentProject.paymentDelete(payment.id)"
+            @keydown.enter="currentProject.paymentDelete(payment.id)"
           >
         </td>
       </tr>
