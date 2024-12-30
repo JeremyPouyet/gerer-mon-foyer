@@ -3,11 +3,11 @@ import '@/assets/secondary.scss'
 
 import ViewTitle from '@/components/ViewTitle.vue'
 
+import { Path, SortType } from '@/types'
+import settingManager, { Currency } from '@/managers/settingManager'
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
 import notificationManager from '@/managers/notificationManager'
-import settingManager, { Currency } from '@/managers/settingManager'
-import { Path, SortType } from '@/types'
 
 import Texts from '@/texts'
 import { computed } from 'vue'
@@ -114,21 +114,21 @@ const unsavedChangeText = computed(() => {
 
 <template>
   <div class="container">
-    <ViewTitle :path="Path.Settings" emoji="💅" unpaded />
+    <ViewTitle emoji="💅" :path="Path.Settings" unpaded />
     <div class="row mb-4">
       <div class="col-sm-12 col-md-5 mt-2">
         <h2 class="mb-4">
           Mes données
         </h2>
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
-          <img src="@/assets/icons/warning.png" class="icon-container" alt="Attention">
+          <img alt="Attention" class="icon-container" src="@/assets/icons/warning.png">
           <p class="mb-0 ms-2">
             <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
           </p>
         </div>
 
         <p class="fw-bold d-flex">
-          <img src="@/assets/icons/diskette.png" class="icon-container-small my-auto" alt="">
+          <img alt="" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
           <span class="ms-1">Sauvegarde:</span>
         </p>
         <div class="row d-flex mb-3">
@@ -136,27 +136,26 @@ const unsavedChangeText = computed(() => {
             <button class="text-black btn btn-secondary btn-sm" @click="uploadFile">
               Importer une sauvegarde
             </button>
-            <small class="text-muted d-block">Cela remplacera vos données actuelles.</small>
           </div>
           <div class="col my-auto">
             <div class="text-end">
-              <button type="button" class="text-black btn btn-secondary btn-sm" @click="saveFile">
+              <button class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
                 Exporter une sauvegarde
               </button>
-              <small class="text-muted d-block">{{ unsavedChangeText }}</small>
+              <small class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
             </div>
           </div>
         </div>
 
         <p class="fw-bold d-flex">
-          <img src="@/assets/icons/warning.png" class="icon-container-small my-auto" alt="Attention">
+          <img alt="Attention" class="icon-container-small my-auto" src="@/assets/icons/warning.png">
           <span class="ms-1">Zone dangereuse:</span>
         </p>
         <div>
           <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
             Supprimer toutes mes données
           </button>
-          <small class="text-muted d-block">
+          <small class="text-body-secondary d-block">
             Cette action est définitive.
             <br>
             Pensez à d'abord faire une sauvegarde.</small>
@@ -175,38 +174,46 @@ const unsavedChangeText = computed(() => {
           Affichage
         </h2>
         <div class="form-check form-switch form-check-reverse mb-4">
-          <label class="form-check-label" for="settings2decimals">
+          <label class="form-check-label" for="setting2decimals">
             Afficher les nombres avec 2 décimales:
           </label>
           <input
             id="setting2decimals"
+            :checked="settingManager.settings.twoDecimals"
             class="form-check-input"
             type="checkbox"
-            :checked="settingManager.settings.twoDecimals"
             @change="twoDecimalsChange"
           >
         </div>
         <div class="row d-flex mb-3">
-          <div class="col-7 my-auto">
+          <label class="col-7 my-auto" for="settingSort">
             Trier les dépenses et revenus par ordre:
-          </div>
+          </label>
           <div class="col">
-            <select class="form-select" @change="sortTypeChange">
+            <select
+              id="settingSort"
+              class="form-select"
+              @change="sortTypeChange"
+            >
               <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="settingManager.settings.sort === sortType" :value="sortType">
                 {{ Texts.sortTypes[sortType] }}
               </option>
             </select>
           </div>
-          <small class="text-muted d-block">
+          <small class="text-body-secondary d-block">
             Pour un tableau indexé par date, l’ordre alphabétique s’applique à la date.
           </small>
         </div>
         <div class="row d-flex mb-3">
-          <div class="col-7 my-auto">
+          <label class="col-7 my-auto" for="settingSymbol">
             Utiliser le symbol monétaire:
-          </div>
+          </label>
           <div class="col">
-            <select class="form-select" @change="currencyChange">
+            <select
+              id="settingSymbol"
+              class="form-select"
+              @change="currencyChange"
+            >
               <option v-for="currency in Object.values(Currency)" :key="currency" :selected="settingManager.settings.currency === currency" :value="currency">
                 {{ settingManager.getCurrencySymbol(currency, true) }}
               </option>

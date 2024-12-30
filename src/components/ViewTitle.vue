@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Texts from '@/texts'
 import { Path } from '@/types'
+import Texts from '@/texts'
 
 const props = defineProps<{ emoji: string, path: Path, unpaded?: boolean }>()
 const unpadedClass = props.unpaded ? 'ps-0' : ''
@@ -13,7 +13,7 @@ const unpadedClass = props.unpaded ? 'ps-0' : ''
       {{ Texts.heads[path].title }}
     </h1>
     <p class="text-center">
-      <span class="fst-italic fw-lighter">
+      <span class="fst-italic text-body-secondary ">
         {{ Texts.heads[path].meta.description }}
       </span>
       <span class="ms-1 fw-normal">{{ emoji }}</span>

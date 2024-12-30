@@ -4,14 +4,14 @@ import '@/assets/secondary.scss'
 import Distribution from '@/components/Distribution.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import isMobile from 'is-mobile'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
+import isMobile from 'is-mobile'
 
+import BrowserStorage, { StorageKey } from '@/browserStorage'
+import { Path } from '@/types'
 import { limitedEvaluate } from '@/helpers'
 import settingManager from '@/managers/settingManager'
 import { sexyAmount } from '@/formaters'
-import BrowserStorage, { StorageKey } from '@/browserStorage'
-import { Path } from '@/types'
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
@@ -51,10 +51,10 @@ function computeValue() : number {
 
 <template>
   <div class="container">
-    <ViewTitle :path="Path.Simulator" emoji="🛋️" unpaded />
+    <ViewTitle emoji="🛋️" :path="Path.Simulator" unpaded />
     <div class="row mb-4 mt-4">
       <div class="col-md-5 col-sm-12">
-        <label for="expenseInput" class="form-label fw-bold">Prix ou formule</label>
+        <label class="form-label fw-bold" for="expenseInput">Prix ou formule</label>
         <div class="input-group mb-3">
           <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
             {{ sexyAmount(computeValue()) }}
@@ -64,11 +64,11 @@ function computeValue() : number {
             ref="inputRef"
             v-model="expenseValue"
             v-tooltip
-            data-bs-placement="bottom"
             class="form-control"
-            type="text"
-            placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
+            data-bs-placement="bottom"
             data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
+            placeholder="Exemples: 500 ou 10 * 50 ou 1000 / 2"
+            type="text"
           >
           <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
             {{ sexyAmount(computeValue()) }}

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import TransactionsEdit from '../TransactionsEdit.vue'
 import type HistoryTransactionsShow from '../HistoryTransactionsShow.vue'
+import TransactionsEdit from '../TransactionsEdit.vue'
 
 import { computed, nextTick, ref, toRefs } from 'vue'
 
+import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
 import { AccountType } from '@/account'
 import Texts from '@/texts'
-import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
 import settingManager from '@/managers/settingManager'
 import userManager from '@/managers/userManager'
 
@@ -41,6 +41,10 @@ const lgClass = computed(() => {
     ? 'col-lg-12' // Then show the transaction array full screen
     : 'col-lg-6'  // Otherwise a transaction array takes 50% of the screen to show both
 })
+
+function hideTransactions(transactionType: TransactionType) {
+  props.account.settings.show[transactionType] = false
+}
 </script>
 
 <template>
@@ -56,12 +60,15 @@ const lgClass = computed(() => {
         </h1>
         <img
           v-tooltip="{ disposeOnClick: true }"
-          src="@/assets/icons/hide.png"
+          :alt="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
           class="icon-container icon-hoverable position-absolute me-2 end-0"
-          alt="Cacher"
           data-bs-placement="left"
-          data-bs-title="Cacher"
-          @click="() => props.account.settings.show[props.transactionType] = false"
+          :data-bs-title="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
+          role="button"
+          src="@/assets/icons/hide.png"
+          tabindex="0"
+          @click="hideTransactions(transactionType)"
+          @keydown.enter="hideTransactions(transactionType)"
         >
       </div>
 
@@ -81,12 +88,12 @@ const lgClass = computed(() => {
           ref="newTransactionInputName"
           v-model="newTransaction.name"
           v-tooltip
-          type="text"
-          :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
-          class="form-control"
           aria-label="Nom de la transaction"
+          class="form-control"
           data-bs-placement="bottom"
           :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
+          :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
+          type="text"
           @keydown.enter="transactionAdd"
         >
         <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
@@ -95,12 +102,12 @@ const lgClass = computed(() => {
         <input
           v-model="newTransaction.value"
           v-tooltip
-          data-bs-placement="bottom"
-          type="text"
-          placeholder="Valeur ou formule"
-          class="form-control"
-          data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
           aria-label="Valeur de la transaction"
+          class="form-control"
+          data-bs-placement="bottom"
+          data-bs-title="Exemples:<ul><li class='text-start'>500</li><li class='text-start'>10 * 50</li><li class='text-start'>1000 / 2</li><li class='text-start'>250 + 250</li>"
+          placeholder="Valeur ou formule"
+          type="text"
           @keydown.enter="transactionAdd"
         >
         <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
@@ -120,7 +127,14 @@ const lgClass = computed(() => {
             {{ name }}
           </option>
         </select>
-        <button class="btn btn-secondary mt-2 mt-sm-0" :disabled="!newTransaction.name || !newTransaction.value" @click="transactionAdd">
+        <button
+          aria-label="Ajouter une entrée"
+          class="btn btn-secondary mt-2 mt-sm-0"
+          :disabled="!newTransaction.name || !newTransaction.value"
+          tabindex="0"
+          @click="transactionAdd"
+          @keydown.enter="transactionAdd"
+        >
           Ajouter
         </button>
       </div>

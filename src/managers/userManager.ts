@@ -1,7 +1,7 @@
 import { reactive, watch } from 'vue'
 
-import User from '@/user'
 import BrowserStorage, { StorageKey } from '@/browserStorage'
+import User from '@/user'
 
 class UserManager {
   readonly users = reactive<User[]>([])

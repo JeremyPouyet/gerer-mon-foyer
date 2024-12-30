@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import UserLine from '@/components/UserLine.vue'
 
-import isMobile from 'is-mobile'
 import { onMounted, ref } from 'vue'
+import isMobile from 'is-mobile'
 
 import userManager from '@/managers/userManager'
 
@@ -31,15 +31,15 @@ onMounted(() => {
     <input
       ref="inputRef"
       v-model="username"
-      type="text"
-      placeholder="Prénom"
       class="form-control"
+      placeholder="Prénom"
+      type="text"
       @keydown.enter="userCreate"
     >
     <button
-      type="button"
       class="btn btn-secondary btn-sm"
       :disabled="!username"
+      type="button"
       @click="userCreate"
     >
       Ajouter

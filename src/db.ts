@@ -1,13 +1,13 @@
 import { nextTick, reactive, watch } from 'vue'
 
-import userManager from '@/managers/userManager'
-import historyManager from '@/managers/historyManager'
 import Account, { AccountType } from '@/account'
-import projectManager from '@/managers/projectManager'
-import unsavedManager from '@/managers/unsavedManager'
-import notificationManager from '@/managers/notificationManager'
-import settingManager from '@/managers/settingManager'
 import BrowserStorage, { StorageKey } from './browserStorage'
+import historyManager from '@/managers/historyManager'
+import notificationManager from '@/managers/notificationManager'
+import projectManager from '@/managers/projectManager'
+import settingManager from '@/managers/settingManager'
+import unsavedManager from '@/managers/unsavedManager'
+import userManager from '@/managers/userManager'
 
 const persistatbleKeys = ['account', 'history', 'projects', 'settings', 'users'] as const
 

@@ -7,12 +7,12 @@ const unpadedClass = props.unpaded ? 'unpaded px-0' : ''
   <span
     v-if="text"
     v-tooltip
-    data-toggle="tooltip"
-    :data-bs-title="text"
-    :class="unpadedClass"
     class="translate-middle badge badge-position"
+    :class="unpadedClass"
+    :data-bs-title="text"
+    data-toggle="tooltip"
   >
-    <img src="@/assets/icons/message.png" class="icon-container-small" alt="Note icon">
+    <img alt="Note icon" class="icon-container-small" src="@/assets/icons/message.png">
   </span>
 </template>
 

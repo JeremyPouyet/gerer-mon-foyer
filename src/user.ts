@@ -1,6 +1,7 @@
-import { newId } from '@/helpers'
-import type { ID } from '@/types'
 import Account, { AccountType } from '@/account'
+import type { ID } from '@/types'
+import { newId } from '@/helpers'
+
 
 export default class User {
   readonly account: Account

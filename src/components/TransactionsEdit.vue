@@ -6,11 +6,12 @@ import TableHeader from './transactionsTable/TableHeader.vue'
 
 import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
 
-import type Account from '@/account'
+import { Frequency, type ID, type Transaction, TransactionType, frequencies } from '@/types'
 import { useTransactions, valueAs } from '@/helpers'
-import { frequencies, Frequency, type ID, type Transaction, TransactionType } from '@/types'
-import { sexyNumber } from '@/formaters'
+import type Account from '@/account'
 import { AccountType } from '@/account'
+import Texts from '@/texts'
+import { sexyNumber } from '@/formaters'
 import userManager from '@/managers/userManager'
 
 const props = defineProps<{
@@ -108,12 +109,19 @@ function deleteTransaction(transaction: Transaction) {
           v-model="editedName"
           class="char-width-20"
           type="text"
-          @keydown.esc="cancelEditTransactionName"
           @keydown.enter="executeEditTransactionName"
+          @keydown.esc="cancelEditTransactionName"
           @keydown.tab="executeEditTransactionName"
         >
       </td>
-      <td v-else class="align-middle editable-cell" @click="() => startEditTransactionName(transaction)">
+      <td
+        v-else
+        :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}`"
+        class="align-middle editable-cell"
+        tabindex="0"
+        @click="startEditTransactionName(transaction)"
+        @keydown.enter="startEditTransactionName(transaction)"
+      >
         <span>{{ transaction.name }}</span>
         <NoteIcon :text="transaction.note" />
       </td>
@@ -123,14 +131,21 @@ function deleteTransaction(transaction: Transaction) {
           <input
             :ref="el => setActiveInput(el)"
             v-model="editedValue"
-            type="text"
             class="w-100"
-            @keydown.esc="cancelEditTransactionValue"
+            type="text"
             @keydown.enter="executeEditTransactionValue"
+            @keydown.esc="cancelEditTransactionValue"
             @keydown.tab="executeEditTransactionValue"
           >
         </td>
-        <td v-else class="text-end align-middle editable-cell" @click="() => startEditTransactionValue(transaction, frequency)">
+        <td
+          v-else
+          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]})`"
+          class="text-end align-middle editable-cell"
+          tabindex="0"
+          @click="startEditTransactionValue(transaction, frequency)"
+          @keydown.enter="startEditTransactionValue(transaction, frequency)"
+        >
           <span
             v-tooltip="{ disposeOnClick: true }"
             :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
@@ -152,11 +167,13 @@ function deleteTransaction(transaction: Transaction) {
         />
         <img
           v-tooltip="{ disposeOnClick: true }"
-          src="@/assets/icons/cross.png"
           alt="Supprimer"
-          data-bs-title="Supprimer"
           class="icon-container-small icon-hoverable ms-2"
-          @click="() => deleteTransaction(transaction)"
+          data-bs-title="Supprimer"
+          src="@/assets/icons/cross.png"
+          tabindex="0"
+          @click="deleteTransaction(transaction)"
+          @keydown.enter="deleteTransaction(transaction)"
         >
       </td>
     </tr>

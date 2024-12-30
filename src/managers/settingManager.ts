@@ -1,8 +1,9 @@
 import { reactive } from 'vue'
-import notificationManager from '@/managers/notificationManager'
-import Texts from '@/texts'
-import { SortType } from '../types'
+
 import BrowserStorage, { StorageKey } from '@/browserStorage'
+import { SortType } from '@/types'
+import Texts from '@/texts'
+import notificationManager from '@/managers/notificationManager'
 
 // ISO 4217 currencies
 export enum Currency {

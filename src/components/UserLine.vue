@@ -56,8 +56,8 @@ function userDelete(user: User) : void {
         v-model="newName"
         type="text"
         @keydown.enter="executeEditName"
-        @keydown.tab="executeEditName"
         @keydown.esc="cancelEdit"
+        @keydown.tab="executeEditName"
       >
     </span>
     <div class="text-nowrap">
@@ -65,18 +65,22 @@ function userDelete(user: User) : void {
         v-if="isEditing === false"
         v-tooltip="{ disposeOnClick: true }"
         :alt="`Éditer le prénom ${user.name}`"
+        class="icon-container-small icon-hoverable me-2"
         data-bs-title="Éditer le prénom"
         src="@/assets/icons/pencil.png"
-        class="icon-container-small icon-hoverable me-2"
+        tabindex="0"
         @click="startEditName"
+        @keydown.enter="startEditName"
       >
       <img
         v-tooltip="{ disposeOnClick: true }"
-        src="@/assets/icons/cross.png"
         :alt="`Supprimer ${user.name} des habitants`"
-        data-bs-title="Supprimer des habitants"
         class="icon-container-small icon-hoverable"
-        @click="() => userDelete(user)"
+        data-bs-title="Supprimer des habitants"
+        src="@/assets/icons/cross.png"
+        tabindex="0"
+        @click="userDelete(user)"
+        @keydown.enter="userDelete(user)"
       >
     </div>
   </div>

@@ -2,19 +2,15 @@
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
-import { sexyDate } from '@/formaters'
 import historyManager, { type Sample } from '@/managers/historyManager'
+import { sexyDate } from '@/formaters'
 
 const emit = defineEmits(['switchSample'])
 
-const activeDate = ref<string | null | undefined>(null)
+const activeDate = ref<string | null | undefined>(historyManager.activeDate)
 const history = ref<Sample[]>(historyManager.history)
-
-onMounted(() => {
-  activeDate.value = sessionStorage.getItem('currentHistoryDate')
-})
 
 function switchSample(date: string) : void {
   const newSample = historyManager.get(date)
@@ -43,11 +39,14 @@ function removeSample(date: string) : void {
       <div class="d-flex justify-content-between container-fluid align-items-center">
         <span
           v-tooltip
+          :aria-pressed="activeDate === sample.date"
+          :class="{ active: activeDate === sample.date }"
           data-bs-placement="right"
           data-bs-title="Cliquer pour sélectionner"
           style="cursor: pointer"
-          :class="{ active: activeDate === sample.date }"
-          @click="() => switchSample(sample.date)"
+          tabindex="0"
+          @click="switchSample(sample.date)"
+          @keydown.enter="switchSample(sample.date)"
         >
           {{ sexyDate(sample.date) }}
           <NoteIcon :text="sample.note" :unpaded="true" />
@@ -56,11 +55,12 @@ function removeSample(date: string) : void {
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            src="@/assets/icons/cross.png"
             alt="Supprimer"
-            data-bs-title="Supprimer de l’historique"
             class="icon-container-small icon-hoverable ms-2"
-            @click="() => removeSample(sample.date)"
+            data-bs-title="Supprimer de l’historique"
+            src="@/assets/icons/cross.png"
+            tabindex="0"
+            @click="removeSample(sample.date)"
           >
         </div>
       </div>

@@ -6,10 +6,10 @@
   * - vue: https://eslint.vuejs.org/rules/
   **/
 
-import js from '@eslint/js'
 import eslintPluginVue from 'eslint-plugin-vue'
-import ts from 'typescript-eslint'
+import js from '@eslint/js'
 import stylisticTs from '@stylistic/eslint-plugin-ts'
+import ts from 'typescript-eslint'
 
 // eslint-disable-next-line no-restricted-syntax
 const apostropheMsg = 'Use the curly apostrophe (’) instead of the straight apostrophe (\').'
@@ -46,9 +46,10 @@ export default ts.config(
       '@stylistic/ts/semi': ['error', 'never'],
       // eslint-disable-next-line no-restricted-syntax
       'no-restricted-syntax': ['error', { message: apostropheMsg, selector: 'Literal[value=/.*\'.*/]' }],
-      'sort-imports': ['error', { allowSeparatedGroups: true, ignoreCase: true, ignoreDeclarationSort: true }],
+      'sort-imports': ['error', { allowSeparatedGroups: true, ignoreCase: false, ignoreDeclarationSort: false }],
       'sort-keys': ['error', 'asc', { 'caseSensitive': true, 'natural': true }],
       'sort-vars': ['error'],
+      'vue/attributes-order': ['error', { alphabetical: true }],
       'vue/max-attributes-per-line': ['error', { multiline: { max: 1 }, singleline: { max: 5 } }],
       'vue/multi-word-component-names': 'off',
       'vue/no-mutating-props': ['error', { shallowOnly: true }],

@@ -109,8 +109,8 @@ onMounted(() => {
         v-model="newProjectName"
         type="text"
         @keydown.enter="executeEditProjectName"
-        @keydown.tab="executeEditProjectName"
         @keydown.esc="cancelEditProjectName"
+        @keydown.tab="executeEditProjectName"
       >
     </h3>
     <h3 v-else>
@@ -121,7 +121,9 @@ onMounted(() => {
         class="icon-container-small ms-2 icon-hoverable"
         data-bs-title="Éditer le nom du projet"
         src="@/assets/icons/pencil.png"
+        tabindex="0"
         @click="startEditProjectName"
+        @keydown.enter="startEditProjectName"
       >
     </h3>
   </div>
@@ -136,16 +138,16 @@ onMounted(() => {
               <th scope="col">
                 Dépense
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Quantitée
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Prix
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Total
               </th>
-              <th scope="col" class="text-end">
+              <th class="text-end" scope="col">
                 Actions
               </th>
             </tr>
@@ -158,12 +160,18 @@ onMounted(() => {
                   v-model="editedValue"
                   class="char-width-20"
                   type="text"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpenseName"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpenseName"
                 >
               </td>
-              <td v-else class="editable-cell" @click="() => startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())">
+              <td
+                v-else
+                class="editable-cell"
+                tabindex="0"
+                @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
+                @keypress.enter="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
+              >
                 <span>{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
@@ -173,26 +181,38 @@ onMounted(() => {
                   v-model="editedValue"
                   class="char-width-20"
                   type="number"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpenseQuantity"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpenseQuantity"
                 >
               </td>
-              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())">
+              <td
+                v-else
+                class="editable-cell text-end"
+                tabindex="0"
+                @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
+                @keypress.enter="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
+              >
                 <span>{{ expense.quantity }}</span>
               </td>
-              <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle  text-end">
+              <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle text-end">
                 <input
                   :ref="el => setActiveInput(el)"
                   v-model="editedValue"
                   class="char-width-20"
                   type="number"
-                  @keydown.esc="cancelEdit"
                   @keydown.enter="executeEditExpensePrice"
+                  @keydown.esc="cancelEdit"
                   @keydown.tab="executeEditExpensePrice"
                 >
               </td>
-              <td v-else class="editable-cell text-end" @click="() => startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())">
+              <td
+                v-else
+                class="editable-cell text-end"
+                tabindex="0"
+                @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
+                @keydown.enter="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
+              >
                 <span>{{ sexyNumber(expense.price) }}</span>
               </td>
               <td class="align-middle text-end">
@@ -205,11 +225,13 @@ onMounted(() => {
                 />
                 <img
                   v-tooltip="{ disposeOnClick: true }"
-                  src="@/assets/icons/cross.png"
-                  alt="Supprimer"
-                  data-bs-title="Supprimer"
+                  alt="Supprimer la dépense"
                   class="icon-container-small icon-hoverable ms-2"
-                  @click="() => currentProject.expenseDelete(expense.id)"
+                  data-bs-title="Supprimer"
+                  src="@/assets/icons/cross.png"
+                  tabindex="0"
+                  @click="currentProject.expenseDelete(expense.id)"
+                  @keydown.enter="currentProject.expenseDelete(expense.id)"
                 >
               </td>
             </tr>

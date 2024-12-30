@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import projectManager from '@/managers/projectManager'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
+
 import { onMounted, onUnmounted, ref } from 'vue'
 
 import type { ID } from '@/types'
 import type Project from '@/project'
+import projectManager from '@/managers/projectManager'
 import { sexyDate } from '@/formaters'
 
 const activeId = ref(projectManager.getCurrent().id)
@@ -43,11 +44,11 @@ onMounted(() => {
           <span
             v-tooltip
             class="fs-5"
+            :class="{ active: activeId === project.id }"
             data-bs-placement="right"
             data-bs-title="Cliquer pour sélectionner"
             style="cursor: pointer"
-            :class="{ active: activeId === project.id }"
-            @click="() => switchProject(project.id)"
+            @click="switchProject(project.id)"
           >
             {{ project.name }}
             <NoteIcon :text="project.note" :unpaded="true" />
@@ -57,11 +58,13 @@ onMounted(() => {
           <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            src="@/assets/icons/cross.png"
             alt="Supprimer"
-            data-bs-title="Supprimer des projets"
             class="icon-container-small icon-hoverable ms-2"
-            @click="() => projectManager.delete(project.id)"
+            data-bs-title="Supprimer des projets"
+            src="@/assets/icons/cross.png"
+            tabindex="0"
+            @click="projectManager.delete(project.id)"
+            @keydown.enter="projectManager.delete(project.id)"
           >
         </div>
       </div>
@@ -84,9 +87,9 @@ onMounted(() => {
       @keydown.enter="projectCreate"
     >
     <button
-      type="button"
       class="btn btn-secondary btn-sm"
       :disabled="!projectName"
+      type="button"
       @click="projectCreate"
     >
       Créer

@@ -1,17 +1,19 @@
 <template>
   <section v-once class="container">
     <header class="text-center mb-5">
-      <h1>Répartissez vos dépenses communes de manière équitable</h1>
-      <p class="lead">
+      <h1 class="mb-3">
+        Répartissez vos dépenses communes équitablement
+      </h1>
+      <p class="lead text-body-secondary">
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 
-      <RouterLink class="btn btn-primary btn-lg mt-3" to="/budget">
+      <RouterLink class="btn btn-primary btn-lg mt-4 shadow-sm" to="/budget">
         Commencer maintenant
       </RouterLink>
     </header>
 
-    <section class="mb-5 text-center text-block">
+    <section class="mb-5 text-center text-block shadow-sm">
       <h2 class="mb-3">
         L’importance d’une répartition équitable
       </h2>
@@ -21,7 +23,7 @@
       </p>
     </section>
 
-    <section class="mb-5 text-center text-block">
+    <section class="mb-5 text-center text-block shadow-sm">
       <h2 class="mb-3">
         Exemple simple de répartition
       </h2>
@@ -39,7 +41,7 @@
       <p>Avec une répartition 50/50, Sam aurait payé 250 €, ce qui représente un avantage de 7 800 € sur 10 ans avec cette méthode.</p>
     </section>
 
-    <section class="mb-5 text-center text-block">
+    <section class="mb-5 text-center text-block shadow-sm">
       <h2 class="mb-3">
         Comment ça fonctionne ?
       </h2>
