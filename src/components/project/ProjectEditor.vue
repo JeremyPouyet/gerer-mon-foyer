@@ -120,6 +120,7 @@ onMounted(() => {
         alt="Éditer le nom du projet"
         class="icon-container-small ms-2 icon-hoverable"
         data-bs-title="Éditer le nom du projet"
+        role="button"
         src="@/assets/icons/pencil.png"
         tabindex="0"
         @click="startEditProjectName"
@@ -168,6 +169,7 @@ onMounted(() => {
               <td
                 v-else
                 class="editable-cell"
+                role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
@@ -189,6 +191,7 @@ onMounted(() => {
               <td
                 v-else
                 class="editable-cell text-end"
+                role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
@@ -209,6 +212,7 @@ onMounted(() => {
               <td
                 v-else
                 class="editable-cell text-end"
+                role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
                 @keydown.enter="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
@@ -228,6 +232,7 @@ onMounted(() => {
                   alt="Supprimer la dépense"
                   class="icon-container-small icon-hoverable ms-2"
                   data-bs-title="Supprimer"
+                  role="button"
                   src="@/assets/icons/cross.png"
                   tabindex="0"
                   @click="currentProject.expenseDelete(expense.id)"

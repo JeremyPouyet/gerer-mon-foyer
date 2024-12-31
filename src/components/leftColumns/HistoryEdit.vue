@@ -35,14 +35,16 @@ function removeSample(date: string) : void {
 
 <template>
   <ul class="item-list p-0">
-    <li v-for="sample in history" :key="sample.date" class="item py-2">
+    <li v-for="sample in history" :key="sample.date" aria-live="polite" class="item py-2">
       <div class="d-flex justify-content-between container-fluid align-items-center">
         <span
           v-tooltip
+          :aria-label="`Sélectionner la date du ${sexyDate(sample.date)}`"
           :aria-pressed="activeDate === sample.date"
           :class="{ active: activeDate === sample.date }"
           data-bs-placement="right"
           data-bs-title="Cliquer pour sélectionner"
+          role="button"
           style="cursor: pointer"
           tabindex="0"
           @click="switchSample(sample.date)"
@@ -55,9 +57,11 @@ function removeSample(date: string) : void {
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            alt="Supprimer"
+            alt="Supprimer de l’historique"
+            :aria-label="`Supprimer la date du ${sexyDate(sample.date)} de l’historique`"
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer de l’historique"
+            role="button"
             src="@/assets/icons/cross.png"
             tabindex="0"
             @click="removeSample(sample.date)"

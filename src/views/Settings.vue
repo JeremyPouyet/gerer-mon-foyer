@@ -128,7 +128,7 @@ const unsavedChangeText = computed(() => {
         </div>
 
         <p class="fw-bold d-flex">
-          <img alt="" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
+          <img aria-hidden="true" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
           <span class="ms-1">Sauvegarde:</span>
         </p>
         <div class="row d-flex mb-3">
@@ -142,7 +142,7 @@ const unsavedChangeText = computed(() => {
               <button class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
                 Exporter une sauvegarde
               </button>
-              <small class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
+              <small aria-describedby="unsaved-count" class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
             </div>
           </div>
         </div>
@@ -192,6 +192,7 @@ const unsavedChangeText = computed(() => {
           <div class="col">
             <select
               id="settingSort"
+              aria-label="Sélectionner le mode de tri des dépenses et revenus"
               class="form-select"
               @change="sortTypeChange"
             >

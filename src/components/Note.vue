@@ -84,6 +84,7 @@ function noteCancel() : void {
     alt="Annoter"
     class="icon-container-small icon-hoverable"
     data-bs-title="Annoter"
+    role="button"
     src="@/assets/icons/take-note.png"
     tabindex="0"
     @click="toggleNotePopup"
