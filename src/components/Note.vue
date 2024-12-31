@@ -17,7 +17,7 @@ const showNotePopup = ref<boolean>(false)
 const popupPosition = ref<'above' | 'below'>('above')
 const notePopupRef = ref<HTMLElement | null>(null) // Reference to the note-popup element
 
-async function toggleNotePopup(event: MouseEvent): Promise<void> {
+async function toggleNotePopup(event: MouseEvent | KeyboardEvent): Promise<void> {
   showNotePopup.value = !showNotePopup.value
 
   // await for the page to be refreshed.
@@ -25,13 +25,15 @@ async function toggleNotePopup(event: MouseEvent): Promise<void> {
   await nextTick()
 
   const popupElement = notePopupRef.value
+  const selectedElement = event.target as HTMLElement
 
-  if (!popupElement || !showNotePopup.value) return
+  if (!popupElement || !selectedElement || !showNotePopup.value) return
 
   const windowWidth = window.innerWidth
   const popupRect = popupElement.getBoundingClientRect()
+  const elementRect = selectedElement.getBoundingClientRect()
 
-  popupPosition.value = event.clientY - popupElement.offsetHeight < 0 ? 'below' : 'above'
+  popupPosition.value = elementRect.top - popupElement.offsetHeight < 0 ? 'below' : 'above'
   popupPosition.value += ' '
   popupPosition.value += popupRect.left < 0 || popupRect.right > windowWidth ? 'left' : 'right'
 }
@@ -85,6 +87,7 @@ function noteCancel() : void {
     src="@/assets/icons/take-note.png"
     tabindex="0"
     @click="toggleNotePopup"
+    @keypress.enter="toggleNotePopup"
   >
 </template>
 
