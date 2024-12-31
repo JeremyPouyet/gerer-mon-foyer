@@ -118,6 +118,7 @@ function deleteTransaction(transaction: Transaction) {
         v-else
         :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}`"
         class="align-middle editable-cell"
+        role="button"
         tabindex="0"
         @click="startEditTransactionName(transaction)"
         @keydown.enter="startEditTransactionName(transaction)"
@@ -142,6 +143,7 @@ function deleteTransaction(transaction: Transaction) {
           v-else
           :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]})`"
           class="text-end align-middle editable-cell"
+          role="button"
           tabindex="0"
           @click="startEditTransactionValue(transaction, frequency)"
           @keydown.enter="startEditTransactionValue(transaction, frequency)"
@@ -170,6 +172,7 @@ function deleteTransaction(transaction: Transaction) {
           alt="Supprimer"
           class="icon-container-small icon-hoverable ms-2"
           data-bs-title="Supprimer"
+          role="button"
           src="@/assets/icons/cross.png"
           tabindex="0"
           @click="deleteTransaction(transaction)"

@@ -61,6 +61,7 @@ onMounted(() => {
             alt="Supprimer"
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer des projets"
+            role="button"
             src="@/assets/icons/cross.png"
             tabindex="0"
             @click="projectManager.delete(project.id)"

@@ -129,6 +129,7 @@ onMounted(() => {
         <td
           v-else
           class="editable-cell"
+          role="button"
           tabindex="0"
           @click="startEditDate(payment)"
           @keydown.enter="startEditDate(payment)"
@@ -149,6 +150,7 @@ onMounted(() => {
         <td
           v-else
           class="editable-cell"
+          role="button"
           tabindex="0"
           @click="startEditComment(payment)"
           @keydown.enter="startEditComment(payment)"
@@ -169,6 +171,7 @@ onMounted(() => {
         <td
           v-else
           class="editable-cell text-end"
+          role="button"
           tabindex="0"
           @click="startEditValue(payment)"
           @keydown.enter="startEditValue(payment)"
@@ -181,6 +184,7 @@ onMounted(() => {
             alt="Supprimer le payment"
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer"
+            role="button"
             src="@/assets/icons/cross.png"
             tabindex="0"
             @click="currentProject.paymentDelete(payment.id)"
