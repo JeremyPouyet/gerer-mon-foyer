@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <ul class="item-list p-0">
-    <li v-for="user in userManager.users" :key="user.id" class="item py-2">
+    <li v-for="user in userManager.users" :key="user.id" aria-live="polite" class="item py-2">
       <UserLine :user="user" />
     </li>
   </ul>
@@ -31,6 +31,7 @@ onMounted(() => {
     <input
       ref="inputRef"
       v-model="username"
+      aria-label="Prénom du nouvel habitant"
       class="form-control"
       placeholder="Prénom"
       type="text"

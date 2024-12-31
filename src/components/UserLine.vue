@@ -45,7 +45,8 @@ function userDelete(user: User) : void {
     <a
       v-if="isEditing === false"
       v-tooltip
-      data-bs-title="Cliquer pour voir"
+      :aria-label="`Voir l’habitant ${user.name }`"
+      data-bs-title="Cliquez pour voir l’habitant"
       :href="`#${user.name}`"
     >
       {{ user.name }}
@@ -54,6 +55,7 @@ function userDelete(user: User) : void {
       <input
         ref="input"
         v-model="newName"
+        aria-label="Modifier le prénom de l’habitant"
         type="text"
         @keydown.enter="executeEditName"
         @keydown.esc="cancelEdit"
@@ -75,7 +77,7 @@ function userDelete(user: User) : void {
       >
       <img
         v-tooltip="{ disposeOnClick: true }"
-        :alt="`Supprimer ${user.name} des habitants`"
+        :aria-label="`Supprimer ${user.name} des habitants`"
         class="icon-container-small icon-hoverable"
         data-bs-title="Supprimer des habitants"
         role="button"
