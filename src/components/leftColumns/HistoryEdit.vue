@@ -57,7 +57,7 @@ function removeSample(date: string) : void {
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            alt="Supprimer"
+            alt="Supprimer de l’historique"
             :aria-label="`Supprimer la date du ${sexyDate(sample.date)} de l’historique`"
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer de l’historique"

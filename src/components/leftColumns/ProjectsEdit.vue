@@ -38,17 +38,21 @@ onMounted(() => {
 
 <template>
   <ul class="item-list p-0">
-    <li v-for="project in projects" :key="project.id" class="item py-2">
+    <li v-for="project in projects" :key="project.id" aria-live="polite" class="item py-2">
       <div class="d-flex justify-content-between container-fluid align-items-center">
         <div>
           <span
             v-tooltip
+            :aria-label="`Sélectionner le projet ${project.name}`"
             class="fs-5"
             :class="{ active: activeId === project.id }"
             data-bs-placement="right"
             data-bs-title="Cliquer pour sélectionner"
+            role="button"
             style="cursor: pointer"
+            tabindex="0"
             @click="switchProject(project.id)"
+            @keydown.enter="switchProject(project.id)"
           >
             {{ project.name }}
             <NoteIcon :text="project.note" :unpaded="true" />
@@ -58,7 +62,8 @@ onMounted(() => {
           <Note :item="project" @update="note => projectManager.update({ id: project.id, note })" />
           <img
             v-tooltip="{ disposeOnClick: true }"
-            alt="Supprimer"
+            alt="Supprimer le projet"
+            :aria-label="`Supprimer le projet ${project.name}`"
             class="icon-container-small icon-hoverable ms-2"
             data-bs-title="Supprimer des projets"
             role="button"
@@ -82,12 +87,14 @@ onMounted(() => {
   <div class="input-group">
     <input
       v-model="projectName"
+      aria-label="Nom du projet"
       class="form-control"
       placeholder="Nom du projet"
       type="text"
       @keydown.enter="projectCreate"
     >
     <button
+      :aria-label="`Créer le projet ${projectName}`"
       class="btn btn-secondary btn-sm"
       :disabled="!projectName"
       type="button"
