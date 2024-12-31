@@ -72,6 +72,7 @@ async function historicize() {
                 Paramètres
                 <div
                   v-if="unsavedManager.count.value > 0"
+                  id="unsaved-count"
                   v-tooltip
                   class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary"
                   data-bs-placement="bottom"
