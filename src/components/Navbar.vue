@@ -62,12 +62,12 @@ async function historicize() {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li v-for="[uri, label, src] in menuItems" :key="label" class="nav-item">
             <RouterLink active-class="active" class="nav-link" :to="uri">
-              <img aria-hidden="true" class="icon-container me-2" :src="src">{{ label }}
+              <img alt="" aria-hidden="true" class="icon-container me-2" :src="src">{{ label }}
             </RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink active-class="active" class="nav-link" to="/settings">
-              <img aria-hidden="true" class="icon-container me-2" src="@/assets/icons/cog.png">
+              <img alt="" aria-hidden="true" class="icon-container me-2" src="@/assets/icons/cog.png">
               <span>
                 Paramètres
                 <div

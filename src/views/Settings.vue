@@ -128,7 +128,7 @@ const unsavedChangeText = computed(() => {
         </div>
 
         <p class="fw-bold d-flex">
-          <img aria-hidden="true" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
+          <img alt="" aria-hidden="true" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
           <span class="ms-1">Sauvegarde:</span>
         </p>
         <div class="row d-flex mb-3">
