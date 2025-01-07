@@ -48,7 +48,9 @@ onUnmounted(() => {
       role="region"
     >
       <div class="container">
-        <h3 id="sticky-header">{{ title }}</h3>
+        <h3 id="sticky-header">
+          {{ title }}
+        </h3>
         <hr class="mb-3 mt-0">
         <slot />
       </div>
