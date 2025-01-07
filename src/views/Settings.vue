@@ -139,10 +139,10 @@ const unsavedChangeText = computed(() => {
           </div>
           <div class="col my-auto">
             <div class="text-end">
-              <button class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
+              <button aria-describedby="export-text" class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
                 Exporter une sauvegarde
               </button>
-              <small aria-describedby="unsaved-count" class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
+              <small id="export-text" class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
             </div>
           </div>
         </div>
@@ -152,10 +152,10 @@ const unsavedChangeText = computed(() => {
           <span class="ms-1">Zone dangereuse:</span>
         </p>
         <div>
-          <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
+          <button aria-describedby="delete-text" class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
             Supprimer toutes mes données
           </button>
-          <small class="text-body-secondary d-block">
+          <small id="delete-text" class="text-body-secondary d-block">
             Cette action est définitive.
             <br>
             Pensez à d'abord faire une sauvegarde.</small>
