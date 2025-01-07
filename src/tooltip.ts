@@ -1,11 +1,14 @@
 import type { DirectiveBinding } from 'vue'
 
 type TooltipElement = HTMLElement & { _tooltipClickHandler?: () => void }
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
 export const tooltip = {
 
   async mounted(el: TooltipElement, binding: DirectiveBinding) {
     if (!el.dataset.bsTitle) return
+
+    if (isTouchDevice && binding.value?.disposeOnClick) return
 
     const { default: Tooltip } = await import('bootstrap/js/dist/tooltip')
 

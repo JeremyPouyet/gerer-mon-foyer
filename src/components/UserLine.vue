@@ -46,7 +46,7 @@ function userDelete(user: User) : void {
       v-if="isEditing === false"
       v-tooltip
       :aria-label="`Voir l’habitant ${user.name }`"
-      data-bs-title="Cliquez pour voir l’habitant"
+      data-bs-title="Cliquer pour voir l’habitant"
       :href="`#${user.name}`"
     >
       {{ user.name }}
@@ -79,7 +79,7 @@ function userDelete(user: User) : void {
         v-tooltip="{ disposeOnClick: true }"
         :aria-label="`Supprimer ${user.name} des habitants`"
         class="icon-container-small icon-hoverable"
-        data-bs-title="Supprimer des habitants"
+        :data-bs-title="`Supprimer ${user.name} des habitants`"
         role="button"
         src="@/assets/icons/cross.png"
         tabindex="0"

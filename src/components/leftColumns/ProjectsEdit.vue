@@ -63,9 +63,9 @@ onMounted(() => {
           <img
             v-tooltip="{ disposeOnClick: true }"
             alt="Supprimer le projet"
-            :aria-label="`Supprimer le projet ${project.name}`"
+            :aria-label="`Supprimer ${project.name} des projets`"
             class="icon-container-small icon-hoverable ms-2"
-            data-bs-title="Supprimer des projets"
+            :data-bs-title="`Supprimer ${project.name} des projets`"
             role="button"
             src="@/assets/icons/cross.png"
             tabindex="0"

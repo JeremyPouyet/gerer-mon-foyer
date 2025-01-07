@@ -40,7 +40,7 @@ function showTransactions(transactionType: TransactionType) {
           :key="transactionType"
           v-tooltip="{ disposeOnClick: true }"
           class="text-container rounded-shadow icon-hoverable d-flex align-items-center p-2"
-          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural}`"
+          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural.toLowerCase()}`"
           role="button"
           tabindex="0"
           @click="showTransactions(transactionType)"
