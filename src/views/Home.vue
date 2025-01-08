@@ -58,10 +58,12 @@
         vous attribuant ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles.
         Utilisez ensuite le
         <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-        <RouterLink class="text-primary-emphasis" to="/simulator">simulateur de dépenses ponctuelles</RouterLink> pour diviser équitablement le prix d’un achat unique, et
+        <RouterLink class="text-primary-emphasis" to="/simulator">simulateur de dépenses ponctuelles</RouterLink> pour diviser équitablement le prix d’un achat unique,
         <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
         <RouterLink class="text-primary-emphasis" to="/history">l’historique</RouterLink>
-        pour suivre l’évolution de vos budgets et dépenses dans le temps.
+        pour suivre l’évolution de vos budgets et dépenses dans le temps et
+        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
+        <RouterLink class="text-primary-emphasis" to="/projects">la gestion de projet</RouterLink> pour vos projets communs comme des travaux, des vacances ou un mariage.
       </p>
     </section>
   </section>
