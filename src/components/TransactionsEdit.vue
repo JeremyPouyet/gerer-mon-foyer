@@ -158,7 +158,7 @@ function deleteTransaction(transaction: Transaction) {
         </td>
       </template>
       <!-- Transaction income percentage -->
-      <td v-if="income" aria-label="Pourcentage du revenu" class="text-end align-middle">
+      <td v-if="income" class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
       <!-- Actions -->
@@ -170,6 +170,7 @@ function deleteTransaction(transaction: Transaction) {
         <img
           v-tooltip="{ disposeOnClick: true }"
           alt="Supprimer"
+          aria-label="Supprimer la ligne"
           class="icon-container-small icon-hoverable ms-2"
           data-bs-title="Supprimer"
           role="button"

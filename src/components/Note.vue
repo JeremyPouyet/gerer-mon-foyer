@@ -81,6 +81,7 @@ function circularTab(event: KeyboardEvent) {
       <textarea
         ref="noteTextareaRef"
         v-model="currentNote"
+        aria-label="Édition de la note"
         cols="30"
         placeholder="Entrez une note"
         rows="4"
