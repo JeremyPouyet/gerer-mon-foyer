@@ -103,7 +103,7 @@ onMounted(() => {
 
 <template>
   <div class="d-flex justify-content-between col-md-11">
-    <h3 v-if="isEditingProjectName">
+    <h2 v-if="isEditingProjectName" class="fs-3">
       <input
         ref="projectNameInput"
         v-model="newProjectName"
@@ -112,8 +112,8 @@ onMounted(() => {
         @keydown.esc="cancelEditProjectName"
         @keydown.tab="executeEditProjectName"
       >
-    </h3>
-    <h3 v-else>
+    </h2>
+    <h2 v-else class="fs-3">
       {{ currentProject.name }}
       <img
         v-tooltip="{ disposeOnClick: true }"
@@ -126,7 +126,7 @@ onMounted(() => {
         @click="startEditProjectName"
         @keydown.enter="startEditProjectName"
       >
-    </h3>
+    </h2>
   </div>
   <hr class="mb-4 mt-0">
   <div class="row">

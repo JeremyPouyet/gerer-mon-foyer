@@ -3,9 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 text-center text-md-start">
-          <h5 class="section-title">
+          <h3 class="section-title">
             Crédits
-          </h5>
+          </h3>
           <p>
             Icons créés par
             <a class="text-primary-emphasis" href="https://www.flaticon.com/authors/juicy-fish" rel="noopener noreferrer" target="_blank">juicy_fish</a>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-md-6 text-center mb-3 mb-md-0 px-5">
-          <h5 class="section-title text-center">
+          <h3 class="section-title text-center">
             <div class="d-flex justify-content-center align-items-center">
               <div class="align-middle me-2">
                 À propos de
@@ -33,7 +33,7 @@
                 Mon <img alt="" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
               </div>
             </div>
-          </h5>
+          </h3>
           <p>
             Ce site est gratuit, ne récupère pas vos informations personnelles et ne nécessite aucune inscription.
             Abusez-en tant qu’il existe !
@@ -44,9 +44,9 @@
         </div>
 
         <div class="col-md-3 text-center text-md-end">
-          <h5 class="section-title">
+          <h3 class="section-title">
             Ressources
-          </h5>
+          </h3>
           <p>
             Code source disponible sur <a class="text-primary-emphasis" href="https://github.com/JeremyPouyet/gerer-mon-foyer" rel="noopener noreferrer" target="_blank">Github</a>
           </p>

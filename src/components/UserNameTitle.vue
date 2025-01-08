@@ -28,11 +28,11 @@ function showTransactions(transactionType: TransactionType) {
     <div class="d-flex justify-content-between">
       <div>
         <!-- Set an id to be used as an inner page anchor -->
-        <h3 :id="name">
+        <h2 :id="name" class="fs-3">
           {{ name }}
           <NoteIcon :text="props.account.note" :unpaded="true" />
           <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
-        </h3>
+        </h2>
       </div>
       <div class="d-flex gap-3">
         <div
