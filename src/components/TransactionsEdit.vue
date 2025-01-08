@@ -116,7 +116,7 @@ function deleteTransaction(transaction: Transaction) {
       </td>
       <td
         v-else
-        :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}`"
+        :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}. Cliquer pour éditer.`"
         class="align-middle editable-cell"
         role="button"
         tabindex="0"
@@ -141,7 +141,7 @@ function deleteTransaction(transaction: Transaction) {
         </td>
         <td
           v-else
-          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]})`"
+          :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]}). Cliquer pour éditer.`"
           class="text-end align-middle editable-cell"
           role="button"
           tabindex="0"
@@ -158,7 +158,7 @@ function deleteTransaction(transaction: Transaction) {
         </td>
       </template>
       <!-- Transaction income percentage -->
-      <td v-if="income" class="text-end align-middle">
+      <td v-if="income" aria-label="Pourcentage du revenu" class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
       <!-- Actions -->

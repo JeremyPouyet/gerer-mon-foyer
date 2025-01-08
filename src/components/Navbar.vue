@@ -87,6 +87,7 @@ async function historicize() {
       </div>
       <button
         v-if="currentPath === '/budget'"
+        aria-label="Ajouter le budget actuel à l’historique"
         class="btn btn-secondary"
         tabindex="0"
         @click="historicize"
