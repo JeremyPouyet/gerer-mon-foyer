@@ -24,6 +24,7 @@ function expenseAdd() : void {
       ref="firstInputRef"
       v-model="newExpense.name"
       v-tooltip
+      aria-label="Nom de la dépense"
       class="form-control"
       data-bs-placement="bottom"
       data-bs-title="Nom de la dépense"
@@ -34,6 +35,7 @@ function expenseAdd() : void {
     <input
       v-model="newExpense.quantity"
       v-tooltip
+      aria-label="Quantité"
       class="form-control"
       data-bs-placement="bottom"
       data-bs-title="Quantité"
@@ -45,10 +47,11 @@ function expenseAdd() : void {
     <input
       v-model="newExpense.price"
       v-tooltip
+      aria-label="Prix unitaire"
       class="form-control mt-2 mt-sm-0"
       data-bs-placement="bottom"
-      data-bs-title="Prix"
-      placeholder="Prix"
+      data-bs-title="Prix unitaire"
+      placeholder="Prix unitaire"
       type="number"
       @keydown.enter="expenseAdd"
     >

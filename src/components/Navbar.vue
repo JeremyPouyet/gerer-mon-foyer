@@ -39,40 +39,40 @@ async function historicize() {
 <template>
   <nav class="bg-primary navbar navbar-expand-md mb-4 shadow-sm">
     <div class="container-fluid">
-      <RouterLink active-class="active" class="navbar-brand py-0" to="/">
+      <RouterLink active-class="active" aria-label="Accueil" class="navbar-brand py-0" to="/">
         <p class="text-center mb-0 lh-1">
           Gérer
         </p>
         <div>
-          Mon <img alt="" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
+          Mon <img alt="Jolie petite maison" aria-hidden="true" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
         </div>
       </RouterLink>
       <button
         aria-controls="navbarNav"
         aria-expanded="false"
-        aria-label="Toggle navigation"
+        aria-label="Afficher la barre de navigation"
         class="navbar-toggler"
         data-bs-target="#navbarNav"
         data-bs-toggle="collapse"
         type="button"
       >
-        <span class="navbar-toggler-icon" />
+        <span aria-hidden="true" class="navbar-toggler-icon" />
       </button>
       <div id="navbarNav" class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li v-for="[uri, label, src] in menuItems" :key="label" class="nav-item">
             <RouterLink active-class="active" class="nav-link" :to="uri">
-              <img alt="" class="icon-container" :src="src">
-              {{ label }}
+              <img alt="" aria-hidden="true" class="icon-container me-2" :src="src">{{ label }}
             </RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink active-class="active" class="nav-link" to="/settings">
-              <img alt="" class="icon-container" src="@/assets/icons/cog.png">
+              <img alt="" aria-hidden="true" class="icon-container me-2" src="@/assets/icons/cog.png">
               <span>
                 Paramètres
                 <div
                   v-if="unsavedManager.count.value > 0"
+                  id="unsaved-count"
                   v-tooltip
                   class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary"
                   data-bs-placement="bottom"
@@ -85,7 +85,14 @@ async function historicize() {
           </li>
         </ul>
       </div>
-      <button v-if="currentPath === '/budget'" class="btn btn-secondary" @click="historicize">
+      <button
+        v-if="currentPath === '/budget'"
+        aria-label="Ajouter le budget actuel à l’historique"
+        class="btn btn-secondary"
+        tabindex="0"
+        @click="historicize"
+        @keypress.enter="historicize"
+      >
         Historiser
       </button>
     </div>

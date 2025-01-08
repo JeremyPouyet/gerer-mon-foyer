@@ -42,9 +42,15 @@ onUnmounted(() => {
     class="col-auto mb-4"
     :class="[isSmallScreen ? 'full-width' : 'char-width-30']"
   >
-    <div :class="['row sticky-top', { 'sticky-offset': isSticky }]">
+    <div
+      aria-labelledby="sticky-header"
+      :class="['row sticky-top', { 'sticky-offset': isSticky }]"
+      role="region"
+    >
       <div class="container">
-        <h3>{{ title }}</h3>
+        <h2 id="sticky-header" class="fs-3">
+          {{ title }}
+        </h2>
         <hr class="mb-3 mt-0">
         <slot />
       </div>

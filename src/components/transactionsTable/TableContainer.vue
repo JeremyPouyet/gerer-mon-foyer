@@ -60,10 +60,10 @@ function hideTransactions(transactionType: TransactionType) {
         </h1>
         <img
           v-tooltip="{ disposeOnClick: true }"
-          :alt="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
+          :alt="`Cacher les ${Texts.transactionTypes[transactionType]['plural'].toLowerCase()}`"
           class="icon-container icon-hoverable position-absolute me-2 end-0"
           data-bs-placement="left"
-          :data-bs-title="`Cacher les ${Texts.transactionTypes[transactionType]['plural']}`"
+          :data-bs-title="`Cacher les ${Texts.transactionTypes[transactionType]['plural'].toLowerCase()}`"
           role="button"
           src="@/assets/icons/hide.png"
           tabindex="0"
@@ -118,6 +118,7 @@ function hideTransactions(transactionType: TransactionType) {
         <select
           v-model="newTransaction.frequency"
           v-tooltip
+          aria-label="Fréquence de la transaction"
           class="form-select mt-2 mt-sm-0"
           data-bs-placement="bottom"
           data-bs-title="Fréquence"

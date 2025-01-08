@@ -24,6 +24,7 @@ function paymentAdd() : void {
     <select
       v-model="newPayment.resident"
       v-tooltip
+      aria-label="Sélectionner l’habitant"
       class="form-select mt-2 mt-sm-0"
       data-bs-placement="bottom"
       data-bs-title="Nom de l’habitant"
@@ -36,9 +37,10 @@ function paymentAdd() : void {
       ref="firstInputRef"
       v-model="newPayment.comment"
       v-tooltip
+      aria-label="Commentaire (optionnel)"
       class="form-control mt-2 mt-sm-0"
       data-bs-placement="bottom"
-      data-bs-title="Commentaire"
+      data-bs-title="Commentaire (optionnel)"
       placeholder="Commentaire"
       type="text"
       @keydown.enter="paymentAdd"
@@ -47,6 +49,7 @@ function paymentAdd() : void {
     <input
       v-model="newPayment.value"
       v-tooltip
+      aria-label="Valeur du payment"
       class="form-control mt-2 mt-sm-0"
       data-bs-placement="bottom"
       data-bs-title="Valeur du payment"

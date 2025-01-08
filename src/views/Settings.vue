@@ -123,12 +123,12 @@ const unsavedChangeText = computed(() => {
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img alt="Attention" class="icon-container" src="@/assets/icons/warning.png">
           <p class="mb-0 ms-2">
-            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
+            <span class="fw-bold">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
           </p>
         </div>
 
         <p class="fw-bold d-flex">
-          <img alt="" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
+          <img alt="" aria-hidden="true" class="icon-container-small my-auto" src="@/assets/icons/diskette.png">
           <span class="ms-1">Sauvegarde:</span>
         </p>
         <div class="row d-flex mb-3">
@@ -139,10 +139,10 @@ const unsavedChangeText = computed(() => {
           </div>
           <div class="col my-auto">
             <div class="text-end">
-              <button class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
+              <button aria-describedby="export-text" class="text-black btn btn-secondary btn-sm" type="button" @click="saveFile">
                 Exporter une sauvegarde
               </button>
-              <small class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
+              <small id="export-text" class="text-body-secondary d-block">{{ unsavedChangeText }}</small>
             </div>
           </div>
         </div>
@@ -152,10 +152,10 @@ const unsavedChangeText = computed(() => {
           <span class="ms-1">Zone dangereuse:</span>
         </p>
         <div>
-          <button class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
+          <button aria-describedby="delete-text" class="text-black btn btn-danger btn-sm" @click="confirmDataDeletion">
             Supprimer toutes mes données
           </button>
-          <small class="text-body-secondary d-block">
+          <small id="delete-text" class="text-body-secondary d-block">
             Cette action est définitive.
             <br>
             Pensez à d'abord faire une sauvegarde.</small>
@@ -192,6 +192,7 @@ const unsavedChangeText = computed(() => {
           <div class="col">
             <select
               id="settingSort"
+              aria-label="Sélectionner le mode de tri des dépenses et revenus"
               class="form-select"
               @change="sortTypeChange"
             >

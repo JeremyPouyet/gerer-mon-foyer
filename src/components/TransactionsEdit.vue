@@ -116,8 +116,9 @@ function deleteTransaction(transaction: Transaction) {
       </td>
       <td
         v-else
-        :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}`"
+        :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}. Cliquer pour éditer.`"
         class="align-middle editable-cell"
+        role="button"
         tabindex="0"
         @click="startEditTransactionName(transaction)"
         @keydown.enter="startEditTransactionName(transaction)"
@@ -140,8 +141,9 @@ function deleteTransaction(transaction: Transaction) {
         </td>
         <td
           v-else
-          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]})`"
+          :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]}). Cliquer pour éditer.`"
           class="text-end align-middle editable-cell"
+          role="button"
           tabindex="0"
           @click="startEditTransactionValue(transaction, frequency)"
           @keydown.enter="startEditTransactionValue(transaction, frequency)"
@@ -168,8 +170,10 @@ function deleteTransaction(transaction: Transaction) {
         <img
           v-tooltip="{ disposeOnClick: true }"
           alt="Supprimer"
+          aria-label="Supprimer la ligne"
           class="icon-container-small icon-hoverable ms-2"
           data-bs-title="Supprimer"
+          role="button"
           src="@/assets/icons/cross.png"
           tabindex="0"
           @click="deleteTransaction(transaction)"

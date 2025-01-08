@@ -16,6 +16,7 @@ const currentNote = ref<string | undefined>(props.item.note)
 const showNotePopup = ref<boolean>(false)
 const popupPosition = ref<'above' | 'below'>('above')
 const notePopupRef = ref<HTMLElement | null>(null) // Reference to the note-popup element
+const noteTextareaRef = ref<HTMLTextAreaElement | null>(null)
 
 async function toggleNotePopup(event: MouseEvent | KeyboardEvent): Promise<void> {
   showNotePopup.value = !showNotePopup.value
@@ -36,6 +37,8 @@ async function toggleNotePopup(event: MouseEvent | KeyboardEvent): Promise<void>
   popupPosition.value = elementRect.top - popupElement.offsetHeight < 0 ? 'below' : 'above'
   popupPosition.value += ' '
   popupPosition.value += popupRect.left < 0 || popupRect.right > windowWidth ? 'left' : 'right'
+
+  noteTextareaRef.value?.focus()
 }
 
 function noteUpdate() : void {
@@ -53,13 +56,32 @@ function noteCancel() : void {
   currentNote.value = props.item.note
   showNotePopup.value = false
 }
+
+/**
+ * When the user presses tab on the last action button, it comes back to the textarea
+ * @param event the key press event
+ */
+function circularTab(event: KeyboardEvent) {
+  event.preventDefault()
+  noteTextareaRef.value?.focus()
+}
 </script>
 
 <template>
-  <div v-if="showNotePopup" ref="notePopupRef" class="note-popup rounded-shadow bg-white" :class="popupPosition">
+  <div
+    v-if="showNotePopup"
+    ref="notePopupRef"
+    aria-label="Édition de la note"
+    aria-modal="true"
+    class="note-popup rounded-shadow bg-white"
+    :class="popupPosition"
+    role="dialog"
+  >
     <div class="form-floating">
       <textarea
+        ref="noteTextareaRef"
         v-model="currentNote"
+        aria-label="Édition de la note"
         cols="30"
         placeholder="Entrez une note"
         rows="4"
@@ -68,12 +90,17 @@ function noteCancel() : void {
       />
       <div class="input-group">
         <button class="btn btn-secondary btn-sm" type="button" @click="noteUpdate">
-          Valider
+          Sauvegarder
         </button>
         <button class="text-black btn btn-danger btn-sm" type="button" @click="noteDelete">
           Supprimer
         </button>
-        <button class="text-white btn btn-dark btn-sm" type="button" @click="noteCancel">
+        <button
+          class="text-white btn btn-dark btn-sm"
+          type="button"
+          @click="noteCancel"
+          @keydown.tab="circularTab"
+        >
           Annuler
         </button>
       </div>
@@ -84,6 +111,7 @@ function noteCancel() : void {
     alt="Annoter"
     class="icon-container-small icon-hoverable"
     data-bs-title="Annoter"
+    role="button"
     src="@/assets/icons/take-note.png"
     tabindex="0"
     @click="toggleNotePopup"
@@ -95,7 +123,6 @@ function noteCancel() : void {
 .note-popup {
   position: relative;
   z-index: 10;
-  border: 1px solid #ccc;
   padding: 10px;
   display: flex;
 }
@@ -126,5 +153,6 @@ function noteCancel() : void {
   min-width: 20em;
   flex: 1; /* allows the textarea to grow and shrink */
   font-size: 1rem;
+  border-radius: 4px;
 }
 </style>
