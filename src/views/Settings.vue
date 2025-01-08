@@ -123,7 +123,7 @@ const unsavedChangeText = computed(() => {
         <div class="alert alert-warning d-flex align-items-center justify-content-center mb-4">
           <img alt="Attention" class="icon-container" src="@/assets/icons/warning.png">
           <p class="mb-0 ms-2">
-            <span class="fw-bold text-decoration-underline">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
+            <span class="fw-bold">Vos données sont uniquement sauvegardées dans votre navigateur.</span> Pensez à les exporter régulièrement !
           </p>
         </div>
 

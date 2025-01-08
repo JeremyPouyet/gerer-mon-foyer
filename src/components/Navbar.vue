@@ -44,7 +44,7 @@ async function historicize() {
           Gérer
         </p>
         <div>
-          Mon <img alt="logo" aria-hidden="true" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
+          Mon <img alt="Jolie petite maison" aria-hidden="true" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
         </div>
       </RouterLink>
       <button

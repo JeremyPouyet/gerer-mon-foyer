@@ -77,7 +77,6 @@ p:not(.lead) {
   line-height: 1.75;
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
-  text-align: justify;
 }
 
 ul.step-list {
