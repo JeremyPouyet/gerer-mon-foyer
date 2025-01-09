@@ -45,6 +45,16 @@ const lgClass = computed(() => {
 function hideTransactions(transactionType: TransactionType) {
   props.account.settings.show[transactionType] = false
 }
+
+const inputNameText = computed(() => {
+  if (transactionType.value === TransactionType.Expense)
+    return account.value.type === AccountType.Personal ? 'Crédits/assurance/travail' : 'Eau/gaz/courses/...'
+
+  if (transactionType.value === TransactionType.Income)
+    return account.value.type === AccountType.Personal ? 'Salaire/allocations/rentes/...' : 'Locations/ventes/...'
+
+  return 'Musique/cinéma/passe-temps/...'
+})
 </script>
 
 <template>
@@ -91,7 +101,7 @@ function hideTransactions(transactionType: TransactionType) {
           aria-label="Nom de la transaction"
           class="form-control"
           data-bs-placement="bottom"
-          :data-bs-title="`${transactionType == TransactionType.Expense ? 'eau/gaz/courses' : 'salaire/allocation/rentes'}`"
+          :data-bs-title="inputNameText"
           :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
           type="text"
           @keydown.enter="transactionAdd"
