@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import ScaleCSS from '@/components/ScaleCSS.vue';
+
+</script>
+
 <template>
   <section v-once class="container">
     <header class="text-center mb-5">
@@ -17,6 +22,8 @@
       <h2 class="mb-3">
         L’importance d’une répartition équitable
       </h2>
+      <ScaleCSS />
+
       <p class="text-start">
         Les revenus des membres d’un foyer sont souvent inégaux, en raison de facteurs tels que des différences salariales entre professions, d’interruptions de carrière, ou d’inégalités structurelles comme l’écart de salaires entre hommes et femmes.
         Malgré ces écarts, les dépenses communes sont souvent réparties de manière égale (50/50), désavantageant ainsi une seconde fois la personne gagnant le moins, en lui imposant une charge financière disproportionnée.
