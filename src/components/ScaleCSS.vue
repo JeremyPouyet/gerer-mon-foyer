@@ -55,9 +55,10 @@ const resetBalance = () => {
     @mouseleave="resetBalance"
     @mousemove="handleMouseMove"
   >
-    <div class="scale-stick" />
     <div class="scale-arm-top-inner" :style="{ transform: topArmRotation }" />
     <div class="scale-arm" :style="{ transform: armRotation }" />
+    <div class="scale-stick" />
+    <div class="scale-rivet" />
     <div class="scale-foot" />
     <div class="scale-foot scale-foot-small" />
 
@@ -124,6 +125,20 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     transform: translateX(-50%);
     border: 1px solid $black;
     z-index: 1;
+  }
+
+  .scale-rivet {
+    width: 8px;
+    height: 8px;
+    background: $gold-metallic;
+    border: 1px solid $black;
+    border-radius: 50%;
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
   .scale-foot {
@@ -205,7 +220,7 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     position: absolute;
     width: 1px;
     background-color: $black;
-    height: 32px;
+    height: 30px;
     transition: transform 0.2s ease-out;
 
     &.left-inner {
