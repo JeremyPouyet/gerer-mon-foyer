@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref } from 'vue'
 
@@ -112,7 +111,6 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
   position: relative;
   float: left;
   margin-right: 1rem;
-  margin-top: 0.8rem;
 
   .scale-stick {
     width: 6px;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import ScaleCSS from '@/components/ScaleCSS.vue';
+import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
+import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
 
 </script>
 
@@ -22,7 +23,7 @@ import ScaleCSS from '@/components/ScaleCSS.vue';
       <h2 class="mb-3">
         L’importance d’une répartition équitable
       </h2>
-      <ScaleCSS />
+      <ScaleDrawing />
 
       <p class="text-start">
         Les revenus des membres d’un foyer sont souvent inégaux, en raison de facteurs tels que des différences salariales entre professions, d’interruptions de carrière, ou d’inégalités structurelles comme l’écart de salaires entre hommes et femmes.
@@ -34,6 +35,7 @@ import ScaleCSS from '@/components/ScaleCSS.vue';
       <h2 class="mb-3">
         Exemple simple de répartition
       </h2>
+      <HouseDrawing />
       <p class="text-start">
         Prenons un foyer dans lequel Camille gagne 2 400 € par mois, et Sam 1 600 €, tout en remboursant un prêt étudiant de 200 €.
         Voici comment seront réparties 500 € de dépenses communes:
