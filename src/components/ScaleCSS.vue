@@ -2,16 +2,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// Reactive states for dynamic styles
 const armRotation = ref('translateX(-50%) rotate(0deg)')
 const topArmRotation = ref('rotate(0deg)')
 const cableLeftOffset = ref('0px')
 const cableRightOffset = ref('0px')
-const plateLeftOffset = ref('0px') // TODO: Add a container above the plates and make them get up or down !
-const plateRightOffset = ref('0px')
+
+const throttle = (func: (event: MouseEvent) => void, limit: number) => {
+  let lastCall = 0
+  return function (event: MouseEvent) {
+    const now = Date.now()
+    if (now - lastCall >= limit) {
+      lastCall = now
+      func(event)
+    }
+  }
+}
 
 // Method to handle mouse movement
-const handleMouseMove = (event: MouseEvent) => {
+const handleMouseMove = throttle((event: MouseEvent) => {
   const container = event.currentTarget as HTMLElement
   const rect = container.getBoundingClientRect()
   const mouseX = event.clientX
@@ -27,11 +35,7 @@ const handleMouseMove = (event: MouseEvent) => {
   // Update cable positions
   cableLeftOffset.value = `${-tiltAmount}px`
   cableRightOffset.value = `${tiltAmount}px`
-
-  // Update plate positions
-  plateLeftOffset.value = `${-tiltAmount}px`
-  plateRightOffset.value = `${tiltAmount}px`
-}
+}, 16)
 
 // Reset balance when mouse leaves the container
 const resetBalance = () => {
@@ -39,14 +43,13 @@ const resetBalance = () => {
   topArmRotation.value = 'rotate(0deg)'
   cableLeftOffset.value = '0px'
   cableRightOffset.value = '0px'
-  plateLeftOffset.value = '0px'
-  plateRightOffset.value = '0px'
 }
 </script>
 
 <template>
   <div
-    aria-label="A decorative scale"
+    aria-hidden="true"
+    aria-label="Une balance décorative"
     class="scale-container"
     role="img"
     @mouseleave="resetBalance"
@@ -61,24 +64,21 @@ const resetBalance = () => {
     <!-- Cable containers with separate transforms -->
     <!-- Left cables -->
     <div class="cable-container-left" :style="{ transform: `translateY(${cableLeftOffset})` }">
-
       <div class="scale-cable left-inner" />
       <div class="scale-cable left-outer" />
-      <div class="scale-plate left" :style="{ transform: `translateX(-50%) translateY(${plateLeftOffset})` }">
-      <div class="coin" />
-    </div>
+      <div class="scale-plate left">
+        <div class="coin" />
+      </div>
     </div>
 
     <!-- Right cables -->
     <div class="cable-container-right" :style="{ transform: `translateY(${cableRightOffset})` }">
       <div class="scale-cable right-inner" />
       <div class="scale-cable right-outer" />
-      <div class="scale-plate right" :style="{ transform: `translateX(-50%) translateY(${plateRightOffset})` }">
-      <div class="coin" />
+      <div class="scale-plate right">
+        <div class="coin" />
+      </div>
     </div>
-    </div>
-
-
   </div>
 </template>
 
@@ -184,21 +184,21 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     transition: transform 0.1s ease-out;
   }
 
-  .cable-container-left {
+  .cable-container-left,
+  .cable-container-right {
     top: 20%;
     position: absolute;
     width: 1px;
     height: 32px;
-    transition: transform 0.2s ease-out; // Transition fluide pour la translation verticale
-    left: 20%
+    transition: transform 0.2s ease-out;
   }
+
+  .cable-container-left {
+    left: 20%;
+  }
+
   .cable-container-right {
-    top:20%;
-    position: absolute;
-    width: 1px;
-    height: 32px;
-    transition: transform 0.2s ease-out; // Transition fluide pour la translation verticale
-    left: 80%
+    left: 80%;
   }
 
   .scale-cable {
@@ -206,7 +206,7 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     width: 1px;
     background-color: $black;
     height: 32px;
-    transition: transform 0.2s ease-out; // Ajout de la transition
+    transition: transform 0.2s ease-out;
 
     &.left-inner {
       left: 20%;
