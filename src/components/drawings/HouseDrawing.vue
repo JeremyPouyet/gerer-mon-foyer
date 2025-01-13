@@ -1,5 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 
+const isLit = ref(false)
+
+const handleMouseEnter = () => {
+  isLit.value = true
+}
+
+const handleMouseLeave = () => {
+  isLit.value = false
+}
 </script>
 
 <template>
@@ -18,11 +28,21 @@
     <div class="door">
       <div class="doorknob" />
     </div>
-    <div class="window left">
+    <div
+      class="window left"
+      :class="{ 'window-lit': isLit }"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
       <div class="pane horizontal" />
       <div class="pane vertical" />
     </div>
-    <div class="window right">
+    <div
+      class="window right"
+      :class="{ 'window-lit': isLit }"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
       <div class="pane horizontal" />
       <div class="pane vertical" />
     </div>
@@ -77,7 +97,7 @@
       background: linear-gradient(180deg, #8b4513, #5a2a0c);
       border: 2px solid #5a2a0c;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-      border-radius: 5px;
+      border-radius: 5px 5px 0 0;
       transform: translateX(-50%);
       left: 50%;
       z-index: 2;
@@ -132,6 +152,11 @@
 
     .window.right {
       right: 30px;
+    }
+
+    .window-lit {
+      background: gold;
+      transition: box-shadow 0.3s ease-in-out, background 0.3s ease-in-out;
     }
 
     .chimney {
