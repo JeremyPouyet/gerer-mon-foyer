@@ -3,20 +3,15 @@ import { ref } from 'vue'
 
 const isLit = ref(false)
 
-const handleMouseEnter = () => {
-  isLit.value = true
-}
-
-const handleMouseLeave = () => {
-  isLit.value = false
-}
+const handleMouseEnter = () => isLit.value = true
+const handleMouseLeave = () => isLit.value = false
 </script>
 
 <template>
   <div
     aria-hidden="true"
     aria-label="Une maison décorative"
-    class="house-container"
+    class="house-container mt-4"
     role="img"
   >
     <div class="chimney">
