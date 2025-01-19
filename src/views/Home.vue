@@ -81,7 +81,7 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
       </p>
 
       <div class="row">
-        <div class="col-sm-12 col-md-10">
+        <div class="col-sm-12 col-md-9 col-lg-10">
           <p class="text-start">
             Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
           </p>
@@ -99,7 +99,7 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
             Avec Gérer Mon Foyer, adoptez une approche financière claire, adaptée à chacun, et conçue pour simplifier votre quotidien.
           </p>
         </div>
-        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
+        <div class="col-sm-12 col-md-3 col-lg-2 d-flex flex-column justify-content-end align-items-center">
           <CoinExplosionDrawing />
         </div>
       </div>

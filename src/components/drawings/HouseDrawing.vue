@@ -50,8 +50,6 @@ const handleMouseLeave = () => isLit.value = false
     width: 128px;
     height: 128px;
     position: relative;
-    float: right;
-    margin-left: 1rem;
 
     .house-body {
       position: absolute;

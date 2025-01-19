@@ -19,16 +19,12 @@ interface Particle {
 const container = ref<HTMLDivElement>()
 const coins = ref<Coin[]>([])
 const particles = ref<Particle[]>([])
-const containerHeight = 200
+const containerHeight = 250
 const containerWidth = 150
 const coinSize = 20
 let moveIntervalId: number | null = null
 let addIntervalId: number | null = null
 let particleIntervalId: number | null = null
-
-function getRandomInt(min: number, max: number) {
-  return
-}
 
 function addCoin() {
   const x = Math.random() * (containerWidth - coinSize)
@@ -99,7 +95,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="container" class="container">
+  <div ref="container" class="coin-container mt-2">
     <!-- Banner -->
     <div class="banner">
       <span class="banner-text">Explose pièces !</span>
@@ -134,10 +130,10 @@ $background-gradient: linear-gradient(to bottom, #ffe680, #ffcc80);
 $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af37 75%, #f39c12);
 
 
-.container {
+.coin-container {
   position: relative;
   width: 150px;
-  height: 200px;
+  height: 250px;
   background: $background-gradient;
   overflow: hidden;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -146,65 +142,64 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
   display: flex;
   flex-direction: column;
   align-items: center;
-}
 
-.banner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background: repeating-linear-gradient(
-    -45deg,
-    $primary-red,
-    $primary-red 10px,
-    $primary-yellow 10px,
-    $primary-yellow 20px,
-    $primary-blue 20px,
-    $primary-blue 30px
-  );
-  border-bottom: 3px solid #ff9900;
-  border-radius: 15px 15px 0 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
+  .banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: repeating-linear-gradient(
+      -45deg,
+      $primary-red,
+      $primary-red 10px,
+      $primary-yellow 10px,
+      $primary-yellow 20px,
+      $primary-blue 20px,
+      $primary-blue 30px
+    );
+    border-bottom: 3px solid #ff9900;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
 
-.banner-text {
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+  .banner-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+  }
 
-.coin {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: $gold-metallic;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #444;
-  font-size: 14px;
-  font-weight: bold;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
-  animation: bounce 1.5s infinite ease-in-out;
-}
+  .coin {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: $gold-metallic;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    animation: bounce 1.5s infinite ease-in-out;
+  }
 
-.particle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: radial-gradient(circle, #ff9999, #ff4d4d);
-  border-radius: 50%;
-  animation: particleExplode 0.8s ease-out forwards;
+  .particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, #ff9999, #ff4d4d);
+    border-radius: 50%;
+    animation: particleExplode 0.8s ease-out forwards;
+  }
 }
 
 @keyframes bounce {
