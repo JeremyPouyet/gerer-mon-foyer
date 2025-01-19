@@ -40,7 +40,7 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
         Voici comment seront réparties 500 € de dépenses communes:
       </p>
       <div class="row">
-        <div class="col-sm-12 col-md-10">
+        <div class="col-sm-12 col-md-9 col-lg-10">
           <ul class="text-start step-list">
             <li>Camille représente 60% des revenus du foyer et Sam 40%.</li>
             <li>Cependant, le revenu mensuel disponible de Sam est en réalité de 1 600 € - 200 € = 1 400 €.</li>
@@ -52,8 +52,8 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
             Avec une répartition 50/50, Sam aurait payé 250 €, ce qui représente une différence de 7 800 € sur 10 ans grâce à cette méthode.
           </p>
         </div>
-        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
-          <HouseDrawing />
+        <div class="col-sm-12 col-md-3 col-lg-2 d-flex flex-column justify-content-end align-items-center">
+          <CoinExplosionDrawing />
         </div>
       </div>
     </section>
@@ -81,7 +81,7 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
       </p>
 
       <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-10">
+        <div class="col-sm-12 col-md-10">
           <p class="text-start">
             Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
           </p>
@@ -99,8 +99,8 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
             Avec Gérer Mon Foyer, adoptez une approche financière claire, adaptée à chacun, et conçue pour simplifier votre quotidien.
           </p>
         </div>
-        <div class="col-sm-12 col-md-3 col-lg-2 d-flex flex-column justify-content-end align-items-center">
-          <CoinExplosionDrawing />
+        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
+          <HouseDrawing />
         </div>
       </div>
     </section>
