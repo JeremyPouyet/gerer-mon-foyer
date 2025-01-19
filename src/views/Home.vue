@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import CoinExplosionDrawing from '@/components/drawings/CoinExplosionDrawing.vue'
+import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
+import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
+</script>
+
 <template>
   <section v-once class="container">
     <header class="text-center mb-5">
@@ -17,7 +23,9 @@
       <h2 class="mb-3">
         L’importance d’une répartition équitable
       </h2>
-      <p class="text-start">
+      <ScaleDrawing />
+
+      <p class="text-start mb-0">
         Les revenus des membres d’un foyer sont souvent inégaux, en raison de facteurs tels que des différences salariales entre professions, d’interruptions de carrière, ou d’inégalités structurelles comme l’écart de salaires entre hommes et femmes.
         Malgré ces écarts, les dépenses communes sont souvent réparties de manière égale (50/50), désavantageant ainsi une seconde fois la personne gagnant le moins, en lui imposant une charge financière disproportionnée.
       </p>
@@ -31,40 +39,70 @@
         Prenons un foyer dans lequel Camille gagne 2 400 € par mois, et Sam 1 600 €, tout en remboursant un prêt étudiant de 200 €.
         Voici comment seront réparties 500 € de dépenses communes:
       </p>
-      <ul class="text-start step-list">
-        <li>Camille représente 60% des revenus du foyer et Sam 40%.</li>
-        <li>Cependant, le revenu mensuel disponible de Sam est en réalité de 1 600 € - 200 € = 1 400 €.</li>
-        <li>Le revenu total disponible du foyer est donc 2 400 € + 1 400 € = 3 800 €.</li>
-        <li>Camille paiera alors 63% des dépenses communes (315 €).</li>
-        <li>Sam ne paiera que 37% (185 €).</li>
-      </ul>
-      <p>Avec une répartition 50/50, Sam aurait payé 250 €, ce qui représente un avantage de 7 800 € sur 10 ans avec cette méthode.</p>
+      <div class="row">
+        <div class="col-sm-12 col-md-10">
+          <ul class="text-start step-list">
+            <li>Camille représente 60% des revenus du foyer et Sam 40%.</li>
+            <li>Cependant, le revenu mensuel disponible de Sam est en réalité de 1 600 € - 200 € = 1 400 €.</li>
+            <li>Le revenu total disponible du foyer est donc 2 400 € + 1 400 € = 3 800 €.</li>
+            <li>Camille paiera alors 63% des dépenses communes (315 €).</li>
+            <li>Sam ne paiera que 37% (185 €).</li>
+          </ul>
+          <p class="text-start mb-0">
+            Avec une répartition 50/50, Sam aurait payé 250 €, ce qui représente une différence de 7 800 € sur 10 ans grâce à cette méthode.
+          </p>
+        </div>
+        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
+          <HouseDrawing />
+        </div>
+      </div>
     </section>
 
     <section class="mb-5 text-center text-block shadow-sm">
       <h2 class="mb-3">
-        Comment ça fonctionne ?
+        Répartissez vos dépenses en 3 étapes
       </h2>
       <p class="text-start">
-        Pour chaque membre du foyer, il suffit de renseigner :
+        Pour chaque membre du foyer, il suffit de :
       </p>
       <ul class="text-start step-list">
-        <li>Les revenus (salaires, allocations, etc…).</li>
-        <li>Les dépenses contraintes personnelles (crédits, essence, assurances, etc…).</li>
-        <li>Les dépenses communes du foyer (loyer, eau, gaz, etc…).</li>
+        <li>
+          <strong>Renseignez vos revenus</strong> : Indiquez les revenus de chaque membre du foyer, comme les salaires, allocations ou autres sources.
+        </li>
+        <li>
+          <strong>Ajoutez vos dépenses personnelles</strong> : Notez vos charges fixes, telles que crédits, essence, assurances, et autres dépenses individuelles.
+        </li>
+        <li>
+          <strong>Entrez les dépenses communes</strong> : Saisissez vos frais collectifs, comme le loyer, l’eau, le gaz, et les courses du ménage.
+        </li>
       </ul>
       <p class="text-start">
-        L’outil soustrait automatiquement les dépenses contraintes des revenus individuels pour une répartition juste,
-        vous attribuant ensuite un pourcentage des dépenses communes à payer, basé sur vos revenus disponibles.
-        Utilisez ensuite le
-        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-        <RouterLink class="text-primary-emphasis" to="/simulator">simulateur de dépenses ponctuelles</RouterLink> pour diviser équitablement le prix d’un achat unique,
-        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-        <RouterLink class="text-primary-emphasis" to="/history">l’historique</RouterLink>
-        pour suivre l’évolution de vos budgets et dépenses dans le temps et
-        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-        <RouterLink class="text-primary-emphasis" to="/projects">la gestion de projet</RouterLink> pour vos projets communs comme des travaux, des vacances ou un mariage.
+        💡 Gérer Mon Foyer calcule automatiquement une répartition équitable en soustrayant vos dépenses personnelles de vos revenus disponibles.
       </p>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-10">
+          <p class="text-start">
+            Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
+          </p>
+          <p class="text-start mb-0">
+            🛠️ <strong><RouterLink class="text-primary-emphasis" to="/simulator">Simulateur de dépenses ponctuelles</RouterLink></strong> : Partagez équitablement le prix d’un achat unique, comme de l’électroménager.
+          </p>
+          <p class="text-start mb-0">
+            📊 <strong><RouterLink class="text-primary-emphasis" to="/history">Historique budgétaire</RouterLink></strong> : Suivez l’évolution de vos finances et dépenses dans le temps.
+          </p>
+          <p class="text-start">
+            🎯 <strong><RouterLink class="text-primary-emphasis" to="/projects">Gestion de projets communs</RouterLink></strong> : Budgétez vos grands projets comme des travaux, des vacances ou un mariage.
+          </p>
+
+          <p class="text-start mb-0">
+            Avec Gérer Mon Foyer, adoptez une approche financière claire, adaptée à chacun, et conçue pour simplifier votre quotidien.
+          </p>
+        </div>
+        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
+          <CoinExplosionDrawing />
+        </div>
+      </div>
     </section>
   </section>
 </template>
@@ -75,10 +113,9 @@ h1 {
   font-weight: bold;
 }
 
-p:not(.lead) {
+p:not(.lead), ul {
   line-height: 1.75;
   font-size: 1.1rem;
-  margin-bottom: 1.5rem;
 }
 
 ul.step-list {
