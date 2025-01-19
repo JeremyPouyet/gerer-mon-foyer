@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
+import CoinExplosionDrawing from '@/components/drawings/CoinExplosionDrawing.vue'
 import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
-
+import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
 </script>
 
 <template>
@@ -80,22 +80,29 @@ import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
         💡 Gérer Mon Foyer calcule automatiquement une répartition équitable en soustrayant vos dépenses personnelles de vos revenus disponibles.
       </p>
 
-      <p class="text-start">
-        Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
-      </p>
-      <p class="text-start mb-0">
-        🛠️ <strong><RouterLink class="text-primary-emphasis" to="/simulator">Simulateur de dépenses ponctuelles</RouterLink></strong> : Partagez équitablement le prix d’un achat unique, par exemple de l’électroménager.
-      </p>
-      <p class="text-start mb-0">
-        📊 <strong><RouterLink class="text-primary-emphasis" to="/history">Historique budgétaire</RouterLink></strong> : Suivez l’évolution de vos finances et dépenses dans le temps.
-      </p>
-      <p class="text-start">
-        🎯 <strong><RouterLink class="text-primary-emphasis" to="/projects">Gestion de projets communs</RouterLink></strong> : Budgétez vos grands projets comme des travaux, des vacances ou un mariage.
-      </p>
+      <div class="row">
+        <div class="col-sm-12 col-md-10">
+          <p class="text-start">
+            Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
+          </p>
+          <p class="text-start mb-0">
+            🛠️ <strong><RouterLink class="text-primary-emphasis" to="/simulator">Simulateur de dépenses ponctuelles</RouterLink></strong> : Partagez équitablement le prix d’un achat unique, comme de l’électroménager.
+          </p>
+          <p class="text-start mb-0">
+            📊 <strong><RouterLink class="text-primary-emphasis" to="/history">Historique budgétaire</RouterLink></strong> : Suivez l’évolution de vos finances et dépenses dans le temps.
+          </p>
+          <p class="text-start">
+            🎯 <strong><RouterLink class="text-primary-emphasis" to="/projects">Gestion de projets communs</RouterLink></strong> : Budgétez vos grands projets comme des travaux, des vacances ou un mariage.
+          </p>
 
-      <p class="text-start mb-0">
-        Avec Gérer Mon Foyer, adoptez une approche financière claire, adaptée à chacun, et conçue pour simplifier votre quotidien.
-      </p>
+          <p class="text-start mb-0">
+            Avec Gérer Mon Foyer, adoptez une approche financière claire, adaptée à chacun, et conçue pour simplifier votre quotidien.
+          </p>
+        </div>
+        <div class="col-sm-12 col-md-2 d-flex flex-column justify-content-end align-items-center">
+          <CoinExplosionDrawing />
+        </div>
+      </div>
     </section>
   </section>
 </template>
