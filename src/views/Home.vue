@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CoinExplosionDrawing from '@/components/drawings/CoinExplosionDrawing.vue'
+import CoinFieldDrawing from '@/components/drawings/CoinfFieldDrawing.vue'
 import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
 import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
 </script>
@@ -53,7 +53,7 @@ import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
           </p>
         </div>
         <div class="col-sm-12 col-md-3 col-lg-2 d-flex flex-column justify-content-end align-items-center">
-          <CoinExplosionDrawing />
+          <CoinFieldDrawing />
         </div>
       </div>
     </section>
