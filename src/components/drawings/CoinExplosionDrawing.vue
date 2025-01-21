@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Coin, Particle } from '@/types'
+import type { Coin, ID, Particle } from '@/types'
+import { explodeCoin, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { newId } from '@/helpers'
 
@@ -7,13 +8,12 @@ const coins = ref<Coin[]>([])
 const particles = ref<Particle[]>([])
 const containerHeight = 250
 const containerWidth = 150
-const coinSize = 20
 let moveIntervalId: number | null = null
 let addIntervalId: number | null = null
 let particleIntervalId: number | null = null
 
 function addCoin() {
-  const x = Math.random() * (containerWidth - coinSize)
+  const x = randomNumberInCointainer(containerWidth)
   coins.value.push({ id: newId(), x, y: 0 })
 }
 
@@ -27,50 +27,14 @@ function moveCoins() {
   }).filter((coin): coin is Coin => coin !== null)
 }
 
-function explodeCoin(index: number) {
-  const coin = coins.value.splice(index, 1)[0]
-  if (!coin) return
-
-  const n = Math.floor(Math.random() * (10 - 3 + 1)) + 3 // n between 3 and 10
-  for (let i = 0; i < n ; i++) {
-    const angle = Math.random() * Math.PI * 2 // Angle in radians
-    const speed = Math.random() * 2 + 1 // Speed between 1 and 3
-    const velocityX = Math.cos(angle) * speed
-    const velocityY = Math.sin(angle) * speed
-
-    particles.value.push({
-      id: newId(),
-      life: 800, // Lifespan in ms
-      velocityX,
-      velocityY,
-      x: coin.x + coinSize / 2,
-      y: coin.y + coinSize / 2,
-    })
-  }
-}
-
-function updateParticles() {
-  particles.value = particles.value.map((particle: Particle) => {
-    const newX = particle.x + particle.velocityX
-    const newY = particle.y + particle.velocityY
-    const newLife = particle.life - 16
-
-    return newLife > 0
-      ? {
-        ...particle,
-        life: newLife,
-        velocityY: particle.velocityY + 0.1, // Simulate Gravity
-        x: newX,
-        y: newY,
-      }
-      : null
-  }).filter((particle): particle is Particle => particle !== null)
+function onClick(id: ID) {
+  explodeCoin(id, coins, particles)
 }
 
 onMounted(() => {
   moveIntervalId = setInterval(() => moveCoins(), 50)
   addIntervalId = setInterval(() => addCoin(), 350)
-  particleIntervalId = setInterval(() => updateParticles(), 16)
+  particleIntervalId = setInterval(() => updateParticles(particles), 16)
 })
 
 onUnmounted(() => {
@@ -89,11 +53,11 @@ onUnmounted(() => {
 
     <!-- Show coins -->
     <div
-      v-for="(coin, index) in coins"
+      v-for="coin in coins"
       :key="coin.id"
       class="coin"
       :style="{ top: `${coin.y}px`, left: `${coin.x}px` }"
-      @click="explodeCoin(index)"
+      @click="onClick(coin.id)"
     >
       €
     </div>

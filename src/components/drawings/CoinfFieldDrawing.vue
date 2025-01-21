@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Coin, ID, Particle } from '@/types'
+import { explodeCoin, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { newId } from '@/helpers'
 
@@ -7,17 +8,16 @@ const coins = ref<Coin[]>([])
 const particles = ref<Particle[]>([])
 const containerHeight = 250
 const containerWidth = 150
-const coinSize = 20
 let coinAnimationFrameId: number | null = null
 let particleAnimationFrameId: number | null = null
 
 const maxCoins = 6
 const coinAddInterval = 1000 // 1 second for coin generation
 
-function generateRandomPosition(size: number, maxWidth: number, maxHeight: number) {
+function generateRandomPosition(maxWidth: number, maxHeight: number) {
   return {
-    x: Math.random() * (maxWidth - size),
-    y: Math.random() * (maxHeight - size),
+    x: randomNumberInCointainer(maxWidth),
+    y: randomNumberInCointainer(maxHeight),
   }
 }
 
@@ -25,57 +25,15 @@ function addCoin() {
   if (document.visibilityState === 'hidden')
     return
 
-  const { x, y } = generateRandomPosition(coinSize, containerWidth, containerHeight)
+  const { x, y } = generateRandomPosition(containerWidth, containerHeight)
   coins.value.push({ id: newId(), x, y })
 
   if (coins.value.length > maxCoins)
     coins.value.shift()
 }
 
-function explodeCoin(id: ID) {
-  const index = coins.value.findIndex((coin) => coin.id === id)
-  if (index === -1) return
-
-  const coin = coins.value.splice(index, 1)[0]
-  createParticles(coin.x, coin.y)
-}
-
-function createParticles(x: number, y: number) {
-  const n = Math.floor(Math.random() * 8) + 3 // Between 3 and 10 particles
-  const centerX = x + coinSize / 2
-  const centerY = y + coinSize / 2
-
-  for (let i = 0; i < n; i++) {
-    const angle = Math.random() * Math.PI * 2
-    const speed = Math.random() * 2 + 1
-    particles.value.push({
-      id: newId(),
-      life: 800,
-      velocityX: Math.cos(angle) * speed,
-      velocityY: Math.sin(angle) * speed,
-      x: centerX,
-      y: centerY,
-    })
-  }
-}
-
-function updateParticles() {
-  let writeIndex = 0  // Keeps track of where to write the next valid particle
-
-  for (const particle of particles.value) {
-    particle.life -= 16
-    if (particle.life > 0) {
-      particles.value[writeIndex].x = particle.x + particle.velocityX
-      particles.value[writeIndex].y = particle.y + particle.velocityY
-      particles.value[writeIndex].velocityX = particle.velocityX
-      particles.value[writeIndex].velocityY = particle.velocityY + 0.1  // Simulate gravity
-
-      writeIndex++
-    }
-  }
-
-  // Resize the array to keep only valid particles
-  particles.value.length = writeIndex
+function onHover(id: ID) {
+  explodeCoin(id, coins, particles)
 }
 
 function startCoinAnimation() {
@@ -92,7 +50,7 @@ function startCoinAnimation() {
 
 function startParticleAnimation() {
   function animateParticles() {
-    updateParticles()
+    updateParticles(particles)
     particleAnimationFrameId = requestAnimationFrame(animateParticles)
   }
   particleAnimationFrameId = requestAnimationFrame(animateParticles)
@@ -117,7 +75,7 @@ onUnmounted(() => {
         :key="coin.id"
         class="coin"
         :style="{ top: `${coin.y}px`, left: `${coin.x}px` }"
-        @mouseover="explodeCoin(coin.id)"
+        @mouseover="onHover(coin.id)"
       >
         €
       </div>
