@@ -1,30 +1,15 @@
 <script setup lang="ts">
+import type { Coin, ID, Particle } from '@/types'
 import { onMounted, onUnmounted, ref } from 'vue'
-import type { ID } from '@/types'
 import { newId } from '@/helpers'
-
-interface Coin {
-  id: ID
-  x: number
-  y: number
-}
-
-interface Particle {
-  id: ID
-  x: number
-  y: number
-  velocityX: number
-  velocityY: number
-  life: number
-}
 
 const coins = ref<Coin[]>([])
 const particles = ref<Particle[]>([])
 const containerHeight = 250
 const containerWidth = 150
 const coinSize = 20
-let coinAnimationFrameId: number | null = null // Separate variable for coin animation
-let particleAnimationFrameId: number | null = null // Separate variable for particle animation
+let coinAnimationFrameId: number | null = null
+let particleAnimationFrameId: number | null = null
 
 const maxCoins = 6
 const coinAddInterval = 1000 // 1 second for coin generation

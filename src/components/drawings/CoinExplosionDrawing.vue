@@ -1,22 +1,8 @@
 <script setup lang="ts">
+import type { Coin, Particle } from '@/types'
 import { onMounted, onUnmounted, ref } from 'vue'
+import { newId } from '@/helpers'
 
-interface Coin {
-  id: number;
-  x: number;
-  y: number;
-}
-
-interface Particle {
-  id: number;
-  x: number;
-  y: number;
-  velocityX: number;
-  velocityY: number;
-  life: number;
-}
-
-const container = ref<HTMLDivElement>()
 const coins = ref<Coin[]>([])
 const particles = ref<Particle[]>([])
 const containerHeight = 250
@@ -28,7 +14,7 @@ let particleIntervalId: number | null = null
 
 function addCoin() {
   const x = Math.random() * (containerWidth - coinSize)
-  coins.value.push({ id: Date.now() + Math.random(), x, y: 0 })
+  coins.value.push({ id: newId(), x, y: 0 })
 }
 
 function moveCoins() {
@@ -53,7 +39,7 @@ function explodeCoin(index: number) {
     const velocityY = Math.sin(angle) * speed
 
     particles.value.push({
-      id: Date.now() + Math.random(),
+      id: newId(),
       life: 800, // Lifespan in ms
       velocityX,
       velocityY,
@@ -95,7 +81,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="container" class="coin-container mt-2">
+  <div class="coin-container mt-2">
     <!-- Banner -->
     <div class="banner">
       <span class="banner-text">Explose pièces !</span>
@@ -107,7 +93,7 @@ onUnmounted(() => {
       :key="coin.id"
       class="coin"
       :style="{ top: `${coin.y}px`, left: `${coin.x}px` }"
-      @mouseover="explodeCoin(index)"
+      @click="explodeCoin(index)"
     >
       €
     </div>
@@ -128,7 +114,6 @@ $primary-yellow: #ffd700;
 $primary-blue: #4dafff;
 $background-gradient: linear-gradient(to bottom, #ffe680, #ffcc80);
 $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af37 75%, #f39c12);
-
 
 .coin-container {
   position: relative;
@@ -190,6 +175,7 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     font-weight: bold;
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
     animation: bounce 1.5s infinite ease-in-out;
+    cursor: pointer;
   }
 
   .particle {

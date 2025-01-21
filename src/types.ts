@@ -55,3 +55,20 @@ export interface TransactionList {
   sum: number
 }
 export type TransactionFunctional = Omit<Transaction, 'id' | 'note'>
+
+/**** Drawings ****/
+
+export interface Coin {
+  id: ID
+  x: number
+  y: number
+}
+
+export interface Particle {
+  id: ID
+  x: number
+  y: number
+  velocityX: number
+  velocityY: number
+  life: number
+}
