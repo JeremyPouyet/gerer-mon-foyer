@@ -11,8 +11,8 @@ const coinSize = 20
  * @param max Maximum value (inclusive).
  * @returns A random integer between `min` and `max`.
  */
-function randomInclusiveInt(min: number, max: number) : number {
-  return Math.floor(Math.random() * max) + min
+export function randomInclusiveInt(min: number, max: number) : number {
+  return Math.floor(Math.random() * (max - min) + min)
 }
 
 /**

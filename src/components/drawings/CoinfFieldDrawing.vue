@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Coin, ID, Particle } from '@/types'
-import { explodeCoin, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
+import { explodeCoin, randomInclusiveInt, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { newId } from '@/helpers'
 
@@ -11,7 +11,6 @@ const containerWidth = 150
 let coinAnimationFrameId: number | null = null
 let particleAnimationFrameId: number | null = null
 
-const maxCoins = 6
 const coinAddInterval = 1000 // 1 second for coin generation
 
 function generateRandomPosition(maxWidth: number, maxHeight: number) {
@@ -26,10 +25,14 @@ function addCoin() {
     return
 
   const { x, y } = generateRandomPosition(containerWidth, containerHeight)
-  coins.value.push({ id: newId(), x, y })
+  const newCoin = { id: newId(), x, y }
+  coins.value.push(newCoin)
 
-  if (coins.value.length > maxCoins)
-    coins.value.shift()
+  setTimeout(() => {
+    const index = coins.value.findIndex(coin => coin.id === newCoin.id)
+    if (index !== -1)
+      coins.value.splice(index, 1)
+  }, randomInclusiveInt(5000, 7000))
 }
 
 function onHover(id: ID) {
