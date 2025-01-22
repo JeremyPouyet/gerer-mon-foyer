@@ -6,6 +6,14 @@ const topArmRotation = ref('rotate(0deg)')
 const cableLeftOffset = ref('0px')
 const cableRightOffset = ref('0px')
 
+/**
+ * A utility function to throttle the execution of a given function.
+ * Ensures that the function is called at most once within the specified time limit.
+ *
+ * @param func The function to be throttled.
+ * @param limit Time limit (in ms) to throttle function calls.
+ * @returns A throttled version of the input function.
+ */
 const throttle = (func: (event: MouseEvent) => void, limit: number) => {
   let lastCall = 0
   return function (event: MouseEvent) {
@@ -17,7 +25,6 @@ const throttle = (func: (event: MouseEvent) => void, limit: number) => {
   }
 }
 
-// Method to handle mouse movement
 const handleMouseMove = throttle((event: MouseEvent) => {
   const container = event.currentTarget as HTMLElement
   const rect = container.getBoundingClientRect()

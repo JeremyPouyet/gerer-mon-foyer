@@ -13,19 +13,15 @@ let particleAnimationFrameId: number | null = null
 
 const coinAddInterval = 1000 // 1 second for coin generation
 
-function generateRandomPosition(maxWidth: number, maxHeight: number) {
-  return {
-    x: randomNumberInCointainer(maxWidth),
-    y: randomNumberInCointainer(maxHeight),
-  }
-}
-
 function addCoin() {
   if (document.visibilityState === 'hidden')
     return
 
-  const { x, y } = generateRandomPosition(containerWidth, containerHeight)
-  const newCoin = { id: newId(), x, y }
+  const newCoin = {
+    id: newId(),
+    x: randomNumberInCointainer(containerWidth),
+    y: randomNumberInCointainer(containerHeight)
+  }
   coins.value.push(newCoin)
 
   setTimeout(() => {

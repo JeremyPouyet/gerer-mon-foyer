@@ -107,7 +107,6 @@ const handleMouseLeave = () => isLit.value = false
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
     }
 
-    /* Windows */
     .window {
       position: absolute;
       bottom: 50px;
