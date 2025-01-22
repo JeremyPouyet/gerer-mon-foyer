@@ -45,7 +45,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="coin-container mt-2">
+  <div class="coin-container mt-2 mb-4">
     <!-- Banner -->
     <div class="banner">
       <span class="banner-text">Explose pièces !</span>
