@@ -67,7 +67,9 @@ const resetBalance = () => {
       <div class="scale-cable left-inner" />
       <div class="scale-cable left-outer" />
       <div class="scale-plate left">
-        <div class="coin" />
+        <div class="coin positioned">
+          €
+        </div>
       </div>
     </div>
 
@@ -76,34 +78,19 @@ const resetBalance = () => {
       <div class="scale-cable right-inner" />
       <div class="scale-cable right-outer" />
       <div class="scale-plate right">
-        <div class="coin" />
+        <div class="coin positioned">
+          €
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/drawings.scss';
+
 $black: black;
 $plate-shadow: rgba(0, 0, 0, 0.4);
-$gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af37 75%, #f39c12);
-
-@keyframes oscillate {
-  0%, 100% {
-    transform: translateX(-50%) rotate(5deg);
-  }
-  50% {
-    transform: translateX(-50%) rotate(-5deg);
-  }
-}
-
-@keyframes coin-move {
-  0%, 100% {
-    transform: translateZ(-10px) translateY(0);
-  }
-  50% {
-    transform: translateZ(-10px) translateY(-5px);
-  }
-}
 
 .scale-container {
   width: 128px;
@@ -218,30 +205,30 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     position: absolute;
     width: 1px;
     background-color: $black;
-    height: 30px;
+    height: 40px;
     transition: transform 0.2s ease-out;
 
     &.left-inner {
       left: 20%;
-      transform: rotate(-28deg);
+      transform: rotate(-20deg);
       transform-origin: top left;
     }
 
     &.left-outer {
       left: 20%;
-      transform: rotate(28deg);
+      transform: rotate(20deg);
       transform-origin: top left;
     }
 
     &.right-inner {
       left: 80%;
-      transform: rotate(28deg);
+      transform: rotate(20deg);
       transform-origin: top right;
     }
 
     &.right-outer {
       left: 80%;
-      transform: rotate(-28deg);
+      transform: rotate(-20deg);
       transform-origin: top right;
     }
   }
@@ -255,7 +242,7 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     border-radius: 0 0 10px 10px;
     box-shadow: inset 0 2px 4px $plate-shadow, 0 2px 6px rgba(0, 0, 0, 0.3);
     transform-style: preserve-3d;
-    top: 70%;
+    top: 100%;
     transform: translateX(-50%);
     animation: oscillate 2s ease-in-out infinite;
     transition: transform 0.2s ease-in-out;
@@ -268,17 +255,10 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
       left: 80%;
     }
 
-    .coin {
-      position: absolute;
-      top: -7px;
-      left: 33%;
-      width: 13px;
-      height: 13px;
-      background: $gold-metallic;
-      border-radius: 50%;
-      transform: translateZ(-10px);
+    .positioned {
+      top: -11px;
+      left: 21%;
       z-index: -1;
-      animation: coin-move 1.5s ease-in-out infinite;
     }
   }
 }

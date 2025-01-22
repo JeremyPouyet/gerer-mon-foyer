@@ -55,7 +55,7 @@ onUnmounted(() => {
     <div
       v-for="coin in coins"
       :key="coin.id"
-      class="coin"
+      class="coin pointer"
       :style="{ top: `${coin.y}px`, left: `${coin.x}px` }"
       @click="onClick(coin.id)"
     >
@@ -73,11 +73,12 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/drawings.scss';
+
 $primary-red: #ff4d4d;
 $primary-yellow: #ffd700;
 $primary-blue: #4dafff;
 $background-gradient: linear-gradient(to bottom, #ffe680, #ffcc80);
-$gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af37 75%, #f39c12);
 
 .coin-container {
   position: relative;
@@ -124,51 +125,8 @@ $gold-metallic: linear-gradient(45deg, #f9d976, #f39c12 25%, #f9d976 50%, #d4af3
     letter-spacing: 1px;
   }
 
-  .coin {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: $gold-metallic;
-    border-radius: 50%;
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #444;
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
-    animation: bounce 1.5s infinite ease-in-out;
+  .pointer {
     cursor: pointer;
-  }
-
-  .particle {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: radial-gradient(circle, #ff9999, #ff4d4d);
-    border-radius: 50%;
-    animation: particleExplode 0.8s ease-out forwards;
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes particleExplode {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
   }
 }
 </style>
