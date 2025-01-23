@@ -2,7 +2,7 @@
 import '@/assets/secondary.scss'
 
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
-import ProjectEditor from '@/components/project/ProjectEditor.vue'
+import ProjectEditor from '@/components/projects/ProjectEditor.vue'
 import ProjectsEdit from '@/components/leftColumns/ProjectsEdit.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 

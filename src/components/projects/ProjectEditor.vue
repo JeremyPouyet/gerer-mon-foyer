@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Distribution from '@/components/Distribution.vue'
-import ExpenseAdd from '@/components/project/ExpenseAdd.vue'
+import ExpenseAdd from '@/components/projects/ExpenseAdd.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
-import PaymentAdd from '@/components/project/PaymentAdd.vue'
-import PaymentsTable from '@/components/project/PaymentsTable.vue'
+import PaymentAdd from '@/components/projects/PaymentAdd.vue'
+import PaymentsTable from '@/components/projects/PaymentsTable.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
@@ -14,6 +14,7 @@ import userManager from '@/managers/userManager'
 
 import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
+import type { ID } from '@/types'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -79,6 +80,10 @@ function executeEditProjectName() : void {
 function cancelEditProjectName() : void {
   isEditingProjectName.value = false
   newProjectName.value = ''
+}
+
+function btnDoneClick(id: ID, done: boolean) {
+  currentProject.expenseUpdate(id, { done })
 }
 
 onMounted(() => {
@@ -149,6 +154,9 @@ onMounted(() => {
                 Total
               </th>
               <th class="text-end" scope="col">
+                Acheté ?
+              </th>
+              <th class="text-end" scope="col">
                 Actions
               </th>
             </tr>
@@ -168,7 +176,7 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell"
+                class="align-middle editable-cell"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
@@ -190,7 +198,7 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell text-end"
+                class="align-middle editable-cell text-end"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
@@ -211,7 +219,7 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell text-end"
+                class="align-middle editable-cell text-end"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
@@ -221,6 +229,16 @@ onMounted(() => {
               </td>
               <td class="align-middle text-end">
                 {{ sexyNumber(expense.quantity * expense.price) }}
+              </td>
+              <td class="text-end">
+                <input :id="`btn-${expense.id}`" autocomplete="off" :checked="expense.done" class="btn-check" type="checkbox">
+                <label
+                  class="btn btn-primary"
+                  :for="`btn-${expense.id}`"
+                  @click="btnDoneClick(expense.id, !expense.done)"
+                >
+                  {{ expense.done ? 'Oui' : 'Non' }}
+                </label>
               </td>
               <td class="text-end align-middle text-nowrap">
                 <Note
@@ -249,7 +267,7 @@ onMounted(() => {
               <td class="text-end" colspan="3">
                 {{ sexyNumber(expenses.sum) }}
               </td>
-              <td />
+              <td colspan="2" />
             </tr>
           </tfoot>
         </table>

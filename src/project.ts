@@ -9,6 +9,7 @@ export interface Expense {
   note?: string
   quantity: number
   price: number
+  done: boolean
 }
 
 export interface ExpenseList {
