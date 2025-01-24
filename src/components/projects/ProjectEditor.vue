@@ -233,7 +233,7 @@ onMounted(() => {
               <td class="text-end">
                 <input :id="`btn-${expense.id}`" autocomplete="off" :checked="expense.done" class="btn-check" type="checkbox">
                 <label
-                  class="btn btn-primary"
+                  class="btn btn-primary w-50"
                   :for="`btn-${expense.id}`"
                   @click="btnDoneClick(expense.id, !expense.done)"
                 >

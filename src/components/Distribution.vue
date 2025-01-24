@@ -19,10 +19,7 @@ defineProps<{ total: number }>()
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         <div>
-          <div class="fw-bold">
-            {{ user.name }}
-          </div>
-          {{ sexyAmount(total * user.ratio) }}
+          <span class="fw-bold">{{ user.name }}</span> doit donner <span class="fw-bold">{{ sexyAmount(total * user.ratio) }}</span>
         </div>
         <span class="badge bg-secondary rounded-pill">
           Ratio de {{ sexyNumber(user.ratio, 'percent') }}
