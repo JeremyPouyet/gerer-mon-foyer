@@ -182,7 +182,7 @@ onMounted(() => {
                 @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
               >
-                <span>{{ expense.name }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
               <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle text-end">
@@ -204,7 +204,7 @@ onMounted(() => {
                 @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
               >
-                <span>{{ expense.quantity }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ expense.quantity }}</span>
               </td>
               <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle text-end">
                 <input
@@ -225,9 +225,9 @@ onMounted(() => {
                 @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
                 @keydown.enter="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
               >
-                <span>{{ sexyNumber(expense.price) }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ sexyNumber(expense.price) }}</span>
               </td>
-              <td class="align-middle text-end">
+              <td class="align-middle text-end" :class="`${expense.done ? 'text-body-secondary' : ''}`">
                 {{ sexyNumber(expense.quantity * expense.price) }}
               </td>
               <td class="text-end">
