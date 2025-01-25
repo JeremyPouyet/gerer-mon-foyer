@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
   <ul class="item-list p-0">
     <li v-for="project in projects" :key="project.id" aria-live="polite" class="item py-2">
-      <div class="d-flex justify-content-between container-fluid align-items-center">
+      <div class="d-flex justify-content-between container-fluid align-items-center pe-0">
         <div>
           <span
             v-tooltip

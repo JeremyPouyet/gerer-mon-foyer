@@ -40,7 +40,7 @@ function userDelete(user: User) : void {
 </script>
 
 <template>
-  <div class="d-flex justify-content-between container-fluid align-items-center">
+  <div class="d-flex justify-content-between container-fluid align-items-center pe-0">
     <!-- Inner page anchor to the user's corresponding section -->
     <a
       v-if="isEditing === false"

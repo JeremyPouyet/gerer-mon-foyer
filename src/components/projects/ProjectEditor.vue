@@ -22,12 +22,6 @@ const currentProject = reactive(props.currentProject)
 const expenses = computed(() => currentProject.expenseSorted())
 const newProjectName = ref('')
 const isEditingProjectName = ref(false)
-const percentageBought = computed(() => {
-  const expensesList = Object.values(currentProject.expenses)
-  const doneCount = expensesList.filter(expense => expense.done).length
-
-  return (doneCount / (expensesList.length || 1)) * 100
-})
 
 let inputRef : HTMLInputElement
 const projectNameInput = ref<HTMLInputElement>()
@@ -142,7 +136,7 @@ onMounted(() => {
   <hr class="mb-4 mt-0">
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
-      <span class="form-label fw-bold d-block">Liste des dépenses nécessaires</span>
+      <span class="form-label fw-bold d-block">1. Je liste les dépenses nécessaires au projet</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
           <thead>
@@ -240,7 +234,8 @@ onMounted(() => {
                 <input :id="`btn-${expense.id}`" autocomplete="off" :checked="expense.done" class="btn-check" type="checkbox">
                 <label
                   v-tooltip
-                  class="btn btn-primary w-50"
+                  class="btn w-50"
+                  :class="expense.done ? 'btn-primary' : 'btn-secondary'"
                   data-bs-title="Cliquer pour changer"
                   :for="`btn-${expense.id}`"
                   @click="btnDoneClick(expense.id, !expense.done)"
@@ -267,29 +262,15 @@ onMounted(() => {
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td class="fw-bold">
-                Total
-              </td>
-              <td class="text-end" colspan="3">
-                {{ sexyNumber(expenses.sum) }}
-              </td>
-              <td class="text-end">
-                {{ percentageBought }}%
-              </td>
-              <td />
-            </tr>
-          </tfoot>
         </table>
       </div>
       <ExpenseAdd :current-project="currentProject" />
     </div>
-    <Distribution :total="expenses.sum" />
+    <Distribution :total="expenses.sum" :with-total="true" />
   </div>
   <div v-if="userManager.users.length > 0" class="row mt-3">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
-      <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
+      <span class="form-label fw-bold d-block">3. Je liste les payments réalisés par les habitants</span>
       <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">
         <p>
           Aucun payment n’a encore été fait.
