@@ -290,7 +290,8 @@ onMounted(() => {
             class="list-group-item d-flex align-items-center"
           >
             <div>
-              <span class="fw-bold">{{ resident }}</span> a donné <ShowAmount :amount="value" />, soit {{ sexyNumber(value / currentProject.paymentsSorted().sum, 'percent') }}
+              <span class="fw-bold">{{ resident }}</span> a donné <ShowAmount :amount="value" />,
+              soit <span class="fw-bold">{{ sexyNumber(value / currentProject.paymentsSorted().sum, 'percent') }}</span> du montant.
             </div>
           </li>
         </ul>
