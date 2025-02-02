@@ -5,16 +5,15 @@ import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 import PaymentAdd from '@/components/projects/PaymentAdd.vue'
 import PaymentsTable from '@/components/projects/PaymentsTable.vue'
+import ShowAmount from '@/components/helpers/ShowAmount.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-import { sexyAmount, sexyNumber } from '@/formaters'
 import type { ID } from '@/types'
 import Project from '@/project'
 import projectManager from '@/managers/projectManager'
+import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
-import userManager from '@/managers/userManager'
-import ShowAmount from '../helpers/ShowAmount.vue'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)

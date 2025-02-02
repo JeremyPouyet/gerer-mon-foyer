@@ -246,11 +246,8 @@ export default class Project {
       acc[payment.resident] += payment.value
       return acc
     }, {} as Record<string, number >)
-    return {
-      byUser,
-      list: payments.sort(paymentSorters[settingManager.settings.sort]),
-      sum
-    }
+
+    return { byUser, list: payments.sort(paymentSorters[settingManager.settings.sort]), sum }
   }
 
   /**

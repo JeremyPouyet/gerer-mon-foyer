@@ -4,7 +4,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
 
 import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
-import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
+import { sexyDate, sexyNumber } from '@/formaters'
 import type { Payment } from '@/project'
 import type Project from '@/project'
 import { useEditable } from '@/helpers'

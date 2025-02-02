@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ShowAmount from './helpers/ShowAmount.vue'
 
-import { sexyAmount, sexyNumber } from '@/formaters'
+import { sexyNumber } from '@/formaters'
 import userManager from '@/managers/userManager'
 
 defineProps<{ total: number, withTotal?: boolean }>()
