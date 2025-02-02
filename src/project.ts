@@ -232,23 +232,25 @@ export default class Project {
   }
 
   /**
-   * Groups payments by resident name and calculates their total values.
+   * Get sorted payments.
    *
-   * @returns A record of payments grouped by resident.
+   * @returns sorted payments.
    */
-  paymentsSorted(): Record<string, { list: Payment[], sum: number }> {
-    const payments = Object.values(this.payments).reduce((acc, payment) => {
+  paymentsSorted(): { byUser: Record<string, number >, list: Payment[], sum: number } {
+    const payments = Object.values(this.payments)
+    let sum = 0
+    const byUser = payments.reduce((acc, payment) => {
       if (!acc[payment.resident])
-        acc[payment.resident] = { list: [], sum: 0 }
-      acc[payment.resident].list.push(payment)
-      acc[payment.resident].sum += payment.value
+        acc[payment.resident] = 0
+      sum += payment.value
+      acc[payment.resident] += payment.value
       return acc
-    }, {} as Record<string, { list: Payment[]; sum: number }>)
-
-    for (const key in payments)
-      payments[key].list = payments[key].list.sort(paymentSorters[settingManager.settings.sort])
-
-    return payments
+    }, {} as Record<string, number >)
+    return {
+      byUser,
+      list: payments.sort(paymentSorters[settingManager.settings.sort]),
+      sum
+    }
   }
 
   /**

@@ -8,13 +8,13 @@ import PaymentsTable from '@/components/projects/PaymentsTable.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
+import { sexyAmount, sexyNumber } from '@/formaters'
+import type { ID } from '@/types'
 import Project from '@/project'
 import projectManager from '@/managers/projectManager'
-import userManager from '@/managers/userManager'
-
-import type { ID } from '@/types'
-import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
+import userManager from '@/managers/userManager'
+import ShowAmount from '../helpers/ShowAmount.vue'
 
 const props = defineProps<{ currentProject: Project }>()
 const currentProject = reactive(props.currentProject)
@@ -148,7 +148,7 @@ onMounted(() => {
                 Quantitée
               </th>
               <th class="text-end" scope="col">
-                Prix
+                Prix unitaire
               </th>
               <th class="text-end" scope="col">
                 Total
@@ -268,10 +268,10 @@ onMounted(() => {
     </div>
     <Distribution :total="expenses.sum" :with-total="true" />
   </div>
-  <div v-if="userManager.users.length > 0" class="row mt-3">
+  <div class="row mt-3">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
       <span class="form-label fw-bold d-block">3. Je liste les payments réalisés par les habitants</span>
-      <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">
+      <div v-if="currentProject.paymentsSorted().list.length === 0">
         <p>
           Aucun payment n’a encore été fait.
         </p>
@@ -280,6 +280,22 @@ onMounted(() => {
         <PaymentsTable :current-project="currentProject" />
       </div>
       <PaymentAdd :current-project="currentProject" />
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+      <div>
+        <span class="form-label fw-bold d-block">4. Répartition effectué des payments</span>
+        <ul class="list-group">
+          <li
+            v-for="(value, resident) in currentProject.paymentsSorted().byUser"
+            :key="resident"
+            class="list-group-item d-flex align-items-center"
+          >
+            <div>
+              <span class="fw-bold">{{ resident }}</span> a donné <ShowAmount :amount="value" />, soit {{ sexyNumber(value / currentProject.paymentsSorted().sum, 'percent') }}
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

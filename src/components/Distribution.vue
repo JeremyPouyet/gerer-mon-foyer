@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ShowAmount from './helpers/ShowAmount.vue'
+
 import { sexyAmount, sexyNumber } from '@/formaters'
 import userManager from '@/managers/userManager'
 
@@ -8,9 +10,9 @@ defineProps<{ total: number, withTotal?: boolean }>()
 <template>
   <div class="col-sm-12 col-md-12 col-lg-6 mt-0 mb-4">
     <p class="mb-1">
-      <span class="fw-bold">2. Répartition des dépenses</span>
+      <span class="fw-bold">2. Répartition théorique du montant</span>
       <span v-if="userManager.users.length > 0 && withTotal">
-        - pour un total de <span class="fw-bold text-danger">{{ sexyAmount(total) }}</span> :
+        - pour un total de <ShowAmount :amount="total" /> :
       </span>
     </p>
     <p v-if="userManager.users.length === 0">
@@ -24,7 +26,7 @@ defineProps<{ total: number, withTotal?: boolean }>()
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         <div>
-          <span class="fw-bold">{{ user.name }}</span> doit donner <span class="fw-bold text-danger">{{ sexyAmount(total * user.ratio) }}</span>
+          <span class="fw-bold">{{ user.name }}</span> doit donner <ShowAmount :amount="total * user.ratio" />
         </div>
         <span class="badge bg-secondary rounded-pill">
           Ratio de {{ sexyNumber(user.ratio, 'percent') }}
