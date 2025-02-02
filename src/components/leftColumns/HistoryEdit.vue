@@ -36,7 +36,7 @@ function removeSample(date: string) : void {
 <template>
   <ul class="item-list p-0">
     <li v-for="sample in history" :key="sample.date" aria-live="polite" class="item py-2">
-      <div class="d-flex justify-content-between container-fluid align-items-center">
+      <div class="d-flex justify-content-between container-fluid align-items-center pe-0">
         <span
           v-tooltip
           :aria-label="`Sélectionner la date du ${sexyDate(sample.date)}`"

@@ -11,7 +11,6 @@ import BrowserStorage, { StorageKey } from '@/browserStorage'
 import { Path } from '@/types'
 import { limitedEvaluate } from '@/helpers'
 import settingManager from '@/managers/settingManager'
-import { sexyAmount } from '@/formaters'
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
@@ -53,11 +52,11 @@ function computeValue() : number {
   <div class="container">
     <ViewTitle emoji="🛋️" :path="Path.Simulator" unpaded />
     <div class="row mb-4 mt-4">
-      <div class="col-md-5 col-sm-12">
-        <label class="form-label fw-bold" for="expenseInput">Prix ou formule</label>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <label class="form-label fw-bold" for="expenseInput">1. Je donne la valeur de la dépense</label>
         <div class="input-group mb-3">
           <span v-if="!settingManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computeValue()) }}
+            {{ settingManager.getCurrencySymbol() }}
           </span>
           <input
             id="expenseInput"
@@ -71,7 +70,7 @@ function computeValue() : number {
             type="text"
           >
           <span v-if="settingManager.isCurrencySymbolOnRight()" class="input-group-text">
-            {{ sexyAmount(computeValue()) }}
+            {{ settingManager.getCurrencySymbol() }}
           </span>
         </div>
       </div>

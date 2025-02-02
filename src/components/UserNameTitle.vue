@@ -57,6 +57,6 @@ function showTransactions(transactionType: TransactionType) {
 
 <style scope>
 .text-container {
-  height: 2.5rem;
+  height: 2.3rem;
 }
 </style>

@@ -40,7 +40,7 @@ onUnmounted(() => {
 <template>
   <div
     class="col-auto mb-4"
-    :class="[isSmallScreen ? 'full-width' : 'char-width-30']"
+    :class="[isSmallScreen ? 'w-100' : 'char-width-30']"
   >
     <div
       aria-labelledby="sticky-header"
@@ -61,8 +61,5 @@ onUnmounted(() => {
 <style lang="css">
 .sticky-offset {
   top: 1.5rem;
-}
-.full-width {
-  width: 100%;
 }
 </style>

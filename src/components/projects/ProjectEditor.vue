@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import Distribution from '@/components/Distribution.vue'
-import ExpenseAdd from '@/components/project/ExpenseAdd.vue'
+import ExpenseAdd from '@/components/projects/ExpenseAdd.vue'
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
-import PaymentAdd from '@/components/project/PaymentAdd.vue'
-import PaymentsTable from '@/components/project/PaymentsTable.vue'
+import PaymentAdd from '@/components/projects/PaymentAdd.vue'
+import PaymentsTable from '@/components/projects/PaymentsTable.vue'
+import ShowAmount from '@/components/helpers/ShowAmount.vue'
 
 import { type ComponentPublicInstance, computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
+import type { ID } from '@/types'
 import Project from '@/project'
 import projectManager from '@/managers/projectManager'
-import userManager from '@/managers/userManager'
-
 import { sexyNumber } from '@/formaters'
 import { useEditable } from '@/helpers'
 
@@ -81,6 +81,10 @@ function cancelEditProjectName() : void {
   newProjectName.value = ''
 }
 
+function btnDoneClick(id: ID, done: boolean) {
+  currentProject.expenseUpdate(id, { done })
+}
+
 onMounted(() => {
   function handleClickOutside(event: MouseEvent) : void {
     if (!inputRef?.contains(event.target as Node)) {
@@ -131,7 +135,7 @@ onMounted(() => {
   <hr class="mb-4 mt-0">
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
-      <span class="form-label fw-bold d-block">Liste des dépenses nécessaires</span>
+      <span class="form-label fw-bold d-block">1. Je liste les dépenses nécessaires au projet</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
           <thead>
@@ -143,10 +147,13 @@ onMounted(() => {
                 Quantitée
               </th>
               <th class="text-end" scope="col">
-                Prix
+                Prix unitaire
               </th>
               <th class="text-end" scope="col">
                 Total
+              </th>
+              <th class="text-end" scope="col">
+                Acheté ?
               </th>
               <th class="text-end" scope="col">
                 Actions
@@ -168,13 +175,13 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell"
+                class="align-middle editable-cell"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
               >
-                <span>{{ expense.name }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ expense.name }}</span>
                 <NoteIcon :text="expense.note" />
               </td>
               <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle text-end">
@@ -190,13 +197,13 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell text-end"
+                class="align-middle editable-cell text-end"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
                 @keypress.enter="startEdit(expense.id, 'quantity', expense.quantity, () => inputRef?.focus())"
               >
-                <span>{{ expense.quantity }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ expense.quantity }}</span>
               </td>
               <td v-if="editedId === expense.id && editedType === 'price'" class="align-middle text-end">
                 <input
@@ -211,16 +218,29 @@ onMounted(() => {
               </td>
               <td
                 v-else
-                class="editable-cell text-end"
+                class="align-middle editable-cell text-end"
                 role="button"
                 tabindex="0"
                 @click="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
                 @keydown.enter="startEdit(expense.id, 'price', expense.price, () => inputRef?.focus())"
               >
-                <span>{{ sexyNumber(expense.price) }}</span>
+                <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ sexyNumber(expense.price) }}</span>
               </td>
-              <td class="align-middle text-end">
+              <td class="align-middle text-end" :class="`${expense.done ? 'text-body-secondary' : ''}`">
                 {{ sexyNumber(expense.quantity * expense.price) }}
+              </td>
+              <td class="text-end">
+                <input :id="`btn-${expense.id}`" autocomplete="off" :checked="expense.done" class="btn-check" type="checkbox">
+                <label
+                  v-tooltip
+                  class="btn w-50"
+                  :class="expense.done ? 'btn-primary' : 'btn-secondary'"
+                  data-bs-title="Cliquer pour changer"
+                  :for="`btn-${expense.id}`"
+                  @click="btnDoneClick(expense.id, !expense.done)"
+                >
+                  {{ expense.done ? 'Oui' : 'Non' }}
+                </label>
               </td>
               <td class="text-end align-middle text-nowrap">
                 <Note
@@ -241,27 +261,16 @@ onMounted(() => {
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td class="fw-bold">
-                Total
-              </td>
-              <td class="text-end" colspan="3">
-                {{ sexyNumber(expenses.sum) }}
-              </td>
-              <td />
-            </tr>
-          </tfoot>
         </table>
       </div>
       <ExpenseAdd :current-project="currentProject" />
     </div>
-    <Distribution :total="expenses.sum" />
+    <Distribution :total="expenses.sum" :with-total="true" />
   </div>
-  <div v-if="userManager.users.length > 0" class="row mt-3">
+  <div class="row mt-3">
     <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
-      <span class="form-label fw-bold d-block">Payments réalisés par les habitants</span>
-      <div v-if="Object.keys(currentProject.paymentsSorted()).length === 0">
+      <span class="form-label fw-bold d-block">3. Je liste les payments réalisés par les habitants</span>
+      <div v-if="currentProject.paymentsSorted().list.length === 0">
         <p>
           Aucun payment n’a encore été fait.
         </p>
@@ -270,6 +279,23 @@ onMounted(() => {
         <PaymentsTable :current-project="currentProject" />
       </div>
       <PaymentAdd :current-project="currentProject" />
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+      <div>
+        <span class="form-label fw-bold d-block">4. Répartition effectué des payments</span>
+        <ul class="list-group">
+          <li
+            v-for="(value, resident) in currentProject.paymentsSorted().byUser"
+            :key="resident"
+            class="list-group-item d-flex align-items-center"
+          >
+            <div>
+              <span class="fw-bold">{{ resident }}</span> a donné <ShowAmount :amount="value" />,
+              soit <span class="fw-bold">{{ sexyNumber(value / currentProject.paymentsSorted().sum, 'percent') }}</span> du montant.
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

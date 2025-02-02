@@ -116,7 +116,7 @@ const unsavedChangeText = computed(() => {
   <div class="container">
     <ViewTitle emoji="💅" :path="Path.Settings" unpaded />
     <div class="row mb-4">
-      <div class="col-sm-12 col-md-5 mt-2">
+      <div class="col-sm-12 col-md-12 col-lg-5 mt-2">
         <h2 class="mb-4">
           Mes données
         </h2>
@@ -162,14 +162,14 @@ const unsavedChangeText = computed(() => {
         </div>
       </div>
 
-      <div class="col-md-1 d-md-flex mt-2">
-        <!-- Vertical Rule for medium and larger screens -->
-        <div class="vr my-auto mx-auto d-none d-md-block" style="height: 400px;" />
-        <!-- Horizontal Rule for small screens -->
-        <hr class="d-md-none w-100 my-4">
+      <div class="col-lg-2 d-lg-flex mt-2">
+        <!-- Vertical Rule for larger screens -->
+        <div class="vr my-auto mx-auto d-none d-lg-block" style="height: 400px;" />
+        <!-- Horizontal Rule for smaller screens -->
+        <hr class="d-lg-none w-100 my-4">
       </div>
 
-      <div class="col-sm-12 col-md-5 mt-2">
+      <div class="col-sm-12 col-md-12 col-lg-5 mt-2">
         <h2 class="mb-4">
           Affichage
         </h2>

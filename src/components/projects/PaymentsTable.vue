@@ -4,7 +4,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker'
 
 import { type ComponentPublicInstance, onMounted, onUnmounted, ref } from 'vue'
-import { sexyAmount, sexyDate, sexyNumber } from '@/formaters'
+import { sexyDate, sexyNumber } from '@/formaters'
 import type { Payment } from '@/project'
 import type Project from '@/project'
 import { useEditable } from '@/helpers'
@@ -84,18 +84,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <table v-for="(payments, resident) in currentProject.paymentsSorted()" :key="resident" class="table table-hover mb-0">
+  <table class="table table-hover mb-0">
     <thead>
-      <tr>
-        <th colspan="4">
-          {{ resident }} - Total payé : {{ sexyAmount(payments.sum) }}
-        </th>
-      </tr>
       <tr>
         <th scope="col" style="width:20%">
           Date
         </th>
-        <th scope="col" style="width:50%">
+        <th scope="col" style="width:20%">
+          Habitant
+        </th>
+        <th scope="col" style="width:30%">
           Commentaire
         </th>
         <th class="text-end" scope="col" style="width:20%">
@@ -107,7 +105,7 @@ onMounted(() => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="payment in payments.list" :key="payment.id">
+      <tr v-for="payment in currentProject.paymentsSorted().list" :key="payment.id">
         <td v-if="editedId === payment.id && editedType === 'date'" class="text-nowrap">
           <VueDatePicker
             ref="datepicker"
@@ -135,6 +133,9 @@ onMounted(() => {
           @keydown.enter="startEditDate(payment)"
         >
           <span>{{ sexyDate(payment.date, false) }}</span>
+        </td>
+        <td>
+          {{ payment.resident }}
         </td>
         <td v-if="editedId === payment.id && editedType === 'comment'" class="align-middle">
           <input
