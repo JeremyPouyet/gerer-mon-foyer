@@ -2,7 +2,7 @@ import { create, divideDependencies, evaluateDependencies, subtractDependencies 
 
 import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
-import { type Ref, computed, h } from 'vue'
+import { type Ref, computed } from 'vue'
 import type Account from './account'
 
 import { Modal } from 'bootstrap'
