@@ -2,8 +2,10 @@ import { create, divideDependencies, evaluateDependencies, subtractDependencies 
 
 import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
-import { type Ref, computed } from 'vue'
+import { type Ref, computed, h } from 'vue'
 import type Account from './account'
+
+import { Modal } from 'bootstrap'
 
 const math = create({ divideDependencies, evaluateDependencies, subtractDependencies })
 const limitedEvaluate = math.evaluate.bind(math)
@@ -17,6 +19,37 @@ const multipliers : Multipliers = {
   [Frequency.quarterly]: { [Frequency.monthly]: 1/3,  [Frequency.biannual]: 2,    [Frequency.yearly]: 4 },
   [Frequency.biannual]:  { [Frequency.monthly]: 1/6,  [Frequency.quarterly]: 1/2, [Frequency.yearly]: 2 },
   [Frequency.yearly]:    { [Frequency.monthly]: 1/12, [Frequency.quarterly]: 1/4, [Frequency.biannual]: 1/2 }
+}
+
+export function confirmModal(text: string, callback: (arg0: boolean) => void) {
+  const htmlModal = document.getElementById('confirmModal')
+  const htmlConfirmBtn = document.getElementById('confirmBtn')
+  const htmlBodyText = document.querySelector('#confirmModal .modal-body')
+
+  if (!htmlModal || !htmlConfirmBtn || !htmlBodyText)
+    return
+
+  htmlBodyText.textContent = text
+  const confirmModal = new Modal(htmlModal)
+  confirmModal.show()
+
+  const handleCancel = () => {
+    callback(false)
+    htmlModal.removeEventListener('hidden.bs.modal', handleCancel)
+  }
+
+  // Attach cancellation handler
+  htmlModal.addEventListener('hidden.bs.modal', handleCancel, { once: true })
+
+  // Handle confirmation button click
+  htmlConfirmBtn.onclick = function () {
+    confirmModal.hide()
+
+    // Prevent calling the callback again when the modal is hidden
+    htmlModal.removeEventListener('hidden.bs.modal', handleCancel)
+
+    callback(true)
+  }
 }
 
 /**

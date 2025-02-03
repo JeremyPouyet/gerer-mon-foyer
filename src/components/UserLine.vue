@@ -3,6 +3,7 @@ import { nextTick, ref } from 'vue'
 
 import User from '@/user'
 import userManager from '@/managers/userManager'
+import { confirmModal } from '@/helpers'
 
 const props = defineProps<{ user: User }>()
 
@@ -33,9 +34,11 @@ function handleClickOutside(event: MouseEvent) : void {
 }
 
 function userDelete(user: User) : void {
-  const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
-
-  if (confirmation) userManager.delete(user)
+  confirmModal(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`, confirmed => {
+    console.log(confirmed)
+    // if (confirmed) userManager.delete(user)
+  })
+  //const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
 }
 </script>
 
