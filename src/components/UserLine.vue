@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
+import { inject, nextTick, ref } from 'vue'
 
 import User from '@/user'
 import userManager from '@/managers/userManager'
-import { confirmModal } from '@/helpers'
 
+const openModal = inject('openModal') as (arg0: string, arg1: () => void) => void
 const props = defineProps<{ user: User }>()
 
 const isEditing = ref(false)
@@ -34,11 +34,9 @@ function handleClickOutside(event: MouseEvent) : void {
 }
 
 function userDelete(user: User) : void {
-  confirmModal(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`, confirmed => {
-    console.log(confirmed)
-    // if (confirmed) userManager.delete(user)
+  openModal(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`, () => {
+    userManager.delete(user)
   })
-  //const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
 }
 </script>
 
