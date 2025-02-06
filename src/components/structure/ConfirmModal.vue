@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { type Ref, inject } from 'vue'
-
-const { modalCallback, modalMessage } = inject('modalSetup') as { modalCallback: Ref<() => void>, modalMessage: Ref<string> }
-
-const confirm = () => modalCallback.value()
-
+defineProps<{ message: string, callback: (() => void) | undefined }>()
 </script>
 
 <template>
@@ -18,13 +13,13 @@ const confirm = () => modalCallback.value()
           <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" />
         </div>
         <div class="modal-body">
-          {{ modalMessage }}
+          {{ message }}
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
             Annuler
           </button>
-          <button id="confirmBtn" class="btn btn-primary" type="button" @click="confirm">
+          <button id="confirmBtn" class="btn btn-primary" type="button" @click="callback?.()">
             Confirmer
           </button>
         </div>
