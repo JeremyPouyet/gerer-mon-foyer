@@ -3,15 +3,17 @@ import '@/assets/secondary.scss'
 
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { Path, SortType } from '@/types'
+import { type OpenModal, Path, SortType } from '@/types'
 import settingManager, { Currency } from '@/managers/settingManager'
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
 import notificationManager from '@/managers/notificationManager'
 
+import { computed, inject } from 'vue'
 import Texts from '@/texts'
-import { computed } from 'vue'
 import unsavedManager from '@/managers/unsavedManager'
+
+const openModal = inject<OpenModal>('openModal')
 
 function generateDateString() : string {
   const now = new Date()
@@ -77,12 +79,10 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 }
 
 function confirmDataDeletion() : void {
-  const confirmation = confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')
-
-  if (confirmation) {
+  openModal?.('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.', () => {
     db.empty()
     notificationManager.success('Données supprimées avec succès')
-  }
+  })
 }
 
 function twoDecimalsChange(event: Event) : void {

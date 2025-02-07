@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { onMounted, provide, ref, shallowRef } from 'vue'
+import { Modal } from 'bootstrap'
 import { RouterView } from 'vue-router'
 
-import { onMounted, provide, ref, shallowRef } from 'vue'
 import ConfirmModal from './components/structure/ConfirmModal.vue'
 import Footer from '@/components/structure/Footer.vue'
-import { Modal } from 'bootstrap'
 import Navbar from '@/components/structure/Navbar.vue'
 import Notifications from '@/components/structure/Notifications.vue'
 
