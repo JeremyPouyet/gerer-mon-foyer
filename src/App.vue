@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, provide, ref, shallowRef } from 'vue'
-import { Modal } from 'bootstrap'
+import Modal from 'bootstrap/js/dist/modal'
 import { RouterView } from 'vue-router'
 
 import ConfirmModal from './components/structure/ConfirmModal.vue'
