@@ -35,7 +35,7 @@ function handleClickOutside(event: MouseEvent) : void {
 }
 
 function userDelete(user: User) : void {
-  openModal?.(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`, () => {
+  openModal?.('Êtes-vous sûr de vouloir supprimer cet habitant ? Cette action est irréversible.', () => {
     userManager.delete(user)
   })
 }

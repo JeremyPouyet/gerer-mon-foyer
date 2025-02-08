@@ -23,7 +23,7 @@ function projectCreate() : void {
 }
 
 function deleteProject(project: Project) {
-  openModal?.('Êtes-vous sûr de vouloir supprimer votre projet ? Cette action est irréversible.', () => {
+  openModal?.('Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.', () => {
     projectManager.delete(project.id)
   })
 }
