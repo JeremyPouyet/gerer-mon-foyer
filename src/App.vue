@@ -21,6 +21,7 @@ provide('openModal', (msg: string, cb: () => void) => {
 
   modalCallback.value = () => {
     confirmModal?.hide()
+    modalCallback.value = undefined
     cb()
   }
   modalMessage.value = msg
