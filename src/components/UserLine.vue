@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
+import { inject, nextTick, ref } from 'vue'
 
+import type { OpenModal } from '@/types'
 import User from '@/user'
 import userManager from '@/managers/userManager'
 
+const openModal = inject<OpenModal>('openModal')
 const props = defineProps<{ user: User }>()
 
 const isEditing = ref(false)
@@ -33,9 +35,9 @@ function handleClickOutside(event: MouseEvent) : void {
 }
 
 function userDelete(user: User) : void {
-  const confirmation = confirm(`Êtes-vous sûr de vouloir supprimer ${user.name} ? Cette action est irréversible.`)
-
-  if (confirmation) userManager.delete(user)
+  openModal?.('Êtes-vous sûr de vouloir supprimer cet habitant ? Cette action est irréversible.', () => {
+    userManager.delete(user)
+  })
 }
 </script>
 

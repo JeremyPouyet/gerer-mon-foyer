@@ -2,13 +2,15 @@
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 
 import historyManager, { type Sample } from '@/managers/historyManager'
+import type { OpenModal } from '@/types'
 import { sexyDate } from '@/formaters'
 
 const emit = defineEmits(['switchSample'])
 
+const openModal = inject<OpenModal>('openModal')
 const activeDate = ref<string | null | undefined>(historyManager.activeDate)
 const history = ref<Sample[]>(historyManager.history)
 
@@ -21,15 +23,16 @@ function switchSample(date: string) : void {
 }
 
 function removeSample(date: string) : void {
-  const userIsremovingActiveSample = date == historyManager.activeDate
+  openModal?.('Êtes-vous sûr de vouloir supprimer cette date ? Cette action est irréversible.', () => {
+    const userIsremovingActiveSample = date == historyManager.activeDate
 
-  historyManager.delete(date)
+    historyManager.delete(date)
 
-  if (!userIsremovingActiveSample)
-    return
-
-  activeDate.value = historyManager.activeDate
-  emit('switchSample')
+    if (userIsremovingActiveSample) {
+      activeDate.value = historyManager.activeDate
+      emit('switchSample')
+    }
+  })
 }
 </script>
 

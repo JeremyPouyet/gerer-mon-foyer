@@ -35,6 +35,7 @@ export const CurrencyToLocale: Record<Currency, string> = Object.freeze({
 
 interface GlobalSettings {
   currency: Currency,
+  showConfirmModal: boolean,
   sort: SortType,
   twoDecimals: boolean
 }
@@ -47,6 +48,9 @@ const notifications: Notifications = {
   currency: (value: Currency) => notificationManager.success(
     Texts.notifications.settings.currency(settingManager.getCurrencySymbol(value, true))
   ),
+  showConfirmModal: (value: boolean) => notificationManager.success(
+    Texts.notifications.settings.showConfirmModal[value ? 'true' : 'false']
+  ),
   sort: (value: SortType) => notificationManager.success(
     Texts.notifications.settings.sort(Texts.sortTypes[value].toLocaleLowerCase()),
   ),
@@ -58,6 +62,7 @@ const notifications: Notifications = {
 function defaultSettings() : GlobalSettings {
   return {
     currency: Currency.Euro,
+    showConfirmModal: true,
     sort: SortType.Desc,
     twoDecimals: false
   }

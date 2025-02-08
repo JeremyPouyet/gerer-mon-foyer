@@ -3,15 +3,17 @@ import '@/assets/secondary.scss'
 
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { Path, SortType } from '@/types'
+import { type OpenModal, Path, SortType } from '@/types'
 import settingManager, { Currency } from '@/managers/settingManager'
 import db from '@/db'
 import historyManager from '@/managers/historyManager'
 import notificationManager from '@/managers/notificationManager'
 
+import { computed, inject } from 'vue'
 import Texts from '@/texts'
-import { computed } from 'vue'
 import unsavedManager from '@/managers/unsavedManager'
+
+const openModal = inject<OpenModal>('openModal')
 
 function generateDateString() : string {
   const now = new Date()
@@ -77,12 +79,14 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 }
 
 function confirmDataDeletion() : void {
-  const confirmation = confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')
-
-  if (confirmation) {
+  openModal?.('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.', () => {
     db.empty()
     notificationManager.success('Données supprimées avec succès')
-  }
+  })
+}
+
+function showConfirmModalChange(event: Event) : void {
+  settingManager.update('showConfirmModal', (event.target as HTMLInputElement).checked)
 }
 
 function twoDecimalsChange(event: Event) : void {
@@ -173,6 +177,18 @@ const unsavedChangeText = computed(() => {
         <h2 class="mb-4">
           Affichage
         </h2>
+        <div class="form-check form-switch form-check-reverse mb-4">
+          <label class="form-check-label" for="settingConfirm">
+            Demander confirmation lors de suppression importante de données
+          </label>
+          <input
+            id="settingConfirm"
+            :checked="settingManager.settings.showConfirmModal"
+            class="form-check-input"
+            type="checkbox"
+            @change="showConfirmModalChange"
+          >
+        </div>
         <div class="form-check form-switch form-check-reverse mb-4">
           <label class="form-check-label" for="setting2decimals">
             Afficher les nombres avec 2 décimales:

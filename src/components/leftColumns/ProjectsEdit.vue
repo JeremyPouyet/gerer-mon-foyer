@@ -2,13 +2,14 @@
 import Note from '@/components/Note.vue'
 import NoteIcon from '@/components/NoteIcon.vue'
 
-import { onMounted, onUnmounted, ref } from 'vue'
+import { inject, onMounted, onUnmounted, ref } from 'vue'
 
-import type { ID } from '@/types'
+import type { ID, OpenModal } from '@/types'
 import type Project from '@/project'
 import projectManager from '@/managers/projectManager'
 import { sexyDate } from '@/formaters'
 
+const openModal = inject<OpenModal>('openModal')
 const activeId = ref(projectManager.getCurrent().id)
 const projectName = ref('')
 const projects = ref<Project[]>(projectManager.projects)
@@ -19,6 +20,12 @@ function projectCreate() : void {
     projectName.value = ''
     switchProject(newProject.id)
   }
+}
+
+function deleteProject(project: Project) {
+  openModal?.('Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.', () => {
+    projectManager.delete(project.id)
+  })
 }
 
 function updateProjects() {
@@ -69,8 +76,8 @@ onMounted(() => {
             role="button"
             src="@/assets/icons/cross.png"
             tabindex="0"
-            @click="projectManager.delete(project.id)"
-            @keydown.enter="projectManager.delete(project.id)"
+            @click="deleteProject(project)"
+            @keydown.enter="deleteProject(project)"
           >
         </div>
       </div>
