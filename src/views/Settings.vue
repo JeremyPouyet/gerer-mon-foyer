@@ -85,6 +85,10 @@ function confirmDataDeletion() : void {
   })
 }
 
+function showConfirmModalChange(event: Event) : void {
+  settingManager.update('showConfirmModal', (event.target as HTMLInputElement).checked)
+}
+
 function twoDecimalsChange(event: Event) : void {
   settingManager.update('twoDecimals', (event.target as HTMLInputElement).checked)
 }
@@ -173,6 +177,18 @@ const unsavedChangeText = computed(() => {
         <h2 class="mb-4">
           Affichage
         </h2>
+        <div class="form-check form-switch form-check-reverse mb-4">
+          <label class="form-check-label" for="settingConfirm">
+            Demander confirmation lors de suppression importante de données
+          </label>
+          <input
+            id="settingConfirm"
+            :checked="settingManager.settings.showConfirmModal"
+            class="form-check-input"
+            type="checkbox"
+            @change="showConfirmModalChange"
+          >
+        </div>
         <div class="form-check form-switch form-check-reverse mb-4">
           <label class="form-check-label" for="setting2decimals">
             Afficher les nombres avec 2 décimales:
