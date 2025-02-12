@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
+import { provide } from 'vue'
+
 import BudgetShow from '@/components/BudgetShow.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
+import { Path } from '@/types'
 import TransactionsEdit from '@/components/TransactionsEdit.vue'
 import UsersEdit from '@/components/leftColumns/UsersEdit.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
-
 import db from '@/db'
 import userManager from '@/managers/userManager'
 
-import { Path } from '@/types'
-
+provide('editBudget', true)
 </script>
 
 <template>
