@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, provide, ref, shallowRef } from 'vue'
-import Modal from 'bootstrap/js/dist/modal'
+import type Modal from 'bootstrap/js/dist/modal' // Only import type to not load JS
 import { RouterView } from 'vue-router'
 
 import ConfirmModal from './components/structure/ConfirmModal.vue'
@@ -28,11 +28,14 @@ provide('openModal', (msg: string, cb: () => void) => {
   confirmModal?.show()
 })
 
-onMounted(() => {
+onMounted(async () => {
   const htmlModal = document.getElementById('confirmModal')
 
-  if (htmlModal)
-    confirmModal = new Modal(htmlModal)
+  if (htmlModal) {
+    // real import once the page is loaded
+    const { default: BootstrapModal } = await import('bootstrap/js/dist/modal')
+    confirmModal = new BootstrapModal(htmlModal)
+  }
 })
 
 </script>

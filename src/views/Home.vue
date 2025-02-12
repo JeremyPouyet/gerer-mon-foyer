@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import CoinFieldDrawing from '@/components/drawings/CoinfFieldDrawing.vue'
-import HouseDrawing from '@/components/drawings/HouseDrawing.vue'
-import ScaleDrawing from '@/components/drawings/ScaleDrawing.vue'
+import { defineAsyncComponent } from 'vue'
+
+const CoinFieldDrawing = defineAsyncComponent(() => import('@/components/drawings/CoinfFieldDrawing.vue'))
+const HouseDrawing = defineAsyncComponent(() => import('@/components/drawings/HouseDrawing.vue'))
+const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/ScaleDrawing.vue'))
 </script>
 
 <template>
