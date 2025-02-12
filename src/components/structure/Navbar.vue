@@ -39,7 +39,7 @@ async function historicize() {
 <template>
   <nav class="bg-primary navbar navbar-expand-md mb-4 shadow-sm">
     <div class="container-fluid">
-      <RouterLink active-class="active" aria-label="Accueil" class="navbar-brand py-0" to="/">
+      <RouterLink v-once active-class="active" aria-label="Accueil" class="navbar-brand py-0" to="/">
         <p class="text-center mb-0 lh-1">
           Gérer
         </p>
