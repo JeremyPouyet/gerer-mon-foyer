@@ -8,22 +8,19 @@ import { computed, inject } from 'vue'
 import { type OpenModal, Path, SortType } from '@/types'
 import settingManager, { Currency } from '@/managers/settingManager'
 import { type DB } from '@/db'
-import historyManager from '@/managers/historyManager'
 import notificationManager from '@/managers/notificationManager'
 
 import Texts from '@/texts'
 import unsavedManager from '@/managers/unsavedManager'
 
 const openModal = inject<OpenModal>('openModal')
-
 let cachedDB: DB
 
 /**
   Async load the database when needed because it loads many other data
 */
 async function getDB() : Promise<DB> {
-  if (!cachedDB)
-    cachedDB = (await import('@/db')).default
+  cachedDB ||= (await import('@/db')).default
   return cachedDB
 }
 
@@ -83,6 +80,8 @@ async function onFileUploaded(event: ProgressEvent<FileReader>) : Promise<undefi
 
     const db = await getDB()
     db.setup()
+
+    const historyManager = (await import('@/managers/historyManager')).default
     historyManager.activeDate = historyManager.history[0]?.date || ''
     notificationManager.success('Données importées avec succès')
   } catch (error) {
