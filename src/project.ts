@@ -257,3 +257,5 @@ export default class Project {
     this.updatedAt = new Date().toISOString()
   }
 }
+
+export { Project }
