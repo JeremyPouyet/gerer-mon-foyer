@@ -7,10 +7,10 @@ import ConfirmModal from './components/structure/ConfirmModal.vue'
 import Footer from '@/components/structure/Footer.vue'
 import Navbar from '@/components/structure/Navbar.vue'
 import Notifications from '@/components/structure/Notifications.vue'
-
-import settingManager from '@/managers/settingManager'
+import type { SettingsManager } from '@/managers/settingManager'
 
 let confirmModal: Modal | null
+let settingManager: SettingsManager
 const modalMessage = ref<string>('')
 const modalCallback = shallowRef<() => void>()
 
@@ -20,11 +20,16 @@ async function loadModal() : Promise<Modal | null> {
   if (!htmlModal)
     return null
 
-  const { default: BootstrapModal } = await import('bootstrap/js/dist/modal')
-  return new BootstrapModal(htmlModal)
+  return new (await import('bootstrap/js/dist/modal')).default(htmlModal)
+}
+
+async function loadSettingManager() : Promise<SettingsManager> {
+  return (await import('@/managers/settingManager')).default
 }
 
 provide('openModal', async (msg: string, cb: () => void) => {
+  settingManager ||= await loadSettingManager()
+
   // The user does not want to see the confirmation modal
   if (settingManager.settings.showConfirmModal === false)
     return cb()
