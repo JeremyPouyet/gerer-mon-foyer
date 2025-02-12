@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, provide, ref, shallowRef } from 'vue'
+import { provide, ref, shallowRef } from 'vue'
 import type Modal from 'bootstrap/js/dist/modal' // Only import type to not load JS
 import { RouterView } from 'vue-router'
 
@@ -10,15 +10,26 @@ import Notifications from '@/components/structure/Notifications.vue'
 
 import settingManager from '@/managers/settingManager'
 
-let confirmModal: Modal
+let confirmModal: Modal | null
 const modalMessage = ref<string>('')
 const modalCallback = shallowRef<() => void>()
 
-provide('openModal', (msg: string, cb: () => void) => {
+async function loadModal() : Promise<Modal | null> {
+  const htmlModal = document.getElementById('confirmModal')
+
+  if (!htmlModal)
+    return null
+
+  const { default: BootstrapModal } = await import('bootstrap/js/dist/modal')
+  return new BootstrapModal(htmlModal)
+}
+
+provide('openModal', async (msg: string, cb: () => void) => {
   // The user does not want to see the confirmation modal
   if (settingManager.settings.showConfirmModal === false)
     return cb()
 
+  confirmModal ||= await loadModal()
   modalCallback.value = () => {
     confirmModal?.hide()
     modalCallback.value = undefined
@@ -27,17 +38,6 @@ provide('openModal', (msg: string, cb: () => void) => {
   modalMessage.value = msg
   confirmModal?.show()
 })
-
-onMounted(async () => {
-  const htmlModal = document.getElementById('confirmModal')
-
-  if (htmlModal) {
-    // real import once the page is loaded
-    const { default: BootstrapModal } = await import('bootstrap/js/dist/modal')
-    confirmModal = new BootstrapModal(htmlModal)
-  }
-})
-
 </script>
 
 <template>
