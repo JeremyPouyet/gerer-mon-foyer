@@ -94,11 +94,8 @@ function handleClickOutside(event: MouseEvent) {
       <td v-if="editedTransactionId === transaction.id">
         <select
           v-model="editedTransaction.frequency"
-          v-tooltip
           aria-label="Fréquence de la transaction"
           class="form-select mt-2 mt-sm-0"
-          data-bs-placement="bottom"
-          data-bs-title="Fréquence"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
           @keydown.tab="executeEditTransaction"
@@ -142,6 +139,7 @@ function handleClickOutside(event: MouseEvent) {
           @keydown.tab="executeEditTransaction"
         />
       </td>
+      <!-- Transaction note -->
       <td v-else class="align-middle">
         {{ transaction.note }}
       </td>
@@ -188,5 +186,5 @@ function handleClickOutside(event: MouseEvent) {
       </td>
     </tr>
   </tbody>
-  <TableFooter :income="income?.value" :transaction-list="transactionList" :with-tds="true" />
+  <TableFooter :income="income?.value" :transaction-list="transactionList" />
 </template>
