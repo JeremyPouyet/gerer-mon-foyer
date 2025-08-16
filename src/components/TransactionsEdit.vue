@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import Note from '@/components/Note.vue'
-import NoteIcon from './NoteIcon.vue'
 import TableFooter from './transactionsTable/TableFooter.vue'
 import TableHeader from './transactionsTable/TableHeader.vue'
 
-import { type ComponentPublicInstance, nextTick, ref, toRefs } from 'vue'
+import { nextTick, ref, toRaw, toRefs } from 'vue'
 
-import { Frequency, type ID, type Transaction, TransactionType, frequencies } from '@/types'
+import { Frequency, type ID, type Transaction, TransactionType } from '@/types'
 import { useTransactions, valueAs } from '@/helpers'
 import type Account from '@/account'
 import { AccountType } from '@/account'
@@ -23,71 +21,36 @@ const props = defineProps<{
 const { account, transactionType } = toRefs(props)
 const transactionList = useTransactions(account, transactionType)
 
-const editedName = ref<string>('')
-const editedNameId = ref<ID>()
-const editedValueId = ref<ID>()
-const editedFrequency = ref<Frequency>()
-const editedValue = ref<string>('')
+const editedTransaction = ref<Partial<Transaction>>({ })
+const editedTransactionId = ref<ID | null>()
 
-let input : HTMLInputElement
+const editedRowEl = ref<HTMLElement | null>(null)
 
-function setActiveInput(el: Element | ComponentPublicInstance | null) : void {
-  if (el)
-    input = el as HTMLInputElement
+function startEditTransaction(transaction: Transaction, rowEl: HTMLElement) : void {
+  Object.assign(editedTransaction.value, transaction)
+  editedTransactionId.value = transaction.id
+
+  editedRowEl.value = rowEl
+
+  // Wait for next tick to ensure rowEl is rendered
+  nextTick(() => {
+    // small delay ensures the current click doesn't trigger it
+    setTimeout(() => { document.addEventListener('click', handleClickOutside) }, 0)
+  })
 }
 
-function startEditTransactionName(transaction: Transaction) : void {
-  cancelEditTransactionValue()
-  editedNameId.value = transaction.id
-  editedName.value = transaction.name
-  document.addEventListener('mousedown', handleClickOutside)
-  nextTick(() => input?.focus())
-}
-
-function cancelEditTransactionName() : void {
-  editedNameId.value = undefined
-  editedName.value = ''
-  document.removeEventListener('mousedown', handleClickOutside)
-}
-
-function executeEditTransactionName() : void {
-  if (editedNameId.value && account.value.update(props.transactionType, editedNameId.value, { name: editedName.value }))
-    cancelEditTransactionName()
-}
-
-function startEditTransactionValue(transaction: Transaction, newFrequency: Frequency) : void {
-  cancelEditTransactionName()
-  editedFrequency.value = newFrequency
-  editedValueId.value = transaction.id
-  editedValue.value = newFrequency === transaction.frequency
-    ? transaction.value
-    : sexyNumber(valueAs(transaction, newFrequency))
-  document.addEventListener('mousedown', handleClickOutside)
-  nextTick(() => input?.focus())
-}
-
-function cancelEditTransactionValue() : void {
-  editedFrequency.value = undefined
-  editedValueId.value = undefined
-  editedValue.value = ''
-  document.removeEventListener('mousedown', handleClickOutside)
-}
-
-function executeEditTransactionValue() : void {
-  const draft = { frequency: editedFrequency.value, value: editedValue.value }
-
-  if (editedValueId.value && account.value.update(props.transactionType, editedValueId.value, draft)) {
-    cancelEditTransactionValue()
+function executeEditTransaction() : void {
+  if (editedTransactionId.value && account.value.update(props.transactionType, editedTransactionId.value, toRaw(editedTransaction.value))) {
     if (account.value.type === AccountType.Personal)
       userManager.computeRatios()
+    cancelEditTransaction()
   }
 }
 
-function handleClickOutside(event: MouseEvent) : void {
-  if (input && !input.contains(event.target as Node)) {
-    executeEditTransactionName()
-    executeEditTransactionValue()
-  }
+function cancelEditTransaction() : void {
+  editedTransactionId.value = null
+  document.removeEventListener('click', handleClickOutside)
+  editedRowEl.value = null
 }
 
 function deleteTransaction(transaction: Transaction) {
@@ -96,6 +59,12 @@ function deleteTransaction(transaction: Transaction) {
   if (account.value.type === AccountType.Personal)
     userManager.computeRatios()
 }
+
+function handleClickOutside(event: MouseEvent) {
+  if (editedRowEl.value && !editedRowEl.value.contains(event.target as Node)) {
+    cancelEditTransaction()
+  }
+}
 </script>
 
 <template>
@@ -103,70 +72,107 @@ function deleteTransaction(transaction: Transaction) {
   <tbody>
     <tr v-for="transaction in transactionList.values" :key="transaction.id">
       <!-- Transaction name -->
-      <td v-if="editedNameId === transaction.id">
+      <td v-if="editedTransactionId === transaction.id">
         <input
-          :ref="el => setActiveInput(el)"
-          v-model="editedName"
+          v-model="editedTransaction.name"
           class="char-width-20"
           type="text"
-          @keydown.enter="executeEditTransactionName"
-          @keydown.esc="cancelEditTransactionName"
-          @keydown.tab="executeEditTransactionName"
+          @keydown.enter="executeEditTransaction"
+          @keydown.esc="cancelEditTransaction"
+          @keydown.tab="executeEditTransaction"
         >
       </td>
       <td
         v-else
-        :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}. Cliquer pour éditer.`"
-        class="align-middle editable-cell"
-        role="button"
+        :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}.`"
+        class="align-middle"
         tabindex="0"
-        @click="startEditTransactionName(transaction)"
-        @keydown.enter="startEditTransactionName(transaction)"
       >
         <span>{{ transaction.name }}</span>
-        <NoteIcon :text="transaction.note" />
       </td>
-      <!-- Transaction value by frequency -->
-      <template v-for="frequency in frequencies" :key="frequency">
-        <td v-if="editedValueId == transaction.id && editedFrequency == frequency">
-          <input
-            :ref="el => setActiveInput(el)"
-            v-model="editedValue"
-            class="w-100"
-            type="text"
-            @keydown.enter="executeEditTransactionValue"
-            @keydown.esc="cancelEditTransactionValue"
-            @keydown.tab="executeEditTransactionValue"
-          >
-        </td>
-        <td
-          v-else
-          :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[frequency]}). Cliquer pour éditer.`"
-          class="text-end align-middle editable-cell"
-          role="button"
-          tabindex="0"
-          @click="startEditTransactionValue(transaction, frequency)"
-          @keydown.enter="startEditTransactionValue(transaction, frequency)"
+      <!-- Transaction frequency -->
+      <td v-if="editedTransactionId === transaction.id">
+        <select
+          v-model="editedTransaction.frequency"
+          v-tooltip
+          aria-label="Fréquence de la transaction"
+          class="form-select mt-2 mt-sm-0"
+          data-bs-placement="bottom"
+          data-bs-title="Fréquence"
+          @keydown.enter="executeEditTransaction"
+          @keydown.esc="cancelEditTransaction"
+          @keydown.tab="executeEditTransaction"
         >
-          <span
-            v-tooltip="{ disposeOnClick: true }"
-            :data-bs-title="frequency === transaction.frequency ? transaction.value : ''"
-          >
-            {{ sexyNumber(valueAs(transaction, frequency)) }}
-            <div v-show="transaction.frequency===frequency" class="underline" />
-          </span>
-        </td>
-      </template>
+          <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
+            {{ name }}
+          </option>
+        </select>
+      </td>
+      <td v-else class="align-middle">
+        {{ Texts.frequencies[transaction.frequency] }}
+      </td>
+      <!-- Transaction value -->
+      <td v-if="editedTransactionId == transaction.id">
+        <input
+          v-model="editedTransaction.value"
+          class="w-100"
+          type="text"
+          @keydown.enter="executeEditTransaction"
+          @keydown.esc="cancelEditTransaction"
+          @keydown.tab="executeEditTransaction"
+        >
+      </td>
+      <td
+        v-else
+        :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[Frequency.monthly]}).`"
+        class="text-end align-middle"
+        tabindex="0"
+      >
+        {{ sexyNumber(valueAs(transaction, Frequency.monthly)) }}
+      </td>
       <!-- Transaction income percentage -->
       <td v-if="income" class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
+      <td v-if="editedTransactionId == transaction.id">
+        <textarea
+          v-model="editedTransaction.note"
+          @keydown.ctrl.enter="executeEditTransaction"
+          @keydown.esc="cancelEditTransaction"
+          @keydown.tab="executeEditTransaction"
+        />
+      </td>
+      <td v-else class="align-middle">
+        {{ transaction.note }}
+      </td>
       <!-- Actions -->
       <td class="text-end align-middle text-nowrap">
-        <Note
-          :item="transaction"
-          @update="note => account.update(transactionType, transaction.id, { note })"
-        />
+        <img
+          v-if="!editedTransactionId"
+          v-tooltip="{ disposeOnClick: true }"
+          alt="Éditer"
+          aria-label="Éditer la ligne"
+          class="icon-container-small icon-hoverable"
+          data-bs-title="Éditer"
+          role="button"
+          src="@/assets/icons/pencil.png"
+          tabindex="0"
+          @click="startEditTransaction(transaction, $event.currentTarget.closest('tr') as HTMLElement)"
+          @keydown.enter="startEditTransaction(transaction, $event.currentTarget.closest('tr') as HTMLElement)"
+        >
+        <img
+          v-else
+          v-tooltip="{ disposeOnClick: true }"
+          alt="Sauvegarder"
+          aria-label="Sauvegarder la ligne"
+          class="icon-container-small icon-hoverable"
+          data-bs-title="Sauvegarder"
+          role="button"
+          src="@/assets/icons/diskette.png"
+          tabindex="0"
+          @click="executeEditTransaction"
+          @keydown.enter="executeEditTransaction"
+        >
         <img
           v-tooltip="{ disposeOnClick: true }"
           alt="Supprimer"
