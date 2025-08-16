@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import NoteIcon from './NoteIcon.vue'
 import TableFooter from './transactionsTable/TableFooter.vue'
 import TableHeader from './transactionsTable/TableHeader.vue'
 
@@ -26,10 +25,7 @@ const transactionList = useTransactions(account, transactionType)
     <tr v-for="transaction in transactionList.values" :key="transaction.id">
       <!-- Transaction name -->
       <td :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}`" class="align-middle">
-        <span>
-          {{ transaction.name }}
-        </span>
-        <NoteIcon :text="transaction.note" />
+        {{ transaction.name }}
       </td>
       <!-- Transaction frequency -->
       <td class="text-end align-middle">

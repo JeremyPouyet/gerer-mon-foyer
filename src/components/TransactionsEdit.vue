@@ -86,9 +86,8 @@ function handleClickOutside(event: MouseEvent) {
         v-else
         :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}.`"
         class="align-middle"
-        tabindex="0"
       >
-        <span>{{ transaction.name }}</span>
+        {{ transaction.name }}
       </td>
       <!-- Transaction frequency -->
       <td v-if="editedTransactionId === transaction.id">
@@ -123,7 +122,6 @@ function handleClickOutside(event: MouseEvent) {
         v-else
         :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[Frequency.monthly]}).`"
         class="text-end align-middle"
-        tabindex="0"
       >
         {{ sexyNumber(valueAs(transaction, Frequency.monthly)) }}
       </td>
