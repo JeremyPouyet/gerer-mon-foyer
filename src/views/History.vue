@@ -7,11 +7,13 @@ import HistoryTransactionsShow from '@/components/HistoryTransactionsShow.vue'
 import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { onUnmounted, ref, watch } from 'vue'
+import { onUnmounted, provide, ref, watch } from 'vue'
 
 import historyManager, { type Sample } from '@/managers/historyManager'
 import DBSnapshot from '@/dbSnapshot'
 import { Path } from '@/types'
+
+provide('editBudget', false)
 
 let userWatcherCleanup: (() => void) | null = null
 let accountWatcherCleanup: (() => void) | null = null

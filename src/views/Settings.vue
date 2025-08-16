@@ -3,17 +3,26 @@ import '@/assets/secondary.scss'
 
 import ViewTitle from '@/components/ViewTitle.vue'
 
+import { computed, inject } from 'vue'
+
 import { type OpenModal, Path, SortType } from '@/types'
 import settingManager, { Currency } from '@/managers/settingManager'
-import db from '@/db'
-import historyManager from '@/managers/historyManager'
+import { type DB } from '@/db'
 import notificationManager from '@/managers/notificationManager'
 
-import { computed, inject } from 'vue'
 import Texts from '@/texts'
 import unsavedManager from '@/managers/unsavedManager'
 
 const openModal = inject<OpenModal>('openModal')
+let cachedDB: DB
+
+/**
+  Async load the database when needed because it loads many other data
+*/
+async function getDB() : Promise<DB> {
+  cachedDB ||= (await import('@/db')).default
+  return cachedDB
+}
 
 function generateDateString() : string {
   const now = new Date()
@@ -24,8 +33,8 @@ function generateDateString() : string {
   return `${year}-${month}-${day}-sauvegarde.json`
 }
 
-function saveFile() : void {
-  const blob = new Blob([db.export()], { type: 'application/json' })
+async function saveFile() : Promise<undefined> {
+  const blob = new Blob([(await getDB()).export()], { type: 'application/json' })
   const link = document.createElement('a')
 
   link.href = URL.createObjectURL(blob)
@@ -57,7 +66,7 @@ function uploadFile() : void {
   input.click()
 }
 
-function onFileUploaded(event: ProgressEvent<FileReader>) : void {
+async function onFileUploaded(event: ProgressEvent<FileReader>) : Promise<undefined> {
   try {
     const reader = event.target
 
@@ -69,7 +78,10 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
     for (const [key, value] of Object.entries(data))
       localStorage.setItem(key, value)
 
+    const db = await getDB()
     db.setup()
+
+    const historyManager = (await import('@/managers/historyManager')).default
     historyManager.activeDate = historyManager.history[0]?.date || ''
     notificationManager.success('Données importées avec succès')
   } catch (error) {
@@ -79,7 +91,8 @@ function onFileUploaded(event: ProgressEvent<FileReader>) : void {
 }
 
 function confirmDataDeletion() : void {
-  openModal?.('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.', () => {
+  openModal?.('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.', async () => {
+    const db = await getDB()
     db.empty()
     notificationManager.success('Données supprimées avec succès')
   })

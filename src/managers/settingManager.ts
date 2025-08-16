@@ -136,4 +136,5 @@ class SettingsManager {
   }
 }
 const settingManager = new SettingsManager()
+export { SettingsManager }
 export default settingManager

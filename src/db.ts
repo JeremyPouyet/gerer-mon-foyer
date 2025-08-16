@@ -63,3 +63,4 @@ class DB {
 }
 
 export default new DB()
+export { DB }

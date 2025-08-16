@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type HistoryTransactionsShow from '../HistoryTransactionsShow.vue'
-import TransactionsEdit from '../TransactionsEdit.vue'
+import type TransactionsEdit from '../TransactionsEdit.vue'
 
-import { computed, nextTick, ref, toRefs } from 'vue'
+import { computed, inject, nextTick, ref, toRefs } from 'vue'
 
 import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
@@ -20,6 +20,7 @@ const props = defineProps<{
 const { account, transactionType } = toRefs(props)
 const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
 const newTransactionInputName = ref<HTMLInputElement>()
+const editBudget = inject<boolean>('editBudget')
 
 function transactionAdd() : void {
   if (!account.value.create(props.transactionType, newTransaction.value))
@@ -93,7 +94,7 @@ const inputNameText = computed(() => {
         </table>
       </div>
 
-      <div v-if="componentType === TransactionsEdit" class="input-group flex-sm-row">
+      <div v-if="editBudget" class="input-group flex-sm-row">
         <input
           ref="newTransactionInputName"
           v-model="newTransaction.name"
