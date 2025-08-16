@@ -35,8 +35,9 @@ export const createApp = ViteSSG(
       ['Budget',    Path.Budget],
       ['Settings',  Path.Settings],
       ['History',   Path.History],
-      ['Simulator', Path.Simulator],
       ['Projects',  Path.Projects],
+      ['Raphael',   Path.Raphael],
+      ['Simulator', Path.Simulator],
       ['Legals',    Path.Legals],
       ['NotFound',  Path.NotFound]
     ].map(([fileName, path]) => {

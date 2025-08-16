@@ -44,6 +44,7 @@ export enum Path {
   Legals = '/legals',
   NotFound = '/not-found',
   Projects = '/projects',
+  Raphael = '/raphael',
   Settings = '/settings',
   Simulator = '/simulator'
 }

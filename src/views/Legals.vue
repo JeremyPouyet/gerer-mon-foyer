@@ -3,7 +3,6 @@ import '@/assets/secondary.scss'
 import ViewTitle from '@/components/ViewTitle.vue'
 
 import { Path } from '@/types'
-
 </script>
 
 <template>

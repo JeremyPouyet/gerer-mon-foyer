@@ -44,6 +44,12 @@ export default {
       },
       title: 'Planifier mes projets'
     },
+    [Path.Raphael]: {
+      meta: {
+        description: 'Cette page est faite par mon neveu qui apprend l’informatique'
+      },
+      title: 'La page de Raph !'
+    },
     [Path.Settings]: {
       meta: {
         description: 'Exportez, importez ou supprimez vos données, et modifiez l’interface'
