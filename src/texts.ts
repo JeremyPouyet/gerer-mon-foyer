@@ -2,6 +2,7 @@ import { Frequency, Path, SortType, TransactionType } from '@/types'
 
 export default {
   frequencies: {
+    [Frequency.weekly]: 'Semaine',
     [Frequency.monthly]: 'Mois',
     [Frequency.quarterly]: 'Trimestre',
     [Frequency.biannual]: 'Semestre',

@@ -13,10 +13,36 @@ export { limitedEvaluate }
 type Multipliers = Record<Frequency, Partial<Record<Frequency, number>>>
 
 const multipliers : Multipliers = {
-  [Frequency.monthly]:   { [Frequency.quarterly]: 3,  [Frequency.biannual]: 6,    [Frequency.yearly]: 12 },
-  [Frequency.quarterly]: { [Frequency.monthly]: 1/3,  [Frequency.biannual]: 2,    [Frequency.yearly]: 4 },
-  [Frequency.biannual]:  { [Frequency.monthly]: 1/6,  [Frequency.quarterly]: 1/2, [Frequency.yearly]: 2 },
-  [Frequency.yearly]:    { [Frequency.monthly]: 1/12, [Frequency.quarterly]: 1/4, [Frequency.biannual]: 1/2 }
+  [Frequency.weekly]:    {
+    [Frequency.monthly]: 52 / 12, // 52 weeks / 12 months
+    [Frequency.quarterly]: 13,
+    [Frequency.biannualy]: 26,
+    [Frequency.yearly]: 52
+  },
+  [Frequency.monthly]:   {
+    [Frequency.weekly]: 1 / (52 / 12),
+    [Frequency.quarterly]: 3,
+    [Frequency.biannualy]: 6,
+    [Frequency.yearly]: 12
+  },
+  [Frequency.quarterly]: {
+    [Frequency.weekly]: 1 / 13,
+    [Frequency.monthly]: 1 / 3,
+    [Frequency.biannualy]: 2,
+    [Frequency.yearly]: 4
+  },
+  [Frequency.biannualy]: {
+    [Frequency.weekly]: 1 / 26,
+    [Frequency.monthly]: 1 / 6,
+    [Frequency.quarterly]: 1 / 2,
+    [Frequency.yearly]: 2
+  },
+  [Frequency.yearly]:    {
+    [Frequency.weekly]: 1 / 52,
+    [Frequency.monthly]: 1 / 12,
+    [Frequency.quarterly]: 1 / 4,
+    [Frequency.biannualy]: 1 / 2
+  }
 }
 
 /**
