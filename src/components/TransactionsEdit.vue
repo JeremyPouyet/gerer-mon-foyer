@@ -20,16 +20,11 @@ const props = defineProps<{
 
 const { account, transactionType } = toRefs(props)
 const transactionList = useTransactions(account, transactionType)
-
-const editedTransaction = ref<Partial<Transaction>>({ })
-const editedTransactionId = ref<ID | null>()
-
+const edited = ref<{ id: ID, transaction: Partial<Transaction> } | null>()
 const editedRowEl = ref<HTMLElement | null>(null)
 
 function startEditTransaction(transaction: Transaction, rowEl: HTMLElement) : void {
-  Object.assign(editedTransaction.value, transaction)
-  editedTransactionId.value = transaction.id
-
+  edited.value = { id: transaction.id, transaction: { ...transaction } }
   editedRowEl.value = rowEl
 
   // Wait for next tick to ensure rowEl is rendered
@@ -40,7 +35,7 @@ function startEditTransaction(transaction: Transaction, rowEl: HTMLElement) : vo
 }
 
 function executeEditTransaction() : void {
-  if (editedTransactionId.value && account.value.update(props.transactionType, editedTransactionId.value, toRaw(editedTransaction.value))) {
+  if (edited.value && account.value.update(props.transactionType, edited.value.id, toRaw(edited.value.transaction))) {
     if (account.value.type === AccountType.Personal)
       userManager.computeRatios()
     cancelEditTransaction()
@@ -48,7 +43,7 @@ function executeEditTransaction() : void {
 }
 
 function cancelEditTransaction() : void {
-  editedTransactionId.value = null
+  edited.value = null
   document.removeEventListener('click', handleClickOutside)
   editedRowEl.value = null
 }
@@ -61,9 +56,8 @@ function deleteTransaction(transaction: Transaction) {
 }
 
 function handleClickOutside(event: MouseEvent) {
-  if (editedRowEl.value && !editedRowEl.value.contains(event.target as Node)) {
+  if (!editedRowEl.value?.contains(event.target as Node))
     cancelEditTransaction()
-  }
 }
 </script>
 
@@ -72,32 +66,28 @@ function handleClickOutside(event: MouseEvent) {
   <tbody>
     <tr v-for="transaction in transactionList.values" :key="transaction.id">
       <!-- Transaction name -->
-      <td v-if="editedTransactionId === transaction.id">
+      <td v-if="edited?.id === transaction.id">
         <input
-          v-model="editedTransaction.name"
+          id="editName"
+          v-model="edited.transaction.name"
+          :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}.`"
           class="char-width-20"
           type="text"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
-          @keydown.tab="executeEditTransaction"
         >
       </td>
-      <td
-        v-else
-        :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}.`"
-        class="align-middle"
-      >
+      <td v-else class="align-middle">
         {{ transaction.name }}
       </td>
       <!-- Transaction frequency -->
-      <td v-if="editedTransactionId === transaction.id">
+      <td v-if="edited?.id === transaction.id">
         <select
-          v-model="editedTransaction.frequency"
-          aria-label="Fréquence de la transaction"
+          v-model="edited.transaction.frequency"
+          :aria-label="`Éditer la fréquence ${Texts.transactionTypes[transactionType].articleSingular}.`"
           class="form-select mt-2 mt-sm-0"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
-          @keydown.tab="executeEditTransaction"
         >
           <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
             {{ name }}
@@ -108,33 +98,29 @@ function handleClickOutside(event: MouseEvent) {
         {{ Texts.frequencies[transaction.frequency] }}
       </td>
       <!-- Transaction value -->
-      <td v-if="editedTransactionId == transaction.id">
+      <td v-if="edited?.id == transaction.id">
         <input
-          v-model="editedTransaction.value"
+          v-model="edited.transaction.value"
+          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular}.`"
           class="w-100"
           type="text"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
-          @keydown.tab="executeEditTransaction"
         >
       </td>
-      <td
-        v-else
-        :aria-label="`Valeur ${Texts.transactionTypes[transactionType].articleSingular} (${Texts.frequencies[Frequency.monthly]}).`"
-        class="text-end align-middle"
-      >
+      <td v-else class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction, Frequency.monthly)) }}
       </td>
       <!-- Transaction income percentage -->
       <td v-if="income" class="text-end align-middle">
         {{ sexyNumber(valueAs(transaction) / income.value * 100) }}
       </td>
-      <td v-if="editedTransactionId == transaction.id">
+      <td v-if="edited?.id == transaction.id">
         <textarea
-          v-model="editedTransaction.note"
+          v-model="edited.transaction.note"
+          :aria-label="`Éditer l'annotation ${Texts.transactionTypes[transactionType].articleSingular}.`"
           @keydown.ctrl.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
-          @keydown.tab="executeEditTransaction"
         />
       </td>
       <!-- Transaction note -->
@@ -144,7 +130,7 @@ function handleClickOutside(event: MouseEvent) {
       <!-- Actions -->
       <td class="text-end align-middle text-nowrap">
         <img
-          v-if="!editedTransactionId"
+          v-if="!edited"
           v-tooltip="{ disposeOnClick: true }"
           alt="Éditer"
           aria-label="Éditer la ligne"
