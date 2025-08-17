@@ -14,7 +14,7 @@ type Multipliers = Record<Frequency, Partial<Record<Frequency, number>>>
 
 const multipliers : Multipliers = {
   [Frequency.weekly]:    {
-    [Frequency.monthly]: 52 / 12, // 52 weeks / 12 months
+    [Frequency.monthly]: 52 / 12,
     [Frequency.quarterly]: 13,
     [Frequency.biannualy]: 26,
     [Frequency.yearly]: 52
