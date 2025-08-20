@@ -2,7 +2,6 @@
 import Distribution from '@/components/Distribution.vue'
 import ExpenseAdd from '@/components/projects/ExpenseAdd.vue'
 import Note from '@/components/Note.vue'
-import NoteIcon from '@/components/NoteIcon.vue'
 import PaymentAdd from '@/components/projects/PaymentAdd.vue'
 import PaymentsTable from '@/components/projects/PaymentsTable.vue'
 import ShowAmount from '@/components/helpers/ShowAmount.vue'
@@ -182,7 +181,6 @@ onMounted(() => {
                 @keypress.enter="startEdit(expense.id, 'name', expense.name, () => inputRef?.focus())"
               >
                 <span :class="`${expense.done ? 'text-body-secondary' : ''}`">{{ expense.name }}</span>
-                <NoteIcon :text="expense.note" />
               </td>
               <td v-if="editedId === expense.id && editedType === 'quantity'" class="align-middle text-end">
                 <input

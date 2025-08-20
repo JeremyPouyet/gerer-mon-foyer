@@ -119,7 +119,7 @@ function handleClickOutside(event: MouseEvent) {
         <textarea
           v-model="edited.transaction.note"
           :aria-label="`Éditer l'annotation ${Texts.transactionTypes[transactionType].articleSingular}.`"
-          @keydown.ctrl.enter="executeEditTransaction"
+          @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
         />
       </td>

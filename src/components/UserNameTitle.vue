@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
-import NoteIcon from './NoteIcon.vue'
 
 import Account, { AccountType } from '@/account'
 import Texts from '@/texts'
@@ -30,7 +29,6 @@ function showTransactions(transactionType: TransactionType) {
         <!-- Set an id to be used as an inner page anchor -->
         <h2 :id="name" class="fs-3">
           {{ name }}
-          <NoteIcon :text="props.account.note" :unpaded="true" />
           <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
         </h2>
       </div>

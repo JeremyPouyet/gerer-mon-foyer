@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
-import NoteIcon from '@/components/NoteIcon.vue'
 
 import { inject, onMounted, onUnmounted, ref } from 'vue'
 
@@ -62,7 +61,6 @@ onMounted(() => {
             @keydown.enter="switchProject(project.id)"
           >
             {{ project.name }}
-            <NoteIcon :text="project.note" :unpaded="true" />
           </span>
         </div>
         <div class="text-nowrap">
