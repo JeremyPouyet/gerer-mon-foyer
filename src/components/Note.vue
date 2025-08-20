@@ -107,9 +107,10 @@ function circularTab(event: KeyboardEvent) {
   </div>
   <img
     v-tooltip="{ disposeOnClick: true }"
-    alt="Annoter"
+    alt="Voir ou éditer une note"
     class="icon-container-small icon-hoverable"
-    data-bs-title="Annoter"
+    :class="{ 'has-note': !!currentNote }"
+    data-bs-title="Voir ou éditer une note"
     role="button"
     src="@/assets/icons/take-note.png"
     tabindex="0"
@@ -119,6 +120,10 @@ function circularTab(event: KeyboardEvent) {
 </template>
 
 <style scoped>
+.has-note {
+  filter: hue-rotate(180deg) brightness(1.2); /* ou une teinte différente */
+}
+
 .note-popup {
   position: relative;
   z-index: 10;

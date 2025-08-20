@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Texts from '@/texts'
 
-import { TransactionType, frequencies } from '@/types'
+import { TransactionType } from '@/types'
 
 defineProps<{ incomeLabel?: string, transactionType: TransactionType, withActions: boolean }>()
 </script>
@@ -12,12 +12,16 @@ defineProps<{ incomeLabel?: string, transactionType: TransactionType, withAction
       <th scope="col">
         {{ Texts.transactionTypes[transactionType]['singular'] }}
       </th>
-      <th v-for="frequency in frequencies" :key="frequency" class="text-end" scope="col">
-        {{ Texts.frequencies[frequency] }}
+      <th scope="col">
+        Fréquence
+      </th>
+      <th class="text-end" scope="col">
+        Coût par mois
       </th>
       <th v-if="incomeLabel" class="text-end" scope="col">
         {{ incomeLabel }}
       </th>
+      <th>Note</th>
       <th v-if="withActions" class="text-end" scope="col">
         Actions
       </th>

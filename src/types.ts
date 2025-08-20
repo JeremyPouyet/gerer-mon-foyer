@@ -18,9 +18,10 @@ export interface Particle {
 /**** Frequencies ****/
 
 export enum Frequency {
+  weekly = 'weekly',
   monthly = 'monthly',
   quarterly = 'quarterly',
-  biannual = 'biannual',
+  biannualy = 'biannual',
   yearly = 'yearly'
 }
 
