@@ -23,7 +23,9 @@ const transactionList = useTransactions(account, transactionType)
 const edited = ref<{ id: ID, transaction: Partial<Transaction> } | null>()
 const editedRowEl = ref<HTMLElement | null>(null)
 
-function startEditTransaction(transaction: Transaction, rowEl: HTMLElement) : void {
+function startEditTransaction(transaction: Transaction, clickedIcon: EventTarget | null) : void {
+  const rowEl = (clickedIcon as HTMLElement).closest('tr')
+
   edited.value = { id: transaction.id, transaction: { ...transaction } }
   editedRowEl.value = rowEl
 
@@ -139,8 +141,8 @@ function handleClickOutside(event: MouseEvent) {
           role="button"
           src="@/assets/icons/pencil.png"
           tabindex="0"
-          @click="startEditTransaction(transaction, $event.currentTarget.closest('tr') as HTMLElement)"
-          @keydown.enter="startEditTransaction(transaction, $event.currentTarget.closest('tr') as HTMLElement)"
+          @click="startEditTransaction(transaction, $event.currentTarget)"
+          @keydown.enter="startEditTransaction(transaction, $event.currentTarget)"
         >
         <img
           v-else
