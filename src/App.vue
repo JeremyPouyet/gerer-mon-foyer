@@ -49,7 +49,7 @@ provide('openModal', async (msg: string, cb: () => void) => {
   <Navbar />
   <Notifications />
   <ConfirmModal :callback="modalCallback" :message="modalMessage" />
-  <main id="main" role="main">
+  <main id="main" class="mt-5" role="main">
     <RouterView />
   </main>
   <Footer />

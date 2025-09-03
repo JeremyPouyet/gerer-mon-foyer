@@ -1,5 +1,5 @@
 <template>
-  <footer v-once class="bg-primary footer mt-auto py-4">
+  <footer v-once class="footer mt-auto py-4">
     <div class="container">
       <div class="row">
         <div class="col-md-3 text-center text-md-start">

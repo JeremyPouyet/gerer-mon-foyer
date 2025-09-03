@@ -1,3 +1,5 @@
+@use './colors.scss';
+
 @import './main.scss'; // to have bootstrap/custom variables
 
 @import '../../node_modules/bootstrap/scss/alert';
@@ -49,9 +51,9 @@ input:focus, select:focus {
 .item-list {
   list-style-type: none;
 
-  .item {
-    border-bottom: 1px solid var(--color-celadon);
-  }
+  // .item {
+  //   border-bottom: 1px solid var(--color-celadon);
+  // }
 }
 
 /**** Table ****/
@@ -60,7 +62,7 @@ table {
     tr {
       th {
         color: $white !important;
-        background-color: $dark !important;
+        background-color: colors.$header !important;
       }
     }
   }
@@ -68,7 +70,8 @@ table {
   tbody {
     tr {
       td {
-        background-color: var(--color-vanilla) !important;
+        background-color: colors.$background !important;
+        border-color: colors.$separator;
       }
     }
   }
@@ -77,7 +80,7 @@ table {
     tr {
       td {
         color: $white !important;
-        background-color: $dark !important;
+        background-color: colors.$header !important;
 
         &:first-child {
           border-radius: 0 0 0 10px;

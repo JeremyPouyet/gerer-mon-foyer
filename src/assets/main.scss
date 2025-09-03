@@ -1,9 +1,8 @@
+@use './colors.scss';
+
 // Mandatory bootstrap imports
 @import "../../node_modules/bootstrap/scss/functions";
 
-$dark: #442c47;
-$red: #F72C25;
-$primary: #A9E5BB;
 $secondary: #F7B32B;
 
 @import "../../node_modules/bootstrap/scss/variables";
@@ -23,10 +22,7 @@ $secondary: #F7B32B;
 @import '../../node_modules/bootstrap/scss/containers';
 @import '../../node_modules/bootstrap/scss/grid';
 @import '../../node_modules/bootstrap/scss/modal';
-@import '../../node_modules/bootstrap/scss/nav';
-@import '../../node_modules/bootstrap/scss/navbar';
 @import '../../node_modules/bootstrap/scss/tooltip';
-@import '../../node_modules/bootstrap/scss/transitions'; // navbar collapse
 
 @import '../../node_modules/bootstrap/scss/utilities/api';
 
@@ -36,7 +32,7 @@ $secondary: #F7B32B;
 }
 
 body {
-  background-color: var(--color-vanilla) !important;
+  background-color: colors.$background !important;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -75,17 +71,87 @@ h1, h2, h3 {
   flex-direction: column;
 }
 
+#main, .footer {
+  margin-left: 260px; /* Same as the width of the sidebar */
+}
+
+@media (max-width: 768px) {
+  #main, .footer {
+    margin-left: 72px;
+  }
+}
+
+/**** Sidenav ****/
+.sidenav {
+  height: 100%;
+  width: 260px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: colors.$sidenav;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 6px 8px;
+  text-decoration: none;
+  // color: #818181;
+  display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* On small screens: hide text, shrink sidebar */
+@media (max-width: 768px) {
+  .small-hidden {
+    display: none;
+  }
+
+  .small-centered {
+    text-align: center;
+  }
+
+  .sidenav {
+    width: 72px; /* smaller sidebar */
+    /* padding-top: 10px; */
+
+    a {
+      font-size: 11px;
+    }
+  }
+
+  #unsaved-count {
+    left: 100%; /* ensure badge stays visible */
+  }
+}
+
+@media (min-width: 768px) {
+  .large-margin-end {
+    margin-right: 0.5rem;
+  }
+}
+
+hr {
+  color: colors.$separator;
+}
+
 /**** Navbar ****/
-nav {
-  .navbar-nav {
+// nav {
+  // .navbar-nav {
     .nav-link {
       position: relative;
-      color: #333;
+      color: white;
       text-decoration: none;
 
       &.active {
         font-weight: bold;
-        color: $black;
+        // color: red;
       }
 
       &:after {
@@ -104,11 +170,13 @@ nav {
         transform: scaleX(1);
       }
     }
-  }
-}
+  // }
+// }
 
 /**** Footer ****/
 .footer {
+  background-color: colors.$footer;
+
   p, h3 {
     margin: 0;
     padding: 0.5rem 0;
@@ -124,7 +192,7 @@ nav {
   }
 
   .row {
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-top: 1px solid colors.$separator;
     padding-top: 1.5rem;
   }
 }
