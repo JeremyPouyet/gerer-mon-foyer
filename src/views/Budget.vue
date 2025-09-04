@@ -22,18 +22,19 @@ async function historicize() {
 
 <template>
   <div class="container-fluid">
-    <ViewTitle emoji="💸" :path="Path.Budget" />
+    <div class="position-relative">
+      <ViewTitle emoji="💸" :path="Path.Budget" />
 
-    <button
+      <button
         aria-label="Ajouter le budget actuel à l’historique"
-        class="btn btn-secondary"
+        class="end-0 top-0 position-absolute btn btn-secondary"
         tabindex="0"
         @click="historicize"
         @keypress.enter="historicize"
       >
         Historiser
       </button>
-
+    </div>
     <div class="row">
       <LeftColumn :title="'Habitants'">
         <UsersEdit />

@@ -25,12 +25,12 @@ const menuItems: [string, string, string][] = [
 
 <template>
   <div class="sidenav">
-    <RouterLink v-once active-class="active" aria-label="Accueil" class="navbar-brand py-0" to="/">
-      <p class="text-center mb-0 lh-1 small-hidden">
-        Gérer
+    <RouterLink v-once id="home" aria-label="Accueil" to="/">
+      <p class="text-center mb-1 lh-1 small-hidden">
+        Gérer&nbsp;&nbsp;
       </p>
       <div class="text-center">
-        <span class="small-hidden">Mon</span> <img alt="Jolie petite maison" aria-hidden="true" class="icon-container-small" src="@/assets/icons/home.png"> <span class="small-hidden">Foyer</span>
+        <span class="small-hidden">Mon</span> <img alt="Jolie petite maison" aria-hidden="true" class="small-icon-container large-icon-container-small baselined-icon" src="@/assets/icons/home.png"> <span class="small-hidden">Foyer</span>
       </div>
     </RouterLink>
     <hr style="color:aliceblue;">

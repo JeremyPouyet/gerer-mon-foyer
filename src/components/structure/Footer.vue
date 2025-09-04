@@ -27,10 +27,10 @@
                 À propos de
               </div>
               <div class="border p-2">
-                <p class="mb-0 lh-1 py-0">
-                  Gérer
+                <p class="mb-1 lh-1 py-0">
+                  Gérer&nbsp;&nbsp;
                 </p>
-                Mon <img alt="" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
+                Mon <img alt="" class="icon-container-small baselined-icon" src="@/assets/icons/home.png"> Foyer
               </div>
             </div>
           </h3>

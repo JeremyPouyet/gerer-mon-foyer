@@ -19,11 +19,6 @@ input:focus, select:focus {
   transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
 
-.active {
-  font-weight: bold;
-  color: #000;
-}
-
 .rounded-shadow {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -63,15 +58,24 @@ table {
       th {
         color: $white !important;
         background-color: colors.$header !important;
+        border-bottom: none;
       }
     }
   }
 
   tbody {
     tr {
+      background-color: colors.$background !important;
+      border-color: colors.$separator;
+      border-bottom-width: 1px;
+
       td {
-        background-color: colors.$background !important;
-        border-color: colors.$separator;
+        background-color: inherit !important;
+        border: none;
+      }
+
+      &:last-child {
+        border-bottom: none !important
       }
     }
   }
@@ -81,6 +85,7 @@ table {
       td {
         color: $white !important;
         background-color: colors.$header !important;
+        border-bottom: none;
 
         &:first-child {
           border-radius: 0 0 0 10px;
