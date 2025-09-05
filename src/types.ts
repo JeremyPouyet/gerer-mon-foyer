@@ -47,7 +47,8 @@ export enum Path {
   Projects = '/projects',
   Raphael = '/raphael',
   Settings = '/settings',
-  Simulator = '/simulator'
+  Simulator = '/simulator',
+  Users = '/users'
 }
 
 /**** Sort ****/

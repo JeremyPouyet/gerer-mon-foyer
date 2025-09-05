@@ -4,7 +4,6 @@ import Texts from '@/texts'
 
 const props = defineProps<{ emoji: string, path: Path, unpaded?: boolean }>()
 const unpadedClass = props.unpaded ? 'ps-0' : ''
-
 </script>
 
 <template>

@@ -3,6 +3,7 @@ import distributionIcon from '@/assets/icons/distribution.png'
 import historyIcon from '@/assets/icons/history.png'
 import projectIcon from '@/assets/icons/criteria.png'
 import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
+import userIcon from '@/assets/icons/user.png'
 
 import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
@@ -16,6 +17,7 @@ const unsavedChangesText = computed(() : string => {
 })
 
 const menuItems: [string, string, string][] = [
+  ['/users',     'Habitants',  userIcon],
   ['/budget',    'Budget',     taxCalculateIcon],
   ['/projects',  'Projets',    projectIcon],
   ['/simulator', 'Simulateur', distributionIcon],
