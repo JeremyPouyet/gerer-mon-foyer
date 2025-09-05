@@ -41,7 +41,10 @@ h1, h2, h3 {
 }
 
 hr {
-  color: colors.$separator;
+  background-color: colors.$separator;
+  height: 1px;
+  border: none;
+  opacity: 1;
 }
 
 .baselined-icon {
@@ -67,7 +70,7 @@ hr {
 }
 
 .text-block {
-  background-color: #fffbc1;
+  background-color: colors.$block;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
@@ -102,17 +105,21 @@ hr {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: colors.$sidenav;
+  background-color: colors.$primary;
   overflow-x: hidden;
   padding-top: 20px;
-}
 
-/* The navigation menu links */
-.sidenav a {
-  padding: 6px 8px;
-  text-decoration: none;
-  // color: #818181;
-  display: block;
+  hr {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  a {
+    padding: 6px 8px;
+    text-decoration: none;
+    display: block;
+  }
 }
 
 /* On small screens: hide text, shrink sidebar */
@@ -169,23 +176,25 @@ hr {
   &:after {
     content: "";
     position: absolute;
-    width: 100%;
-    height: 2px;
+    width: 85%;
+    height: 1px;
     bottom: 0;
-    left: 0;
+    left: 50%;                   // place it relative to the center
+    transform: translateX(-50%) scaleX(0); // center it + start hidden
     background-color: $secondary;
     transition: transform 0.3s ease-in-out;
-    transform: scaleX(0);
   }
 
   &:hover:after {
-    transform: scaleX(1);
+    transform: translateX(-50%) scaleX(1); // expand from center
   }
 }
 
 /**** Footer ****/
 .footer {
-  background-color: colors.$footer;
+  #home-small {
+    border: 1px solid colors.$separator
+  }
 
   p, h3 {
     margin: 0;

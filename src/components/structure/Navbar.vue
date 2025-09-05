@@ -33,10 +33,12 @@ const menuItems: [string, string, string][] = [
         <span class="small-hidden">Mon</span> <img alt="Jolie petite maison" aria-hidden="true" class="small-icon-container large-icon-container-small baselined-icon" src="@/assets/icons/home.png"> <span class="small-hidden">Foyer</span>
       </div>
     </RouterLink>
-    <hr style="color:aliceblue;">
+    <hr>
     <RouterLink v-for="[uri, label, src] in menuItems" :key="label" active-class="active" class="small-centered nav-link" :to="uri">
-      <img :alt="label" aria-hidden="true" class="large-margin-end mb-1 icon-container" :src="src">
-      {{ label }}
+      <div>
+        <img :alt="label" aria-hidden="true" class="large-margin-end mb-1 icon-container" :src="src">
+        {{ label }}
+      </div>
     </RouterLink>
     <RouterLink active-class="active" class="nav-link small-centered" to="/settings">
       <div class="position-relative" style="width:95%">
