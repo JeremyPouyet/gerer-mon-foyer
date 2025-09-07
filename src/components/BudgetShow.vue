@@ -26,33 +26,31 @@ const remainSum = computed(() => users.value.reduce((sum, user) => sum + (user.a
 </script>
 
 <template>
-  <div class="col">
-    <div class="row">
-      <UserNameTitle :account="account" :name="'Compte commun'" :with-note="withNote" />
-      <TableContainer
-        :account="account"
-        :component-type="componentType"
-        :income="{ label: '% des revenus commun', value: incomeSum }"
-        :transaction-type="TransactionType.Expense"
-      />
-      <TableContainer :account="account" :component-type="componentType" :transaction-type="TransactionType.Income" />
-    </div>
-    <div v-for="user in users" :key="user.id" class="row">
-      <UserNameTitle :account="user.account" :name="user.name" :with-note="withNote" />
-      <TableContainer
-        :account="user.account"
-        :component-type="componentType"
-        :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
-        :transaction-type="TransactionType.Expense"
-      />
-      <TableContainer
-        :account="user.account"
-        :component-type="componentType"
-        :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
-        :transaction-type="TransactionType.PersonalExpense"
-      />
-      <TableContainer :account="user.account" :component-type="componentType" :transaction-type="TransactionType.Income" />
-      <FinanceInfoBlock :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" :user="user" />
-    </div>
+  <div class="row mb-4">
+    <UserNameTitle :account="account" :name="'Compte commun'" :with-note="withNote" />
+    <TableContainer
+      :account="account"
+      :component-type="componentType"
+      :income="{ label: '% des revenus commun', value: incomeSum }"
+      :transaction-type="TransactionType.Expense"
+    />
+    <TableContainer :account="account" :component-type="componentType" :transaction-type="TransactionType.Income" />
+  </div>
+  <div v-for="user in users" :key="user.id" class="row mb-4">
+    <UserNameTitle :account="user.account" :name="user.name" :with-note="withNote" />
+    <TableContainer
+      :account="user.account"
+      :component-type="componentType"
+      :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
+      :transaction-type="TransactionType.Expense"
+    />
+    <TableContainer
+      :account="user.account"
+      :component-type="componentType"
+      :income="{ label: '% de tes revenus', value: user.account.incomes.sum }"
+      :transaction-type="TransactionType.PersonalExpense"
+    />
+    <TableContainer :account="user.account" :component-type="componentType" :transaction-type="TransactionType.Income" />
+    <FinanceInfoBlock :common-account="account" :common-bill="commonBill" :remain-sum="remainSum" :user="user" />
   </div>
 </template>

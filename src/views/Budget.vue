@@ -4,10 +4,8 @@ import '@/assets/secondary.scss'
 import { provide } from 'vue'
 
 import BudgetShow from '@/components/BudgetShow.vue'
-import LeftColumn from '@/components/leftColumns/LeftColumn.vue'
 import { Path } from '@/types'
 import TransactionsEdit from '@/components/TransactionsEdit.vue'
-import UsersEdit from '@/components/leftColumns/UsersEdit.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 import db from '@/db'
 import userManager from '@/managers/userManager'
@@ -35,16 +33,11 @@ async function historicize() {
         Historiser
       </button>
     </div>
-    <div class="row">
-      <LeftColumn :title="'Habitants'">
-        <UsersEdit />
-      </LeftColumn>
-      <BudgetShow
-        :account="db.account"
-        :component-type="TransactionsEdit"
-        :users="userManager.users"
-        :with-note="true"
-      />
-    </div>
+    <BudgetShow
+      :account="db.account"
+      :component-type="TransactionsEdit"
+      :users="userManager.users"
+      :with-note="true"
+    />
   </div>
 </template>

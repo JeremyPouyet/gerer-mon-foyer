@@ -44,6 +44,10 @@ export const createApp = ViteSSG(
     ].map(([fileName, path]) => {
       return { component: () => import(`@/views/${fileName}.vue`), path }
     }),
+    // when the url contains an anchor, smooth scroll the page to the anchor
+    scrollBehavior(to) {
+      return to.hash ? { behavior: 'smooth', el: to.hash } : { top: 0 }
+    },
   },
   ({ app, router }) => {
     let currentPath = ''
