@@ -1,7 +1,8 @@
 @use './colors.scss';
 
-@import './main.scss'; // to have bootstrap/custom variables
+@import './bootstrap_mandatory.scss';
 
+// Optional bootstrap components
 @import '../../node_modules/bootstrap/scss/alert';
 @import '../../node_modules/bootstrap/scss/button-group';
 @import '../../node_modules/bootstrap/scss/close';

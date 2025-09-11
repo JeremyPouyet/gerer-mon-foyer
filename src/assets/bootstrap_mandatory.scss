@@ -1,0 +1,15 @@
+// Mandatory bootstrap imports
+@import "../../node_modules/bootstrap/scss/functions";
+
+$secondary: #F7B32B;
+
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
+
+@import '../../node_modules/bootstrap/scss/utilities';
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
