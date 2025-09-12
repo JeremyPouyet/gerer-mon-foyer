@@ -24,6 +24,23 @@ const openModal = inject<OpenModal>('openModal')
 const selectedUser = ref<User | null>(null)
 const showIconModal = ref(false)
 
+const editingUserId = ref<string | null>(null)
+const editingName = ref('')
+
+function startEditing(user: User) {
+  editingUserId.value = user.id
+  editingName.value = user.name
+}
+
+function saveEditing(user: User) {
+  const trimmed = editingName.value.trim()
+  if (trimmed) {
+    user.updateName(trimmed)
+    userManager.update(user)
+  }
+  editingUserId.value = null
+}
+
 function openIconModal(user: User) {
   selectedUser.value = user
   showIconModal.value = true
@@ -87,7 +104,36 @@ onMounted(() => {
             </div>
 
             <!-- User info -->
-            <h5 class="card-title">{{ user.name }}</h5>
+            <div class="mb-2">
+              <template v-if="editingUserId === user.id">
+                <div class="input-group input-group-sm justify-content-center">
+                  <input
+                    v-model="editingName"
+                    class="form-control text-center"
+                    style="max-width: 150px"
+                    type="text"
+                    @blur="saveEditing(user)"
+                    @keydown.enter="saveEditing(user)"
+                  >
+                </div>
+              </template>
+              <template v-else>
+                <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
+                  {{ user.name }}
+                  <button
+                    class="btn btn-sm btn-light p-1 border"
+                    @click="startEditing(user)"
+                  >
+                    <img
+                      alt="Éditer"
+                      class="icon-container-small"
+                      src="@/assets/icons/pencil.png"
+                    >
+                  </button>
+                </h5>
+              </template>
+            </div>
+
             <p class="card-text mb-1">
               <strong>Ratio de dépense commun :</strong> {{ sexyNumber(user.ratio, 'percent') }}
             </p>
@@ -97,16 +143,6 @@ onMounted(() => {
 
             <!-- Actions -->
             <div class="d-flex justify-content-center gap-2">
-              <img
-                v-tooltip="{ disposeOnClick: true }"
-                alt="Éditer"
-                aria-label="Éditer la ligne"
-                class="icon-container-small icon-hoverable"
-                data-bs-title="Éditer"
-                role="button"
-                src="@/assets/icons/pencil.png"
-                tabindex="0"
-              >
               <img
                 v-tooltip="{ disposeOnClick: true }"
                 alt="Supprimer"
@@ -188,7 +224,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
 
 <style>
 .selectable-icon {
