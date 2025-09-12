@@ -29,7 +29,7 @@ h1, h2, h3 {
 hr {
   background-color: colors.$separator;
   height: 1px;
-  border: none;
+  border: none !important;
   opacity: 1;
 }
 

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
 
+import { computed } from 'vue'
+
 import Account, { AccountType } from '@/account'
 import Texts from '@/texts'
 import { TransactionType } from '@/types'
-import { computed } from 'vue'
+import { user_icons } from '@/icons/users'
 
-const props = defineProps<{ account: Account, name: string, withNote: boolean }>()
+const props = defineProps<{ account: Account, name: string, picture?: string, withNote: boolean }>()
 
 const transactionTypes: TransactionType[] = [
   TransactionType.Expense,
@@ -28,6 +30,12 @@ function showTransactions(transactionType: TransactionType) {
       <div>
         <!-- Set an id to be used as an inner page anchor -->
         <h2 :id="name" class="fs-3">
+          <img
+            v-if="picture"
+            :alt="`Avatar de ${name}`"
+            class="user-avatar shadow-sm"
+            :src="user_icons[picture]"
+          >
           {{ name }}
           <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />
         </h2>

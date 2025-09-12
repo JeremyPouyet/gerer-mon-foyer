@@ -74,7 +74,7 @@ onMounted(() => {
             <!-- User image with edit button -->
             <div class="position-relative d-inline-block mb-3">
               <img
-                alt="Avatar"
+                :alt="`Avatar de ${user.name}`"
                 class="user-avatar shadow-sm"
                 :src="user_icons[user.picture]"
               >
@@ -161,9 +161,9 @@ onMounted(() => {
     <div
       v-if="showIconModal"
       class="modal fade"
-      tabindex="-1"
       :class="{ show: showIconModal }"
       style="display: block;"
+      tabindex="-1"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -171,15 +171,15 @@ onMounted(() => {
             <h5 class="modal-title">
               Choisir mon avatar
             </h5>
-            <button type="button" class="btn-close" @click="showIconModal = false" />
+            <button class="btn-close" type="button" @click="showIconModal = false" />
           </div>
           <div class="modal-body d-flex flex-wrap gap-3 justify-content-center">
             <img
               v-for="icon in user_icon_list"
               :key="icon"
-              :src="user_icons[icon]"
-              alt="Icône"
+              :alt="`Icône ${icon}`"
               class="selectable-icon"
+              :src="user_icons[icon]"
               @click="selectIcon(icon)"
             >
           </div>
@@ -191,13 +191,6 @@ onMounted(() => {
 
 
 <style>
-.user-avatar {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border: 2px solid #ddd;
-}
-
 .selectable-icon {
   width: 60px;
   height: 60px;

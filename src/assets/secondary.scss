@@ -26,6 +26,13 @@ input:focus, select:focus {
   justify-content: center;
 }
 
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
 /* Clickable and editable cell style */
 .editable-cell {
   cursor: pointer;
