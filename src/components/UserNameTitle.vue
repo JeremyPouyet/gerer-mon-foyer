@@ -30,6 +30,7 @@ function showTransactions(transactionType: TransactionType) {
       <div>
         <!-- Set an id to be used as an inner page anchor -->
         <h2 :id="name" class="fs-3">
+          <!-- todo - better html structure to not have the note icon -->
           <img
             v-if="picture"
             :alt="`Avatar de ${name}`"

@@ -32,6 +32,7 @@ function startEditing(user: User) {
   editingName.value = user.name
 }
 
+// todo - graphique bug when name too long + maybe deduplicate ?
 function saveEditing(user: User) {
   const trimmed = editingName.value.trim()
   if (trimmed) {
