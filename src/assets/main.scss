@@ -12,11 +12,6 @@
 
 @import '../../node_modules/bootstrap/scss/utilities/api';
 
-:root {
-  --color-vanilla: #FCF6B1;
-  --color-celadon: #A9E5BB;
-}
-
 body {
   background-color: colors.$background !important;
   font-family: 'Roboto', sans-serif;

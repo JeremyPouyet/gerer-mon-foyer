@@ -17,7 +17,7 @@ import tiger from '@/assets/users/tiger.png'
 import turtle from '@/assets/users/turtle.png'
 import unicorn from '@/assets/users/unicorn.png'
 
-export const user_icons: Record<string, string> = {
+export const user_avatars: Record<string, string> = {
   alien,
   cat,
   chick,
@@ -38,4 +38,4 @@ export const user_icons: Record<string, string> = {
   unicorn
 }
 
-export const user_icon_list = Object.keys(user_icons)
+export const user_avatar_list = Object.keys(user_avatars)

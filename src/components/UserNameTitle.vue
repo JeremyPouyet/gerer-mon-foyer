@@ -6,9 +6,9 @@ import { computed } from 'vue'
 import Account, { AccountType } from '@/account'
 import Texts from '@/texts'
 import { TransactionType } from '@/types'
-import { user_icons } from '@/icons/users'
+import { user_avatars } from '@/avatars/users'
 
-const props = defineProps<{ account: Account, name: string, picture?: string, withNote: boolean }>()
+const props = defineProps<{ account: Account, name: string, avatar?: string, withNote: boolean }>()
 
 const transactionTypes: TransactionType[] = [
   TransactionType.Expense,
@@ -32,10 +32,10 @@ function showTransactions(transactionType: TransactionType) {
         <h2 :id="name" class="fs-3">
           <!-- todo - better html structure to not have the note icon -->
           <img
-            v-if="picture"
+            v-if="avatar"
             :alt="`Avatar de ${name}`"
             class="user-avatar shadow-sm"
-            :src="user_icons[picture]"
+            :src="user_avatars[avatar]"
           >
           {{ name }}
           <Note v-if="props.withNote" :item="props.account" @update="note => account.note = note" />

@@ -81,8 +81,8 @@ class UserManager {
       this.users.push(new User(user))
   }
 
-  update(updates: Partial<User> & { id: ID }): void {
-    const userIndex = this.users.findIndex(({ id }) => updates.id === id)
+  update(id: ID, updates: Partial<User>): void {
+    const userIndex = this.users.findIndex(user => user.id === id)
 
     if (userIndex === -1) return
 

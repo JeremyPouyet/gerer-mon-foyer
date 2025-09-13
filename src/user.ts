@@ -7,7 +7,7 @@ export default class User {
   readonly id: ID
   name: string
   ratio: number
-  picture: string
+  avatar: string
 
   constructor(props: Partial<User>) {
     this.account = new Account(props.account, AccountType.Personal)
@@ -15,13 +15,6 @@ export default class User {
     this.name = props.name ?? ''
     this.ratio = props.ratio ?? 0
     // todo - random image ?
-    this.picture = props.picture || 'tiger'
-  }
-
-  updateName(name: string) : void {
-    name = name.trim()
-
-    if (name)
-      this.name = name
+    this.avatar = props.avatar || 'tiger'
   }
 }

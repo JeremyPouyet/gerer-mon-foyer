@@ -2,13 +2,13 @@
 import '@/assets/secondary.scss'
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { type OpenModal, Path } from '@/types'
-import { inject, onMounted, ref } from 'vue'
+import { inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import isMobile from 'is-mobile'
 
+import { type ID, type OpenModal, Path } from '@/types'
 import { sexyAmount, sexyNumber } from '@/formaters'
-import { user_icon_list, user_icons } from '@/icons/users'
+import { user_avatar_list, user_avatars } from '@/avatars/users'
 import type User from '@/user'
 import db from '@/db'
 import userManager from '@/managers/userManager'
@@ -22,38 +22,42 @@ const inputRef = ref<HTMLInputElement | null>(null)
 const openModal = inject<OpenModal>('openModal')
 
 const selectedUser = ref<User | null>(null)
-const showIconModal = ref(false)
+const showAvatarModal = ref(false)
 
-const editingUserId = ref<string | null>(null)
+const editingUserId = ref<ID | null>(null)
 const editingName = ref('')
+const editingInputs = ref<Record<ID, HTMLInputElement | null>>({})
 
-function startEditing(user: User) {
-  editingUserId.value = user.id
-  editingName.value = user.name
+/** Avatar Modal **/
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && showAvatarModal.value)
+    cancelSelectAvatar()
 }
 
-// todo - graphique bug when name too long + maybe deduplicate ?
-function saveEditing(user: User) {
-  const trimmed = editingName.value.trim()
-  if (trimmed) {
-    user.updateName(trimmed)
-    userManager.update(user)
-  }
-  editingUserId.value = null
-}
+onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 
-function openIconModal(user: User) {
+function openAvatarModal(user: User) {
   selectedUser.value = user
-  showIconModal.value = true
+  document.addEventListener('keydown', handleKeydown)
+  showAvatarModal.value = true
 }
 
-function selectIcon(icon: string) {
+function selectAvatar(avatar: string) {
   if (selectedUser.value) {
-    selectedUser.value.picture = icon
-    userManager.update(selectedUser.value)
+    selectedUser.value.avatar = avatar
+    userManager.update(selectedUser.value.id, { avatar })
   }
-  showIconModal.value = false
+  cancelSelectAvatar()
 }
+
+function cancelSelectAvatar() {
+  selectedUser.value = null
+  showAvatarModal.value = false
+  document.removeEventListener('keydown', handleKeydown)
+}
+
+/** User Management **/
 
 function userCreate(): void {
   userManager.create(username.value)
@@ -64,11 +68,27 @@ function userCreate(): void {
 function userDelete(user: User): void {
   openModal?.(
     'Êtes-vous sûr de vouloir supprimer cet habitant ? Cette action est irréversible.',
-    () => {
-      userManager.delete(user)
-    }
+    () => userManager.delete(user)
   )
 }
+
+function startEditingName(user: User) {
+  editingUserId.value = user.id
+  editingName.value = user.name
+
+  nextTick(() => editingInputs.value[user.id]?.focus())
+}
+
+function saveEditedName() {
+  const standardized = editingName.value.trim().slice(0, 30)
+
+  if (standardized && editingUserId.value)
+    userManager.update(editingUserId.value, { name: standardized })
+
+  cancelEditName()
+}
+
+const cancelEditName = () => editingUserId.value = null
 
 onMounted(() => {
   if (!isMobile() && userManager.users.length === 0 && inputRef.value)
@@ -94,11 +114,11 @@ onMounted(() => {
               <img
                 :alt="`Avatar de ${user.name}`"
                 class="user-avatar shadow-sm"
-                :src="user_icons[user.picture]"
+                :src="user_avatars[user.avatar]"
               >
               <button
                 class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border"
-                @click="openIconModal(user)"
+                @click="openAvatarModal(user)"
               >
                 <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
               </button>
@@ -109,12 +129,13 @@ onMounted(() => {
               <template v-if="editingUserId === user.id">
                 <div class="input-group input-group-sm justify-content-center">
                   <input
+                    :ref="el => editingInputs[user.id] = el as HTMLInputElement"
                     v-model="editingName"
-                    class="form-control text-center"
-                    style="max-width: 150px"
+                    class="form-control text-center name-update"
                     type="text"
-                    @blur="saveEditing(user)"
-                    @keydown.enter="saveEditing(user)"
+                    @blur="saveEditedName"
+                    @keydown.enter="saveEditedName"
+                    @keydown.esc="cancelEditName"
                   >
                 </div>
               </template>
@@ -123,7 +144,7 @@ onMounted(() => {
                   {{ user.name }}
                   <button
                     class="btn btn-sm btn-light p-1 border"
-                    @click="startEditing(user)"
+                    @click="startEditingName(user)"
                   >
                     <img
                       alt="Éditer"
@@ -136,10 +157,10 @@ onMounted(() => {
             </div>
 
             <p class="card-text mb-1">
-              <strong>Ratio de dépense commun :</strong> {{ sexyNumber(user.ratio, 'percent') }}
+              <span class="fw-bold">Ratio de dépense commun :</span> {{ sexyNumber(user.ratio, 'percent') }}
             </p>
             <p class="card-text">
-              <strong>Participation mensuelle aux dépenses communes :</strong> {{ sexyAmount(user.ratio * commonBill) }}
+              <span class="fw-bold">Participation mensuelle aux dépenses communes :</span> {{ sexyAmount(user.ratio * commonBill) }}
             </p>
 
             <!-- Actions -->
@@ -156,7 +177,7 @@ onMounted(() => {
                 @click="userDelete(user)"
                 @keydown.enter="userDelete(user)"
               >
-              <RouterLink :to="`/budget#${user.name}`" style="display:inline-flex;align-items:center">
+              <RouterLink class="d-inline-flex align-items-center" :to="`/budget#${user.name}`">
                 <img
                   v-tooltip="{ disposeOnClick: true }"
                   alt="Voir le budget"
@@ -194,13 +215,13 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Modal for selecting icons -->
+    <!-- Modal for selecting avatars -->
+    <!-- @click.self works as the modal covers the entire screen -->
     <div
-      v-if="showIconModal"
-      class="modal fade"
-      :class="{ show: showIconModal }"
-      style="display: block;"
+      v-if="showAvatarModal"
+      class="modal fade d-block"
       tabindex="-1"
+      @click.self="cancelSelectAvatar()"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -208,16 +229,16 @@ onMounted(() => {
             <h5 class="modal-title">
               Choisir mon avatar
             </h5>
-            <button class="btn-close" type="button" @click="showIconModal = false" />
+            <button aria-label="Fermer" class="btn-close" type="button" @click="cancelSelectAvatar" />
           </div>
           <div class="modal-body d-flex flex-wrap gap-3 justify-content-center">
             <img
-              v-for="icon in user_icon_list"
-              :key="icon"
-              :alt="`Icône ${icon}`"
+              v-for="avatar in user_avatar_list"
+              :key="avatar"
+              :alt="`Avatar ${avatar}`"
               class="selectable-icon"
-              :src="user_icons[icon]"
-              @click="selectIcon(icon)"
+              :src="user_avatars[avatar]"
+              @click="selectAvatar(avatar)"
             >
           </div>
         </div>
@@ -226,7 +247,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .selectable-icon {
   width: 60px;
   height: 60px;
@@ -238,5 +259,9 @@ onMounted(() => {
     transform: scale(1.1);
     border-color: #24739B;
   }
+}
+
+.name-update {
+  width: 25rem;
 }
 </style>
