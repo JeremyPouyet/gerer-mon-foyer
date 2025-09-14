@@ -12,6 +12,7 @@ import { user_avatar_list, user_avatars } from '@/avatars/users'
 import type User from '@/user'
 import db from '@/db'
 import userManager from '@/managers/userManager'
+import { vClickOutside } from '@/directives/clickOutside'
 
 const commonAccount = db.account
 const commonBill = Math.max(commonAccount.expenses.sum - commonAccount.incomes.sum, 0)
@@ -44,10 +45,8 @@ function openAvatarModal(user: User) {
 }
 
 function selectAvatar(avatar: string) {
-  if (selectedUser.value) {
-    selectedUser.value.avatar = avatar
+  if (selectedUser.value)
     userManager.update(selectedUser.value.id, { avatar })
-  }
   cancelSelectAvatar()
 }
 
@@ -102,58 +101,42 @@ onMounted(() => {
 
     <!-- User cards grid -->
     <div class="row g-3">
-      <div
-        v-for="user in userManager.users"
-        :key="user.id"
-        class="col-12 col-md-6 col-lg-4"
-      >
+      <div v-for="user in userManager.users" :key="user.id" class="col-12 col-md-6 col-lg-4">
         <div class="card rounded-shadow h-100">
           <div class="card-body text-center py-3">
             <!-- User image with edit button -->
             <div class="position-relative d-inline-block mb-3">
-              <img
-                :alt="`Avatar de ${user.name}`"
-                class="user-avatar shadow-sm"
-                :src="user_avatars[user.avatar]"
-              >
-              <button
-                class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border"
-                @click="openAvatarModal(user)"
-              >
+              <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
+              <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border" @click="openAvatarModal(user)">
                 <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
               </button>
             </div>
 
             <!-- User info -->
-            <div class="mb-2">
-              <template v-if="editingUserId === user.id">
-                <div class="input-group input-group-sm justify-content-center">
-                  <input
-                    :ref="el => editingInputs[user.id] = el as HTMLInputElement"
-                    v-model="editingName"
-                    class="form-control text-center name-update"
-                    type="text"
-                    @blur="saveEditedName"
-                    @keydown.enter="saveEditedName"
-                    @keydown.esc="cancelEditName"
-                  >
-                </div>
-              </template>
-              <template v-else>
-                <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
-                  {{ user.name }}
-                  <button
-                    class="btn btn-sm btn-light p-1 border"
-                    @click="startEditingName(user)"
-                  >
-                    <img
-                      alt="Éditer"
-                      class="icon-container-small"
-                      src="@/assets/icons/pencil.png"
-                    >
-                  </button>
-                </h5>
-              </template>
+            <div v-if="editingUserId === user.id" v-click-outside="cancelEditName" class="input-group input-group-sm justify-content-center mb-3">
+              <input
+                :ref="el => editingInputs[user.id] = el as HTMLInputElement"
+                v-model="editingName"
+                class="form-control text-center name-update"
+                type="text"
+                @keydown.enter="saveEditedName"
+                @keydown.esc="cancelEditName"
+              >
+              <button class="btn btn-sm btn-light border" type="button" @click="saveEditedName">
+                <img
+                  alt="Sauvegarder"
+                  class="icon-container-small"
+                  src="@/assets/icons/diskette.png"
+                >
+              </button>
+            </div>
+            <div v-else class="mb-3">
+              <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
+                {{ user.name }}
+                <button class="btn btn-sm btn-light p-1 border" @click="startEditingName(user)">
+                  <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
+                </button>
+              </h5>
             </div>
 
             <p class="card-text mb-1">
@@ -205,24 +188,14 @@ onMounted(() => {
         type="text"
         @keydown.enter="userCreate"
       >
-      <button
-        class="btn btn-secondary btn-sm"
-        :disabled="!username"
-        type="button"
-        @click="userCreate"
-      >
+      <button class="btn btn-secondary btn-sm" :disabled="!username" type="button" @click="userCreate">
         Ajouter
       </button>
     </div>
 
     <!-- Modal for selecting avatars -->
     <!-- @click.self works as the modal covers the entire screen -->
-    <div
-      v-if="showAvatarModal"
-      class="modal fade d-block"
-      tabindex="-1"
-      @click.self="cancelSelectAvatar()"
-    >
+    <div v-if="showAvatarModal" class="modal fade d-block" @click.self="cancelSelectAvatar()">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -238,6 +211,7 @@ onMounted(() => {
               :alt="`Avatar ${avatar}`"
               class="selectable-icon"
               :src="user_avatars[avatar]"
+              tabindex="0"
               @click="selectAvatar(avatar)"
             >
           </div>
@@ -262,6 +236,7 @@ onMounted(() => {
 }
 
 .name-update {
-  width: 25rem;
+  flex: initial !important; // overides bootstrap
+  width: 20rem !important;
 }
 </style>

@@ -37,7 +37,7 @@ const remainSum = computed(() => users.value.reduce((sum, user) => sum + (user.a
     <TableContainer :account="account" :component-type="componentType" :transaction-type="TransactionType.Income" />
   </div>
   <div v-for="user in users" :key="user.id" class="row mb-4">
-    <UserNameTitle :account="user.account" :name="user.name" :avatar="user.avatar" :with-note="withNote" />
+    <UserNameTitle :account="user.account" :avatar="user.avatar" :name="user.name" :with-note="withNote" />
     <TableContainer
       :account="user.account"
       :component-type="componentType"
