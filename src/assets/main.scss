@@ -22,7 +22,7 @@ h1, h2, h3 {
 }
 
 hr {
-  background-color: colors.$separator;
+  background-color: colors.$white;
   height: 1px;
   border: none !important;
   opacity: 1 !important;
@@ -63,10 +63,6 @@ hr {
   flex-direction: column;
 }
 
-#main, .footer {
-  margin-left: 220px; /* Same as the width of the sidebar */
-}
-
 @media (max-width: 768px) {
   #main, .footer {
     margin-left: 72px;
@@ -74,6 +70,31 @@ hr {
 }
 
 /**** Sidenav ****/
+/* Default: no sidenav */
+#main, .footer {
+  margin-left: 0;
+  transition: margin-left 0.3s ease; /* smooth animation */
+}
+
+#sidenavToggler {
+  background-color: colors.$white;
+  width: fit-content;
+  cursor: pointer;
+}
+
+/* When sidenav is visible */
+.has-sidenav #main,
+.has-sidenav .footer {
+  margin-left: 220px;
+}
+
+@media (max-width: 768px) {
+  .has-sidenav #main,
+  .has-sidenav .footer {
+    margin-left: 72px;
+  }
+}
+
 #home {
   color: white;
   font-size: 1.5rem;
@@ -103,7 +124,7 @@ hr {
   }
 }
 
-/* On small screens: hide text, shrink sidebar */
+/* On small screens: hide text, shrink sidenav */
 @media (max-width: 768px) {
   .small-icon-container {
     width: 32px;
@@ -120,7 +141,7 @@ hr {
   }
 
   .sidenav {
-    width: 72px; /* smaller sidebar */
+    width: 72px; /* smaller sidenav */
 
     a {
       font-size: 11px;
@@ -146,7 +167,7 @@ hr {
 
 .nav-link {
   position: relative;
-  color: white;
+  color: colors.$white;
   text-decoration: none;
 
   &.active {
@@ -174,7 +195,7 @@ hr {
 /**** Footer ****/
 .footer {
   #home-small {
-    border: 1px solid colors.$separator
+    border: 1px solid colors.$white
   }
 
   p, h3 {
@@ -192,7 +213,7 @@ hr {
   }
 
   .row {
-    border-top: 1px solid colors.$separator;
+    border-top: 1px solid colors.$white;
     padding-top: 1.5rem;
   }
 }

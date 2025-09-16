@@ -4,7 +4,6 @@ import ViewTitle from '@/components/ViewTitle.vue'
 
 import { inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import isMobile from 'is-mobile'
 
 import { type ID, type OpenModal, Path } from '@/types'
 import { sexyAmount, sexyNumber } from '@/formaters'
@@ -90,7 +89,7 @@ function saveEditedName() {
 const cancelEditName = () => editingUserId.value = null
 
 onMounted(() => {
-  if (!isMobile() && userManager.users.length === 0 && inputRef.value)
+  if (userManager.users.length === 0 && inputRef.value)
     inputRef.value.focus()
 })
 </script>

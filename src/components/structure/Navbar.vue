@@ -5,10 +5,31 @@ import projectIcon from '@/assets/icons/criteria.png'
 import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
 import userIcon from '@/assets/icons/user.png'
 
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
-import { computed } from 'vue'
 
 import unsavedManager from '@/managers/unsavedManager'
+import { useScreenSize } from '@/composables/useScreenSize'
+const { isSmallerScreen } = useScreenSize(576)
+
+// on a small screen, do not show the sidenav by default
+const showNav = ref(!isSmallerScreen.value)
+const app = document.getElementById('app')
+
+if (showNav.value && typeof window !== 'undefined' && app)
+  app.classList.add('has-sidenav')
+
+watch(showNav, showSidenav => {
+  if (!app) return
+  if (showSidenav)
+    app.classList.add('has-sidenav')
+  else
+    app.classList.remove('has-sidenav')
+})
+
+watch(isSmallerScreen, () => toggleSidenavOnSmallScreen())
+const toggleSidenavOnSmallScreen = () => showNav.value = !isSmallerScreen.value
+const showSidenav = () => showNav.value = true
 
 const unsavedChangesText = computed(() : string => {
   const count = unsavedManager.count.value
@@ -26,8 +47,8 @@ const menuItems: [string, string, string][] = [
 </script>
 
 <template>
-  <div class="sidenav">
-    <RouterLink v-once id="home" aria-label="Accueil" to="/">
+  <div v-if="showNav" class="sidenav">
+    <RouterLink v-once id="home" aria-label="Accueil" to="/" @click="toggleSidenavOnSmallScreen">
       <p class="text-center mb-1 lh-1 small-hidden">
         Gérer&nbsp;&nbsp;
       </p>
@@ -36,13 +57,20 @@ const menuItems: [string, string, string][] = [
       </div>
     </RouterLink>
     <hr>
-    <RouterLink v-for="[uri, label, src] in menuItems" :key="label" active-class="active" class="small-centered nav-link" :to="uri">
+    <RouterLink
+      v-for="[uri, label, src] in menuItems"
+      :key="label"
+      active-class="active"
+      class="small-centered nav-link"
+      :to="uri"
+      @click="toggleSidenavOnSmallScreen"
+    >
       <div>
         <img :alt="label" aria-hidden="true" class="large-margin-end mb-1 icon-container" :src="src">
         {{ label }}
       </div>
     </RouterLink>
-    <RouterLink active-class="active" class="nav-link small-centered" to="/settings">
+    <RouterLink active-class="active" class="nav-link small-centered" to="/settings" @click="toggleSidenavOnSmallScreen">
       <div class="position-relative" style="width:95%">
         <img alt="Paramètres" aria-hidden="true" class="mb-1 icon-container large-margin-end" src="@/assets/icons/cog.png">
         Paramètres
@@ -58,5 +86,8 @@ const menuItems: [string, string, string][] = [
         </div>
       </div>
     </RouterLink>
+  </div>
+  <div v-else id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" style="" @click="showSidenav">
+    <img alt="Afficher le menu" aria-hidden="true" class="icon-container" src="@/assets/icons/menu.png">
   </div>
 </template>
