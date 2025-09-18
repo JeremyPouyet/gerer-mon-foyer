@@ -5,18 +5,19 @@ import Distribution from '@/components/Distribution.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import isMobile from 'is-mobile'
 
 import BrowserStorage, { StorageKey } from '@/browserStorage'
 import { Path } from '@/types'
 import { limitedEvaluate } from '@/helpers'
 import settingManager from '@/managers/settingManager'
+import { useScreenSize } from '@/composables/useScreenSize'
 
 let computedValue = ref(0)
 const expenseValue = ref<string>('')
 const inputRef = ref<HTMLInputElement | null>(null)
 
 onMounted(() => {
+  const { isSmallerScreen } = useScreenSize(992)
   const simulatorValueStorage = new BrowserStorage(sessionStorage, StorageKey.SimulatorValue)
   expenseValue.value = simulatorValueStorage.get('')
 
@@ -24,7 +25,8 @@ onMounted(() => {
     watch(expenseValue, value => simulatorValueStorage.set(value)),
   ]
 
-  if (!isMobile()) inputRef.value?.focus()
+  // On a large screen, autofocus the input
+  if (!isSmallerScreen.value) inputRef.value?.focus()
 
   onUnmounted(() => {
     watchers.forEach(stop => stop())

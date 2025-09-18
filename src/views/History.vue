@@ -65,12 +65,14 @@ switchSample()
       <LeftColumn :title="'Dates'">
         <HistoryEdit @switch-sample="switchSample()" />
       </LeftColumn>
-      <BudgetShow
-        :account="snapshot.account"
-        :component-type="HistoryTransactionsShow"
-        :users="snapshot.users"
-        :with-note="false"
-      />
+      <div class="col">
+        <BudgetShow
+          :account="snapshot.account"
+          :component-type="HistoryTransactionsShow"
+          :users="snapshot.users"
+          :with-note="false"
+        />
+      </div>
     </div>
   </div>
 </template>

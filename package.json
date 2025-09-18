@@ -16,7 +16,6 @@
     "@popperjs/core": "^2.11.8",
     "@vuepic/vue-datepicker": "^10.0.0",
     "bootstrap": "^5.3.3",
-    "is-mobile": "^5.0.0",
     "mathjs": "^12.4.2",
     "vite-ssg": "^0.24.0",
     "vue": "^3.4.21",
