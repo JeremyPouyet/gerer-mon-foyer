@@ -159,15 +159,16 @@ onMounted(() => {
                 @click="userDelete(user)"
                 @keydown.enter="userDelete(user)"
               >
-              <RouterLink class="d-inline-flex align-items-center" :to="`/budget#${user.name}`">
+              <RouterLink
+                v-tooltip="{ disposeOnClick: true }"
+                class="d-inline-flex align-items-center"
+                :data-bs-title="`Voir le budget de ${user.name}`"
+                :to="`/budget#${user.name}`"
+              >
                 <img
-                  v-tooltip="{ disposeOnClick: true }"
-                  alt="Voir le budget"
-                  :aria-label="`Voir le budget de ${user.name}`"
+                  :alt="`Voir le budget de ${user.name}`"
                   class="icon-container-small icon-hoverable"
-                  :data-bs-title="`Voir le budget de ${user.name}`"
                   src="@/assets/icons/hyperlink.png"
-                  tabindex="0"
                 >
               </RouterLink>
             </div>
