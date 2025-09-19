@@ -15,7 +15,7 @@
 
 input:focus, select:focus {
   outline: none !important; /* Remove default style */
-  border: 2px solid #4CAF50 !important;
+  border: 2px solid colors.$secondary !important;
   box-shadow: 0 0 8px rgba(76, 175, 80, 0.8) !important;
   transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
@@ -30,7 +30,7 @@ input:focus, select:focus {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border: 2px solid #ddd;
+  border: 2px solid colors.$secondary;
 }
 
 /* Clickable and editable cell style */

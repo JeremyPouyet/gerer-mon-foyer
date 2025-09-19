@@ -133,7 +133,7 @@ onMounted(() => {
   </div>
   <hr class="mb-4 mt-0">
   <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+    <div class="col-xl-12 col-xxl-6 mb-3">
       <span class="form-label fw-bold d-block">1. Je liste les dépenses nécessaires au projet</span>
       <div class="table-responsive shadowed-border mb-3">
         <table class="table table-hover mb-0">
@@ -228,17 +228,16 @@ onMounted(() => {
                 {{ sexyNumber(expense.quantity * expense.price) }}
               </td>
               <td class="text-end">
-                <input :id="`btn-${expense.id}`" autocomplete="off" :checked="expense.done" class="btn-check" type="checkbox">
-                <label
+                <button
                   v-tooltip
-                  class="btn w-50"
+                  class="btn"
                   :class="expense.done ? 'btn-primary' : 'btn-secondary'"
                   data-bs-title="Cliquer pour changer"
                   :for="`btn-${expense.id}`"
                   @click="btnDoneClick(expense.id, !expense.done)"
                 >
                   {{ expense.done ? 'Oui' : 'Non' }}
-                </label>
+                </button>
               </td>
               <td class="text-end align-middle text-nowrap">
                 <Note
@@ -266,7 +265,7 @@ onMounted(() => {
     <Distribution :total="expenses.sum" :with-total="true" />
   </div>
   <div class="row mt-3">
-    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+    <div class="col-xl-12 col-xxl-6 mb-3">
       <span class="form-label fw-bold d-block">3. Je liste les payments réalisés par les habitants</span>
       <div v-if="currentProject.paymentsSorted().list.length === 0">
         <p>
@@ -278,9 +277,14 @@ onMounted(() => {
       </div>
       <PaymentAdd :current-project="currentProject" />
     </div>
-    <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+    <div class="col-xl-12 col-xxl-6 mb-3">
       <div>
         <span class="form-label fw-bold d-block">4. Répartition effectué des payments</span>
+        <div v-if="currentProject.paymentsSorted().list.length === 0">
+          <p>
+            Aucun payment n’a encore été fait.
+          </p>
+        </div>
         <ul class="list-group">
           <li
             v-for="(value, resident) in currentProject.paymentsSorted().byUser"

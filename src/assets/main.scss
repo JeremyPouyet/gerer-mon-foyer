@@ -53,7 +53,7 @@ hr {
 .text-block {
   background-color: colors.$block;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 0.45rem;
   padding: 20px;
 }
 
@@ -96,7 +96,7 @@ hr {
 }
 
 #home {
-  color: white;
+  color: colors.$white;
   font-size: 1.5rem;
 }
 
@@ -172,7 +172,7 @@ hr {
 
   &.active {
     font-weight: bold;
-    color: #F7B32B;
+    color: colors.$highlight;
   }
 
   &:after {
@@ -183,7 +183,7 @@ hr {
     bottom: 0;
     left: 50%;                   // place it relative to the center
     transform: translateX(-50%) scaleX(0); // center it + start hidden
-    background-color: $secondary;
+    background-color: colors.$highlight;
     transition: transform 0.3s ease-in-out;
   }
 

@@ -106,7 +106,7 @@ onMounted(() => {
             <!-- User image with edit button -->
             <div class="position-relative d-inline-block mb-3">
               <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
-              <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border" @click="openAvatarModal(user)">
+              <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border included" @click="openAvatarModal(user)">
                 <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
               </button>
             </div>
@@ -222,6 +222,18 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+@use '@/assets/colors.scss';
+
+button {
+  img {
+    vertical-align: sub;
+  }
+}
+
+.included {
+  border-radius: 0.25rem 0% 0% 0%;
+}
+
 .selectable-icon {
   width: 60px;
   height: 60px;
@@ -231,7 +243,7 @@ onMounted(() => {
 
   &:hover {
     transform: scale(1.1);
-    border-color: #24739B;
+    border-color: colors.$secondary;
   }
 }
 

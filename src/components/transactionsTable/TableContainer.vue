@@ -39,8 +39,8 @@ const lgClass = computed(() => {
   const show = props.account.settings.show
   // If the account is common and one of the transaction array is hidden on large screens
   return props.account.type === AccountType.Common && (!show.expenses || !show.incomes)
-    ? 'col-lg-12' // Then show the transaction array full screen
-    : 'col-lg-6'  // Otherwise a transaction array takes 50% of the screen to show both
+    ? 'col-xxl-12' // Then show the transaction array full screen
+    : 'col-xxl-6'  // Otherwise a transaction array takes 50% of the screen to show both
 })
 
 function hideTransactions(transactionType: TransactionType) {
@@ -61,7 +61,7 @@ const inputNameText = computed(() => {
 <template>
   <div
     v-show="account.settings.show[transactionType]"
-    class="col-sm-12 col-md-12 mb-4"
+    class="col-xl-12 mb-4"
     :class="lgClass"
   >
     <section>

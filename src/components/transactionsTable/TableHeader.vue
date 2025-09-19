@@ -21,7 +21,9 @@ defineProps<{ incomeLabel?: string, transactionType: TransactionType, withAction
       <th v-if="incomeLabel" class="text-end" scope="col">
         {{ incomeLabel }}
       </th>
-      <th>Note</th>
+      <th scope="col">
+        Note
+      </th>
       <th v-if="withActions" class="text-end" scope="col">
         Actions
       </th>

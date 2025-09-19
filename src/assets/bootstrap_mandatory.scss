@@ -1,7 +1,10 @@
+@use './colors.scss';
+
 // Mandatory bootstrap imports
 @import "../../node_modules/bootstrap/scss/functions";
 
-$secondary: #F7B32B;
+$primary: colors.$primary;
+$secondary: colors.$secondary;
 
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/variables-dark";
