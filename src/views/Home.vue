@@ -16,7 +16,7 @@ const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/Sc
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 
-      <RouterLink class="btn btn-primary btn-lg mt-4 shadow-sm" to="/budget">
+      <RouterLink class="btn btn-primary btn-lg mt-4 shadow-sm" to="/users">
         Commencer maintenant
       </RouterLink>
     </header>

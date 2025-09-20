@@ -98,8 +98,13 @@ onMounted(() => {
   <div class="container">
     <ViewTitle emoji="👋" :path="Path.Users" unpaded />
 
+    <!-- Message to help people when there is no user -->
+    <div v-if="userManager.users.length == 0" class="text-center">
+      <p>Commencez par ajouter les habitants de votre foyer pour débloquer les autres fonctionnalités :</p>
+    </div>
+
     <!-- User cards grid -->
-    <div class="row g-3">
+    <div v-else class="row g-3">
       <div v-for="user in userManager.users" :key="user.id" class="col-12 col-md-6 col-lg-4">
         <div class="card rounded-shadow h-100">
           <div class="card-body text-center py-3">
@@ -191,6 +196,15 @@ onMounted(() => {
       <button class="btn btn-secondary btn-sm" :disabled="!username" type="button" @click="userCreate">
         Ajouter
       </button>
+    </div>
+
+    <!-- Message to help people when their budget is not setup -->
+    <div v-if="userManager.users.length > 0 && commonBill == 0" class="text-center mt-4">
+      <p>
+        Vous pouvez maintenant commencer à <RouterLink to="/budget">
+          établir votre budget
+        </RouterLink>
+      </p>
     </div>
 
     <!-- Modal for selecting avatars -->
