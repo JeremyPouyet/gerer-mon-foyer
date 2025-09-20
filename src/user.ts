@@ -14,7 +14,6 @@ export default class User {
     this.id = props.id ?? newId()
     this.name = props.name ?? ''
     this.ratio = props.ratio ?? 0
-    // todo - random image ?
     this.avatar = props.avatar || 'tiger'
   }
 }

@@ -224,6 +224,7 @@ onMounted(() => {
               :key="avatar"
               :alt="`Avatar ${avatar}`"
               class="selectable-icon"
+              loading="lazy"
               :src="user_avatars[avatar]"
               tabindex="0"
               @click="selectAvatar(avatar)"
