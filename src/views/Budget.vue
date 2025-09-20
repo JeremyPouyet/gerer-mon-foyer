@@ -20,18 +20,17 @@ async function historicize() {
 
 <template>
   <div class="container-fluid">
+    <button
+      aria-label="Ajouter le budget actuel à l’historique"
+      class="end-0 top-0 position-absolute btn btn-secondary mt-1 me-1"
+      tabindex="0"
+      @click="historicize"
+      @keypress.enter="historicize"
+    >
+      Historiser
+    </button>
     <div class="position-relative">
       <ViewTitle emoji="💸" :path="Path.Budget" />
-
-      <button
-        aria-label="Ajouter le budget actuel à l’historique"
-        class="end-0 top-0 position-absolute btn btn-secondary"
-        tabindex="0"
-        @click="historicize"
-        @keypress.enter="historicize"
-      >
-        Historiser
-      </button>
     </div>
     <BudgetShow
       :account="db.account"
