@@ -93,7 +93,9 @@ export function useEditable<T>() {
     editedType.value = type
     editedId.value = id
     editedValue.value = value
-    nextTick(onEditStart)
+
+    if (onEditStart)
+      nextTick(onEditStart)
   }
 
 

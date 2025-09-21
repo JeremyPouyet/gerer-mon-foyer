@@ -87,7 +87,7 @@ const menuItems: [string, string, string][] = [
       </div>
     </RouterLink>
   </div>
-  <div v-else id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" style="" @click="showSidenav">
+  <div v-else id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" @click="showSidenav">
     <img alt="Afficher le menu" aria-hidden="true" class="icon-container" src="@/assets/icons/menu.png">
   </div>
 </template>

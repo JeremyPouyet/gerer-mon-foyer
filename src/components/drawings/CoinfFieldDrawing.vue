@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/drawings.scss'
+
 import type { Coin, ID, Particle } from '@/types'
 import { explodeCoin, randomInclusiveInt, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
 import { onMounted, onUnmounted, ref } from 'vue'
@@ -90,8 +92,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/drawings.scss';
-
 .coin-container {
   position: relative;
   width: 150px;

@@ -9,9 +9,9 @@
 @import '../../node_modules/bootstrap/scss/forms';
 @import '../../node_modules/bootstrap/scss/helpers/vr';
 @import '../../node_modules/bootstrap/scss/list-group';
+@import '../../node_modules/bootstrap/scss/modal';
 @import '../../node_modules/bootstrap/scss/tables';
 @import '../../node_modules/bootstrap/scss/toasts';
-@import '../../node_modules/bootstrap/scss/helpers/position';
 
 input:focus, select:focus {
   outline: none !important; /* Remove default style */
