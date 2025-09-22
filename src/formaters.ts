@@ -47,7 +47,7 @@ export function sexyDate(strDate: string, includeTime = true) : string {
  * @param style Intl.NumberFormatOptions.style possible value
  * @return Formated number
  */
-export function sexyNumber(value: number, style = 'decimal') : string {
+export function sexyNumber(value: number, style: keyof Intl.NumberFormatOptionsStyleRegistry = 'decimal') : string {
   if (!isFinite(value))
     return 'NC'
 

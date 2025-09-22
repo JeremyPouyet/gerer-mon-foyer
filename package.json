@@ -14,10 +14,9 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@vuepic/vue-datepicker": "^10.0.0",
+    "@vuepic/vue-datepicker": "^11.0.2",
     "bootstrap": "^5.3.8",
     "mathjs": "^12.4.2",
-    "vite-ssg": "^28.1.0",
     "vue": "^3.4.21",
     "vue-router": "^4.4.5"
   },
@@ -31,15 +30,15 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
     "@unhead/vue": "^1.11.10",
-    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^9.9.0",
     "eslint-plugin-vue": "^9.27.0",
-    "npm-run-all2": "^6.1.2",
     "sass-embedded": "^1.83.0",
-    "typescript": "~5.4.0",
-    "typescript-eslint": "^8.2.0",
-    "vite": "^5.2.8",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^7.0.0",
+    "vite-ssg": "^28.1.0",
     "vue-tsc": "^2.0.11"
   }
 }
