@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Note from '@/components/Note.vue'
-import NoteIcon from '@/components/NoteIcon.vue'
 
 import { inject, ref } from 'vue'
 
@@ -54,7 +53,6 @@ function removeSample(date: string) : void {
           @keydown.enter="switchSample(sample.date)"
         >
           {{ sexyDate(sample.date) }}
-          <NoteIcon :text="sample.note" :unpaded="true" />
         </span>
         <div class="text-nowrap">
           <Note :item="sample" @update="note => historyManager.update(sample.date, { note })" />

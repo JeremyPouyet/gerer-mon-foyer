@@ -1,5 +1,8 @@
-@import './main.scss'; // to have bootstrap/custom variables
+@use './colors.scss';
 
+@import './bootstrap_mandatory.scss';
+
+// Optional bootstrap components
 @import '../../node_modules/bootstrap/scss/alert';
 @import '../../node_modules/bootstrap/scss/button-group';
 @import '../../node_modules/bootstrap/scss/close';
@@ -8,24 +11,25 @@
 @import '../../node_modules/bootstrap/scss/list-group';
 @import '../../node_modules/bootstrap/scss/tables';
 @import '../../node_modules/bootstrap/scss/toasts';
-@import '../../node_modules/bootstrap/scss/helpers/position';
 
 input:focus, select:focus {
   outline: none !important; /* Remove default style */
-  border: 2px solid #4CAF50 !important;
+  border: 2px solid colors.$secondary !important;
   box-shadow: 0 0 8px rgba(76, 175, 80, 0.8) !important;
   transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-}
-
-.active {
-  font-weight: bold;
-  color: #000;
 }
 
 .rounded-shadow {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   justify-content: center;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid colors.$secondary;
 }
 
 /* Clickable and editable cell style */
@@ -37,14 +41,6 @@ input:focus, select:focus {
   }
 }
 
-.underline {
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: $secondary;
-}
-
 .char-width-20 {
   width: 20ch;
 }
@@ -53,13 +49,9 @@ input:focus, select:focus {
   width: 30ch;
 }
 
-/**** Left column with history dates or users ****/
+/**** Left column with history dates ****/
 .item-list {
   list-style-type: none;
-
-  .item {
-    border-bottom: 1px solid var(--color-celadon);
-  }
 }
 
 /**** Table ****/
@@ -68,15 +60,25 @@ table {
     tr {
       th {
         color: $white !important;
-        background-color: $dark !important;
+        background-color: colors.$primary !important;
+        border-bottom: none;
       }
     }
   }
 
   tbody {
     tr {
+      background-color: colors.$background !important;
+      border-color: colors.$white;
+      border-bottom-width: 1px;
+
       td {
-        background-color: var(--color-vanilla) !important;
+        background-color: inherit !important;
+        border: none;
+      }
+
+      &:last-child {
+        border-bottom: none !important
       }
     }
   }
@@ -85,7 +87,8 @@ table {
     tr {
       td {
         color: $white !important;
-        background-color: $dark !important;
+        background-color: colors.$primary !important;
+        border-bottom: none;
 
         &:first-child {
           border-radius: 0 0 0 10px;

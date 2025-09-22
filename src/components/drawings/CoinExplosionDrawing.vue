@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/drawings.scss'
+
 import type { Coin, ID, Particle } from '@/types'
 import { explodeCoin, randomNumberInCointainer, updateParticles } from '@/coinDrawing'
 import { onMounted, onUnmounted, ref } from 'vue'
@@ -73,8 +75,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/drawings.scss';
-
 $primary-red: #ff4d4d;
 $primary-yellow: #ffd700;
 $primary-blue: #4dafff;

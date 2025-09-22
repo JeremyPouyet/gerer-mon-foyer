@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/drawings.scss'
+
 import { ref } from 'vue'
 
 const armRotation = ref('translateX(-50%) rotate(0deg)')
@@ -94,9 +96,8 @@ const resetBalance = () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/drawings.scss';
+@use '@/assets/colors.scss';
 
-$black: black;
 $plate-shadow: rgba(0, 0, 0, 0.4);
 
 .scale-container {
@@ -109,21 +110,21 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
   .scale-stick {
     width: 6px;
     height: 99%;
-    background: $gold-metallic;
+    background: colors.$gold-metallic;
     border-radius: 4px;
     position: absolute;
     box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
     left: 50%;
     transform: translateX(-50%);
-    border: 1px solid $black;
+    border: 1px solid colors.$black;
     z-index: 1;
   }
 
   .scale-rivet {
     width: 8px;
     height: 8px;
-    background: $gold-metallic;
-    border: 1px solid $black;
+    background: colors.$gold-metallic;
+    border: 1px solid colors.$black;
     border-radius: 50%;
     position: absolute;
     top: 18%;
@@ -136,13 +137,13 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
   .scale-foot {
     width: 65%;
     height: 6px;
-    background: $gold-metallic;;
+    background: colors.$gold-metallic;;
     border-radius: 8px;
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    border: 1px solid $black;
+    border: 1px solid colors.$black;
     z-index: 2;
 
     &.scale-foot-small {
@@ -154,13 +155,13 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
   .scale-arm {
     width: 100%;
     height: 5px;
-    background: $gold-metallic;
+    background: colors.$gold-metallic;
     border-radius: 4px;
     position: absolute;
     top: 17%;
     left: 50%;
     transform: translateX(-50%);
-    border: 1px solid $black;
+    border: 1px solid colors.$black;
     border-top: none;
     z-index: 1;
     transition: transform 0.2s ease-out;
@@ -175,7 +176,7 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
       height: 0;
       border-style: solid;
       border-width: 0 62px 5px 62px;
-      border-color: transparent transparent $black transparent;
+      border-color: transparent transparent colors.$black transparent;
     }
   }
 
@@ -211,7 +212,7 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
   .scale-cable {
     position: absolute;
     width: 1px;
-    background-color: $black;
+    background-color: colors.$black;
     height: 40px;
     transition: transform 0.2s ease-out;
 
@@ -244,8 +245,8 @@ $plate-shadow: rgba(0, 0, 0, 0.4);
     position: absolute;
     width: 34px;
     height: 11px;
-    background: $gold-metallic;
-    border: 1px solid $black;
+    background: colors.$gold-metallic;
+    border: 1px solid colors.$black;
     border-radius: 0 0 10px 10px;
     box-shadow: inset 0 2px 4px $plate-shadow, 0 2px 6px rgba(0, 0, 0, 0.3);
     transform-style: preserve-3d;

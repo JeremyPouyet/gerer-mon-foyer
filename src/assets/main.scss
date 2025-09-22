@@ -1,47 +1,36 @@
-// Mandatory bootstrap imports
-@import "../../node_modules/bootstrap/scss/functions";
+@use './colors.scss';
 
-$dark: #442c47;
-$red: #F72C25;
-$primary: #A9E5BB;
-$secondary: #F7B32B;
+@import './bootstrap_mandatory.scss';
 
-@import "../../node_modules/bootstrap/scss/variables";
-@import "../../node_modules/bootstrap/scss/variables-dark";
-
-@import "../../node_modules/bootstrap/scss/maps";
-@import "../../node_modules/bootstrap/scss/mixins";
-@import "../../node_modules/bootstrap/scss/root";
-
-@import '../../node_modules/bootstrap/scss/utilities';
-@import "../../node_modules/bootstrap/scss/reboot";
-@import "../../node_modules/bootstrap/scss/type";
-
-// Optional used components
+// Optional bootstrap components
 @import '../../node_modules/bootstrap/scss/badge';
 @import '../../node_modules/bootstrap/scss/buttons';
 @import '../../node_modules/bootstrap/scss/containers';
 @import '../../node_modules/bootstrap/scss/grid';
+@import '../../node_modules/bootstrap/scss/helpers/position'; //fixed-top
 @import '../../node_modules/bootstrap/scss/modal';
-@import '../../node_modules/bootstrap/scss/nav';
-@import '../../node_modules/bootstrap/scss/navbar';
 @import '../../node_modules/bootstrap/scss/tooltip';
-@import '../../node_modules/bootstrap/scss/transitions'; // navbar collapse
 
 @import '../../node_modules/bootstrap/scss/utilities/api';
 
-:root {
-  --color-vanilla: #FCF6B1;
-  --color-celadon: #A9E5BB;
-}
-
 body {
-  background-color: var(--color-vanilla) !important;
+  background-color: colors.$background !important;
   font-family: 'Roboto', sans-serif;
 }
 
 h1, h2, h3 {
   font-family: 'Playfair Display', serif;
+}
+
+hr {
+  background-color: colors.$white;
+  height: 1px;
+  border: none !important;
+  opacity: 1 !important;
+}
+
+.baselined-icon {
+  vertical-align: baseline;
 }
 
 .icon-container {
@@ -63,9 +52,9 @@ h1, h2, h3 {
 }
 
 .text-block {
-  background-color: #fffbc1;
+  background-color: colors.$block;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 0.45rem;
   padding: 20px;
 }
 
@@ -75,40 +64,130 @@ h1, h2, h3 {
   flex-direction: column;
 }
 
-/**** Navbar ****/
-nav {
-  .navbar-nav {
-    .nav-link {
-      position: relative;
-      color: #333;
-      text-decoration: none;
+/**** Sidenav ****/
+$large-sidenav-width: 220px;
+$small-sidenav-width: 72px;
 
-      &.active {
-        font-weight: bold;
-        color: $black;
-      }
+#sidenavToggler {
+  background-color: colors.$white;
+  width: fit-content;
+  cursor: pointer;
+}
 
-      &:after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: $secondary;
-        transition: transform 0.3s ease-in-out;
-        transform: scaleX(0);
-      }
+/* When sidenav is visible */
+.has-sidenav #main,
+.has-sidenav .footer {
+  margin-left: $large-sidenav-width;
+}
 
-      &:hover:after {
-        transform: scaleX(1);
-      }
+#home {
+  color: colors.$white;
+  font-size: 1.5rem;
+}
+
+.sidenav {
+  height: 100%;
+  width: $large-sidenav-width;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: colors.$primary;
+  overflow-x: hidden;
+  padding-top: 20px;
+
+  hr {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  a {
+    padding: 0.3rem 0.5rem;
+    text-decoration: none;
+    display: block;
+  }
+}
+
+/* On small screens: hide text, shrink sidenav */
+@media (max-width: map-get($grid-breakpoints, md)) {
+  .has-sidenav #main,
+  .has-sidenav .footer {
+    margin-left: $small-sidenav-width;
+  }
+
+  .small-icon-container {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+  }
+
+  .small-hidden {
+    display: none;
+  }
+
+  .small-centered {
+    text-align: center;
+  }
+
+  .sidenav {
+    width: $small-sidenav-width;
+
+    a {
+      font-size: 11px;
     }
+  }
+
+  #unsaved-count {
+    left: 100%; /* ensure badge stays visible */
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, md)) {
+  .large-margin-end {
+    margin-right: 0.5rem;
+  }
+
+  .large-icon-container-small {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.nav-link {
+  position: relative;
+  color: colors.$white;
+  text-decoration: none;
+
+  &.active {
+    font-weight: bold;
+    color: colors.$highlight;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 85%;
+    height: 1px;
+    bottom: 0;
+    left: 50%;                   // place it relative to the center
+    transform: translateX(-50%) scaleX(0); // center it + start hidden
+    background-color: colors.$highlight;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &:hover:after {
+    transform: translateX(-50%) scaleX(1); // expand from center
   }
 }
 
 /**** Footer ****/
 .footer {
+  #home-small {
+    border: 1px solid colors.$white
+  }
+
   p, h3 {
     margin: 0;
     padding: 0.5rem 0;
@@ -124,7 +203,7 @@ nav {
   }
 
   .row {
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-top: 1px solid colors.$white;
     padding-top: 1.5rem;
   }
 }

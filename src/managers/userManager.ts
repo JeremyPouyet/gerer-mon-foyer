@@ -1,6 +1,7 @@
 import { reactive, watch } from 'vue'
 
 import BrowserStorage, { StorageKey } from '@/browserStorage'
+import type { ID } from '@/types'
 import User from '@/user'
 
 class UserManager {
@@ -78,6 +79,15 @@ class UserManager {
 
     for (const user of users)
       this.users.push(new User(user))
+  }
+
+  update(id: ID, updates: Partial<User>): void {
+    const userIndex = this.users.findIndex(user => user.id === id)
+
+    if (userIndex === -1) return
+
+    Object.assign(this.users[userIndex], updates)
+    this.#save()
   }
 
   #save(): void {

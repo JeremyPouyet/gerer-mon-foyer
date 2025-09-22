@@ -2,9 +2,10 @@ import { Frequency, Path, SortType, TransactionType } from '@/types'
 
 export default {
   frequencies: {
+    [Frequency.weekly]: 'Semaine',
     [Frequency.monthly]: 'Mois',
     [Frequency.quarterly]: 'Trimestre',
-    [Frequency.biannual]: 'Semestre',
+    [Frequency.biannualy]: 'Semestre',
     [Frequency.yearly]: 'Année',
   },
   heads: {
@@ -12,13 +13,13 @@ export default {
       meta: {
         description: 'Définissez votre budget commun en renseignant les revenus et les dépenses contraintes de tous les membres du foyer.'
       },
-      title: 'Gérer mon budget'
+      title: 'Gérer notre budget'
     },
     [Path.History]: {
       meta: {
         description: 'Visualisez l’évolution de votre budget et de vos dépenses'
       },
-      title: 'Historique de mon budget'
+      title: 'Historique de notre budget'
     },
     [Path.Home]: {
       meta: {
@@ -42,7 +43,7 @@ export default {
       meta: {
         description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés'
       },
-      title: 'Planifier mes projets'
+      title: 'Budgéter nos projets'
     },
     [Path.Raphael]: {
       meta: {
@@ -61,6 +62,12 @@ export default {
         description: 'Répartissez le coût d’une dépense ponctuelle (meuble, électroménager, etc.) entre les habitants de votre foyer, en fonction de leurs revenus'
       },
       title: 'Simuler une dépense ponctuelle'
+    },
+    [Path.Users]: {
+      meta: {
+        description: 'Renseignez la liste des habitants de votre foyer pour établir votre budget'
+      },
+      title: 'Lister les habitants de notre foyer'
     }
   },
   notifications: {

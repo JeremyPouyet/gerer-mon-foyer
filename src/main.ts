@@ -7,7 +7,7 @@ import { useHead } from '@unhead/vue'
 import App from '@/App.vue'
 import { Path } from '@/types'
 import Texts from '@/texts'
-import { tooltip } from '@/tooltip'
+import { tooltip } from '@/directives/tooltip'
 
 /**
  * Set page headers (meta description and page title)
@@ -39,10 +39,15 @@ export const createApp = ViteSSG(
       ['Raphael',   Path.Raphael],
       ['Simulator', Path.Simulator],
       ['Legals',    Path.Legals],
-      ['NotFound',  Path.NotFound]
+      ['NotFound',  Path.NotFound],
+      ['Users',     Path.Users]
     ].map(([fileName, path]) => {
       return { component: () => import(`@/views/${fileName}.vue`), path }
     }),
+    // when the url contains an anchor, smooth scroll the page to the anchor
+    scrollBehavior(to) {
+      return to.hash ? { behavior: 'smooth', el: to.hash } : { top: 0 }
+    },
   },
   ({ app, router }) => {
     let currentPath = ''

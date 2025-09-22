@@ -16,7 +16,7 @@ const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/Sc
         Un outil gratuit pour gérer votre budget et simplifier la gestion des dépenses communes de votre foyer en tenant compte de vos charges personnelles.
       </p>
 
-      <RouterLink class="btn btn-primary btn-lg mt-4 shadow-sm" to="/budget">
+      <RouterLink class="btn btn-primary btn-lg mt-4 shadow-sm" to="/users">
         Commencer maintenant
       </RouterLink>
     </header>
@@ -69,13 +69,13 @@ const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/Sc
       </p>
       <ul class="text-start step-list">
         <li>
-          <strong>Renseignez vos revenus</strong> : Indiquez les revenus de chaque membre du foyer, comme les salaires, allocations ou autres sources.
+          <span class="fw-bold">Renseignez vos revenus</span> : Indiquez les revenus de chaque membre du foyer, comme les salaires, allocations ou autres sources.
         </li>
         <li>
-          <strong>Ajoutez vos dépenses personnelles</strong> : Notez vos charges fixes, telles que crédits, essence, assurances, et autres dépenses individuelles.
+          <span class="fw-bold">Ajoutez vos dépenses personnelles</span> : Notez vos charges fixes, telles que crédits, essence, assurances, et autres dépenses individuelles.
         </li>
         <li>
-          <strong>Entrez les dépenses communes</strong> : Saisissez vos frais collectifs, comme le loyer, l’eau, le gaz, et les courses du ménage.
+          <span class="fw-bold">Entrez les dépenses communes</span> : Saisissez vos frais collectifs, comme le loyer, l’eau, le gaz, et les courses du ménage.
         </li>
       </ul>
       <p class="text-start">
@@ -88,13 +88,13 @@ const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/Sc
             Découvrez ensuite des fonctionnalités complémentaires pour simplifier votre gestion de budget :
           </p>
           <p class="text-start mb-0">
-            🛠️ <strong><RouterLink class="text-primary-emphasis" to="/simulator">Simulateur de dépenses ponctuelles</RouterLink></strong> : Partagez équitablement le prix d’un achat unique, comme de l’électroménager.
+            🛠️ <span class="fw-bold"><RouterLink class="text-primary-emphasis" to="/simulator">Simulateur de dépenses ponctuelles</RouterLink></span> : Partagez équitablement le prix d’un achat unique, comme de l’électroménager.
           </p>
           <p class="text-start mb-0">
-            📊 <strong><RouterLink class="text-primary-emphasis" to="/history">Historique budgétaire</RouterLink></strong> : Suivez l’évolution de vos finances et dépenses dans le temps.
+            📊 <span class="fw-bold"><RouterLink class="text-primary-emphasis" to="/history">Historique budgétaire</RouterLink></span> : Suivez l’évolution de vos finances et dépenses dans le temps.
           </p>
           <p class="text-start">
-            🎯 <strong><RouterLink class="text-primary-emphasis" to="/projects">Gestion de projets communs</RouterLink></strong> : Budgétez vos grands projets comme des travaux, des vacances ou un mariage.
+            🎯 <span class="fw-bold"><RouterLink class="text-primary-emphasis" to="/projects">Gestion de projets communs</RouterLink></span> : Budgétez vos grands projets comme des travaux, des vacances ou un mariage.
           </p>
 
           <p class="text-start mb-0">
@@ -109,7 +109,9 @@ const ScaleDrawing = defineAsyncComponent(() => import('@/components/drawings/Sc
   </section>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@/assets/colors.scss';
+
 h1 {
   font-size: 2.75rem;
   font-weight: bold;
@@ -140,10 +142,10 @@ ul.step-list li::before {
   left: 0;
   top: 0;
   font-weight: bold;
-  background-color: #007bff;
-  color: white;
-  width: 1.5rem;
-  height: 1.5rem;
+  background-color: colors.$primary;
+  color: colors.$white;
+  width: 1.6rem;
+  height: 1.6rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,5 +1,5 @@
 <template>
-  <footer v-once class="bg-primary footer mt-auto py-4">
+  <footer v-once class="footer mt-auto py-4">
     <div class="container">
       <div class="row">
         <div class="col-md-3 text-center text-md-start">
@@ -26,11 +26,11 @@
               <div class="align-middle me-2">
                 À propos de
               </div>
-              <div class="border p-2">
-                <p class="mb-0 lh-1 py-0">
-                  Gérer
+              <div id="home-small" class="p-2">
+                <p class="mb-1 lh-1 py-0">
+                  Gérer&nbsp;&nbsp;
                 </p>
-                Mon <img alt="" class="icon-container-small" src="@/assets/icons/home.png"> Foyer
+                Mon <img alt="" class="icon-container-small baselined-icon" src="@/assets/icons/home.png"> Foyer
               </div>
             </div>
           </h3>

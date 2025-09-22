@@ -18,9 +18,10 @@ export interface Particle {
 /**** Frequencies ****/
 
 export enum Frequency {
+  weekly = 'weekly',
   monthly = 'monthly',
   quarterly = 'quarterly',
-  biannual = 'biannual',
+  biannualy = 'biannual',
   yearly = 'yearly'
 }
 
@@ -46,7 +47,8 @@ export enum Path {
   Projects = '/projects',
   Raphael = '/raphael',
   Settings = '/settings',
-  Simulator = '/simulator'
+  Simulator = '/simulator',
+  Users = '/users'
 }
 
 /**** Sort ****/

@@ -4,7 +4,7 @@ import type TransactionsEdit from '../TransactionsEdit.vue'
 
 import { computed, inject, nextTick, ref, toRefs } from 'vue'
 
-import { Frequency, type TransactionFunctional, TransactionType } from '@/types'
+import { type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
 import { AccountType } from '@/account'
 import Texts from '@/texts'
@@ -18,18 +18,18 @@ const props = defineProps<{
   componentType: typeof TransactionsEdit | typeof HistoryTransactionsShow
 }>()
 const { account, transactionType } = toRefs(props)
-const newTransaction = ref<TransactionFunctional>({ frequency: Frequency.monthly, name: '',  value: '' })
+const newTransaction = ref({ frequency: '', name: '',  value: '' })
 const newTransactionInputName = ref<HTMLInputElement>()
 const editBudget = inject<boolean>('editBudget')
 
 function transactionAdd() : void {
-  if (!account.value.create(props.transactionType, newTransaction.value))
+  if (!account.value.create(props.transactionType, newTransaction.value as TransactionFunctional))
     return
 
   if (account.value.type === AccountType.Personal)
     userManager.computeRatios()
 
-  newTransaction.value = { frequency: Frequency.monthly, name: '', value: '' }
+  newTransaction.value = { frequency: '', name: '', value: '' }
 
   // once the transaction is added, expect the user to add a new one
   nextTick(() => newTransactionInputName.value?.focus())
@@ -39,8 +39,8 @@ const lgClass = computed(() => {
   const show = props.account.settings.show
   // If the account is common and one of the transaction array is hidden on large screens
   return props.account.type === AccountType.Common && (!show.expenses || !show.incomes)
-    ? 'col-lg-12' // Then show the transaction array full screen
-    : 'col-lg-6'  // Otherwise a transaction array takes 50% of the screen to show both
+    ? 'col-xxl-12' // Then show the transaction array full screen
+    : 'col-xxl-6'  // Otherwise a transaction array takes 50% of the screen to show both
 })
 
 function hideTransactions(transactionType: TransactionType) {
@@ -61,7 +61,7 @@ const inputNameText = computed(() => {
 <template>
   <div
     v-show="account.settings.show[transactionType]"
-    class="col-sm-12 col-md-12 mb-4"
+    class="col-xl-12 mb-4"
     :class="lgClass"
   >
     <section>
@@ -135,6 +135,9 @@ const inputNameText = computed(() => {
           data-bs-title="Fréquence"
           @keydown.enter="transactionAdd"
         >
+          <option disabled hidden value="">
+            Fréquence
+          </option>
           <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
             {{ name }}
           </option>
@@ -142,7 +145,7 @@ const inputNameText = computed(() => {
         <button
           aria-label="Ajouter une entrée"
           class="btn btn-secondary mt-2 mt-sm-0"
-          :disabled="!newTransaction.name || !newTransaction.value"
+          :disabled="!newTransaction.name || !newTransaction.value || !newTransaction.frequency"
           tabindex="0"
           @click="transactionAdd"
           @keydown.enter="transactionAdd"
