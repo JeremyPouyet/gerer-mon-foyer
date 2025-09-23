@@ -29,11 +29,12 @@ function showTransactions(transactionType: TransactionType) {
     <div class="d-flex justify-content-between">
       <div>
         <!-- Set an id to be used as an inner page anchor -->
-        <h2 :id="name" class="fs-3">
+        <h2 :id="account.id" class="fs-3">
           <!-- todo - better html structure to not have the note icon -->
           <img
             v-if="avatar"
-            :alt="`Avatar de ${name}`"
+            alt="Avatar"
+            aria-hidden="true"
             class="user-avatar shadow-sm"
             :src="user_avatars[avatar]"
           >

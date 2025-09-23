@@ -168,7 +168,7 @@ onMounted(() => {
                 v-tooltip="{ disposeOnClick: true }"
                 class="d-inline-flex align-items-center"
                 :data-bs-title="`Voir le budget de ${user.name}`"
-                :to="`/budget#${user.name}`"
+                :to="`/budget#${user.account.id}`"
               >
                 <img
                   :alt="`Voir le budget de ${user.name}`"

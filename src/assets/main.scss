@@ -72,6 +72,23 @@ $small-sidenav-width: 72px;
   background-color: colors.$white;
   width: fit-content;
   cursor: pointer;
+  z-index: 0;
+}
+
+// On > sm screens
+@media (min-width: map-get($grid-breakpoints, sm)) {
+  // Do not show the sidenav toggler
+  #sidenavToggler {
+    visibility: hidden;
+  }
+}
+
+// On < sm screens
+@media (max-width: map-get($grid-breakpoints, sm)) {
+  // Do not show the sidebar when the app does not have the .has-sidenav class
+  #app:not(.has-sidenav) .sidenav {
+    display: none;
+  }
 }
 
 /* When sidenav is visible */
@@ -109,7 +126,7 @@ $small-sidenav-width: 72px;
   }
 }
 
-/* On small screens: hide text, shrink sidenav */
+/* On < md screens: hide text, shrink sidenav */
 @media (max-width: map-get($grid-breakpoints, md)) {
   .has-sidenav #main,
   .has-sidenav .footer {
