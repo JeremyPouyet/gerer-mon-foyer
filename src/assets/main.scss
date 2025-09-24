@@ -198,29 +198,3 @@ $small-sidenav-width: 72px;
     transform: translateX(-50%) scaleX(1); // expand from center
   }
 }
-
-/**** Footer ****/
-.footer {
-  #home-small {
-    border: 1px solid colors.$white
-  }
-
-  p, h3 {
-    margin: 0;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-  }
-
-  .section-title {
-    font-weight: bold;
-  }
-
-  a {
-    text-decoration: underline;
-  }
-
-  .row {
-    border-top: 1px solid colors.$white;
-    padding-top: 1.5rem;
-  }
-}
