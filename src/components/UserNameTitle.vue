@@ -45,10 +45,10 @@ function saveEditedAccountNote() {
   <div class="container">
     <div class="d-flex justify-content-between mb-2">
       <!-- Set an id to be used as an inner page anchor -->
-      <div class="d-flex align-items-start">
+      <div class="d-flex align-items-start" style="max-width: 50%">
         <img v-if="avatar" aria-hidden="true" class="user-avatar shadow-sm me-2" :src="user_avatars[avatar]">
         <img v-else aria-hidden="true" class="user-avatar shadow-sm me-2" src="@/assets/icons/home-large.png">
-        <div style="max-width: 40rem;">
+        <div>
           <h2 :id="account.id" class="fs-3">
             {{ name }}
           </h2>
@@ -57,7 +57,8 @@ function saveEditedAccountNote() {
               :ref="el => editingTextareas[account.id] = el as HTMLTextAreaElement"
               v-model="editingNote"
               placeholder="Ajouter une note"
-              @keydown.enter="saveEditedAccountNote"
+              style="width:100%"
+              @keydown.ctrl.enter="saveEditedAccountNote"
               @keydown.esc="cancelEditAccountNote"
             />
             <button class="btn btn-sm btn-light border" type="button" @click="saveEditedAccountNote">
@@ -65,7 +66,7 @@ function saveEditedAccountNote() {
             </button>
           </div>
           <div v-else>
-            <span v-if="account.note" contenteditable="true">
+            <span v-if="account.note" contenteditable="true" style="white-space:pre-line;">
               {{ account.note }}
             </span>
             <span v-else-if="props.withNote" class="fw-light fst-italic">
