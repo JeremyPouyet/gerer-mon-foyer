@@ -250,15 +250,13 @@ button {
 }
 
 .selectable-icon {
-  width: 60px;
-  height: 60px;
-  border: 2px solid transparent;
+  width: 70px;
+  height: 70px;
   cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s;
 
   &:hover {
     transform: scale(1.1);
-    border-color: colors.$secondary;
   }
 }
 
