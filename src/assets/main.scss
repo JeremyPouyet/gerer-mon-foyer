@@ -72,6 +72,23 @@ $small-sidenav-width: 72px;
   background-color: colors.$white;
   width: fit-content;
   cursor: pointer;
+  z-index: 0;
+}
+
+// On > sm screens
+@media (min-width: map-get($grid-breakpoints, sm)) {
+  // Do not show the sidenav toggler
+  #sidenavToggler {
+    visibility: hidden;
+  }
+}
+
+// On < sm screens
+@media (max-width: map-get($grid-breakpoints, sm)) {
+  // Do not show the sidebar when the app does not have the .has-sidenav class
+  #app:not(.has-sidenav) .sidenav {
+    display: none;
+  }
 }
 
 /* When sidenav is visible */
@@ -109,7 +126,7 @@ $small-sidenav-width: 72px;
   }
 }
 
-/* On small screens: hide text, shrink sidenav */
+/* On < md screens: hide text, shrink sidenav */
 @media (max-width: map-get($grid-breakpoints, md)) {
   .has-sidenav #main,
   .has-sidenav .footer {
@@ -179,31 +196,5 @@ $small-sidenav-width: 72px;
 
   &:hover:after {
     transform: translateX(-50%) scaleX(1); // expand from center
-  }
-}
-
-/**** Footer ****/
-.footer {
-  #home-small {
-    border: 1px solid colors.$white
-  }
-
-  p, h3 {
-    margin: 0;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-  }
-
-  .section-title {
-    font-weight: bold;
-  }
-
-  a {
-    text-decoration: underline;
-  }
-
-  .row {
-    border-top: 1px solid colors.$white;
-    padding-top: 1.5rem;
   }
 }

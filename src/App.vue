@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { provide, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, provide, ref, shallowRef } from 'vue'
 import type Modal from 'bootstrap/js/dist/modal' // Only import type to not load JS
 import { RouterView } from 'vue-router'
 
-import ConfirmModal from './components/structure/ConfirmModal.vue'
-import Footer from '@/components/structure/Footer.vue'
 import Navbar from '@/components/structure/Navbar.vue'
-import Notifications from '@/components/structure/Notifications.vue'
 import type { SettingsManager } from '@/managers/settingManager'
+
+const ConfirmModal = defineAsyncComponent(() => import('./components/structure/ConfirmModal.vue'))
+const Footer = defineAsyncComponent(() => import('@/components/structure/Footer.vue'))
+const Notifications = defineAsyncComponent(() => import('@/components/structure/Notifications.vue'))
 
 let confirmModal: Modal | null
 let settingManager: SettingsManager
@@ -47,10 +48,10 @@ provide('openModal', async (msg: string, cb: () => void) => {
 
 <template>
   <Navbar />
-  <Notifications />
-  <ConfirmModal :callback="modalCallback" :message="modalMessage" />
   <main id="main" class="mt-5" role="main">
     <RouterView />
   </main>
+  <ConfirmModal :callback="modalCallback" :message="modalMessage" />
+  <Notifications />
   <Footer />
 </template>

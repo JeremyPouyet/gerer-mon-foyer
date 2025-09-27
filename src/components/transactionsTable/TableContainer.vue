@@ -7,7 +7,8 @@ import { computed, inject, nextTick, ref, toRefs } from 'vue'
 import { type TransactionFunctional, TransactionType } from '@/types'
 import type Account from '@/account'
 import { AccountType } from '@/account'
-import Texts from '@/texts'
+import { TextFrequencies } from '@/locales/frequencies'
+import { TextTransactionTypes } from '@/locales/transactionTypes'
 import settingManager from '@/managers/settingManager'
 import userManager from '@/managers/userManager'
 
@@ -67,14 +68,14 @@ const inputNameText = computed(() => {
     <section>
       <div class="table-title-container rounded-shadow d-flex align-items-center justify-content-center position-relative">
         <h1 class="table-title align-bottom">
-          {{ Texts.transactionTypes[transactionType]['plural'] }}
+          {{ TextTransactionTypes[transactionType]['plural'] }}
         </h1>
         <img
           v-tooltip="{ disposeOnClick: true }"
-          :alt="`Cacher les ${Texts.transactionTypes[transactionType]['plural'].toLowerCase()}`"
+          :alt="`Cacher les ${TextTransactionTypes[transactionType]['plural'].toLowerCase()}`"
           class="icon-container icon-hoverable position-absolute me-2 end-0"
           data-bs-placement="left"
-          :data-bs-title="`Cacher les ${Texts.transactionTypes[transactionType]['plural'].toLowerCase()}`"
+          :data-bs-title="`Cacher les ${TextTransactionTypes[transactionType]['plural'].toLowerCase()}`"
           role="button"
           src="@/assets/icons/hide.png"
           tabindex="0"
@@ -103,7 +104,7 @@ const inputNameText = computed(() => {
           class="form-control"
           data-bs-placement="bottom"
           :data-bs-title="inputNameText"
-          :placeholder="Texts.transactionTypes[props.transactionType]['singular']"
+          :placeholder="TextTransactionTypes[props.transactionType]['singular']"
           type="text"
           @keydown.enter="transactionAdd"
         >
@@ -138,7 +139,7 @@ const inputNameText = computed(() => {
           <option disabled hidden value="">
             Fréquence
           </option>
-          <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
+          <option v-for="(name, frequency) in TextFrequencies" :key="frequency" :value="frequency">
             {{ name }}
           </option>
         </select>

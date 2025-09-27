@@ -8,7 +8,8 @@ import { Frequency, type ID, type Transaction, TransactionType } from '@/types'
 import { useTransactions, valueAs } from '@/helpers'
 import type Account from '@/account'
 import { AccountType } from '@/account'
-import Texts from '@/texts'
+import { TextFrequencies } from '@/locales/frequencies'
+import { TextTransactionTypes } from '@/locales/transactionTypes'
 import { sexyNumber } from '@/formaters'
 import userManager from '@/managers/userManager'
 
@@ -72,7 +73,7 @@ function handleClickOutside(event: MouseEvent) {
         <input
           id="editName"
           v-model="edited.transaction.name"
-          :aria-label="`Éditer le nom ${Texts.transactionTypes[transactionType].articleSingular}.`"
+          :aria-label="`Éditer le nom ${TextTransactionTypes[transactionType].articleSingular}.`"
           class="char-width-20"
           type="text"
           @keydown.enter="executeEditTransaction"
@@ -86,24 +87,24 @@ function handleClickOutside(event: MouseEvent) {
       <td v-if="edited?.id === transaction.id">
         <select
           v-model="edited.transaction.frequency"
-          :aria-label="`Éditer la fréquence ${Texts.transactionTypes[transactionType].articleSingular}.`"
+          :aria-label="`Éditer la fréquence ${TextTransactionTypes[transactionType].articleSingular}.`"
           class="form-select mt-2 mt-sm-0"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
         >
-          <option v-for="(name, frequency) in Texts.frequencies" :key="frequency" :value="frequency">
+          <option v-for="(name, frequency) in TextFrequencies" :key="frequency" :value="frequency">
             {{ name }}
           </option>
         </select>
       </td>
       <td v-else class="align-middle">
-        {{ Texts.frequencies[transaction.frequency] }}
+        {{ TextFrequencies[transaction.frequency] }}
       </td>
       <!-- Transaction value -->
       <td v-if="edited?.id == transaction.id">
         <input
           v-model="edited.transaction.value"
-          :aria-label="`Éditer la valeur ${Texts.transactionTypes[transactionType].articleSingular}.`"
+          :aria-label="`Éditer la valeur ${TextTransactionTypes[transactionType].articleSingular}.`"
           class="w-100"
           type="text"
           @keydown.enter="executeEditTransaction"
@@ -120,7 +121,7 @@ function handleClickOutside(event: MouseEvent) {
       <td v-if="edited?.id == transaction.id">
         <textarea
           v-model="edited.transaction.note"
-          :aria-label="`Éditer l'annotation ${Texts.transactionTypes[transactionType].articleSingular}.`"
+          :aria-label="`Éditer l'annotation ${TextTransactionTypes[transactionType].articleSingular}.`"
           @keydown.enter="executeEditTransaction"
           @keydown.esc="cancelEditTransaction"
         />

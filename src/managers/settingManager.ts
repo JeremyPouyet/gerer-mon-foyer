@@ -2,7 +2,8 @@ import { reactive } from 'vue'
 
 import BrowserStorage, { StorageKey } from '@/browserStorage'
 import { SortType } from '@/types'
-import Texts from '@/texts'
+import { TextNotifications } from '@/locales/notifications'
+import { TextSortTypes } from '@/locales/sortTypes'
 import notificationManager from '@/managers/notificationManager'
 
 // ISO 4217 currencies
@@ -46,16 +47,16 @@ type Notifications = {
 }
 const notifications: Notifications = {
   currency: (value: Currency) => notificationManager.success(
-    Texts.notifications.settings.currency(settingManager.getCurrencySymbol(value, true))
+    TextNotifications.settings.currency(settingManager.getCurrencySymbol(value, true))
   ),
   showConfirmModal: (value: boolean) => notificationManager.success(
-    Texts.notifications.settings.showConfirmModal[value ? 'true' : 'false']
+    TextNotifications.settings.showConfirmModal[value ? 'true' : 'false']
   ),
   sort: (value: SortType) => notificationManager.success(
-    Texts.notifications.settings.sort(Texts.sortTypes[value].toLocaleLowerCase()),
+    TextNotifications.settings.sort(TextSortTypes[value].toLocaleLowerCase()),
   ),
   twoDecimals: (value: boolean) => notificationManager.success(
-    Texts.notifications.settings.twoDecimals[value ? 'true' : 'false']
+    TextNotifications.settings.twoDecimals[value ? 'true' : 'false']
   )
 }
 
