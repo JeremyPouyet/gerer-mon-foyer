@@ -8,9 +8,8 @@ import { computed, inject } from 'vue'
 import { type OpenModal, Path, SortType } from '@/types'
 import settingManager, { Currency } from '@/managers/settingManager'
 import { type DB } from '@/db'
+import { TextSortTypes } from '@/locales/sortTypes'
 import notificationManager from '@/managers/notificationManager'
-
-import Texts from '@/texts'
 import unsavedManager from '@/managers/unsavedManager'
 
 const openModal = inject<OpenModal>('openModal')
@@ -226,7 +225,7 @@ const unsavedChangeText = computed(() => {
               @change="sortTypeChange"
             >
               <option v-for="sortType in Object.values(SortType)" :key="sortType" :selected="settingManager.settings.sort === sortType" :value="sortType">
-                {{ Texts.sortTypes[sortType] }}
+                {{ TextSortTypes[sortType] }}
               </option>
             </select>
           </div>

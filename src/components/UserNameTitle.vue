@@ -3,7 +3,7 @@ import { computed, nextTick, ref } from 'vue'
 
 import Account, { AccountType } from '@/account'
 import { type ID, TransactionType } from '@/types'
-import Texts from '@/texts'
+import { TextTransactionTypes } from '@/locales/transactionTypes'
 import { user_avatars } from '@/avatars/users'
 import { vClickOutside } from '@/directives/clickOutside'
 
@@ -87,14 +87,14 @@ function saveEditedAccountNote() {
           :key="transactionType"
           v-tooltip="{ disposeOnClick: true }"
           class="rounded-shadow icon-hoverable d-flex align-items-center p-2"
-          :data-bs-title="`Voir les ${Texts.transactionTypes[transactionType].plural.toLowerCase()}`"
+          :data-bs-title="`Voir les ${TextTransactionTypes[transactionType].plural.toLowerCase()}`"
           role="button"
           style="height: 3rem;align-self: flex-end;"
           tabindex="0"
           @click="showTransactions(transactionType)"
           @keydown.enter="showTransactions(transactionType)"
         >
-          {{ Texts.transactionTypes[transactionType].plural }}
+          {{ TextTransactionTypes[transactionType].plural }}
           <img alt="" class="icon-container-small ms-2" src="@/assets/icons/show.png">
         </div>
       </div>

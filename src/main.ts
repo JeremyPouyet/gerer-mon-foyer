@@ -6,7 +6,7 @@ import { useHead } from '@unhead/vue'
 
 import App from '@/App.vue'
 import { Path } from '@/types'
-import Texts from '@/texts'
+import { TextHeaders } from '@/locales/headers'
 import { tooltip } from '@/directives/tooltip'
 
 /**
@@ -15,7 +15,7 @@ import { tooltip } from '@/directives/tooltip'
  * @param {String} path Page path
  */
 function setHead(path: Path) {
-  const pageHeader = Texts.heads[path]
+  const pageHeader = TextHeaders[path]
 
   useHead({
     meta: [{
