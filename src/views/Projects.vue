@@ -3,13 +3,13 @@ import '@/assets/secondary.scss'
 
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { inject, nextTick, onBeforeUnmount, onMounted, onUnmounted, ref } from 'vue'
+import { inject, nextTick, onBeforeUnmount, ref } from 'vue'
 
-import { type ID, OpenModal, Path } from '@/types'
+import { type ID, type OpenModal, Path } from '@/types'
 import { projectsAvatarList, projectsAvatars } from '@/avatars/projects'
-import { sexyDate, sexyNumber } from '@/formaters'
 import Project from '@/project'
 import projectManager from '@/managers/projectManager'
+import { sexyDate } from '@/formaters'
 import { vClickOutside } from '@/directives/clickOutside'
 
 /** Project management */
@@ -21,16 +21,16 @@ function projectCreate() : void {
   const newProject = projectManager.create(projectName.value)
   if (newProject) {
     projectName.value = ''
-    // switchProject(newProject.id)
+    refreshProjects()
   }
 }
 
 function deleteProject(project: Project) {
   openModal?.('Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.', () => {
     projectManager.delete(project.id)
+    refreshProjects()
   })
 }
-
 
 /** Avatar Modal **/
 const showAvatarModal = ref(false)
@@ -84,6 +84,7 @@ function saveEditedName() {
 }
 
 const cancelEditName = () => editingProjectId.value = null
+const refreshProjects = () => projects.value = projectManager.projects
 </script>
 
 <template>
@@ -215,5 +216,4 @@ const cancelEditName = () => editingProjectId.value = null
       </div>
     </div>
   </div>
-    <!-- <ProjectEditor :key="currentProject.id" :current-project="currentProject" /> -->
 </template>
