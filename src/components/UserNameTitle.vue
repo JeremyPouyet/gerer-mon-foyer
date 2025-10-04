@@ -102,17 +102,3 @@ function saveEditedAccountNote() {
     <hr class="mb-4 mt-0">
   </div>
 </template>
-
-<style lang="scss">
-.editable {
-  cursor: text;
-  border-bottom: 1px dotted #aaa;
-  padding: 2px;
-}
-.editable:focus {
-  outline: none;
-  border: 1px dashed #888;
-  background-color: #f9f9f9;
-}
-
-</style>

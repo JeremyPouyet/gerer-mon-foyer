@@ -15,6 +15,7 @@ import { tooltip } from '@/directives/tooltip'
  * @param {String} path Page path
  */
 function setHead(path: Path) {
+  console.log(path)
   const pageHeader = TextHeaders[path]
 
   useHead({
@@ -35,6 +36,7 @@ export const createApp = ViteSSG(
       ['Budget',    Path.Budget],
       ['Settings',  Path.Settings],
       ['History',   Path.History],
+      ['Project',   Path.Project],
       ['Projects',  Path.Projects],
       ['Raphael',   Path.Raphael],
       ['Simulator', Path.Simulator],
@@ -59,7 +61,8 @@ export const createApp = ViteSSG(
       if (currentPath === to.path) return
 
       currentPath = to.path
-      setHead(to.path as Path)
+      // Use matched to hahe the path without parameters replaced
+      setHead(to.matched[0].path as Path)
       next()
     })
 

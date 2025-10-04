@@ -31,6 +31,12 @@ export const TextHeaders = {
     },
     title: 'Oups, cette page n’existe pas !'
   },
+  [Path.Project]: {
+    meta: {
+      description: 'Mon projet'
+    },
+    title: 'Mon projet'
+  },
   [Path.Projects]: {
     meta: {
       description: 'Budgétez vos projets (travaux, vacances, mariage, etc.), répartissez les dépenses équitablement et suivez les achats réalisés'
