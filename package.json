@@ -8,12 +8,13 @@
     "build": "npm run checks && npm run build-only",
     "preview": "vite preview",
     "build-only": "vite-ssg build",
-    "type-check": "vue-tsc --build --force",
+    "type-check": "vue-tsc --noEmit",
     "lint": "npx eslint .",
     "checks": "npm run lint && npm run type-check"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "@unhead/vue": "^1.11.10",
     "@vuepic/vue-datepicker": "^11.0.2",
     "bootstrap": "^5.3.8",
     "mathjs": "^12.4.2",
@@ -29,7 +30,6 @@
     "@types/node": "^20.12.5",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@unhead/vue": "^1.11.10",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^9.9.0",
@@ -37,8 +37,8 @@
     "sass-embedded": "^1.83.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.44.0",
-    "vite": "^7.0.0",
+    "vite": "^7.1.9",
     "vite-ssg": "^28.1.0",
-    "vue-tsc": "^2.0.11"
+    "vue-tsc": "^3.1.0"
   }
 }

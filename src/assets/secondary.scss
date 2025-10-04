@@ -28,8 +28,12 @@ input:focus, select:focus {
 .user-avatar {
   width: 80px;
   height: 80px;
-  object-fit: cover;
-  border: 2px solid colors.$secondary;
+}
+
+.cards-container {
+  display: grid;
+  gap: 1%;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }
 
 /* Clickable and editable cell style */

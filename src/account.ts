@@ -88,6 +88,7 @@ function formatValue(transaction: Pick<Transaction, 'value'> & Partial<Pick<Tran
 
 export default class Account {
   readonly expenses: TransactionRecord
+  readonly id: ID
   readonly incomes: TransactionRecord
   readonly personalExpenses: TransactionRecord
 
@@ -96,6 +97,7 @@ export default class Account {
   readonly settings: AccountSettings
 
   constructor(props: Partial<Account> = {}, accountType: AccountType) {
+    this.id = props.id ?? newId()
     this.note = props.note
     this.settings = buildSettings(props.settings)
     this.expenses = props.expenses ?? emptyTransactions()

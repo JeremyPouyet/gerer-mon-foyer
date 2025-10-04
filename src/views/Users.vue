@@ -98,92 +98,8 @@ onMounted(() => {
   <div class="container">
     <ViewTitle emoji="👋" :path="Path.Users" unpaded />
 
-    <!-- Message to help people when there is no user -->
-    <div v-if="userManager.users.length == 0" class="text-center">
-      <p>Commencez par ajouter les habitants de votre foyer pour débloquer les autres fonctionnalités :</p>
-    </div>
-
-    <!-- User cards grid -->
-    <div v-else class="row g-3">
-      <div v-for="user in userManager.users" :key="user.id" class="col-12 col-md-6 col-lg-4">
-        <div class="card rounded-shadow h-100">
-          <div class="card-body text-center py-3">
-            <!-- User image with edit button -->
-            <div class="position-relative d-inline-block mb-3">
-              <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
-              <button class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border included" @click="openAvatarModal(user)">
-                <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
-              </button>
-            </div>
-
-            <!-- User info -->
-            <div v-if="editingUserId === user.id" v-click-outside="cancelEditName" class="input-group input-group-sm justify-content-center mb-3">
-              <input
-                :ref="el => editingInputs[user.id] = el as HTMLInputElement"
-                v-model="editingName"
-                class="form-control text-center name-update"
-                type="text"
-                @keydown.enter="saveEditedName"
-                @keydown.esc="cancelEditName"
-              >
-              <button class="btn btn-sm btn-light border" type="button" @click="saveEditedName">
-                <img
-                  alt="Sauvegarder"
-                  class="icon-container-small"
-                  src="@/assets/icons/diskette.png"
-                >
-              </button>
-            </div>
-            <div v-else class="mb-3">
-              <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
-                {{ user.name }}
-                <button class="btn btn-sm btn-light p-1 border" @click="startEditingName(user)">
-                  <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
-                </button>
-              </h5>
-            </div>
-
-            <p class="card-text mb-1">
-              <span class="fw-bold">Ratio de dépense commun :</span> {{ sexyNumber(user.ratio, 'percent') }}
-            </p>
-            <p class="card-text">
-              <span class="fw-bold">Participation mensuelle aux dépenses communes :</span> {{ sexyAmount(user.ratio * commonBill) }}
-            </p>
-
-            <!-- Actions -->
-            <div class="d-flex justify-content-center gap-2">
-              <img
-                v-tooltip="{ disposeOnClick: true }"
-                alt="Supprimer"
-                :aria-label="`Supprimer ${user.name} des habitants`"
-                class="icon-container-small icon-hoverable"
-                :data-bs-title="`Supprimer ${user.name} des habitants`"
-                role="button"
-                src="@/assets/icons/cross.png"
-                tabindex="0"
-                @click="userDelete(user)"
-                @keydown.enter="userDelete(user)"
-              >
-              <RouterLink
-                v-tooltip="{ disposeOnClick: true }"
-                class="d-inline-flex align-items-center"
-                :data-bs-title="`Voir le budget de ${user.name}`"
-                :to="`/budget#${user.name}`"
-              >
-                <img
-                  :alt="`Voir le budget de ${user.name}`"
-                  class="icon-container-small icon-hoverable"
-                  src="@/assets/icons/hyperlink.png"
-                >
-              </RouterLink>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Add new user -->
-    <div class="input-group mt-4">
+    <div class="input-group mb-4">
       <input
         ref="inputRef"
         v-model="username"
@@ -196,6 +112,85 @@ onMounted(() => {
       <button class="btn btn-secondary btn-sm" :disabled="!username" type="button" @click="userCreate">
         Ajouter
       </button>
+    </div>
+
+    <!-- Message to help people when there is no user -->
+    <div v-if="userManager.users.length == 0" class="text-center">
+      <p>Commencez par ajouter les habitants de votre foyer pour débloquer les autres fonctionnalités :</p>
+    </div>
+
+    <!-- User cards grid -->
+    <div v-else class="cards-container">
+      <div v-for="user in userManager.users" :key="user.id" class="card rounded-shadow h-100">
+        <div class="card-body text-center py-3">
+          <!-- User image with edit button -->
+          <div class="position-relative d-inline-block mb-3">
+            <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
+            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border included" data-bs-title="Changer l’avatar" @click="openAvatarModal(user)">
+              <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
+            </button>
+          </div>
+
+          <!-- User name -->
+          <div v-if="editingUserId === user.id" v-click-outside="cancelEditName" class="input-group input-group-sm justify-content-center mb-3">
+            <input
+              :ref="el => editingInputs[user.id] = el as HTMLInputElement"
+              v-model="editingName"
+              class="form-control text-center name-update"
+              type="text"
+              @keydown.enter="saveEditedName"
+              @keydown.esc="cancelEditName"
+            >
+            <button class="btn btn-sm btn-light border" type="button" @click="saveEditedName">
+              <img alt="Sauvegarder" class="icon-container-small" src="@/assets/icons/diskette.png">
+            </button>
+          </div>
+          <div v-else class="mb-3">
+            <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
+              {{ user.name }}
+              <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light p-1 border" data-bs-title="Éditer le nom" @click="startEditingName(user)">
+                <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
+              </button>
+            </h5>
+          </div>
+
+          <!-- User data -->
+          <p class="card-text mb-1">
+            <span class="fw-bold">Ratio de dépense commun :</span> {{ sexyNumber(user.ratio, 'percent') }}
+          </p>
+          <p class="card-text">
+            <span class="fw-bold">Participation mensuelle aux dépenses communes :</span> {{ sexyAmount(user.ratio * commonBill) }}
+          </p>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-center gap-2">
+            <img
+              v-tooltip="{ disposeOnClick: true }"
+              alt="Supprimer"
+              :aria-label="`Supprimer ${user.name} des habitants`"
+              class="icon-container-small icon-hoverable"
+              :data-bs-title="`Supprimer ${user.name} des habitants`"
+              role="button"
+              src="@/assets/icons/cross.png"
+              tabindex="0"
+              @click="userDelete(user)"
+              @keydown.enter="userDelete(user)"
+            >
+            <RouterLink
+              v-tooltip="{ disposeOnClick: true }"
+              class="d-inline-flex align-items-center"
+              :data-bs-title="`Voir le budget de ${user.name}`"
+              :to="`/budget#${user.account.id}`"
+            >
+              <img
+                :alt="`Voir le budget de ${user.name}`"
+                class="icon-container-small icon-hoverable"
+                src="@/assets/icons/hyperlink.png"
+              >
+            </RouterLink>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Message to help people when their budget is not setup -->
@@ -236,7 +231,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '@/assets/colors.scss';
 
 button {
@@ -250,15 +245,13 @@ button {
 }
 
 .selectable-icon {
-  width: 60px;
-  height: 60px;
-  border: 2px solid transparent;
+  width: 70px;
+  height: 70px;
   cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s;
 
   &:hover {
     transform: scale(1.1);
-    border-color: colors.$secondary;
   }
 }
 

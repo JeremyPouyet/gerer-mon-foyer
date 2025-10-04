@@ -7,7 +7,8 @@ import { toRefs } from 'vue'
 import { Frequency, TransactionType } from '@/types'
 import { useTransactions, valueAs  } from '@/helpers'
 import type Account from '@/account'
-import Texts from '@/texts'
+import { TextFrequencies } from '@/locales/frequencies'
+import { TextTransactionTypes } from '@/locales/transactionTypes'
 import { sexyNumber } from '@/formaters'
 
 const props = defineProps<{
@@ -24,12 +25,12 @@ const transactionList = useTransactions(account, transactionType)
   <tbody>
     <tr v-for="transaction in transactionList.values" :key="transaction.id">
       <!-- Transaction name -->
-      <td :aria-label="`Nom ${Texts.transactionTypes[transactionType].articleSingular}`" class="align-middle">
+      <td :aria-label="`Nom ${TextTransactionTypes[transactionType].articleSingular}`" class="align-middle">
         {{ transaction.name }}
       </td>
       <!-- Transaction frequency -->
       <td class="text-end align-middle">
-        {{ Texts.frequencies[transaction.frequency] }}
+        {{ TextFrequencies[transaction.frequency] }}
       </td>
       <!-- Transaction value -->
       <td class="text-end align-middle">

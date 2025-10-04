@@ -2,7 +2,7 @@ import { create, divideDependencies, evaluateDependencies, subtractDependencies 
 
 import { Frequency, TransactionType } from './types'
 import type { ID, Transaction } from './types'
-import { type Ref, computed } from 'vue'
+import { type Ref, computed, nextTick, ref } from 'vue'
 import type Account from './account'
 
 const math = create({ divideDependencies, evaluateDependencies, subtractDependencies })
@@ -70,8 +70,6 @@ export function newId() : ID {
 export function useTransactions(accountRef: Ref<Account>, transactionTypeRef: Ref<TransactionType>) {
   return computed(() => accountRef.value.transactionSorted(transactionTypeRef.value))
 }
-
-import { nextTick, ref } from 'vue'
 
 /**
  * Provides reactive state for editable data.
