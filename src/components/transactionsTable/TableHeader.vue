@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import Texts from '@/texts'
-
+import { TextTransactionTypes } from '@/locales/transactionTypes'
 import { TransactionType } from '@/types'
 
 defineProps<{ incomeLabel?: string, transactionType: TransactionType, withActions: boolean }>()
@@ -10,7 +9,7 @@ defineProps<{ incomeLabel?: string, transactionType: TransactionType, withAction
   <thead>
     <tr class="align-middle">
       <th scope="col">
-        {{ Texts.transactionTypes[transactionType]['singular'] }}
+        {{ TextTransactionTypes[transactionType]['singular'] }}
       </th>
       <th scope="col">
         Fréquence

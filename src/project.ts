@@ -97,6 +97,7 @@ function handleValidation<T>(item: T, validateFn: (item: T) => string | null): b
 }
 
 export default class Project {
+  avatar: string
   createdAt: string
   updatedAt: string
   readonly id: ID
@@ -111,6 +112,7 @@ export default class Project {
    * @param props Partial initial properties to set up the project.
    */
   constructor(props: Partial<Project> = {}) {
+    this.avatar = props.avatar || 'idea'
     this.createdAt = props.createdAt ?? new Date().toISOString()
     this.updatedAt = props.updatedAt ?? this.createdAt
     this.id = props.id ?? newId()

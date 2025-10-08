@@ -5,31 +5,28 @@ import projectIcon from '@/assets/icons/criteria.png'
 import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
 import userIcon from '@/assets/icons/user.png'
 
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import unsavedManager from '@/managers/unsavedManager'
 import { useScreenSize } from '@/composables/useScreenSize'
 const { isSmallerScreen } = useScreenSize(576)
 
-// on a small screen, do not show the sidenav by default
-const showNav = ref(!isSmallerScreen.value)
 const app = document.getElementById('app')
 
-if (showNav.value && typeof window !== 'undefined' && app)
+// on a small screen, do not show the sidenav by default
+if (!isSmallerScreen.value && typeof window !== 'undefined' && app)
   app.classList.add('has-sidenav')
 
-watch(showNav, showSidenav => {
-  if (!app) return
-  if (showSidenav)
-    app.classList.add('has-sidenav')
-  else
-    app.classList.remove('has-sidenav')
-})
-
 watch(isSmallerScreen, () => toggleSidenavOnSmallScreen())
-const toggleSidenavOnSmallScreen = () => showNav.value = !isSmallerScreen.value
-const showSidenav = () => showNav.value = true
+
+const toggleSidenavOnSmallScreen = () => {
+  if (isSmallerScreen.value && app?.classList.contains('has-sidenav'))
+    app.classList.remove('has-sidenav')
+  else
+    showSidenav()
+}
+const showSidenav = () => app?.classList.add('has-sidenav')
 
 const unsavedChangesText = computed(() : string => {
   const count = unsavedManager.count.value
@@ -47,7 +44,7 @@ const menuItems: [string, string, string][] = [
 </script>
 
 <template>
-  <div v-if="showNav" class="sidenav">
+  <div class="sidenav">
     <RouterLink v-once id="home" aria-label="Accueil" to="/" @click="toggleSidenavOnSmallScreen">
       <p class="text-center mb-1 lh-1 small-hidden">
         Gérer&nbsp;&nbsp;
@@ -87,7 +84,7 @@ const menuItems: [string, string, string][] = [
       </div>
     </RouterLink>
   </div>
-  <div v-else id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" @click="showSidenav">
+  <div id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" @click="showSidenav">
     <img alt="Afficher le menu" aria-hidden="true" class="icon-container" src="@/assets/icons/menu.png">
   </div>
 </template>

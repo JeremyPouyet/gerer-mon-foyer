@@ -28,8 +28,6 @@ input:focus, select:focus {
 .user-avatar {
   width: 80px;
   height: 80px;
-  object-fit: cover;
-  border: 2px solid colors.$secondary;
 }
 
 /* Clickable and editable cell style */
@@ -47,6 +45,33 @@ input:focus, select:focus {
 
 .char-width-30 {
   width: 30ch;
+}
+
+/**** cards ****/
+.custom-card {
+  flex-direction: column;
+
+  .card-body {
+    flex: 1 1 auto;
+  }
+}
+.cards-container {
+  display: grid;
+  gap: 1%;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+.card-text {
+  display: flex;
+  align-items: flex-start;
+
+  span:first-of-type {
+    flex: 0 0 30%;
+    text-align: left;
+  }
+
+  .user-label { // overides above rules for users
+    flex: 0 0 60% !important;
+  }
 }
 
 /**** Left column with history dates ****/
