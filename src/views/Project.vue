@@ -76,7 +76,7 @@ function executeEditExpensePrice() {
 </script>
 
 <template>
-  <div class="container-fluid">
+  <div v-if="project" class="container-fluid">
     <div class="d-flex align-items-start mb-2">
       <img aria-hidden="true" class="d-inline-block user-avatar shadow-sm me-2" :src="projectsAvatars[project.avatar]">
       <div>
@@ -272,5 +272,12 @@ function executeEditExpensePrice() {
         </div>
       </div>
     </div>
+  </div>
+  <div v-else class="container-fluid text-center mt-5">
+    <h2>Ce projet est introuvable 🫠</h2>
+    <p>Le projet que vous cherchez n’existe pas ou a été supprimé.</p>
+    <RouterLink class="btn btn-primary mt-3" to="/projects">
+      Retour aux projets
+    </RouterLink>
   </div>
 </template>

@@ -110,8 +110,8 @@ onMounted(() => {
     </div>
 
     <!-- Message to help people when there is no user -->
-    <div v-if="userManager.users.length == 0" class="text-center">
-      <p>Commencez par ajouter les habitants de votre foyer pour débloquer les autres fonctionnalités :</p>
+    <div v-if="userManager.users.length == 0">
+      <p>Commencez par ajouter les habitants de votre foyer pour débloquer les autres fonctionnalités</p>
     </div>
 
     <!-- User cards grid -->
