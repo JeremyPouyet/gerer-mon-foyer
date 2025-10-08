@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import distributionIcon from '@/assets/icons/distribution.png'
-import historyIcon from '@/assets/icons/history.png'
-import projectIcon from '@/assets/icons/criteria.png'
-import taxCalculateIcon from '@/assets/icons/tax-calculate.png'
-import userIcon from '@/assets/icons/user.png'
+import distributionIcon from '@/assets/icons/distribution.webp'
+import historyIcon from '@/assets/icons/history.webp'
+import projectIcon from '@/assets/icons/criteria.webp'
+import taxCalculateIcon from '@/assets/icons/tax-calculate.webp'
+import userIcon from '@/assets/icons/user.webp'
 
 import { computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -69,7 +69,7 @@ const menuItems: [string, string, string][] = [
     </RouterLink>
     <RouterLink active-class="active" class="nav-link small-centered" to="/settings" @click="toggleSidenavOnSmallScreen">
       <div class="position-relative" style="width:95%">
-        <img alt="Paramètres" aria-hidden="true" class="mb-1 icon-container large-margin-end" src="@/assets/icons/cog.png">
+        <img alt="Paramètres" aria-hidden="true" class="mb-1 icon-container large-margin-end" src="@/assets/icons/cog.webp">
         Paramètres
         <div
           v-if="unsavedManager.count.value > 0"
@@ -85,6 +85,6 @@ const menuItems: [string, string, string][] = [
     </RouterLink>
   </div>
   <div id="sidenavToggler" class="fixed-top d-sm-none d-inline p-2" @click="showSidenav">
-    <img alt="Afficher le menu" aria-hidden="true" class="icon-container" src="@/assets/icons/menu.png">
+    <img alt="Afficher le menu" aria-hidden="true" class="icon-container" src="@/assets/icons/menu.webp">
   </div>
 </template>
