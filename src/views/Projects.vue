@@ -108,7 +108,7 @@ const refreshProjects = () => projects.value = projectManager.projects
     </div>
 
     <div class="cards-container">
-      <div v-for="project in projects" :key="project.id" class="d-flex card rounded-shadow project-card">
+      <div v-for="project in projects" :key="project.id" class="d-flex card rounded-shadow custom-card">
         <div class="card-body d-flex flex-column text-center p-2">
           <!-- Project image with edit button -->
           <div class="position-relative d-inline-block mb-3">
@@ -180,13 +180,3 @@ const refreshProjects = () => projects.value = projectManager.projects
     @select="selectAvatar"
   />
 </template>
-
-<style scoped>
-.project-card {
-  flex-direction: column;
-}
-
-.project-card .card-body {
-  flex: 1 1 auto;
-}
-</style>

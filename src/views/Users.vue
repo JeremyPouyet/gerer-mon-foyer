@@ -92,7 +92,7 @@ onMounted(() => {
 
     <!-- Add new user -->
     <label class="form-label" for="new-user">
-      Nom de l’habitant:
+      Prénom de l’habitant:
     </label>
     <div class="input-group mb-4">
       <input
@@ -116,12 +116,12 @@ onMounted(() => {
 
     <!-- User cards grid -->
     <div v-else class="cards-container">
-      <div v-for="user in userManager.users" :key="user.id" class="card rounded-shadow h-100">
-        <div class="card-body text-center p-2">
+      <div v-for="user in userManager.users" :key="user.id" class="d-flex card rounded-shadow custom-card">
+        <div class="card-body d-flex flex-column text-center p-2">
           <!-- User image with edit button -->
           <div class="position-relative d-inline-block mb-3">
             <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
-            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border included" data-bs-title="Changer l’avatar" @click="openAvatarModal(user)">
+            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 p-1 border" data-bs-title="Changer l’avatar" @click="openAvatarModal(user)">
               <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
             </button>
           </div>
@@ -150,13 +150,13 @@ onMounted(() => {
           </div>
 
           <!-- User data -->
-          <p class="card-text mb-1">
+          <p class="card-text mb-1 text-start">
             <span class="user-label fw-bold">Revenus :</span>{{ sexyAmount(user.account.incomes.sum) }}
           </p>
-          <p class="card-text mb-1">
+          <p class="card-text mb-1 text-start">
             <span class="user-label fw-bold">Dépenses contraintes :</span>{{ sexyAmount(user.account.expenses.sum) }}
           </p>
-          <p class="card-text mb-1">
+          <p class="card-text mb-1 text-start">
             <span class="user-label fw-bold">
               <img
                 v-tooltip
@@ -169,7 +169,7 @@ onMounted(() => {
             </span>
             {{ sexyNumber(user.ratio, 'percent') }}
           </p>
-          <p class="card-text">
+          <p class="card-text text-start">
             <span class="user-label fw-bold">
               <img
                 v-tooltip
@@ -214,22 +214,3 @@ onMounted(() => {
     @select="selectAvatar"
   />
 </template>
-
-<style lang="scss" scoped>
-@use '@/assets/colors.scss';
-
-button {
-  img {
-    vertical-align: sub;
-  }
-}
-
-.included {
-  border-radius: 0.25rem 0% 0% 0%;
-}
-
-.name-update {
-  flex: initial !important; // overides bootstrap
-  width: 20rem !important;
-}
-</style>

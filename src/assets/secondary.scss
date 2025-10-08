@@ -48,6 +48,13 @@ input:focus, select:focus {
 }
 
 /**** cards ****/
+.custom-card {
+  flex-direction: column;
+
+  .card-body {
+    flex: 1 1 auto;
+  }
+}
 .cards-container {
   display: grid;
   gap: 1%;
