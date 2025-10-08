@@ -50,7 +50,7 @@ const menuItems: [string, string, string][] = [
         Gérer&nbsp;&nbsp;
       </p>
       <div class="text-center">
-        <span class="small-hidden">Mon</span> <img alt="Jolie petite maison" aria-hidden="true" class="small-icon-container large-icon-container-small baselined-icon" src="@/assets/icons/home.png"> <span class="small-hidden">Foyer</span>
+        <span class="small-hidden">Mon</span> <img alt="Jolie petite maison" aria-hidden="true" class="small-icon-container large-icon-container-small baselined-icon" src="@/assets/icons/home.webp"> <span class="small-hidden">Foyer</span>
       </div>
     </RouterLink>
     <hr>
