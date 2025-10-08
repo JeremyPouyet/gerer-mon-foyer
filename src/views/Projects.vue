@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
 
+import AvatarSelectorModal from '@/components/AvatarSelectorModal.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { inject, nextTick, onBeforeUnmount, ref } from 'vue'
+import { inject, nextTick, ref } from 'vue'
 
 import { type ID, type OpenModal, Path } from '@/types'
 import { projectsAvatarList, projectsAvatars } from '@/avatars/projects'
@@ -33,19 +34,11 @@ function deleteProject(project: Project) {
 }
 
 /** Avatar Modal **/
-const showAvatarModal = ref(false)
 const selectedProject = ref<Project | null>(null)
-
-function handleKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && showAvatarModal.value)
-    cancelSelectAvatar()
-}
-
-onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
+const showAvatarModal = ref(false)
 
 function openAvatarModal(project: Project) {
   selectedProject.value = project
-  document.addEventListener('keydown', handleKeydown)
   showAvatarModal.value = true
 }
 
@@ -60,7 +53,6 @@ function selectAvatar(avatar: string) {
 function cancelSelectAvatar() {
   selectedProject.value = null
   showAvatarModal.value = false
-  document.removeEventListener('keydown', handleKeydown)
 }
 
 /*** Project name ***/
@@ -190,30 +182,11 @@ const refreshProjects = () => projects.value = projectManager.projects
     </div>
   </div>
 
-  <!-- Modal for selecting avatars -->
-  <!-- @click.self works as the modal covers the entire screen -->
-  <div v-if="showAvatarModal" class="modal fade d-block" @click.self="cancelSelectAvatar()">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            Choisir mon avatar
-          </h5>
-          <button aria-label="Fermer" class="btn-close" type="button" @click="cancelSelectAvatar" />
-        </div>
-        <div class="modal-body d-flex flex-wrap gap-3 justify-content-center">
-          <img
-            v-for="avatar in projectsAvatarList"
-            :key="avatar"
-            :alt="`Avatar ${avatar}`"
-            class="selectable-icon"
-            loading="lazy"
-            :src="projectsAvatars[avatar]"
-            tabindex="0"
-            @click="selectAvatar(avatar)"
-          >
-        </div>
-      </div>
-    </div>
-  </div>
+  <AvatarSelectorModal
+    :avatar-list="projectsAvatarList"
+    :avatars="projectsAvatars"
+    :show="showAvatarModal"
+    @close="cancelSelectAvatar"
+    @select="selectAvatar"
+  />
 </template>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import '@/assets/secondary.scss'
+
+import AvatarSelectorModal from '@/components/AvatarSelectorModal.vue'
 import ViewTitle from '@/components/ViewTitle.vue'
 
-import { inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { inject, nextTick, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { type ID, type OpenModal, Path } from '@/types'
@@ -21,25 +23,16 @@ const inputRef = ref<HTMLInputElement | null>(null)
 
 const openModal = inject<OpenModal>('openModal')
 
-const selectedUser = ref<User | null>(null)
-const showAvatarModal = ref(false)
-
 const editingUserId = ref<ID | null>(null)
 const editingName = ref('')
 const editingInputs = ref<Record<ID, HTMLInputElement | null>>({})
 
 /** Avatar Modal **/
-
-function handleKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && showAvatarModal.value)
-    cancelSelectAvatar()
-}
-
-onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
+const selectedUser = ref<User | null>(null)
+const showAvatarModal = ref(false)
 
 function openAvatarModal(user: User) {
   selectedUser.value = user
-  document.addEventListener('keydown', handleKeydown)
   showAvatarModal.value = true
 }
 
@@ -52,7 +45,6 @@ function selectAvatar(avatar: string) {
 function cancelSelectAvatar() {
   selectedUser.value = null
   showAvatarModal.value = false
-  document.removeEventListener('keydown', handleKeydown)
 }
 
 /** User Management **/
@@ -227,34 +219,15 @@ onMounted(() => {
         </RouterLink>
       </p>
     </div>
-
-    <!-- Modal for selecting avatars -->
-    <!-- @click.self works as the modal covers the entire screen -->
-    <div v-if="showAvatarModal" class="modal fade d-block" @click.self="cancelSelectAvatar()">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              Choisir mon avatar
-            </h5>
-            <button aria-label="Fermer" class="btn-close" type="button" @click="cancelSelectAvatar" />
-          </div>
-          <div class="modal-body d-flex flex-wrap gap-3 justify-content-center">
-            <img
-              v-for="avatar in user_avatar_list"
-              :key="avatar"
-              :alt="`Avatar ${avatar}`"
-              class="selectable-icon"
-              loading="lazy"
-              :src="user_avatars[avatar]"
-              tabindex="0"
-              @click="selectAvatar(avatar)"
-            >
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
+
+  <AvatarSelectorModal
+    :avatar-list="user_avatar_list"
+    :avatars="user_avatars"
+    :show="showAvatarModal"
+    @close="cancelSelectAvatar"
+    @select="selectAvatar"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -268,17 +241,6 @@ button {
 
 .included {
   border-radius: 0.25rem 0% 0% 0%;
-}
-
-.selectable-icon {
-  width: 70px;
-  height: 70px;
-  cursor: pointer;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 }
 
 .name-update {
