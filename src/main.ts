@@ -15,7 +15,6 @@ import { tooltip } from '@/directives/tooltip'
  * @param {String} path Page path
  */
 function setHead(path: Path) {
-  console.log(path)
   const pageHeader = TextHeaders[path]
 
   useHead({

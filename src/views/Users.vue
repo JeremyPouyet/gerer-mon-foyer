@@ -122,7 +122,7 @@ onMounted(() => {
     <!-- User cards grid -->
     <div v-else class="cards-container">
       <div v-for="user in userManager.users" :key="user.id" class="card rounded-shadow h-100">
-        <div class="card-body text-center py-3">
+        <div class="card-body text-center p-2">
           <!-- User image with edit button -->
           <div class="position-relative d-inline-block mb-3">
             <img :alt="`Avatar de ${user.name}`" class="user-avatar shadow-sm" :src="user_avatars[user.avatar]">
@@ -156,10 +156,36 @@ onMounted(() => {
 
           <!-- User data -->
           <p class="card-text mb-1">
-            <span class="fw-bold">Ratio de dépense commun :</span> {{ sexyNumber(user.ratio, 'percent') }}
+            <span class="user-label fw-bold">Revenus :</span>{{ sexyAmount(user.account.incomes.sum) }}
+          </p>
+          <p class="card-text mb-1">
+            <span class="user-label fw-bold">Dépenses contraintes :</span>{{ sexyAmount(user.account.expenses.sum) }}
+          </p>
+          <p class="card-text mb-1">
+            <span class="user-label fw-bold">
+              <img
+                v-tooltip
+                alt="Info"
+                class="icon-container-small"
+                data-bs-title="Calculé à partir de ton budget, ce pourcentage représente ta participation à une dépense commune."
+                src="@/assets/icons/information.png"
+              >
+              Ratio :
+            </span>
+            {{ sexyNumber(user.ratio, 'percent') }}
           </p>
           <p class="card-text">
-            <span class="fw-bold">Participation mensuelle aux dépenses communes :</span> {{ sexyAmount(user.ratio * commonBill) }}
+            <span class="user-label fw-bold">
+              <img
+                v-tooltip
+                alt="Info"
+                class="icon-container-small"
+                data-bs-title="Calculé à partir de ton ratio et de vos dépenses communes, c'est le montant que tu dois donner chaque mois pour vos charges communes."
+                src="@/assets/icons/information.png"
+              >
+              Dépenses communes :
+            </span>
+            {{ sexyAmount(user.ratio * commonBill) }}
           </p>
 
           <!-- Actions -->

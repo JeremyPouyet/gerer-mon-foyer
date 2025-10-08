@@ -56,6 +56,10 @@ class ProjectManager extends EventTarget {
     this.#projects.clear()
   }
 
+  getProject(id: ID) : Project {
+    return this.#projects.get(id) as Project
+  }
+
   /**
    * Loads projects from storage into the internal projects Map.
    */

@@ -114,7 +114,7 @@ const refreshProjects = () => projects.value = projectManager.projects
 
     <div v-if="projects.length > 0" class="cards-container">
       <div v-for="project in projects" :key="project.id" class="card rounded-shadow h-100">
-        <div class="card-body text-center py-3">
+        <div class="card-body text-center p-2">
           <!-- Project image with edit button -->
           <div class="position-relative d-inline-block mb-3">
             <img :alt="`Mon projet ${project.name}`" class="user-avatar shadow-sm" :src="projectsAvatars[project.avatar]">
@@ -147,13 +147,13 @@ const refreshProjects = () => projects.value = projectManager.projects
           </div>
 
           <!-- Project data -->
-          <p class="card-text mb-1 text-start ms-2">
+          <p class="card-text mb-1 text-start">
             <span class="fw-bold">Créé le :</span> {{ sexyDate(project.createdAt, false) }}
           </p>
-          <p class="card-text mb-1 text-start ms-2">
+          <p class="card-text mb-1 text-start">
             <span class="fw-bold">Mis à jour :</span> {{ sexyDate(project.updatedAt, false) }}
           </p>
-          <p class="card-text text-start ms-2">
+          <p class="card-text text-start">
             <span class="fw-bold">Note : </span>
             <span v-if="project.note">{{ project.note }}</span>
             <span v-else class="fw-light fst-italic">Aucune note pour le moment</span>
