@@ -133,12 +133,12 @@ const refreshProjects = () => projects.value = projectManager.projects
             </button>
           </div>
           <div v-else class="mb-3">
-            <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
+            <p class="h5 card-title mb-0 d-inline-flex align-items-center gap-2">
               {{ project.name }}
               <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light p-1 border" data-bs-title="Éditer le nom" @click="startEditingName(project)">
                 <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
               </button>
-            </h5>
+            </p>
           </div>
 
           <!-- Project data -->

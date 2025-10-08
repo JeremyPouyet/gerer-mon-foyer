@@ -91,13 +91,16 @@ onMounted(() => {
     <ViewTitle emoji="👋" :path="Path.Users" unpaded />
 
     <!-- Add new user -->
+    <label class="form-label" for="new-user">
+      Nom de l’habitant:
+    </label>
     <div class="input-group mb-4">
       <input
+        id="new-user"
         ref="inputRef"
         v-model="username"
-        aria-label="Prénom de l'habitant"
         class="form-control"
-        placeholder="Prénom de l'habitant"
+        placeholder="Aragorn / Arwen"
         type="text"
         @keydown.enter="userCreate"
       >
@@ -138,12 +141,12 @@ onMounted(() => {
             </button>
           </div>
           <div v-else class="mb-3">
-            <h5 class="card-title mb-0 d-inline-flex align-items-center gap-2">
+            <p class="h5 card-title mb-0 d-inline-flex align-items-center gap-2">
               {{ user.name }}
               <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light p-1 border" data-bs-title="Éditer le nom" @click="startEditingName(user)">
                 <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
               </button>
-            </h5>
+            </p>
           </div>
 
           <!-- User data -->
@@ -172,7 +175,7 @@ onMounted(() => {
                 v-tooltip
                 alt="Info"
                 class="icon-container-small"
-                data-bs-title="Calculé à partir de ton ratio et de vos dépenses communes, c'est le montant que tu dois donner chaque mois pour vos charges communes."
+                data-bs-title="Calculé à partir de ton ratio et de vos dépenses communes, c’est le montant que tu dois donner chaque mois pour vos charges communes."
                 src="@/assets/icons/information.png"
               >
               Dépenses communes :
