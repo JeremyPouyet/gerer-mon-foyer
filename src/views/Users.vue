@@ -182,29 +182,11 @@ onMounted(() => {
 
           <!-- Actions -->
           <div class="d-flex justify-content-center gap-2">
-            <img
-              v-tooltip="{ disposeOnClick: true }"
-              alt="Supprimer"
-              :aria-label="`Supprimer ${user.name} des habitants`"
-              class="icon-container-small icon-hoverable"
-              :data-bs-title="`Supprimer ${user.name} des habitants`"
-              role="button"
-              src="@/assets/icons/cross.png"
-              tabindex="0"
-              @click="userDelete(user)"
-              @keydown.enter="userDelete(user)"
-            >
-            <RouterLink
-              v-tooltip="{ disposeOnClick: true }"
-              class="d-inline-flex align-items-center"
-              :data-bs-title="`Voir le budget de ${user.name}`"
-              :to="`/budget#${user.account.id}`"
-            >
-              <img
-                :alt="`Voir le budget de ${user.name}`"
-                class="icon-container-small icon-hoverable"
-                src="@/assets/icons/hyperlink.png"
-              >
+            <button class="btn btn-danger btn-sm" @click="userDelete(user)">
+              Supprimer l’utilisateur
+            </button>
+            <RouterLink class="btn btn-primary btn-sm" :to="`/budget#${user.account.id}`">
+              Voir le budget
             </RouterLink>
           </div>
         </div>

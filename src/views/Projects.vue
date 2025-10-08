@@ -84,12 +84,15 @@ const refreshProjects = () => projects.value = projectManager.projects
     <ViewTitle emoji="🗂️" :path="Path.Projects" />
 
     <!-- Add new project -->
+    <label class="form-label" for="new-project">
+      Nom du nouveau projet:
+    </label>
     <div class="input-group mb-4">
       <input
+        id="new-project"
         v-model="projectName"
-        aria-label="Nom du projet"
         class="form-control"
-        placeholder="Nom du projet"
+        placeholder="Travaux / anniversaire / bébé / etc..."
         type="text"
         @keydown.enter="projectCreate"
       >
@@ -104,13 +107,13 @@ const refreshProjects = () => projects.value = projectManager.projects
       </button>
     </div>
 
-    <div v-if="projects.length > 0" class="cards-container">
-      <div v-for="project in projects" :key="project.id" class="card rounded-shadow h-100">
-        <div class="card-body text-center p-2">
+    <div class="cards-container">
+      <div v-for="project in projects" :key="project.id" class="d-flex card rounded-shadow project-card">
+        <div class="card-body d-flex flex-column text-center p-2">
           <!-- Project image with edit button -->
           <div class="position-relative d-inline-block mb-3">
             <img :alt="`Mon projet ${project.name}`" class="user-avatar shadow-sm" :src="projectsAvatars[project.avatar]">
-            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 end-0 p-1 border included" data-bs-title="Changer d’icône" @click="openAvatarModal(project)">
+            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 p-1 border included" data-bs-title="Changer d’icône" @click="openAvatarModal(project)">
               <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
             </button>
           </div>
@@ -150,36 +153,23 @@ const refreshProjects = () => projects.value = projectManager.projects
             <span v-if="project.note">{{ project.note }}</span>
             <span v-else class="fw-light fst-italic">Aucune note pour le moment</span>
           </p>
+        </div>
 
-          <!-- Actions -->
-          <div class="d-flex justify-content-center gap-2">
-            <img
-              v-tooltip="{ disposeOnClick: true }"
-              alt="Supprimer"
-              :aria-label="`Supprimer ${project.name}`"
-              class="icon-container-small icon-hoverable"
-              :data-bs-title="`Supprimer ${project.name}`"
-              role="button"
-              src="@/assets/icons/cross.png"
-              tabindex="0"
-              @click="deleteProject(project)"
-            >
-            <RouterLink
-              v-tooltip="{ disposeOnClick: true }"
-              class="d-inline-flex align-items-center"
-              :data-bs-title="`Voir le projet ${project.name}`"
-              :to="`/project/${project.id}`"
-            >
-              <img
-                :alt="`Voir le projet ${project.name}`"
-                class="icon-container-small icon-hoverable"
-                src="@/assets/icons/hyperlink.png"
-              >
-            </RouterLink>
-          </div>
+        <!-- Footer (stays at the bottom) -->
+        <div class="d-flex justify-content-center gap-2 mb-2">
+          <button class="btn btn-danger btn-sm" @click="deleteProject(project)">
+            Supprimer le projet
+          </button>
+          <RouterLink class="btn btn-primary btn-sm" :to="`/project/${project.id}`">
+            Accéder au projet
+          </RouterLink>
         </div>
       </div>
     </div>
+
+    <p v-if="projects.length === 0">
+      Aucun projet pour le moment.
+    </p>
   </div>
 
   <AvatarSelectorModal
@@ -190,3 +180,13 @@ const refreshProjects = () => projects.value = projectManager.projects
     @select="selectAvatar"
   />
 </template>
+
+<style scoped>
+.project-card {
+  flex-direction: column;
+}
+
+.project-card .card-body {
+  flex: 1 1 auto;
+}
+</style>
