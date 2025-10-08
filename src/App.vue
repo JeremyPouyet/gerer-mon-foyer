@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineAsyncComponent, provide, ref, shallowRef } from 'vue'
-import type Modal from 'bootstrap/js/dist/modal' // Only import type to not load JS
+import { defineAsyncComponent, onMounted, provide, ref, shallowRef } from 'vue'
+import type Modal from 'bootstrap/js/dist/modal'
 import { RouterView } from 'vue-router'
 
 import Navbar from '@/components/structure/Navbar.vue'
@@ -8,7 +8,9 @@ import type { SettingsManager } from '@/managers/settingManager'
 
 const ConfirmModal = defineAsyncComponent(() => import('./components/structure/ConfirmModal.vue'))
 const Footer = defineAsyncComponent(() => import('@/components/structure/Footer.vue'))
-const Notifications = defineAsyncComponent(() => import('@/components/structure/Notifications.vue'))
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Notifications = ref<any>(null) // Will be loaded later
 
 let confirmModal: Modal | null
 let settingManager: SettingsManager
@@ -44,6 +46,14 @@ provide('openModal', async (msg: string, cb: () => void) => {
   modalMessage.value = msg
   confirmModal?.show()
 })
+
+// Wait for the page to be loaded to load notifications
+onMounted(() => {
+  window.addEventListener('load', async () => {
+    const comp = await import('@/components/structure/Notifications.vue')
+    Notifications.value = comp.default
+  })
+})
 </script>
 
 <template>
@@ -51,7 +61,9 @@ provide('openModal', async (msg: string, cb: () => void) => {
   <main id="main" class="mt-5" role="main">
     <RouterView />
   </main>
+  
   <ConfirmModal :callback="modalCallback" :message="modalMessage" />
-  <Notifications />
+  <component :is="Notifications" v-if="Notifications" />
+
   <Footer />
 </template>
