@@ -22,16 +22,16 @@ async function historicize() {
   <div class="container-fluid">
     <button
       aria-label="Ajouter le budget actuel à l’historique"
-      class="end-0 top-0 position-absolute btn btn-secondary mt-1 me-1"
+      class="end-0 top-0 position-absolute btn btn-secondary mt-2 me-2"
       tabindex="0"
       @click="historicize"
       @keypress.enter="historicize"
     >
       Historiser
     </button>
-    <div class="position-relative">
-      <ViewTitle emoji="💸" :path="Path.Budget" />
-    </div>
+
+    <ViewTitle emoji="💸" :path="Path.Budget" />
+
     <BudgetShow
       :account="db.account"
       :component-type="TransactionsEdit"
