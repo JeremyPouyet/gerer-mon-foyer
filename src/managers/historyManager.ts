@@ -126,11 +126,7 @@ class HistoryManager {
    * and pushes the new samples into the history array.
    */
   load() : void {
-    this.empty()
-    const samples = JSON.parse(this.#historyStorage.get('[]')) as Sample[]
-
-    for (const sample of samples)
-      this.#_history.push(sample)
+    this.#_history = JSON.parse(this.#historyStorage.get('[]')) as Sample[]
   }
 
   #save() : void {

@@ -147,9 +147,8 @@ switchSample()
             <span v-else class="fst-italic text-body-secondary">
               Aucune note pour le moment
             </span>
-            <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" @click="startEditingNote">
+            <button class="btn btn-outline-primary btn-sm d-flex p-1" @click="startEditingNote">
               <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
-              Éditer
             </button>
           </div>
         </div>
