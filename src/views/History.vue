@@ -14,8 +14,8 @@ import { sexyDate } from '@/formaters'
 
 provide('editBudget', false)
 
-const currentSample = ref<Sample | undefined>()
-const snapshot = ref<DBSnapshot>(new DBSnapshot({}))
+const currentSample = ref<Sample>()
+const snapshot = ref<DBSnapshot>()
 const watchers: ((() => void) | null)[] = []
 const selectedDate = ref(historyManager.activeDate)
 const openModal = inject<OpenModal>('openModal')
@@ -24,41 +24,27 @@ const openModal = inject<OpenModal>('openModal')
 
 function switchSample() {
   currentSample.value = historyManager.activeSample
-  selectedDate.value = currentSample.value?.date
-
-  if (!currentSample.value)
-    return
 
   stopWatchers()
 
-  snapshot.value = new DBSnapshot(JSON.parse(currentSample.value.data))
-
-  watchers[0] = watch(snapshot.value.users, () => updateSampleData({ users: snapshot.value.users }), { deep: true })
-  watchers[1] = watch(snapshot.value.account, () => updateSampleData({ account: snapshot.value.account }), {deep: true})
-}
-
-function dateSelected() {
-  if (!selectedDate.value)
-    return
-
-  historyManager.activeDate = selectedDate.value
-  switchSample()
-}
-
-function updateSampleData(updates: Partial<DBSnapshot>) {
   if (!currentSample.value)
     return
-  const data = { ...JSON.parse(currentSample.value.data), ...updates } as DBSnapshot
-  historyManager.update(currentSample.value.date, { data: JSON.stringify(data) })
+
+  snapshot.value = new DBSnapshot(JSON.parse(currentSample.value.data))
+
+  watchers[0] = watch(snapshot.value.users, () => updateSampleData(), { deep: true })
+  watchers[1] = watch(snapshot.value.account, () => updateSampleData(), {deep: true})
+}
+
+function updateSampleData() {
+  if (currentSample.value)
+    historyManager.update(currentSample.value.date, { data: JSON.stringify(snapshot.value) })
 }
 
 function removeSample() : void {
   openModal?.('Êtes-vous sûr de vouloir supprimer cette date ? Cette action est irréversible.', () => {
-    if (currentSample.value) {
-      historyManager.delete(currentSample.value.date)
-
-      switchSample()
-    }
+    historyManager.delete(historyManager.activeDate)
+    selectedDate.value = historyManager.activeDate
   })
 }
 
@@ -86,8 +72,13 @@ function editNote(save = false) {
   isEditingNote.value = false
 }
 
+/*** Setup ***/
 onUnmounted(() => stopWatchers())
-switchSample()
+watch(selectedDate, newDate => {
+  if (newDate !== historyManager.activeDate)
+    historyManager.activeDate = newDate
+  switchSample()
+}, { immediate: true })
 </script>
 
 <template>
@@ -102,7 +93,7 @@ switchSample()
           <label class="form-label fw-semibold d-block" for="navSelect">
             Date à afficher
           </label>
-          <select id="navSelect" v-model="selectedDate" class="form-select" @change="dateSelected">
+          <select id="navSelect" v-model="selectedDate" class="form-select">
             <option disabled value="">
               Choix de la date
             </option>
@@ -147,7 +138,7 @@ switchSample()
             <span v-else class="fst-italic text-body-secondary">
               Aucune note pour le moment
             </span>
-            <button class="btn btn-outline-primary btn-sm d-flex p-1" @click="startEditingNote">
+            <button aria-label="Éditer la note" class="btn btn-outline-primary btn-sm d-flex p-1" @click="startEditingNote">
               <img alt="Éditer" class="icon-container-small" src="@/assets/icons/pencil.png">
             </button>
           </div>
@@ -162,7 +153,7 @@ switchSample()
 
     <!-- Show history -->
     <BudgetShow
-      v-if="currentSample"
+      v-if="snapshot"
       :account="snapshot.account"
       :component-type="HistoryTransactionsShow"
       :users="snapshot.users"
