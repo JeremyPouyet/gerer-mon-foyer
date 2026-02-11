@@ -113,7 +113,7 @@ const refreshProjects = () => projects.value = projectManager.projects
           <!-- Project image with edit button -->
           <div class="position-relative d-inline-block mb-3">
             <img :alt="`Mon projet ${project.name}`" class="user-avatar shadow-sm" :src="projectsAvatars[project.avatar]">
-            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 p-1 border included" data-bs-title="Changer d’icône" @click="openAvatarModal(project)">
+            <button v-tooltip="{ disposeOnClick: true }" class="btn btn-sm btn-light position-absolute bottom-0 p-1 border" data-bs-title="Changer d’icône" @click="openAvatarModal(project)">
               <img alt="Changer son avatar" class="icon-container-small" src="@/assets/icons/pencil.png">
             </button>
           </div>

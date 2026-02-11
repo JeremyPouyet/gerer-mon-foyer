@@ -9,12 +9,10 @@ export interface Sample {
 
 class HistoryManager {
   #_history: Sample[] = []
-  #currentDateStorage: BrowserStorage
-  #historyStorage: BrowserStorage
+  #currentDateStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentHistoryDate)
+  #historyStorage = new BrowserStorage(localStorage, StorageKey.History)
 
   constructor() {
-    this.#currentDateStorage = new BrowserStorage(sessionStorage, StorageKey.CurrentHistoryDate)
-    this.#historyStorage = new BrowserStorage(localStorage, StorageKey.History)
     this.load()
   }
 
@@ -24,16 +22,16 @@ class HistoryManager {
    * @param {string} date The date string to set as the current active history date.
    *                      If the value is empty, an empty string is stored.
    */
-  set activeDate(date: string) {
+  set activeDate(date: string | undefined) {
     this.#currentDateStorage.set(date || '')
   }
 
   /**
    * Gets the active date from the session storage.
    *
-   * @returns {string | null} The currently active date from session storage or null if not set.
+   * @returns The currently active date from session storage or null if not set.
    */
-  get activeDate() : string | null {
+  get activeDate() : string | undefined {
     let date = this.#currentDateStorage.get()
     if (!date && this.#_history.length > 0) {
       const { date: sampleDate } = this.#_history[0]
@@ -74,7 +72,7 @@ class HistoryManager {
    *                      the active date is updated to the next available sample in the history.
    *                      If no samples remain, the active date is cleared.
    */
-  delete(date: string) : void {
+  delete(date?: string) {
     this.findSample(date, (sample, index) => {
       this.#_history.splice(index, 1)
       this.#save()
@@ -95,7 +93,7 @@ class HistoryManager {
    * Removes all Sample from the history
    */
   empty() : void {
-    this.#_history.splice(0)
+    this.#_history = []
     this.activeDate = ''
   }
 
@@ -126,11 +124,7 @@ class HistoryManager {
    * and pushes the new samples into the history array.
    */
   load() : void {
-    this.empty()
-    const samples = JSON.parse(this.#historyStorage.get('[]')) as Sample[]
-
-    for (const sample of samples)
-      this.#_history.push(sample)
+    this.#_history = JSON.parse(this.#historyStorage.get('[]')) as Sample[]
   }
 
   #save() : void {
@@ -158,7 +152,7 @@ class HistoryManager {
   *                                                  It receives the sample and its index in the history.
   * @returns {T | undefined} Returns the value of the callback or undefined if the sample is not found.
   */
-  private findSample<T>(date: string, cb: (sample: Sample, index: number) => T) : T | undefined {
+  private findSample<T>(date: string | undefined, cb: (sample: Sample, index: number) => T) : T | undefined {
     const index = this.#_history.findIndex(sample => sample.date === date)
 
     if (index !== -1) return cb(this.#_history[index], index)

@@ -25,6 +25,7 @@ function showTransactions(transactionType: TransactionType) {
 const editingAccount = ref<Account|null>()
 const editingNote = ref<string>()
 const editingTextareas = ref<Record<ID, HTMLTextAreaElement>>({})
+
 function startEditingAccountNote(account: Account) {
   editingAccount.value = account
   editingNote.value = account.note
@@ -66,7 +67,7 @@ function saveEditedAccountNote() {
             </button>
           </div>
           <div v-else>
-            <span v-if="account.note" contenteditable="true" style="white-space:pre-line;">
+            <span v-if="account.note" style="white-space:pre-line;">
               {{ account.note }}
             </span>
             <span v-else-if="props.withNote" class="fw-light fst-italic">
